@@ -1,4 +1,4 @@
-// LOGIN_FIXED_20260624_2
+// GAMELEVEL_FIXED_20260624_3
 
 const GAME_DATA = [
   {id:'memory_match', code:'S001', preview:'previews/memory_match.svg', icon:'🃏', price:20, free:true, path:'games/memory_match_game/index.html', download:'downloads/memory_match.zip'},
@@ -265,6 +265,24 @@ function L(){ return I18N[state.lang || 'zh'] || I18N.zh; }
 function t(key){ return L()[key] ?? I18N.zh[key] ?? key; }
 function gameName(id){ return L().gameNames?.[id] || I18N.zh.gameNames[id] || id; }
 function gameDesc(id){ return L().gameDesc?.[id] || I18N.zh.gameDesc[id] || ''; }
+
+function gameLevel(id){
+  for(const level of LEVEL_ORDER){
+    if((GAME_LEVELS[level] || []).includes(id)) return level;
+  }
+  return 'beginner';
+}
+function levelText(level){
+  return (LEVEL_TEXT[state.lang || 'zh'] || LEVEL_TEXT.zh)[level] || LEVEL_TEXT.zh[level] || {label:level, desc:''};
+}
+function gameCode(id){
+  const game = GAME_DATA.find(g => g.id === id);
+  return game?.code || id;
+}
+function gamePreview(id){
+  const game = GAME_DATA.find(g => g.id === id);
+  return game?.preview || '';
+}
 function langSelect(id='langSelect'){
   return `<label class="lang-wrap">${t('language')} <select id="${id}" class="select lang-select">${LANGS.map(l=>`<option value="${l.id}" ${state.lang===l.id?'selected':''}>${l.label}</option>`).join('')}</select></label>`;
 }

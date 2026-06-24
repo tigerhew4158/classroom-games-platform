@@ -503,3 +503,16 @@ index.html
 - 强制保留测试老师：teacher@example.com / 123456
 
 如 Vercel 更新后仍显示旧状态，请在页面点击「重置 Demo」，或在浏览器清除该网站的 Local Storage 后重新载入。
+
+
+## 2026-06-24 gameLevel 修正版
+
+修正登入后空白页 / Console 报错：`ReferenceError: gameLevel is not defined`。
+本版已补回以下辅助函数：
+
+- `gameLevel()`
+- `levelText()`
+- `gameCode()`
+- `gamePreview()`
+
+同时更新 `index.html` 的 `app.js` 版本号，避免浏览器继续读取旧缓存。
