@@ -490,3 +490,16 @@ index.html
 - 老师登入后可在「老师后台」设置题库、课堂标题、科目年级与素材说明。
 
 重要说明：当前版本是纯前端静态 Vercel 测试版，账号资料保存在浏览器 localStorage。若要做到不同电脑 / 不同老师之间真正共用账号，需要后续接入后端数据库，例如 Supabase、Firebase、Vercel KV 或自建 API。
+
+## 2026-06 登入修正版
+
+本版修正老师 / 管理员登入按钮无反应的问题：
+
+- 登入按钮加入直接 onclick fallback
+- 管理员登入按钮加入直接 onclick fallback
+- Enter 键可直接登入
+- 自动修复旧 localStorage 中缺少 accountStatus / disabled 的账号资料
+- 强制保留测试管理员：admin@lead.ai / admin123
+- 强制保留测试老师：teacher@example.com / 123456
+
+如 Vercel 更新后仍显示旧状态，请在页面点击「重置 Demo」，或在浏览器清除该网站的 Local Storage 后重新载入。

@@ -311,6 +311,40 @@ function defaultState(){
   };
 }
 
+
+function saveMigratedState(nextState){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState)); }catch(e){} }
+function ensureDefaultAccounts(parsed){
+  parsed.users = Array.isArray(parsed.users) ? parsed.users : [];
+  const defaults = defaultState().users;
+  defaults.forEach(def => {
+    let existing = parsed.users.find(u => normalizeEmail(u.email || u.username) === normalizeEmail(def.email));
+    if(!existing){
+      parsed.users.push({...def});
+      return;
+    }
+    existing.id = existing.id || def.id;
+    existing.email = def.email;
+    existing.username = def.email;
+    existing.name = existing.name || def.name;
+    existing.role = def.role;
+    existing.accountStatus = 'approved';
+    existing.disabled = false;
+    if(def.role === 'admin') {
+      existing.password = 'admin123';
+      existing.package = 'all_access';
+      existing.ownedGames = GAME_DATA.map(g=>g.id);
+    }
+    if(def.email === 'teacher@example.com') {
+      existing.password = '123456';
+      existing.package = 'all_access';
+      existing.ownedGames = GAME_DATA.map(g=>g.id);
+    }
+    existing.profile = existing.profile || def.profile;
+    existing.profileCompleted = true;
+  });
+  return parsed;
+}
+
 function loadState(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -324,11 +358,13 @@ function loadState(){
         u.username = u.email;
         if(!u.profile) u.profile = {email:u.email, phone:'', chineseName:u.name || '', englishName:'', state:'Johor', orgTypes:[]};
         if(!u.profile.email) u.profile.email = u.email;
-        if(!u.accountStatus) u.accountStatus = u.role==='admin' ? 'approved' : 'approved';
+        if(!u.accountStatus) u.accountStatus = 'approved';
         if(typeof u.disabled !== 'boolean') u.disabled = false;
         if(u.role==='admin') u.profileCompleted = true;
         if(typeof u.profileCompleted !== 'boolean') u.profileCompleted = isProfileComplete(u);
       });
+      ensureDefaultAccounts(parsed);
+      saveMigratedState(parsed);
       return parsed;
     }
   }catch(e){}
@@ -360,7 +396,17 @@ function isValidEmail(email){
 }
 function login(email, password){
   const normalized = normalizeEmail(email);
-  const user = state.users.find(u => normalizeEmail(u.email || u.username)===normalized && u.password===password);
+  const passwordText = String(password || '').trim();
+  ensureDefaultAccounts(state);
+  let user = state.users.find(u => normalizeEmail(u.email || u.username)===normalized && String(u.password || '').trim()===passwordText);
+  if(!user && normalized==='admin@lead.ai' && passwordText==='admin123'){
+    ensureDefaultAccounts(state);
+    user = state.users.find(u => normalizeEmail(u.email || u.username)==='admin@lead.ai');
+  }
+  if(!user && normalized==='teacher@example.com' && passwordText==='123456'){
+    ensureDefaultAccounts(state);
+    user = state.users.find(u => normalizeEmail(u.email || u.username)==='teacher@example.com');
+  }
   if(!user) return {ok:false, msg:t('loginFail')};
   if(user.disabled) return {ok:false, msg:'此帳號已停用，請聯絡管理員。'};
   if(user.accountStatus !== 'approved') return {ok:false, msg:'帳號申請已送出，請等待管理員批准。'};
@@ -474,9 +520,9 @@ function renderAuth(){
           <input id="loginPassword" class="input" placeholder="${t('password')}" type="password" value="123456" />
         </div>
         <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-          <button id="loginBtn" class="btn">登入</button>
-          <button id="quickAdminBtn" class="btn secondary">管理員登入</button>
-          <button id="resetDemoBtn" class="btn secondary">重置 Demo</button>
+          <button id="loginBtn" type="button" class="btn" onclick="handleLoginClick()">登入</button>
+          <button id="quickAdminBtn" type="button" class="btn secondary" onclick="handleQuickAdminClick()">管理員登入</button>
+          <button id="resetDemoBtn" type="button" class="btn secondary" onclick="resetDemo()">重置 Demo</button>
         </div>
         <p id="loginMsg" class="muted"></p>
         <hr style="border:none;border-top:1px solid rgba(255,255,255,.08);margin:22px 0" />
@@ -488,7 +534,7 @@ function renderAuth(){
           <input id="regPassword2" class="input" type="password" placeholder="再次輸入密碼" />
         </div>
         <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-          <button id="registerBtn" class="btn maker">送出申請</button>
+          <button id="registerBtn" type="button" class="btn maker" onclick="handleRegisterClick()">送出申請</button>
         </div>
         <p id="regMsg" class="muted"></p>
       </div>
@@ -782,29 +828,50 @@ function packageLabel(pkg){
   return t('single');
 }
 
+
+function handleLoginClick(){
+  const email = $('#loginEmail')?.value?.trim() || '';
+  const password = $('#loginPassword')?.value || '';
+  const result = login(email, password);
+  const msg = $('#loginMsg');
+  if(msg) msg.textContent = result.ok ? '' : result.msg;
+}
+function handleQuickAdminClick(){
+  const email = $('#loginEmail');
+  const password = $('#loginPassword');
+  if(email) email.value='admin@lead.ai';
+  if(password) password.value='admin123';
+  const result = login('admin@lead.ai','admin123');
+  const msg = $('#loginMsg');
+  if(msg) msg.textContent = result.ok ? '' : result.msg;
+}
+function handleRegisterClick(){
+  const name = $('#regName')?.value?.trim() || '';
+  const email = $('#regEmail')?.value?.trim() || '';
+  const p1 = $('#regPassword')?.value || '';
+  const p2 = $('#regPassword2')?.value || '';
+  const msg = $('#regMsg');
+  if(!name || !email || !p1){ if(msg) msg.textContent=t('fillAll'); return; }
+  if(p1 !== p2){ if(msg) msg.textContent=t('passwordMismatch'); return; }
+  const result = registerTeacherAccount(name, email, p1);
+  if(msg) msg.textContent = result.msg;
+  if(result.ok){
+    if($('#regName')) $('#regName').value='';
+    if($('#regEmail')) $('#regEmail').value='';
+    if($('#regPassword')) $('#regPassword').value='';
+    if($('#regPassword2')) $('#regPassword2').value='';
+  }
+}
+
 function bindAuth(){
-  $('#loginBtn').onclick = () => {
-    const result = login($('#loginEmail').value.trim(), $('#loginPassword').value);
-    $('#loginMsg').textContent = result.ok ? '' : result.msg;
-  };
-  $('#quickAdminBtn').onclick = () => {
-    $('#loginEmail').value='admin@lead.ai';
-    $('#loginPassword').value='admin123';
-    const result = login('admin@lead.ai','admin123');
-    $('#loginMsg').textContent = result.ok ? '' : result.msg;
-  };
-  $('#resetDemoBtn').onclick = resetDemo;
-  $('#registerBtn').onclick = () => {
-    const name = $('#regName').value.trim();
-    const email = $('#regEmail').value.trim();
-    const p1 = $('#regPassword').value;
-    const p2 = $('#regPassword2').value;
-    if(!name || !email || !p1) return $('#regMsg').textContent=t('fillAll');
-    if(p1 !== p2) return $('#regMsg').textContent=t('passwordMismatch');
-    const result = registerTeacherAccount(name, email, p1);
-    $('#regMsg').textContent = result.msg;
-    if(result.ok){ $('#regName').value=''; $('#regEmail').value=''; $('#regPassword').value=''; $('#regPassword2').value=''; }
-  };
+  const loginBtn = $('#loginBtn'); if(loginBtn) loginBtn.onclick = handleLoginClick;
+  const quickAdminBtn = $('#quickAdminBtn'); if(quickAdminBtn) quickAdminBtn.onclick = handleQuickAdminClick;
+  const resetDemoBtn = $('#resetDemoBtn'); if(resetDemoBtn) resetDemoBtn.onclick = resetDemo;
+  const registerBtn = $('#registerBtn'); if(registerBtn) registerBtn.onclick = handleRegisterClick;
+  ['loginEmail','loginPassword'].forEach(id=>{
+    const el = $(id);
+    if(el) el.onkeydown = (ev)=>{ if(ev.key==='Enter') handleLoginClick(); };
+  });
 }
 
 
