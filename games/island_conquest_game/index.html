@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>孤岛抢夺赛</title>
+<style>
+:root{
+  --sea1:#06263d;--sea2:#0ea5e9;--panel:rgba(15,23,42,.82);--line:rgba(255,255,255,.14);
+  --text:#f8fafc;--muted:#cbd5e1;--accent:#facc15;--good:#22c55e;--bad:#ef4444;
+  --a:#ef4444;--b:#3b82f6;--neutral:#2dd4bf;--target:#facc15;--weed:#14532d;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",Arial,sans-serif;color:var(--text);background:
+radial-gradient(circle at 20% 20%,rgba(34,211,238,.28),transparent 30%),
+radial-gradient(circle at 80% 70%,rgba(14,165,233,.22),transparent 34%),
+linear-gradient(135deg,#031525,#06324a 48%,#075985)}
+body:before{content:"";position:fixed;inset:-20%;pointer-events:none;background:
+repeating-linear-gradient(115deg,rgba(255,255,255,.035) 0 2px,transparent 2px 28px);
+opacity:.75;animation:waves 12s linear infinite}
+@keyframes waves{from{transform:translateX(-40px) translateY(-20px)}to{transform:translateX(40px) translateY(20px)}}
+button,input,textarea,select{font:inherit}
+.app{position:relative;height:100vh;width:min(1520px,98vw);margin:0 auto;padding:12px;display:grid;grid-template-rows:auto 1fr;gap:10px;z-index:1}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);background:rgba(15,23,42,.72);border-radius:20px;box-shadow:0 14px 34px rgba(0,0,0,.28);backdrop-filter:blur(8px)}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;font-size:30px;background:linear-gradient(135deg,#facc15,#22c55e,#38bdf8)}
+h1{margin:0;font-size:clamp(22px,2.5vw,36px);line-height:1.05}.sub{font-size:13px;color:var(--muted);margin-top:4px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.btn{border:0;border-radius:13px;padding:9px 12px;font-weight:900;cursor:pointer;background:var(--accent);color:#111827;box-shadow:0 8px 18px rgba(0,0,0,.18)}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.04)}.btn.secondary{background:#334155;color:#fff;border:1px solid var(--line);box-shadow:none}.btn.good{background:var(--good);color:#052e16}.btn.bad{background:var(--bad);color:#fff}.btn.blue{background:#38bdf8;color:#062033}
+.input,.select{border:1px solid rgba(255,255,255,.15);background:#08111f;color:#fff;border-radius:12px;padding:9px 10px}
+.main{min-height:0;display:grid;grid-template-columns:292px 1fr 310px;gap:10px}
+.panel{min-height:0;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:12px;box-shadow:0 14px 34px rgba(0,0,0,.22);overflow:hidden}
+.section{padding:10px;border-radius:15px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);margin-bottom:10px}
+.section-title{font-size:14px;color:#e2e8f0;font-weight:900;margin-bottom:8px}.help{font-size:13px;line-height:1.55;color:var(--muted)}
+.team-card{display:grid;gap:8px;padding:11px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);margin-bottom:10px}
+.team-card.active{outline:3px solid var(--accent)}.team-head{display:flex;justify-content:space-between;align-items:center}.team-name{font-size:21px;font-weight:950}.team-name.a{color:#fecaca}.team-name.b{color:#bfdbfe}.score{font-size:24px;font-weight:950;color:#fff}.meta{display:grid;grid-template-columns:1fr 1fr;gap:7px}.stat{padding:7px;border-radius:12px;background:rgba(0,0,0,.24);font-size:12px}.stat b{display:block;font-size:18px;color:#fff}
+.progress-pill{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(250,204,21,.3);background:rgba(250,204,21,.12);color:#fde68a;border-radius:999px;padding:6px 9px;font-size:12px;font-weight:900}
+.board-wrap{min-height:0;display:grid;grid-template-rows:auto 1fr;gap:10px}
+.statusbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-radius:16px;background:rgba(15,23,42,.72);border:1px solid var(--line)}
+.turn{font-size:18px;font-weight:950}.target-info{color:var(--muted);font-size:13px}
+.ocean-board{position:relative;min-height:0;border-radius:26px;border:1px solid rgba(255,255,255,.16);overflow:hidden;background:
+radial-gradient(circle at 22% 18%,rgba(255,255,255,.18),transparent 8%),
+radial-gradient(circle at 75% 30%,rgba(255,255,255,.12),transparent 10%),
+linear-gradient(135deg,rgba(8,145,178,.25),rgba(14,116,144,.18));
+box-shadow:inset 0 0 60px rgba(8,47,73,.8),0 18px 50px rgba(0,0,0,.25)}
+.ocean-board:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 120%,rgba(255,255,255,.18),transparent 35%);opacity:.45;animation:seaPulse 5s ease-in-out infinite alternate}
+@keyframes seaPulse{from{transform:translateY(8px);opacity:.25}to{transform:translateY(-8px);opacity:.55}}
+.map-layer{position:absolute;left:50%;top:50%;width:920px;height:560px;transform-origin:center center}
+.hex{position:absolute;width:82px;height:72px;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%);display:grid;place-items:center;text-align:center;cursor:default;transition:.18s transform,.18s filter,.18s opacity;background:rgba(15,23,42,.38);border:0;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5)}
+.hex:after{content:"";position:absolute;inset:3px;clip-path:inherit;border-radius:14px;background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.18)}
+.hex span{position:relative;z-index:2;font-size:13px;font-weight:950}
+.hex.neutral{background:rgba(8,47,73,.38);opacity:.42}
+.hex.a{background:linear-gradient(145deg,#ef4444,#991b1b);opacity:1}.hex.b{background:linear-gradient(145deg,#3b82f6,#1e3a8a);opacity:1}
+.hex.target{background:linear-gradient(145deg,#facc15,#d97706);box-shadow:0 0 26px rgba(250,204,21,.45);opacity:1}.hex.target span{color:#111827;text-shadow:none}
+.hex.option{cursor:pointer;opacity:1;filter:brightness(1.2);animation:pulse 1s infinite alternate;background:linear-gradient(145deg,#34d399,#0f766e)}
+.hex.option:hover{transform:scale(1.08);filter:brightness(1.35)}
+.hex.obstacle{background:linear-gradient(145deg,#166534,#052e16);opacity:1;cursor:not-allowed;filter:saturate(1.2)}
+.hex.obstacle span{font-size:20px}
+.hex.flag:before{content:"🚩";position:absolute;z-index:4;top:-18px;left:50%;transform:translateX(-50%);font-size:28px;animation:flagDrop .75s ease-out both;text-shadow:0 4px 12px rgba(0,0,0,.45)}
+@keyframes flagDrop{0%{transform:translateX(-50%) translateY(-32px) scale(.2);opacity:0}60%{transform:translateX(-50%) translateY(5px) scale(1.18);opacity:1}100%{transform:translateX(-50%) translateY(0) scale(1)}}
+.boat{position:absolute;font-size:32px;z-index:5;filter:drop-shadow(0 5px 8px rgba(0,0,0,.4));animation:boatBob 2.6s ease-in-out infinite}
+@keyframes boatBob{from{transform:translateY(-3px) rotate(-4deg)}to{transform:translateY(3px) rotate(4deg)}}
+@keyframes pulse{from{box-shadow:0 0 8px rgba(34,197,94,.3)}to{box-shadow:0 0 24px rgba(34,197,94,.75)}}
+.legend{display:flex;gap:8px;flex-wrap:wrap}.legend span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}.dot{width:14px;height:14px;border-radius:4px}.dot.a{background:#ef4444}.dot.b{background:#3b82f6}.dot.t{background:#facc15}.dot.o{background:#34d399}.dot.w{background:#166534}
+.log-list{height:100%;display:flex;flex-direction:column;gap:8px;overflow:hidden}.log{padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:13px;line-height:1.45}
+.modal{position:fixed;inset:0;background:rgba(2,6,23,.76);z-index:30;display:grid;place-items:center;padding:18px}.modal-card{width:min(820px,96vw);background:#0f172a;border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:0 28px 80px rgba(0,0,0,.52)}
+.q-context{color:var(--muted);font-size:14px}.q-title{font-size:24px;font-weight:950;line-height:1.35;margin:10px 0 14px}.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}.option{text-align:left;background:#1e293b;color:#fff;border:1px solid rgba(255,255,255,.1);border-radius:15px;padding:14px;font-weight:850;cursor:pointer}.option:hover{background:#334155}
+.setup{position:fixed;inset:0;background:rgba(2,6,23,.92);z-index:20;display:grid;place-items:center;padding:18px}.setup-card{width:min(1220px,96vw);max-height:92vh;overflow:auto;background:#0f172a;border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:0 28px 80px rgba(0,0,0,.5)}.setup-card h2{font-size:clamp(24px,2.4vw,34px);line-height:1.12}.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}textarea.input{grid-column:1/-1;min-height:160px;line-height:1.45}
+.win{position:fixed;inset:0;background:rgba(2,6,23,.88);z-index:40;display:grid;place-items:center;text-align:center;padding:20px}.win-card{width:min(760px,94vw);background:linear-gradient(135deg,rgba(250,204,21,.2),rgba(34,211,238,.15));border:1px solid rgba(250,204,21,.35);border-radius:28px;padding:28px;box-shadow:0 28px 80px rgba(0,0,0,.52)}.win h2{font-size:42px;margin:0 0 8px}
+.hidden{display:none!important}
+@media(max-width:1120px){.main{grid-template-columns:260px 1fr}.panel.right{display:none}.hex{width:74px;height:65px}.map-layer{width:820px;height:500px}}
+@media(max-width:760px){html,body{overflow:auto}.app{height:auto}.main{grid-template-columns:1fr}.ocean-board{height:620px}.setup-grid,.options{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand"><div class="logo">🏝️</div><div><h1 id="title"></h1><div id="subtitle" class="sub"></div></div></div>
+    <div class="actions">
+      <select id="lang" class="select"><option value="zh">中文</option><option value="en">English</option><option value="ms">Bahasa Melayu</option></select>
+      <button id="setupBtn" class="btn secondary"></button>
+      <button id="fullBtn" class="btn secondary"></button>
+      <button id="resetBtn" class="btn bad"></button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="panel">
+      <div id="teamA" class="team-card"></div>
+      <div id="teamB" class="team-card"></div>
+      <div class="section"><div id="targetProgress" class="progress-pill"></div></div>
+      <div class="section">
+        <div id="ruleTitle" class="section-title"></div>
+        <div id="ruleText" class="help"></div>
+      </div>
+      <div class="section">
+        <div class="legend">
+          <span><i class="dot a"></i><b>A</b></span>
+          <span><i class="dot b"></i><b>B</b></span>
+          <span><i class="dot o"></i><b id="optionLabel"></b></span>
+          <span><i class="dot t"></i><b id="targetLabel"></b></span>
+          <span><i class="dot w"></i><b id="weedLabel"></b></span>
+        </div>
+      </div>
+    </div>
+    <div class="board-wrap">
+      <div class="statusbar">
+        <div><div id="turnText" class="turn"></div><div id="hintText" class="target-info"></div></div>
+        <button id="skipBtn" class="btn blue"></button>
+      </div>
+      <div id="oceanBoard" class="ocean-board"><div id="mapLayer" class="map-layer"></div></div>
+    </div>
+    <div class="panel right">
+      <h3 id="logTitle" style="margin:0 0 10px"></h3>
+      <div id="logs" class="log-list"></div>
+    </div>
+  </div>
+</div>
+
+<div id="setup" class="setup">
+  <div class="setup-card">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
+      <h2 id="setupTitle" style="margin:0 0 8px"></h2>
+      <select id="setupLang" class="select"><option value="zh">中文</option><option value="en">English</option><option value="ms">Bahasa Melayu</option></select>
+    </div>
+    <div id="setupHelp" class="help"></div>
+    <div class="setup-grid" style="margin-top:12px">
+      <input id="nameA" class="input">
+      <input id="nameB" class="input">
+      <select id="boardSize" class="select"><option value="small">Small Map</option><option value="normal" selected>Normal Map</option><option value="large">Large Map</option></select>
+      <select id="winNeed" class="select"><option value="2" selected>3 抢 2 / Best of 3</option><option value="1">3 抢 1 / First target</option></select>
+      <select id="startMode" class="select"><option value="diagonal" selected>A 左上 / B 右下</option><option value="vertical">A 上方 / B 下方</option><option value="horizontal">A 左边 / B 右边</option><option value="random">随机起点 / Random</option></select>
+      <select id="wrongMode" class="select"><option value="none" selected>答错：不改变土地</option><option value="neutral">答错：该土地变中立</option></select>
+      <input id="maxRounds" class="input" type="number" min="4" max="80" value="30">
+      <select id="soundMode" class="select"><option value="on" selected>Sound On</option><option value="off">Sound Off</option></select>
+      <textarea id="questionText" class="input"></textarea>
+    </div>
+    <div class="actions" style="margin-top:12px;justify-content:flex-start">
+      <button id="startBtn" class="btn good"></button>
+      <button id="sampleBtn" class="btn secondary"></button>
+    </div>
+  </div>
+</div>
+
+<div id="questionModal" class="modal hidden">
+  <div class="modal-card">
+    <div id="qContext" class="q-context"></div>
+    <div id="qTitle" class="q-title"></div>
+    <div id="options" class="options"></div>
+  </div>
+</div>
+
+<div id="win" class="win hidden">
+  <div class="win-card">
+    <h2 id="winTitle"></h2>
+    <p id="winDesc" style="font-size:20px;color:#e2e8f0"></p>
+    <button class="btn good" onclick="location.reload()" id="againBtn"></button>
+  </div>
+</div>
+
+<script>
+const I18N={
+ zh:{
+  title:"孤岛抢夺赛",subtitle:"A 队与 B 队在海上抢占六边形岛屿，先取得指定数量目标区者获胜。",
+  setup:"设置题库",fullscreen:"全屏",restart:"重开",setupTitle:"孤岛抢夺赛｜老师设置",
+  setupHelp:"老师可设定胜利条件、起点位置、回合数、答错规则与题库。游戏会随机生成 1–2 条海草障碍，队伍必须绕路抢占中间目标区。",
+  nameA:"A 队名称",nameB:"B 队名称",start:"开始游戏",sample:"载入示范题库",ruleTitle:"玩法说明",
+  ruleText:"轮到该队时，点击绿色发光的六边形土地，系统会随机抽题。答对就占领土地并插旗；答错则依老师设定处理。海草是障碍，不能通过。达到目标区占领条件即可获胜。",
+  option:"可抢占土地",target:"目标区",weed:"海草障碍",turn:"轮到",hint:"请选择自己土地旁边的绿色六边形方向进行抢攻。",skip:"跳过",logTitle:"战况记录",
+  correct:"答对！成功占领新土地。",wrong:"答错，正确答案是",neutral:"该土地变回中立。",teamA:"红队",teamB:"蓝队",questionFor:"抢占土地题",
+  win:"获胜！",winDesc:"成功取得足够的中间目标区。",again:"再玩一次",qph:"题目格式：题目 | 答案 | 选项1,选项2,选项3,选项4",
+  startLog:"比赛开始！海草障碍已经出现。",round:"回合",maxRound:"回合数已到，系统按目标区数量与土地数判定胜负。",draw:"平手！",
+  progress:"目标区",occupied:"已占领"
+ },
+ en:{
+  title:"Island Conquest",subtitle:"Team A and Team B capture hex islands over the sea. Control the required center targets to win.",
+  setup:"Question settings",fullscreen:"Fullscreen",restart:"Restart",setupTitle:"Island Conquest | Teacher Settings",
+  setupHelp:"Teachers can set win condition, starting positions, round limit, wrong-answer rule and question bank. The game randomly creates 1–2 seaweed barriers, so teams must go around them.",
+  nameA:"Team A name",nameB:"Team B name",start:"Start game",sample:"Load sample questions",ruleTitle:"How to play",
+  ruleText:"On your turn, click a glowing green hex next to your land. A random question appears. Answer correctly to capture and raise a flag. Wrong answers follow the teacher setting. Seaweed blocks cannot be crossed. Control enough center targets to win.",
+  option:"Claimable land",target:"Target zone",weed:"Seaweed block",turn:"Turn",hint:"Choose a glowing green hex next to your land to attack.",skip:"Skip",logTitle:"Battle log",
+  correct:"Correct! New land captured.",wrong:"Incorrect. Correct answer:",neutral:"The land becomes neutral.",teamA:"Red Team",teamB:"Blue Team",questionFor:"Land capture question",
+  win:"wins!",winDesc:"controlled enough center target tiles.",again:"Play again",qph:"Format: Question | Answer | Option 1,Option 2,Option 3,Option 4",
+  startLog:"Battle starts! Seaweed barriers have appeared.",round:"Round",maxRound:"Round limit reached. Winner is decided by target tiles and land count.",draw:"Draw!",
+  progress:"Targets",occupied:"Captured"
+ },
+ ms:{
+  title:"Perebutan Pulau",subtitle:"Pasukan A dan B merebut pulau heksagon di laut. Kuasai sasaran tengah yang diperlukan untuk menang.",
+  setup:"Tetapan soalan",fullscreen:"Skrin penuh",restart:"Mula semula",setupTitle:"Perebutan Pulau | Tetapan Guru",
+  setupHelp:"Guru boleh menetapkan syarat menang, kedudukan mula, had pusingan, peraturan jawapan salah dan bank soalan. Permainan menjana 1–2 halangan rumpai laut secara rawak.",
+  nameA:"Nama Pasukan A",nameB:"Nama Pasukan B",start:"Mula permainan",sample:"Muat soalan contoh",ruleTitle:"Cara bermain",
+  ruleText:"Apabila giliran pasukan, klik heksagon hijau di sebelah tanah sendiri. Soalan rawak akan muncul. Jawab betul untuk menawan tanah dan menaikkan bendera. Jawapan salah ikut tetapan guru. Rumpai laut ialah halangan. Kuasai sasaran tengah yang cukup untuk menang.",
+  option:"Tanah boleh direbut",target:"Zon sasaran",weed:"Halangan rumpai laut",turn:"Giliran",hint:"Pilih heksagon hijau di sebelah tanah sendiri untuk menyerang.",skip:"Langkau",logTitle:"Rekod pertempuran",
+  correct:"Betul! Tanah baharu berjaya ditawan.",wrong:"Salah. Jawapan betul:",neutral:"Tanah menjadi neutral.",teamA:"Pasukan Merah",teamB:"Pasukan Biru",questionFor:"Soalan rebut tanah",
+  win:"menang!",winDesc:"menguasai sasaran tengah yang mencukupi.",again:"Main lagi",qph:"Format: Soalan | Jawapan | Pilihan 1,Pilihan 2,Pilihan 3,Pilihan 4",
+  startLog:"Pertandingan bermula! Halangan rumpai laut telah muncul.",round:"Pusingan",maxRound:"Had pusingan tamat. Pemenang ditentukan melalui sasaran dan jumlah tanah.",draw:"Seri!",
+  progress:"Sasaran",occupied:"Dikuasai"
+ }
+};
+const BANK={
+ zh:[
+  ["使用 AI 时，最重要的态度是什么？","诚实与负责任",["诚实与负责任","随便乱用","隐藏来源","伤害别人"]],
+  ["看到陌生链接时，正确做法是什么？","先确认来源，不随便点击",["先确认来源，不随便点击","马上点击","输入密码测试","转发所有人"]],
+  ["AI 生成内容需要注意什么？","检查真实性",["检查真实性","永远相信","不用注明","越快越好"]],
+  ["安全密码应该怎样？","长且混合不同字符",["长且混合不同字符","123456","生日","名字"]],
+  ["图片识别 AI 可能会怎样？","有时会判断错误",["有时会判断错误","永远正确","可以闻味道","可以触摸物体"]]
+ ],
+ en:[
+  ["What is the most important attitude when using AI?","Be honest and responsible",["Be honest and responsible","Use it carelessly","Hide the source","Hurt others"]],
+  ["What should you do with an unknown link?","Check the source before clicking",["Check the source before clicking","Click immediately","Enter your password","Forward to everyone"]],
+  ["What should you check in AI-generated content?","Accuracy",["Accuracy","Trust everything","No need to cite","Speed only"]],
+  ["Which password is safer?","Long with mixed characters",["Long with mixed characters","123456","Birthday","Name"]],
+  ["What can happen with image recognition AI?","It may sometimes be wrong",["It may sometimes be wrong","Always correct","It can smell","It can touch objects"]]
+ ],
+ ms:[
+  ["Apakah sikap penting semasa menggunakan AI?","Jujur dan bertanggungjawab",["Jujur dan bertanggungjawab","Guna sesuka hati","Sembunyikan sumber","Menyakiti orang lain"]],
+  ["Apakah perlu dibuat dengan pautan tidak dikenali?","Semak sumber sebelum klik",["Semak sumber sebelum klik","Klik terus","Masukkan kata laluan","Kongsi kepada semua"]],
+  ["Apakah perlu disemak pada kandungan AI?","Ketepatan",["Ketepatan","Percaya semua","Tidak perlu nyatakan sumber","Kelajuan sahaja"]],
+  ["Kata laluan manakah lebih selamat?","Panjang dan bercampur aksara",["Panjang dan bercampur aksara","123456","Tarikh lahir","Nama"]],
+  ["Apa mungkin berlaku pada AI pengecaman gambar?","Kadang-kadang boleh salah",["Kadang-kadang boleh salah","Sentiasa betul","Boleh menghidu","Boleh menyentuh objek"]]
+ ]
+};
+let lang=new URLSearchParams(location.search).get("lang")||localStorage.getItem("island_lang")||"zh";
+let state=null, questions=[], pending=null, lastClaim=null;
+const $=s=>document.querySelector(s);
+function T(k){return(I18N[lang]||I18N.zh)[k]||k}
+function applyLang(){
+ document.documentElement.lang=lang==="zh"?"zh-Hans":lang;document.title=T("title");
+ ["title","subtitle","ruleTitle","ruleText","optionLabel","targetLabel","weedLabel","setupTitle","setupHelp","logTitle"].forEach(id=>{const el=$("#"+id); if(!el)return; el.textContent = id==="optionLabel"?T("option"):id==="targetLabel"?T("target"):id==="weedLabel"?T("weed"):T(id);});
+ $("#setupBtn").textContent=T("setup");$("#fullBtn").textContent=T("fullscreen");$("#resetBtn").textContent=T("restart");$("#skipBtn").textContent=T("skip");$("#startBtn").textContent=T("start");$("#sampleBtn").textContent=T("sample");$("#againBtn").textContent=T("again");
+ $("#nameA").placeholder=T("nameA");$("#nameB").placeholder=T("nameB");$("#questionText").placeholder=T("qph");$("#lang").value=lang;$("#setupLang").value=lang;
+ if(!$("#nameA").value)$("#nameA").value=T("teamA"); if(!$("#nameB").value)$("#nameB").value=T("teamB");
+ $("#questionText").value=sampleText();
+ if(state) render();
+}
+function sampleText(){return (BANK[lang]||BANK.zh).map(q=>`${q[0]} | ${q[1]} | ${q[2].join(",")}`).join("\n")}
+function parseQuestions(text){
+ const rows=text.split("\n").map(x=>x.trim()).filter(Boolean), out=[];
+ for(const row of rows){const p=row.split("|").map(x=>x.trim()); if(p.length>=2){let opts=p[2]?p[2].split(",").map(x=>x.trim()).filter(Boolean):[]; if(!opts.includes(p[1]))opts.unshift(p[1]); out.push({q:p[0],a:p[1],opts:shuffle(opts).slice(0,4)});}}
+ return out.length?out:(BANK[lang]||BANK.zh).map(x=>({q:x[0],a:x[1],opts:x[2]}));
+}
+function shuffle(a){return[...a].sort(()=>Math.random()-.5)}
+function rand(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function mapConfig(){const size=$("#boardSize").value; if(size==="small")return{cols:7,rows:5}; if(size==="large")return{cols:11,rows:7}; return{cols:9,rows:7};}
+function key(c,r){return `${c},${r}`}
+function cellAt(c,r){return state?.cells.find(x=>x.c===c&&x.r===r)}
+function staticCell(cells,c,r){return cells.find(x=>x.c===c&&x.r===r)}
+function makeState(){
+ const cfg=mapConfig(), cells=[];
+ for(let c=0;c<cfg.cols;c++)for(let r=0;r<cfg.rows;r++)cells.push({c,r,owner:null,target:false,obstacle:false});
+ const mid=Math.floor(cfg.cols/2), midRows=[Math.floor(cfg.rows/2)-1,Math.floor(cfg.rows/2),Math.floor(cfg.rows/2)+1].filter(r=>r>=0&&r<cfg.rows);
+ cells.forEach(cell=>{if(cell.c===mid&&midRows.includes(cell.r))cell.target=true;});
+ const starts = chooseStarts(cfg);
+ staticCell(cells,starts.A.c,starts.A.r).owner="A";
+ staticCell(cells,starts.B.c,starts.B.r).owner="B";
+ const s={cols:cfg.cols,rows:cfg.rows,cells,turn:"A",round:1,maxRounds:Number($("#maxRounds").value||30),winNeed:Number($("#winNeed").value||2),wrongMode:$("#wrongMode").value,sound:$("#soundMode").value==="on",starts,teams:{A:{name:$("#nameA").value||T("teamA"),count:1,correct:0},B:{name:$("#nameB").value||T("teamB"),count:1,correct:0}},logs:[T("startLog")],gameOver:false};
+ state=s; generateObstacles(); return state;
+}
+function chooseStarts(cfg){
+ const mode=$("#startMode").value;
+ const options={
+  diagonal:{A:{c:0,r:1},B:{c:cfg.cols-1,r:cfg.rows-2}},
+  vertical:{A:{c:Math.floor(cfg.cols/2),r:0},B:{c:Math.floor(cfg.cols/2),r:cfg.rows-1}},
+  horizontal:{A:{c:0,r:Math.floor(cfg.rows/2)},B:{c:cfg.cols-1,r:Math.floor(cfg.rows/2)}}
+ };
+ if(mode==="random"){
+   const pool=[options.diagonal,options.vertical,options.horizontal,{A:{c:0,r:cfg.rows-2},B:{c:cfg.cols-1,r:1}},{A:{c:1,r:0},B:{c:cfg.cols-2,r:cfg.rows-1}}];
+   return rand(pool);
+ }
+ return options[mode] || options.diagonal;
+}
+function generateObstacles(){
+ const count=1+Math.floor(Math.random()*2);
+ const protectedKeys=new Set(state.cells.filter(x=>x.target||x.owner).map(x=>key(x.c,x.r)));
+ for(let n=0;n<count;n++){
+  const horizontal=Math.random()>.45, len=2+Math.floor(Math.random()*2);
+  let placed=false, tries=0;
+  while(!placed && tries++<80){
+    const c=2+Math.floor(Math.random()*Math.max(1,state.cols-4));
+    const r=1+Math.floor(Math.random()*Math.max(1,state.rows-2));
+    const cells=[];
+    for(let i=0;i<len;i++){cells.push(horizontal?cellAt(c+i,r):cellAt(c,r+i));}
+    if(cells.every(x=>x&&!protectedKeys.has(key(x.c,x.r))&&!x.obstacle&&Math.abs(x.c-Math.floor(state.cols/2))>0)){
+      cells.forEach(x=>{x.obstacle=true; protectedKeys.add(key(x.c,x.r));}); placed=true;
+    }
+  }
+ }
+}
+function startGame(){questions=parseQuestions($("#questionText").value||sampleText());state=makeState();lastClaim=null;$("#setup").classList.add("hidden");render();fitMap();}
+function neighbors(c,r){
+ const even=c%2===0;
+ const dirs=even?[[0,-1],[1,-1],[1,0],[0,1],[-1,0],[-1,-1]]:[[0,-1],[1,0],[1,1],[0,1],[-1,1],[-1,0]];
+ return dirs.map(([dc,dr])=>cellAt(c+dc,r+dr)).filter(Boolean);
+}
+function claimableFor(team){
+ const set=new Map();
+ state.cells.filter(x=>x.owner===team).forEach(cell=>{
+   neighbors(cell.c,cell.r).forEach(n=>{if(!n.obstacle && (!n.owner||n.target))set.set(key(n.c,n.r),n);});
+ });
+ return [...set.values()].filter(x=>x.owner!==team);
+}
+function render(){
+ renderTeams(); renderMap(); renderLogs(); renderProgress();
+ $("#turnText").textContent=`${T("turn")}：${state.teams[state.turn].name}｜${T("round")} ${state.round}/${state.maxRounds}`;
+ $("#hintText").textContent=T("hint");
+}
+function targetCount(team){return state.cells.filter(x=>x.target&&x.owner===team).length}
+function renderProgress(){
+ $("#targetProgress").textContent=`${T("progress")}：A ${targetCount("A")}/${state.winNeed} ｜ B ${targetCount("B")}/${state.winNeed} ｜ ${T("occupied")} ${targetCount("A")+targetCount("B")}/3`;
+}
+function renderTeams(){
+ ["A","B"].forEach(team=>{
+  const t=state.teams[team], div=$("#team"+team);
+  div.className=`team-card ${state.turn===team?"active":""}`;
+  div.innerHTML=`<div class="team-head"><div class="team-name ${team.toLowerCase()}">${team}｜${t.name}</div><div class="score">${t.count}</div></div><div class="meta"><div class="stat"><b>${t.correct}</b><span>Correct</span></div><div class="stat"><b>${targetCount(team)}/${state.winNeed}</b><span>${T("target")}</span></div></div>`;
+ });
+}
+function renderMap(){
+ const layer=$("#mapLayer"); layer.innerHTML="";
+ const opts=new Set(claimableFor(state.turn).map(x=>key(x.c,x.r)));
+ const W=82,H=72,dx=64,dy=72;
+ const totalW=(state.cols-1)*dx+W,totalH=(state.rows-1)*dy+H+36;
+ layer.style.width=totalW+"px";layer.style.height=totalH+"px";
+ state.cells.forEach(cell=>{
+   const x=cell.c*dx, y=cell.r*dy+(cell.c%2?H/2:0);
+   const div=document.createElement("div"); div.className="hex";
+   if(cell.target)div.classList.add("target");
+   if(cell.obstacle)div.classList.add("obstacle");
+   else if(cell.owner==="A")div.classList.add("a"); else if(cell.owner==="B")div.classList.add("b"); else div.classList.add("neutral");
+   if(!cell.obstacle && opts.has(key(cell.c,cell.r)) && cell.owner!==opponent(state.turn)){div.classList.add("option"); div.onclick=()=>attack(cell);}
+   if(lastClaim===key(cell.c,cell.r)) div.classList.add("flag");
+   div.style.left=x+"px";div.style.top=y+"px";
+   let label="";
+   if(cell.obstacle)label="🌿";
+   else if(cell.target)label=cell.owner?`${cell.owner}★`:"★";
+   else label=cell.owner||"";
+   div.innerHTML=`<span>${label}</span>`;
+   layer.appendChild(div);
+ });
+ renderBoats(layer,W,H,dx,dy);
+ fitMap();
+}
+function renderBoats(layer,W,H,dx,dy){
+ [["A","⛵"],["B","🚤"]].forEach(([team,emoji])=>{
+   const s=state.starts[team]; if(!s)return;
+   const x=s.c*dx+(team==="A"?-34:58), y=s.r*dy+(s.c%2?H/2:0)+34;
+   const boat=document.createElement("div"); boat.className="boat"; boat.textContent=emoji; boat.style.left=x+"px"; boat.style.top=y+"px"; layer.appendChild(boat);
+ });
+}
+function fitMap(){
+ const board=$("#oceanBoard"),layer=$("#mapLayer"); if(!board||!layer)return;
+ const bw=board.clientWidth-32,bh=board.clientHeight-32,lw=layer.offsetWidth||920,lh=layer.offsetHeight||560;
+ const scale=Math.min(bw/lw,bh/lh,1.15);
+ layer.style.transform=`translate(-50%,-50%) scale(${scale})`;
+}
+function renderLogs(){$("#logs").innerHTML=state.logs.map(x=>`<div class="log">${x}</div>`).join("")}
+function addLog(x){state.logs.unshift(x);state.logs=state.logs.slice(0,8)}
+function opponent(t){return t==="A"?"B":"A"}
+function attack(cell){if(state.gameOver)return; pending=cell; const q=questions[Math.floor(Math.random()*questions.length)]; pending.question=q; $("#qContext").textContent=`${state.teams[state.turn].name}｜${T("questionFor")}`; $("#qTitle").textContent=q.q; $("#options").innerHTML=shuffle(q.opts).map(opt=>`<button class="option" data-answer="${String(opt).replaceAll('"','&quot;')}">${opt}</button>`).join(""); document.querySelectorAll(".option").forEach(btn=>btn.onclick=()=>answer(btn.dataset.answer)); $("#questionModal").classList.remove("hidden");}
+function answer(ans){
+ $("#questionModal").classList.add("hidden");
+ const team=state.turn, q=pending.question;
+ if(ans===q.a){
+   pending.owner=team; lastClaim=key(pending.c,pending.r);
+   state.teams[team].count=state.cells.filter(x=>x.owner===team).length; state.teams[team].correct++;
+   addLog(`✅ ${state.teams[team].name} ${T("correct")}`); playTone("correct");
+   if(targetCount(team)>=state.winNeed){win(team); return;}
+ } else {
+   addLog(`❌ ${state.teams[team].name} ${T("wrong")}「${q.a}」`);
+   if(state.wrongMode==="neutral" && pending && !pending.obstacle){ pending.owner=null; addLog(`🌊 ${T("neutral")}`); }
+   playTone("wrong");
+ }
+ pending=null;
+ state.turn=opponent(team);
+ if(state.turn==="A") state.round++;
+ if(state.round>state.maxRounds){endByRounds();return;}
+ render();
+}
+function endByRounds(){
+ addLog(`⏱️ ${T("maxRound")}`);
+ const aT=targetCount("A"), bT=targetCount("B");
+ let winner=null;
+ if(aT>bT) winner="A"; else if(bT>aT) winner="B";
+ else if(state.teams.A.count>state.teams.B.count) winner="A"; else if(state.teams.B.count>state.teams.A.count) winner="B";
+ if(winner) win(winner,T("maxRound")); else {state.gameOver=true;$("#winTitle").textContent=T("draw");$("#winDesc").textContent=T("maxRound");$("#win").classList.remove("hidden");}
+}
+function win(team,desc){state.gameOver=true; render(); playTone("win"); $("#winTitle").textContent=`${team}｜${state.teams[team].name} ${T("win")}`; $("#winDesc").textContent=desc||T("winDesc"); $("#win").classList.remove("hidden");}
+function playTone(type){
+ if(!state||!state.sound)return;
+ try{
+  const ctx=new (window.AudioContext||window.webkitAudioContext)();
+  const osc=ctx.createOscillator(); const gain=ctx.createGain();
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.frequency.value=type==="correct"?740:type==="wrong"?180:980;
+  gain.gain.value=.055; osc.start();
+  setTimeout(()=>{osc.stop();ctx.close();}, type==="win"?380:160);
+ }catch(e){}
+}
+$("#lang").onchange=e=>{lang=e.target.value;localStorage.setItem("island_lang",lang);applyLang()}
+$("#setupLang").onchange=e=>{lang=e.target.value;localStorage.setItem("island_lang",lang);applyLang()}
+$("#setupBtn").onclick=()=>$("#setup").classList.remove("hidden");
+$("#resetBtn").onclick=()=>location.reload();
+$("#fullBtn").onclick=()=>document.documentElement.requestFullscreen?.();
+$("#skipBtn").onclick=()=>{if(!state||state.gameOver)return;state.turn=opponent(state.turn);if(state.turn==="A")state.round++;render();}
+$("#startBtn").onclick=startGame;
+$("#sampleBtn").onclick=()=>$("#questionText").value=sampleText();
+window.addEventListener("resize",fitMap);
+applyLang();
+</script>
+</body>
+</html>

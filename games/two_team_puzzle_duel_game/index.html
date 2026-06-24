@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>双组拼图对战</title>
+<style>
+:root{--bg:#111827;--bg2:#581c87;--panel:rgba(15,23,42,.82);--line:rgba(255,255,255,.13);--text:#f8fafc;--muted:#cbd5e1;--accent:#a78bfa;--good:#22c55e;--bad:#ef4444;--yellow:#fbbf24}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",Arial,sans-serif;color:var(--text);background:radial-gradient(circle at top,var(--bg2),var(--bg) 66%,#020617)}button,input,select{font:inherit}
+.app{height:100vh;width:min(1520px,98vw);margin:0 auto;padding:12px;display:grid;grid-template-rows:auto auto 1fr;gap:10px}
+.topbar,.setupbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);background:rgba(15,23,42,.72);border-radius:20px;box-shadow:0 14px 34px rgba(0,0,0,.25)}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;font-size:30px;background:linear-gradient(135deg,#a78bfa,#22d3ee)}
+h1{margin:0;font-size:clamp(22px,2.5vw,36px);line-height:1.05}.sub{font-size:13px;color:var(--muted);margin-top:4px}.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.btn{border:0;border-radius:13px;padding:9px 12px;font-weight:900;cursor:pointer;background:var(--accent);color:#1e1b4b}.btn.secondary{background:#334155;color:#fff;border:1px solid var(--line)}.btn.good{background:var(--good);color:#052e16}.btn.bad{background:var(--bad);color:#fff}.input,.select{border:1px solid rgba(255,255,255,.15);background:#08111f;color:#fff;border-radius:12px;padding:9px 10px}
+.duel{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;overflow:hidden}
+.team{min-height:0;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:12px;display:grid;grid-template-rows:auto 1fr;gap:10px;box-shadow:0 14px 34px rgba(0,0,0,.22);overflow:hidden}.team.winner{outline:4px solid var(--yellow)}
+.team-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.team-title{font-size:24px;font-weight:950}.timer{font-size:25px;font-weight:950;color:var(--yellow)}
+.play-area{min-height:0;display:grid;grid-template-rows:1.15fr .85fr;gap:8px;overflow:hidden}.pane{min-height:0;border-radius:18px;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.1);padding:7px;display:grid;place-items:center;overflow:hidden}.board,.pieces{display:grid;gap:4px;overflow:hidden}.cell,.piece{border-radius:8px;border:1px solid rgba(255,255,255,.16);min-width:0;min-height:0}.cell{background:rgba(255,255,255,.05)}.cell.correct{outline:2px solid var(--good)}.cell .piece{width:100%;height:100%}.piece{background-repeat:no-repeat;cursor:grab;box-shadow:0 5px 12px rgba(0,0,0,.24)}
+.preview{height:70px;max-width:120px;border-radius:12px;background:#020617 center/contain no-repeat;border:1px solid rgba(255,255,255,.12)}.help{font-size:13px;color:var(--muted);line-height:1.45}.hidden{display:none!important}.win{position:fixed;inset:0;background:rgba(2,6,23,.86);z-index:30;display:grid;place-items:center;text-align:center;padding:20px}.win-card{width:min(720px,94vw);background:linear-gradient(135deg,rgba(167,139,250,.22),rgba(34,211,238,.15));border:1px solid rgba(167,139,250,.38);border-radius:28px;padding:28px;box-shadow:0 28px 80px rgba(0,0,0,.52)}.win h2{font-size:42px;margin:0 0 8px}
+@media(max-width:900px){html,body{overflow:auto}.app{height:auto}.duel{grid-template-columns:1fr}.play-area{height:720px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand"><div class="logo">🖼️</div><div><h1 id="title"></h1><div id="subtitle" class="sub"></div></div></div>
+    <div class="actions"><select id="lang" class="select"><option value="zh">中文</option><option value="en">English</option><option value="ms">Bahasa Melayu</option></select><button id="fullBtn" class="btn secondary"></button><button id="resetBtn" class="btn bad"></button></div>
+  </div>
+  <div class="setupbar">
+    <div class="actions"><input id="imageInput" class="input" type="file" accept="image/*"><select id="difficulty" class="select"><option value="2">2 × 2</option><option value="3" selected>3 × 3</option><option value="4">4 × 4</option><option value="5">5 × 5</option></select><input id="teamA" class="input" style="width:150px"><input id="teamB" class="input" style="width:150px"><button id="startBtn" class="btn good"></button></div>
+    <div class="actions"><div id="preview" class="preview"></div><div id="tip" class="help"></div></div>
+  </div>
+  <div class="duel"><div id="team0" class="team"></div><div id="team1" class="team"></div></div>
+</div>
+<div id="win" class="win hidden"><div class="win-card"><h2 id="winTitle"></h2><p id="winDesc" style="font-size:20px;color:#e2e8f0"></p><button class="btn good" onclick="document.getElementById('win').classList.add('hidden')"></button></div></div>
+<script>
+const I18N={
+ zh:{title:"双组拼图对战",subtitle:"老师上传图片，两组同时拼合，最快完成的一组胜利。",fullscreen:"全屏",restart:"重开",start:"开始对战",uploadFirst:"请先上传图片。",teamA:"红队",teamB:"蓝队",tip:"两组使用同一张图片。把下方碎片拖到上方拼图区。",winner:"获胜组别",time:"完成时间",again:"继续",ready:"准备中"},
+ en:{title:"Two-Team Puzzle Duel",subtitle:"Teacher uploads an image. Two teams solve the puzzle at the same time. Fastest team wins.",fullscreen:"Fullscreen",restart:"Restart",start:"Start duel",uploadFirst:"Please upload an image first.",teamA:"Red Team",teamB:"Blue Team",tip:"Both teams use the same image. Drag pieces from the lower area to the board above.",winner:"Winning team",time:"Completion time",again:"Continue",ready:"Ready"},
+ ms:{title:"Duel Puzzle Dua Kumpulan",subtitle:"Guru memuat naik gambar. Dua kumpulan menyusun puzzle serentak. Kumpulan terpantas menang.",fullscreen:"Skrin penuh",restart:"Mula semula",start:"Mula duel",uploadFirst:"Sila muat naik gambar dahulu.",teamA:"Pasukan Merah",teamB:"Pasukan Biru",tip:"Kedua-dua kumpulan menggunakan gambar yang sama. Seret kepingan dari bawah ke papan di atas.",winner:"Kumpulan menang",time:"Masa siap",again:"Teruskan",ready:"Sedia"}
+};
+let lang=new URLSearchParams(location.search).get("lang")||localStorage.getItem("duel_lang")||"zh",imgUrl="",imgW=1,imgH=1,imgRatio=1,grid=3,startTime=0,timerId=null,done=[false,false],times=[null,null],running=false;
+const $=s=>document.querySelector(s);
+function T(k){return(I18N[lang]||I18N.zh)[k]||k}
+function fmt(ms){ms=Math.max(0,ms||0);let s=Math.floor(ms/1000),m=Math.floor(s/60);s%=60;let d=Math.floor((ms%1000)/100);return`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}.${d}`}
+function applyLang(){document.documentElement.lang=lang==="zh"?"zh-Hans":lang;document.title=T("title");$("#title").textContent=T("title");$("#subtitle").textContent=T("subtitle");$("#fullBtn").textContent=T("fullscreen");$("#resetBtn").textContent=T("restart");$("#startBtn").textContent=T("start");$("#teamA").placeholder=T("teamA");$("#teamB").placeholder=T("teamB");if(!$("#teamA").value)$("#teamA").value=T("teamA");if(!$("#teamB").value)$("#teamB").value=T("teamB");$("#tip").textContent=T("tip");$("#win button").textContent=T("again");$("#lang").value=lang;renderEmpty();}
+$("#lang").onchange=e=>{lang=e.target.value;localStorage.setItem("duel_lang",lang);applyLang()}
+$("#fullBtn").onclick=()=>document.documentElement.requestFullscreen?.();$("#resetBtn").onclick=()=>location.reload()
+$("#imageInput").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  imgUrl=URL.createObjectURL(f);
+  const img=new Image();
+  img.onload=()=>{
+    imgW=img.naturalWidth||1;imgH=img.naturalHeight||1;imgRatio=imgW/imgH;
+    $("#preview").style.backgroundImage=`url(${imgUrl})`;
+    $("#preview").style.aspectRatio=`${imgW} / ${imgH}`;
+  };
+  img.src=imgUrl;
+}
+$("#startBtn").onclick=()=>{if(!imgUrl){alert(T("uploadFirst"));return;}start();}
+window.addEventListener("resize",()=>{ if(running) sizeAll(); });
+function renderEmpty(){if(running)return;[0,1].forEach(i=>{$("#team"+i).innerHTML=`<div class="team-head"><div class="team-title">${i?($("#teamB").value||T("teamB")):($("#teamA").value||T("teamA"))}</div><div class="timer">${T("ready")}</div></div><div class="play-area"><div class="pane"><div class="board"></div></div><div class="pane"><div class="pieces"></div></div></div>`})}
+function start(){grid=Number($("#difficulty").value);running=true;done=[false,false];times=[null,null];startTime=performance.now();clearInterval(timerId);timerId=setInterval(updateTimers,100);[0,1].forEach(i=>buildTeam(i));sizeAll();}
+function updateTimers(){[0,1].forEach(i=>{const el=document.querySelector(`#team${i} .timer`);if(el&&!done[i])el.textContent=fmt(performance.now()-startTime);});}
+function fitSize(pane){
+  const pad=16,w=Math.max(80,pane.clientWidth-pad),h=Math.max(80,pane.clientHeight-pad);
+  let outW=w,outH=w/imgRatio;if(outH>h){outH=h;outW=h*imgRatio;}return{w:Math.floor(outW),h:Math.floor(outH)}
+}
+function applySize(el,size){el.style.width=size.w+"px";el.style.height=size.h+"px";el.style.gridTemplateColumns=`repeat(${grid},1fr)`;el.style.gridTemplateRows=`repeat(${grid},1fr)`}
+function sizeAll(){[0,1].forEach(i=>{const root=$("#team"+i);const board=root.querySelector(".board"),pieces=root.querySelector(".pieces");const panes=root.querySelectorAll(".pane");if(board&&pieces){applySize(board,fitSize(panes[0]));applySize(pieces,fitSize(panes[1]));}})}
+function buildTeam(i){
+  const name=i?($("#teamB").value||T("teamB")):($("#teamA").value||T("teamA"));
+  const team=$("#team"+i);team.classList.remove("winner");
+  team.innerHTML=`<div class="team-head"><div class="team-title">${name}</div><div class="timer">00:00.0</div></div><div class="play-area"><div class="pane"><div class="board" data-team="${i}"></div></div><div class="pane"><div class="pieces" data-team="${i}"></div></div></div>`;
+  const board=team.querySelector(".board"),pieces=team.querySelector(".pieces");
+  const ids=[...Array(grid*grid).keys()],shuffled=[...ids].sort(()=>Math.random()-.5);
+  board.innerHTML=ids.map(id=>`<div class="cell" data-target="${id}" data-team="${i}"></div>`).join("");
+  pieces.innerHTML=shuffled.map(id=>pieceHtml(id,i)).join("");
+  sizeAll();bindDrag(team,i);
+}
+function pieceHtml(id,team){const r=Math.floor(id/grid),c=id%grid;return`<div class="piece" draggable="true" data-id="${id}" data-team="${team}" style="background-image:url('${imgUrl}');background-size:${grid*100}% ${grid*100}%;background-position:${grid===1?0:(c/(grid-1))*100}% ${grid===1?0:(r/(grid-1))*100}%"></div>`}
+function bindDrag(root,team){
+  root.querySelectorAll(".piece").forEach(p=>p.addEventListener("dragstart",e=>{e.dataTransfer.setData("id",p.dataset.id);e.dataTransfer.setData("team",p.dataset.team)}));
+  root.querySelectorAll(".cell").forEach(cell=>{cell.addEventListener("dragover",e=>e.preventDefault());cell.addEventListener("drop",e=>{e.preventDefault();const id=e.dataTransfer.getData("id"),tm=e.dataTransfer.getData("team");if(Number(tm)!==team)return;const piece=root.querySelector(`.piece[data-id="${id}"][data-team="${tm}"]`);if(!piece)return;if(cell.firstChild){root.querySelector(".pieces").appendChild(cell.firstChild);cell.classList.remove("correct")}cell.appendChild(piece);cell.classList.toggle("correct",cell.dataset.target===id);check(team);});});
+  root.querySelector(".pieces").addEventListener("dragover",e=>e.preventDefault());
+  root.querySelector(".pieces").addEventListener("drop",e=>{e.preventDefault();const id=e.dataTransfer.getData("id"),tm=e.dataTransfer.getData("team");if(Number(tm)!==team)return;const piece=root.querySelector(`.piece[data-id="${id}"][data-team="${tm}"]`);if(piece)root.querySelector(".pieces").appendChild(piece);});
+}
+function check(team){const cells=[...document.querySelectorAll(`#team${team} .cell`)];if(!done[team]&&cells.every(c=>c.firstChild&&c.firstChild.dataset.id===c.dataset.target)){done[team]=true;times[team]=performance.now()-startTime;document.querySelector(`#team${team} .timer`).textContent=fmt(times[team])+" ✅";announce(team);}}
+function announce(team){clearInterval(timerId);const name=team?($("#teamB").value||T("teamB")):($("#teamA").value||T("teamA"));$("#team"+team).classList.add("winner");$("#winTitle").textContent=`🏆 ${T("winner")}：${name}`;$("#winDesc").textContent=`${T("time")}：${fmt(times[team])}`;$("#win").classList.remove("hidden");}
+applyLang();
+</script>
+</body>
+</html>

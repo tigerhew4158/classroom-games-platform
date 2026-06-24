@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>图片拼图竞速赛</title>
+<style>
+:root{
+  --bg:#07111f;--bg2:#12345f;--panel:rgba(15,23,42,.82);--line:rgba(255,255,255,.13);
+  --text:#f8fafc;--muted:#cbd5e1;--accent:#fbbf24;--good:#22c55e;--bad:#ef4444;--blue:#38bdf8;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",Arial,sans-serif;color:var(--text);background:radial-gradient(circle at top,var(--bg2),var(--bg) 65%,#020617)}
+button,input,select{font:inherit}
+.app{height:100vh;width:min(1500px,98vw);margin:0 auto;padding:12px;display:grid;grid-template-rows:auto 1fr;gap:10px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);background:rgba(15,23,42,.72);border-radius:20px;box-shadow:0 14px 34px rgba(0,0,0,.28)}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;font-size:30px;background:linear-gradient(135deg,#fbbf24,#38bdf8)}
+h1{margin:0;font-size:clamp(22px,2.5vw,36px);line-height:1.05}.sub{font-size:13px;color:var(--muted);margin-top:4px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.btn{border:0;border-radius:13px;padding:9px 12px;font-weight:900;cursor:pointer;background:var(--accent);color:#111827;box-shadow:0 8px 18px rgba(0,0,0,.18)}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.04)}.btn.secondary{background:#334155;color:#fff;border:1px solid var(--line);box-shadow:none}.btn.good{background:var(--good);color:#052e16}.btn.bad{background:var(--bad);color:#fff}.btn.blue{background:var(--blue);color:#062033}
+.input,.select{border:1px solid rgba(255,255,255,.15);background:#08111f;color:#fff;border-radius:12px;padding:9px 10px}
+.main{min-height:0;display:grid;grid-template-columns:300px 1fr 320px;gap:10px}
+.panel{min-height:0;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:12px;box-shadow:0 14px 34px rgba(0,0,0,.22);overflow:hidden}
+.section{padding:10px;border-radius:15px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);margin-bottom:10px}
+.section-title{font-size:14px;color:#e2e8f0;font-weight:900;margin-bottom:8px}
+.help{font-size:13px;line-height:1.55;color:var(--muted)}
+.preview{width:100%;max-height:160px;border-radius:14px;background:#020617 center/contain no-repeat;border:1px solid rgba(255,255,255,.12);display:grid;place-items:center;color:var(--muted);overflow:hidden}
+.team-list{display:grid;gap:8px}.team-row{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:9px 10px;border-radius:13px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}.team-row.active{outline:3px solid var(--accent)}.team-time{font-weight:900;color:#fde68a}
+.board-wrap{min-height:0;display:grid;grid-template-rows:auto 1fr;gap:10px}
+.statusbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-radius:16px;background:rgba(15,23,42,.72);border:1px solid var(--line)}
+.timer{font-size:28px;font-weight:950;color:var(--accent)}
+.board-area{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;overflow:hidden}.board-area.landscape{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) minmax(92px,.42fr)}.board-area.landscape #boardPane{order:1}.board-area.landscape #piecesPane{order:2}.board-area.portrait #piecesPane{order:1}.board-area.portrait #boardPane{order:2}
+.pane{min-height:0;border-radius:20px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.1);padding:8px;display:grid;place-items:center;overflow:hidden}
+.pieces,.board{display:grid;gap:5px;overflow:hidden}
+.cell,.piece{border-radius:8px;border:1px solid rgba(255,255,255,.16);min-width:0;min-height:0}
+.cell{background:rgba(255,255,255,.05)}
+.piece{background-repeat:no-repeat;cursor:grab;box-shadow:0 6px 12px rgba(0,0,0,.25)}
+.piece:active{cursor:grabbing}.cell.correct{outline:2px solid var(--good)}.cell .piece{width:100%;height:100%}
+.result{height:100%;display:grid;grid-template-rows:auto 1fr;gap:8px}.log-list{display:flex;flex-direction:column;gap:8px;overflow:hidden}.log{padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:13px;line-height:1.45}
+.win{position:fixed;inset:0;background:rgba(2,6,23,.86);z-index:30;display:grid;place-items:center;text-align:center;padding:20px}.win-card{width:min(720px,94vw);background:linear-gradient(135deg,rgba(251,191,36,.2),rgba(56,189,248,.14));border:1px solid rgba(251,191,36,.35);border-radius:28px;padding:28px;box-shadow:0 28px 80px rgba(0,0,0,.52)}.win h2{font-size:42px;margin:0 0 8px}
+.hidden{display:none!important}
+@media(max-width:1100px){.main{grid-template-columns:270px 1fr}.panel.right{display:none}.board-area{grid-template-columns:1fr}.pane{min-height:230px}}
+@media(max-width:760px){html,body{overflow:auto}.app{height:auto}.main{grid-template-columns:1fr}.board-area{grid-template-columns:1fr}.pane{min-height:260px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand"><div class="logo">🧩</div><div><h1 id="title"></h1><div id="subtitle" class="sub"></div></div></div>
+    <div class="actions">
+      <select id="lang" class="select"><option value="zh">中文</option><option value="en">English</option><option value="ms">Bahasa Melayu</option></select>
+      <button id="fullBtn" class="btn secondary"></button>
+      <button id="resetBtn" class="btn bad"></button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="panel">
+      <div class="section">
+        <div id="uploadTitle" class="section-title"></div>
+        <input id="imageInput" class="input" type="file" accept="image/*" style="width:100%">
+        <div id="preview" class="preview" style="margin-top:8px"></div>
+      </div>
+      <div class="section">
+        <div id="settingTitle" class="section-title"></div>
+        <div style="display:grid;gap:8px">
+          <select id="difficulty" class="select">
+            <option value="2">2 × 2</option>
+            <option value="3" selected>3 × 3</option>
+            <option value="4">4 × 4</option>
+            <option value="5">5 × 5</option>
+            <option value="6">6 × 6</option>
+          </select>
+          <select id="teamsCount" class="select">
+            <option value="2">2 Teams</option>
+            <option value="3">3 Teams</option>
+            <option value="4">4 Teams</option>
+            <option value="5">5 Teams</option>
+            <option value="6">6 Teams</option>
+          </select>
+          <button id="buildBtn" class="btn good"></button>
+          <button id="nextTeamBtn" class="btn blue"></button>
+        </div>
+      </div>
+      <div class="section">
+        <div id="howTitle" class="section-title"></div>
+        <div id="howText" class="help"></div>
+      </div>
+    </div>
+    <div class="board-wrap">
+      <div class="statusbar">
+        <div><b id="activeTeam"></b><div class="help" id="instruction"></div></div>
+        <div class="timer" id="timer">00:00.0</div>
+      </div>
+      <div id="boardArea" class="board-area">
+        <div id="piecesPane" class="pane"><div id="pieces" class="pieces"></div></div>
+        <div id="boardPane" class="pane"><div id="board" class="board"></div></div>
+      </div>
+    </div>
+    <div class="panel right">
+      <div class="result">
+        <h3 id="leaderTitle" style="margin:0"></h3>
+        <div id="teams" class="team-list"></div>
+        <div class="log-list" id="logs"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="win" class="win hidden"><div class="win-card"><h2 id="winTitle"></h2><p id="winDesc" style="font-size:20px;color:#e2e8f0"></p><button class="btn good" onclick="document.getElementById('win').classList.add('hidden')"></button></div></div>
+<script>
+const I18N={
+ zh:{title:"图片拼图竞速赛",subtitle:"老师上传图片作为题目，各组轮流拼图，最快完成者胜利。",uploadTitle:"上传题目图片",settingTitle:"游戏设置",howTitle:"玩法说明",howText:"老师先上传图片并选择难度。每一组轮流上台拼同一张图，系统记录完成时间。全部组别完成后，时间最短者获胜。",build:"生成拼图",nextTeam:"下一组开始",fullscreen:"全屏",restart:"重开",leader:"排行榜",active:"当前组别",instruction:"拖动左边碎片到右边正确位置。",uploadFirst:"请先上传图片。",team:"第 {n} 组",notDone:"请先完成当前组别。",complete:"完成！",winner:"最快完成组别",time:"时间",again:"继续",ready:"准备开始"},
+ en:{title:"Image Puzzle Speed Race",subtitle:"Teachers upload an image as the question. Teams take turns solving the puzzle. Fastest team wins.",uploadTitle:"Upload question image",settingTitle:"Game settings",howTitle:"How to play",howText:"Upload an image and choose the difficulty. Each team solves the same puzzle in turn. The system records completion time. The fastest team wins.",build:"Generate puzzle",nextTeam:"Start next team",fullscreen:"Fullscreen",restart:"Restart",leader:"Leaderboard",active:"Active team",instruction:"Drag pieces from the left to the correct positions on the right.",uploadFirst:"Please upload an image first.",team:"Team {n}",notDone:"Please complete the current team first.",complete:"Completed!",winner:"Fastest team",time:"Time",again:"Continue",ready:"Ready"},
+ ms:{title:"Perlumbaan Pantas Puzzle Gambar",subtitle:"Guru memuat naik gambar sebagai soalan. Kumpulan menyusun puzzle secara bergilir. Kumpulan terpantas menang.",uploadTitle:"Muat naik gambar soalan",settingTitle:"Tetapan permainan",howTitle:"Cara bermain",howText:"Guru memuat naik gambar dan memilih tahap. Setiap kumpulan menyusun gambar yang sama secara bergilir. Sistem merekod masa siap. Kumpulan terpantas menang.",build:"Jana puzzle",nextTeam:"Mula kumpulan seterusnya",fullscreen:"Skrin penuh",restart:"Mula semula",leader:"Papan markah",active:"Kumpulan semasa",instruction:"Seret kepingan dari kiri ke kedudukan betul di kanan.",uploadFirst:"Sila muat naik gambar dahulu.",team:"Kumpulan {n}",notDone:"Sila selesaikan kumpulan semasa dahulu.",complete:"Siap!",winner:"Kumpulan terpantas",time:"Masa",again:"Teruskan",ready:"Sedia"}
+};
+let lang=new URLSearchParams(location.search).get("lang")||localStorage.getItem("puzzle_lang")||"zh";
+let imgUrl="", imgW=1, imgH=1, imgRatio=1, grid=3, current=0, started=false, finished=false, startTime=0, timerId=null, teams=[], logs=[];
+const $=s=>document.querySelector(s);
+function T(k){return (I18N[lang]||I18N.zh)[k]||k}
+function fmt(ms){ms=Math.max(0,ms||0);let s=Math.floor(ms/1000),m=Math.floor(s/60);s%=60;let d=Math.floor((ms%1000)/100);return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}.${d}`}
+function applyLang(){document.documentElement.lang=lang==="zh"?"zh-Hans":lang;document.title=T("title");["title","subtitle","uploadTitle","settingTitle","howTitle"].forEach(id=>$("#"+id).textContent=T(id));$("#howText").textContent=T("howText");$("#buildBtn").textContent=T("build");$("#nextTeamBtn").textContent=T("nextTeam");$("#fullBtn").textContent=T("fullscreen");$("#resetBtn").textContent=T("restart");$("#leaderTitle").textContent=T("leader");$("#instruction").textContent=T("instruction");$("#win button").textContent=T("again");$("#lang").value=lang;renderTeams();}
+function teamName(i){return T("team").replace("{n}",i+1)}
+function log(x){logs.unshift(x);logs=logs.slice(0,6);$("#logs").innerHTML=logs.map(v=>`<div class="log">${v}</div>`).join("")}
+$("#lang").onchange=e=>{lang=e.target.value;localStorage.setItem("puzzle_lang",lang);applyLang()}
+$("#fullBtn").onclick=()=>document.documentElement.requestFullscreen?.()
+$("#resetBtn").onclick=()=>location.reload()
+$("#imageInput").onchange=e=>{
+  const f=e.target.files[0]; if(!f)return;
+  imgUrl=URL.createObjectURL(f);
+  const img=new Image();
+  img.onload=()=>{
+    imgW=img.naturalWidth||1; imgH=img.naturalHeight||1; imgRatio=imgW/imgH;
+    $("#preview").style.backgroundImage=`url(${imgUrl})`;
+    $("#preview").style.aspectRatio=`${imgW} / ${imgH}`;
+    $("#preview").textContent="";
+  };
+  img.src=imgUrl;
+}
+$("#buildBtn").onclick=()=>{if(!imgUrl){alert(T("uploadFirst"));return;}setupGame();}
+$("#nextTeamBtn").onclick=()=>{if(!teams.length){setupGame();return;}if(!teams[current].done && started){alert(T("notDone"));return;}if(current<teams.length-1){current++;makePuzzle();}else{showWinner();}}
+window.addEventListener("resize",()=>{ if(started) sizePuzzleAreas(); });
+function setupGame(){grid=Number($("#difficulty").value);const n=Number($("#teamsCount").value);teams=Array.from({length:n},(_,i)=>({name:teamName(i),time:null,done:false}));current=0;makePuzzle();renderTeams();log(T("ready"));}
+function fitSize(pane){
+  const pad=18;
+  const w=Math.max(80,pane.clientWidth-pad);
+  const h=Math.max(80,pane.clientHeight-pad);
+  let outW=w, outH=w/imgRatio;
+  if(outH>h){outH=h;outW=h*imgRatio;}
+  return {w:Math.floor(outW), h:Math.floor(outH)};
+}
+function sizePuzzleAreas(){
+  const area=$("#boardArea");
+  if(imgRatio>1.2){area.classList.add("landscape");area.classList.remove("portrait");}
+  else{area.classList.add("portrait");area.classList.remove("landscape");}
+  requestAnimationFrame(()=>{
+    const boardSize=fitSize($("#boardPane"));
+    const piecesSize=fitSize($("#piecesPane"));
+    applySize($("#board"), boardSize);
+    applySize($("#pieces"), piecesSize);
+  });
+}
+function applySize(el, size){
+  el.style.width=size.w+"px";
+  el.style.height=size.h+"px";
+  el.style.gridTemplateColumns=`repeat(${grid},1fr)`;
+  el.style.gridTemplateRows=`repeat(${grid},1fr)`;
+}
+function makePuzzle(){
+  finished=false;started=true;clearInterval(timerId);
+  startTime=performance.now();timerId=setInterval(()=>$("#timer").textContent=fmt(performance.now()-startTime),100);
+  $("#activeTeam").textContent=`${T("active")}：${teams[current].name}`;
+  const total=grid*grid, ids=[...Array(total).keys()], shuffled=[...ids].sort(()=>Math.random()-.5);
+  const pieces=$("#pieces"),board=$("#board");
+  board.innerHTML=ids.map(i=>`<div class="cell" data-target="${i}"></div>`).join("");
+  pieces.innerHTML=shuffled.map(i=>pieceHtml(i)).join("");
+  sizePuzzleAreas(); bindDrag(); renderTeams();
+}
+function pieceHtml(i){
+  const r=Math.floor(i/grid),c=i%grid;
+  return `<div class="piece" draggable="true" data-id="${i}" style="background-image:url('${imgUrl}');background-size:${grid*100}% ${grid*100}%;background-position:${grid===1?0:(c/(grid-1))*100}% ${grid===1?0:(r/(grid-1))*100}%"></div>`;
+}
+function bindDrag(){
+  document.querySelectorAll(".piece").forEach(p=>p.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",p.dataset.id)));
+  document.querySelectorAll(".cell").forEach(cell=>{
+    cell.addEventListener("dragover",e=>e.preventDefault());
+    cell.addEventListener("drop",e=>{
+      e.preventDefault();const id=e.dataTransfer.getData("text/plain");const piece=document.querySelector(`.piece[data-id="${id}"]`);if(!piece)return;
+      if(cell.firstChild){$("#pieces").appendChild(cell.firstChild);cell.classList.remove("correct")}
+      cell.appendChild(piece);cell.classList.toggle("correct",cell.dataset.target===id);checkComplete();
+    });
+  });
+  $("#pieces").addEventListener("dragover",e=>e.preventDefault());
+  $("#pieces").addEventListener("drop",e=>{e.preventDefault();const id=e.dataTransfer.getData("text/plain");const piece=document.querySelector(`.piece[data-id="${id}"]`);if(piece)$("#pieces").appendChild(piece);});
+}
+function checkComplete(){const cells=[...document.querySelectorAll(".cell")];if(cells.every(c=>c.firstChild&&c.firstChild.dataset.id===c.dataset.target)){finishTeam();}}
+function finishTeam(){if(finished)return;finished=true;clearInterval(timerId);const time=performance.now()-startTime;teams[current].time=time;teams[current].done=true;$("#timer").textContent=fmt(time);log(`✅ ${teams[current].name} ${T("complete")} ${fmt(time)}`);renderTeams();if(teams.every(t=>t.done))showWinner();}
+function renderTeams(){if(!teams.length){$("#activeTeam").textContent=T("ready");$("#teams").innerHTML="";return;}$("#teams").innerHTML=teams.map((t,i)=>`<div class="team-row ${i===current?"active":""}"><b>${t.name}</b><span class="team-time">${t.done?fmt(t.time):"--:--.-"}</span></div>`).join("")}
+function showWinner(){const done=teams.filter(t=>t.done);if(!done.length)return;const w=done.sort((a,b)=>a.time-b.time)[0];$("#winTitle").textContent=`🏆 ${T("winner")}：${w.name}`;$("#winDesc").textContent=`${T("time")}：${fmt(w.time)}`;$("#win").classList.remove("hidden");}
+applyLang();
+</script>
+</body>
+</html>

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>幸运转盘问答 Classroom Game</title>
+  <style>
+    :root{
+      --bg1:#061421; --bg2:#143b62; --card:#ffffff; --text:#172033; --muted:#65758b;
+      --primary:#8b5cf6; --primary2:#ec4899; --good:#16a34a; --bad:#dc2626; --warn:#f59e0b;
+      --line:#e5e7eb; --shadow:0 18px 46px rgba(0,0,0,.28); --radius:22px;
+      --red:#ef4444; --blue:#3b82f6; --green:#22c55e; --purple:#a855f7;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; color:#fff;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",Arial,sans-serif;
+      background:radial-gradient(circle at 12% 12%,#3b82f6 0,#173d69 28%,#061421 75%);
+    }
+    .app{max-width:1480px;margin:0 auto;padding:18px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;border-radius:20px;background:linear-gradient(135deg,#facc15,#ec4899,#8b5cf6);display:grid;place-items:center;font-size:32px;box-shadow:var(--shadow)}
+    h1{font-size:clamp(24px,3vw,42px);line-height:1;margin:0;letter-spacing:.4px}
+    .subtitle{color:#cbd5e1;font-size:14px;margin-top:6px}
+    .quickBtns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    button,.btn{border:none;border-radius:14px;padding:10px 14px;font-weight:900;cursor:pointer;transition:.15s transform,.15s filter;background:#fff;color:#111827;box-shadow:0 8px 18px rgba(0,0,0,.14)}
+    button:hover{transform:translateY(-1px);filter:brightness(1.03)}
+    button:active{transform:translateY(1px)}
+    button.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff}
+    button.good{background:var(--good);color:#fff}
+    button.bad{background:var(--bad);color:#fff}
+    button.warn{background:var(--warn);color:#fff}
+    button.ghost{background:rgba(255,255,255,.12);color:white;border:1px solid rgba(255,255,255,.24);box-shadow:none}
+    button.small{padding:8px 10px;border-radius:12px;font-size:13px}
+    button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
+    .layout{display:grid;grid-template-columns:380px 1fr;gap:16px;align-items:start}
+    .layout.playing{grid-template-columns:1fr}.layout.playing .settings{display:none}.layout.playing .game{min-height:calc(100vh - 100px)}
+    .panel{background:rgba(255,255,255,.96);color:var(--text);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .settings{position:sticky;top:14px}.panelHeader{padding:16px 18px;background:linear-gradient(135deg,#111827,#4c1d95);color:white;font-weight:1000;display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .panelBody{padding:16px}.sectionTitle{font-weight:1000;margin:13px 0 8px;color:#111827}.hint{font-size:13px;color:var(--muted);line-height:1.5;margin-top:6px}
+    label{display:block;font-size:13px;font-weight:900;margin:10px 0 6px;color:#374151}
+    select,input,textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:10px 12px;font:inherit;background:white;color:#111827;outline:none}
+    textarea{min-height:175px;resize:vertical;line-height:1.5;font-family:"Consolas","Courier New",monospace;font-size:13px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.rowBtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.rowBtns button{flex:1;min-width:120px}
+    .game{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;min-height:735px;position:relative;overflow:hidden}
+    .game:before{content:"";position:absolute;inset:-100px auto auto -100px;width:260px;height:260px;background:#facc15;border-radius:50%;filter:blur(90px);opacity:.18;pointer-events:none}
+    .game:after{content:"";position:absolute;right:-150px;bottom:-150px;width:320px;height:320px;background:#ec4899;border-radius:50%;filter:blur(110px);opacity:.16;pointer-events:none}
+    .hud{display:grid;grid-template-columns:minmax(260px,1fr) auto minmax(260px,1fr);gap:12px;align-items:center;margin-bottom:14px;position:relative;z-index:1}
+    .statusCard{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:12px}.timer{font-size:clamp(28px,5vw,64px);font-weight:1000;text-align:center;text-shadow:0 6px 14px rgba(0,0,0,.25)}
+    .currentTurn{font-weight:1000;font-size:20px}.roundInfo{font-size:13px;color:#cbd5e1;margin-top:4px}.goalInfo{text-align:right;font-weight:900}.goalInfo small{display:block;color:#cbd5e1;font-weight:700;margin-top:4px}
+    .teams{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;position:relative;z-index:1}.teamCard{border-radius:18px;padding:12px;background:rgba(255,255,255,.95);color:#111827;border:4px solid transparent;box-shadow:0 10px 22px rgba(0,0,0,.16);position:relative;overflow:hidden}.teamCard.active{outline:4px solid #facc15;transform:translateY(-2px)}.teamName{font-weight:1000;font-size:18px;display:flex;align-items:center;gap:8px}.teamDot{width:16px;height:16px;border-radius:999px;display:inline-block}.teamScore{font-size:42px;font-weight:1000;line-height:1;margin-top:8px}.teamMeta{color:#6b7280;font-size:13px;margin-top:5px}.bar{height:10px;background:#e5e7eb;border-radius:999px;margin-top:10px;overflow:hidden}.barFill{height:100%;width:0%;background:linear-gradient(90deg,#8b5cf6,#ec4899);transition:.35s}
+    .stage{display:grid;grid-template-columns:minmax(430px,560px) 1fr;gap:16px;position:relative;z-index:1;align-items:stretch}.wheelPanel,.sidePanel{background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.16);border-radius:24px;padding:16px;position:relative;overflow:hidden}.wheelPanel{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:520px}.pointer{width:0;height:0;border-left:24px solid transparent;border-right:24px solid transparent;border-top:44px solid #fef3c7;filter:drop-shadow(0 6px 6px rgba(0,0,0,.35));position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:5}.wheelBox{position:relative;width:min(78vw,420px);height:min(78vw,420px);display:grid;place-items:center}.wheel{width:100%;height:100%;border-radius:50%;border:12px solid rgba(255,255,255,.86);box-shadow:inset 0 0 0 5px rgba(0,0,0,.16),0 20px 42px rgba(0,0,0,.36);position:relative;transition:transform 4s cubic-bezier(.12,.72,.12,1);overflow:hidden}.wheel:before{content:"";position:absolute;inset:42%;border-radius:50%;background:#fff;box-shadow:0 0 0 10px rgba(0,0,0,.10);z-index:2}.wheelLabel{position:absolute;left:50%;top:50%;width:118px;margin-left:-59px;margin-top:-16px;text-align:center;color:#fff;font-weight:1000;font-size:13px;text-shadow:0 2px 4px rgba(0,0,0,.45);transform-origin:50% 16px;pointer-events:none;z-index:3}.spinBtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:118px;height:118px;border-radius:999px;background:linear-gradient(135deg,#fff,#fef3c7);font-size:22px;color:#4c1d95;z-index:4;border:7px solid rgba(255,255,255,.65);box-shadow:0 12px 26px rgba(0,0,0,.28)}.spinBtn:hover{transform:translate(-50%,-52%)}.wheelHint{margin-top:12px;color:#e2e8f0;text-align:center;font-weight:800}.resultBadge{margin-top:12px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);font-weight:1000;min-height:42px;display:flex;align-items:center;justify-content:center;text-align:center}
+    .sideTitle{font-size:22px;font-weight:1000;margin-bottom:8px}.sideText{color:#cbd5e1;line-height:1.55;font-weight:700}.eventList{display:grid;gap:8px;margin-top:14px}.eventItem{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:10px 12px;font-weight:900}.eventItem span:first-child{display:flex;align-items:center;gap:8px}.eventLog{margin-top:14px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:12px;min-height:54px;color:#e5e7eb;font-weight:800}.eventLog b{color:#fef08a}
+    .modalBackdrop{position:fixed;inset:0;background:rgba(2,6,23,.72);display:none;align-items:center;justify-content:center;z-index:50;padding:18px}.modalBackdrop.show{display:flex}.modal{max-width:900px;width:100%;background:white;color:#111827;border-radius:28px;box-shadow:0 30px 80px rgba(0,0,0,.45);overflow:hidden}.modalHead{padding:18px 22px;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:white;display:flex;align-items:center;justify-content:space-between;gap:10px}.modalTitle{font-weight:1000;font-size:24px}.modalBody{padding:22px}.bigEvent{font-size:clamp(36px,7vw,86px);text-align:center;margin:8px 0}.eventText{text-align:center;font-weight:1000;font-size:clamp(22px,3vw,36px);line-height:1.2}.question{font-size:clamp(22px,3vw,34px);font-weight:1000;line-height:1.25;margin-bottom:14px}.answerBox{padding:12px 14px;border-radius:16px;background:#f3f4f6;color:#111827;font-weight:900;margin:12px 0;display:none}.options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.option{padding:14px;border-radius:16px;border:2px solid #e5e7eb;background:#f9fafb;font-weight:900;text-align:left}.option.correct{background:#dcfce7;border-color:#22c55e}.option.wrong{background:#fee2e2;border-color:#ef4444}.modalActions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}.rankList{display:grid;gap:10px;margin-top:12px}.rankItem{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #e5e7eb;border-radius:16px;padding:12px 14px;background:#f9fafb;font-weight:900}.rankMedal{font-size:28px}.hidden{display:none!important}.footerNote{text-align:center;color:#94a3b8;font-size:12px;margin-top:12px}
+    @media (max-width:1150px){.layout{grid-template-columns:1fr}.settings{position:static}.hud{grid-template-columns:1fr}.goalInfo{text-align:left}.teams{grid-template-columns:repeat(2,1fr)}.stage{grid-template-columns:1fr}.wheelPanel{min-height:500px}}
+    @media (max-width:640px){.app{padding:12px}.topbar{align-items:flex-start;flex-direction:column}.quickBtns{justify-content:flex-start}.grid2,.grid3{grid-template-columns:1fr}.teams{grid-template-columns:1fr}.options{grid-template-columns:1fr}.modalBody{padding:16px}.wheelBox{width:min(92vw,360px);height:min(92vw,360px)}.wheelLabel{font-size:11px;width:92px;margin-left:-46px}.spinBtn{width:96px;height:96px;font-size:18px}.pointer{top:10px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🎡</div>
+        <div>
+          <h1 data-i18n="appTitle">幸运转盘问答</h1>
+          <div class="subtitle" data-i18n="appSub">适合老师投影使用的分组课堂复习小游戏</div>
+        </div>
+      </div>
+      <div class="quickBtns">
+        <button class="ghost small" id="showSettingsBtn" data-i18n="showSettings">显示老师设定</button>
+        <button class="ghost small" id="fsBtn" data-i18n="fullscreen">全屏</button>
+        <button class="ghost small" id="resetBtn" data-i18n="reset">重置</button>
+      </div>
+    </div>
+
+    <div class="layout" id="layout">
+      <aside class="settings panel" id="settingsPanel">
+        <div class="panelHeader"><span data-i18n="teacherSettings">老师设定</span><span>⚙️</span></div>
+        <div class="panelBody">
+          <div class="grid2">
+            <div>
+              <label data-i18n="uiLang">介面语言</label>
+              <select id="langSelect">
+                <option value="zh">简体中文</option>
+                <option value="en">English</option>
+                <option value="ms">Bahasa Melayu</option>
+              </select>
+            </div>
+            <div>
+              <label data-i18n="teamCount">组数</label>
+              <select id="teamCount"><option value="2">2</option><option value="3">3</option><option value="4">4</option></select>
+            </div>
+          </div>
+
+          <div class="grid2">
+            <div>
+              <label data-i18n="gameTime">游戏时间</label>
+              <select id="gameTime">
+                <option value="0" data-i18n="noLimit">不限时</option>
+                <option value="180">3:00</option><option value="300" selected>5:00</option><option value="480">8:00</option><option value="600">10:00</option>
+              </select>
+            </div>
+            <div>
+              <label data-i18n="targetScore">目标分</label>
+              <select id="targetScore"><option value="0" data-i18n="noTarget">不设目标</option><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option></select>
+            </div>
+          </div>
+
+          <div class="grid2">
+            <div>
+              <label data-i18n="questionMode">题目顺序</label>
+              <select id="questionMode"><option value="random" data-i18n="random">随机</option><option value="order" data-i18n="order">顺序</option></select>
+            </div>
+            <div>
+              <label data-i18n="turnAfter">回合结束后</label>
+              <select id="turnAfter"><option value="next" data-i18n="nextTeam">换下一组</option><option value="same" data-i18n="sameTeam">本组继续</option></select>
+            </div>
+          </div>
+
+          <div class="grid2">
+            <div>
+              <label data-i18n="wrongPenalty">答错扣分</label>
+              <select id="wrongPenalty"><option value="0" data-i18n="noDeduct">不扣分</option><option value="1" selected>-1</option><option value="2">-2</option></select>
+            </div>
+            <div>
+              <label data-i18n="sound">音效</label>
+              <select id="soundSelect"><option value="on" data-i18n="on">开启</option><option value="off" data-i18n="off">关闭</option></select>
+            </div>
+          </div>
+
+          <div class="sectionTitle" data-i18n="questionBank">题库</div>
+          <textarea id="questionBank" spellcheck="false"></textarea>
+          <div class="hint" data-i18n="bankHint">格式：题目,正确答案,错误选项1,错误选项2,错误选项3。只有两栏时为开放题。</div>
+          <div class="rowBtns">
+            <button id="importBtn" data-i18n="importTxt">汇入 TXT</button>
+            <button id="exportBtn" data-i18n="exportTxt">导出 TXT</button>
+            <input id="fileInput" type="file" accept=".txt,text/plain" class="hidden" />
+          </div>
+          <div class="rowBtns">
+            <button class="primary" id="startBtn" data-i18n="startGame">开始游戏</button>
+          </div>
+          <div class="hint" data-i18n="startHint">开始后老师设定区会隐藏，只保留游戏介面，适合投影使用。</div>
+        </div>
+      </aside>
+
+      <main class="game" id="gameArea">
+        <div class="hud">
+          <div class="statusCard">
+            <div class="currentTurn" id="turnText">轮到：红队</div>
+            <div class="roundInfo" id="roundInfo">请点击转盘按钮。</div>
+          </div>
+          <div class="timer" id="timer">05:00</div>
+          <div class="statusCard goalInfo" id="goalInfo">目标分：10<small>转到题目、加分、扣分、偷分、交换分数或跳过。</small></div>
+        </div>
+        <div class="teams" id="teams"></div>
+        <div class="stage">
+          <section class="wheelPanel">
+            <div class="pointer"></div>
+            <div class="wheelBox">
+              <div class="wheel" id="wheel"></div>
+              <button class="spinBtn" id="spinBtn" data-i18n="spin">转动</button>
+            </div>
+            <div class="wheelHint" id="wheelHint" data-i18n="wheelHint">轮到的队伍点击转盘，按照抽到的事件完成挑战。</div>
+            <div class="resultBadge" id="resultBadge">🎯 <span data-i18n="ready">准备开始</span></div>
+          </section>
+          <section class="sidePanel">
+            <div class="sideTitle" data-i18n="eventTitle">转盘事件</div>
+            <div class="sideText" data-i18n="eventDesc">老师可以把题库换成任何科目的复习题。选择题会自动判断，开放题由老师点击答对或答错。</div>
+            <div class="eventList" id="eventList"></div>
+            <div class="eventLog" id="eventLog">💡 <span data-i18n="logReady">设定完成后点击开始游戏。</span></div>
+            <div class="footerNote">LEAD AI Classroom Game Box · Offline HTML Game</div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="modalBackdrop" id="modalBackdrop">
+    <div class="modal" id="modal">
+      <div class="modalHead">
+        <div class="modalTitle" id="modalTitle">转盘事件</div>
+        <button class="small" id="modalClose">×</button>
+      </div>
+      <div class="modalBody" id="modalBody"></div>
+    </div>
+  </div>
+
+<script>
+const I18N = {
+  zh:{appTitle:'幸运转盘问答',appSub:'适合老师投影使用的分组课堂复习小游戏',showSettings:'显示老师设定',fullscreen:'全屏',reset:'重置',teacherSettings:'老师设定',uiLang:'介面语言',teamCount:'组数',gameTime:'游戏时间',noLimit:'不限时',targetScore:'目标分',noTarget:'不设目标',questionMode:'题目顺序',random:'随机',order:'顺序',turnAfter:'回合结束后',nextTeam:'换下一组',sameTeam:'本组继续',wrongPenalty:'答错扣分',noDeduct:'不扣分',sound:'音效',on:'开启',off:'关闭',questionBank:'题库',bankHint:'格式：题目,正确答案,错误选项1,错误选项2,错误选项3。只有两栏时为开放题。',importTxt:'汇入 TXT',exportTxt:'导出 TXT',startGame:'开始游戏',startHint:'开始后老师设定区会隐藏，只保留游戏介面，适合投影使用。',spin:'转动',wheelHint:'轮到的队伍点击转盘，按照抽到的事件完成挑战。',ready:'准备开始',eventTitle:'转盘事件',eventDesc:'老师可以把题库换成任何科目的复习题。选择题会自动判断，开放题由老师点击答对或答错。',logReady:'设定完成后点击开始游戏。',turn:'轮到',spinNow:'请点击转盘按钮。',goal:'目标分',noGoal:'无目标分',goalSmall:'转到题目、加分、扣分、偷分、交换分数或跳过。',teamRed:'红队',teamBlue:'蓝队',teamGreen:'绿队',teamPurple:'紫队',score:'分数',rounds:'回合',wheelEvent:'转盘事件',quiz1:'+1 题目',quiz2:'+2 题目',doubleQuiz:'双倍挑战',bonus1:'+1 奖励',bonus2:'+2 奖励',trap1:'-1 陷阱',trap2:'-2 陷阱',steal:'偷 1 分',swap:'交换分数',pass:'跳过',question:'题目',correctAnswer:'正确答案',showAnswer:'显示答案',correct:'答对',wrong:'答错',continue:'继续',close:'关闭',gameOver:'游戏结束',ranking:'排名',chooseOption:'请选择一个答案。',answerRight:'回答正确，获得 {n} 分。',answerWrong:'回答错误。',answerWrongPenalty:'回答错误，扣除 {n} 分。',gotPoints:'获得 {n} 分。',lostPoints:'扣除 {n} 分。',stole:'从 {team} 偷到 {n} 分。',noSteal:'没有可偷的分数。',swapped:'与 {team} 交换分数。',passTurn:'跳过本回合。',timeUp:'时间到！',targetReached:'达到目标分！',pleaseStart:'请先点击开始游戏。',confirmReset:'确定要重置游戏吗？',bankEmpty:'题库为空，请先输入题目。'},
+  en:{appTitle:'Lucky Wheel Quiz',appSub:'A team classroom revision game for projection',showSettings:'Show Teacher Settings',fullscreen:'Fullscreen',reset:'Reset',teacherSettings:'Teacher Settings',uiLang:'UI Language',teamCount:'Teams',gameTime:'Game Time',noLimit:'No limit',targetScore:'Target Score',noTarget:'No target',questionMode:'Question Order',random:'Random',order:'In order',turnAfter:'After Each Turn',nextTeam:'Next team',sameTeam:'Same team continues',wrongPenalty:'Wrong Penalty',noDeduct:'No penalty',sound:'Sound',on:'On',off:'Off',questionBank:'Question Bank',bankHint:'Format: Question,Correct Answer,Wrong Option 1,Wrong Option 2,Wrong Option 3. Two columns = open question.',importTxt:'Import TXT',exportTxt:'Export TXT',startGame:'Start Game',startHint:'After starting, teacher settings will be hidden for projection.',spin:'SPIN',wheelHint:'The current team spins the wheel and completes the event.',ready:'Ready',eventTitle:'Wheel Events',eventDesc:'Replace the question bank with any subject. Multiple-choice questions are checked automatically; open questions are judged by the teacher.',logReady:'Set up the game and click Start Game.',turn:'Turn',spinNow:'Click the spin button.',goal:'Target',noGoal:'No target',goalSmall:'Spin for quizzes, bonuses, penalties, steal, swap, or pass.',teamRed:'Red Team',teamBlue:'Blue Team',teamGreen:'Green Team',teamPurple:'Purple Team',score:'Score',rounds:'Turns',wheelEvent:'Wheel Event',quiz1:'+1 Quiz',quiz2:'+2 Quiz',doubleQuiz:'Double Quiz',bonus1:'+1 Bonus',bonus2:'+2 Bonus',trap1:'-1 Trap',trap2:'-2 Trap',steal:'Steal 1',swap:'Swap Scores',pass:'Pass',question:'Question',correctAnswer:'Correct Answer',showAnswer:'Show Answer',correct:'Correct',wrong:'Wrong',continue:'Continue',close:'Close',gameOver:'Game Over',ranking:'Ranking',chooseOption:'Choose an answer.',answerRight:'Correct. Gained {n} point(s).',answerWrong:'Wrong answer.',answerWrongPenalty:'Wrong answer. Lost {n} point(s).',gotPoints:'Gained {n} point(s).',lostPoints:'Lost {n} point(s).',stole:'Stole {n} point(s) from {team}.',noSteal:'No points available to steal.',swapped:'Swapped scores with {team}.',passTurn:'Turn skipped.',timeUp:'Time is up!',targetReached:'Target score reached!',pleaseStart:'Please start the game first.',confirmReset:'Reset the game?',bankEmpty:'Question bank is empty. Please enter questions first.'},
+  ms:{appTitle:'Kuiz Roda Bertuah',appSub:'Permainan ulang kaji kelas berkumpulan untuk projektor',showSettings:'Tunjuk Tetapan Guru',fullscreen:'Skrin Penuh',reset:'Set Semula',teacherSettings:'Tetapan Guru',uiLang:'Bahasa Antara Muka',teamCount:'Bilangan Kumpulan',gameTime:'Masa Permainan',noLimit:'Tiada had',targetScore:'Markah Sasaran',noTarget:'Tiada sasaran',questionMode:'Susunan Soalan',random:'Rawak',order:'Ikut urutan',turnAfter:'Selepas Giliran',nextTeam:'Kumpulan seterusnya',sameTeam:'Kumpulan sama teruskan',wrongPenalty:'Denda Salah',noDeduct:'Tiada denda',sound:'Bunyi',on:'Buka',off:'Tutup',questionBank:'Bank Soalan',bankHint:'Format: Soalan,Jawapan Betul,Pilihan Salah 1,Pilihan Salah 2,Pilihan Salah 3. Dua ruangan = soalan terbuka.',importTxt:'Import TXT',exportTxt:'Eksport TXT',startGame:'Mula Permainan',startHint:'Selepas mula, tetapan guru akan disembunyikan untuk projektor.',spin:'PUTAR',wheelHint:'Kumpulan semasa memutar roda dan menyelesaikan cabaran.',ready:'Sedia',eventTitle:'Peristiwa Roda',eventDesc:'Guru boleh menggantikan bank soalan dengan ulang kaji mana-mana subjek. Soalan objektif disemak automatik; soalan terbuka dinilai oleh guru.',logReady:'Sediakan permainan dan klik Mula Permainan.',turn:'Giliran',spinNow:'Klik butang putar.',goal:'Sasaran',noGoal:'Tiada sasaran',goalSmall:'Putar untuk soalan, bonus, denda, curi markah, tukar markah atau langkau.',teamRed:'Kumpulan Merah',teamBlue:'Kumpulan Biru',teamGreen:'Kumpulan Hijau',teamPurple:'Kumpulan Ungu',score:'Markah',rounds:'Giliran',wheelEvent:'Peristiwa Roda',quiz1:'+1 Soalan',quiz2:'+2 Soalan',doubleQuiz:'Cabaran Berganda',bonus1:'+1 Bonus',bonus2:'+2 Bonus',trap1:'-1 Perangkap',trap2:'-2 Perangkap',steal:'Curi 1',swap:'Tukar Markah',pass:'Langkau',question:'Soalan',correctAnswer:'Jawapan Betul',showAnswer:'Tunjuk Jawapan',correct:'Betul',wrong:'Salah',continue:'Teruskan',close:'Tutup',gameOver:'Permainan Tamat',ranking:'Kedudukan',chooseOption:'Pilih satu jawapan.',answerRight:'Betul. Dapat {n} markah.',answerWrong:'Jawapan salah.',answerWrongPenalty:'Jawapan salah. Hilang {n} markah.',gotPoints:'Dapat {n} markah.',lostPoints:'Hilang {n} markah.',stole:'Curi {n} markah daripada {team}.',noSteal:'Tiada markah untuk dicuri.',swapped:'Tukar markah dengan {team}.',passTurn:'Giliran dilangkau.',timeUp:'Masa tamat!',targetReached:'Markah sasaran dicapai!',pleaseStart:'Sila mula permainan dahulu.',confirmReset:'Set semula permainan?',bankEmpty:'Bank soalan kosong. Sila masukkan soalan dahulu.'}
+};
+
+const DEFAULT_BANK = `马来西亚首都是哪里？,吉隆坡,新山,槟城,马六甲
+AI 可以随便用同学照片做搞笑图吗？,不可以,可以,只要好笑就可以,老师没看到就可以
+password 的中文意思是什么？,密码
+太阳从哪里升起？,东方,西方,南方,北方
+ChatGPT 属于什么工具？,AI工具,游戏工具,交通工具,运动工具
+水的化学式是什么？,H2O
+植物制造食物的过程叫什么？,光合作用,呼吸作用,蒸发作用,消化作用
+早安 的马来文是什么？,selamat pagi
+网络账号的密码应该怎样设置？,复杂且不轻易告诉别人
+Malaysia flag is called what?,Jalur Gemilang,Union Jack,Stars and Stripes,Merlion Flag`;
+
+const EVENT_DEFS = [
+  {id:'quiz1',icon:'❓',score:1,quiz:true,color:'#8b5cf6'},
+  {id:'bonus1',icon:'🎁',score:1,color:'#22c55e'},
+  {id:'quiz2',icon:'⭐',score:2,quiz:true,color:'#2563eb'},
+  {id:'trap1',icon:'⚠️',score:-1,color:'#ef4444'},
+  {id:'steal',icon:'🕵️',score:1,color:'#f97316'},
+  {id:'doubleQuiz',icon:'💎',score:4,quiz:true,color:'#06b6d4'},
+  {id:'bonus2',icon:'🏆',score:2,color:'#16a34a'},
+  {id:'swap',icon:'🔄',score:0,color:'#a855f7'},
+  {id:'quiz1',icon:'❓',score:1,quiz:true,color:'#ec4899'},
+  {id:'trap2',icon:'💣',score:-2,color:'#dc2626'},
+  {id:'quiz2',icon:'⭐',score:2,quiz:true,color:'#3b82f6'},
+  {id:'pass',icon:'⏭️',score:0,color:'#64748b'}
+];
+const TEAM_COLORS = ['var(--red)','var(--blue)','var(--green)','var(--purple)'];
+const LS_KEY = 'lead_ai_lucky_wheel_quiz_v1';
+let lang = 'zh';
+let teams = [];
+let currentTeam = 0;
+let questions = [];
+let questionIndex = 0;
+let started = false;
+let spinning = false;
+let timeLeft = 300;
+let timerId = null;
+let rotation = 0;
+let currentQuizScore = 1;
+let currentQuestion = null;
+let selectedEvent = null;
+
+const $ = id => document.getElementById(id);
+const t = key => (I18N[lang] && I18N[lang][key]) || I18N.zh[key] || key;
+const fmt = (key, data={}) => t(key).replace(/\{(\w+)\}/g, (_,k)=> data[k] ?? '');
+
+function init(){
+  loadSettings();
+  bindEvents();
+  applyI18n();
+  parseQuestions();
+  setupTeams(false);
+  renderTeams();
+  renderWheel();
+  renderEventList();
+  updateHud();
+}
+
+function bindEvents(){
+  $('langSelect').addEventListener('change',()=>{lang=$('langSelect').value; saveSettings(); applyI18n(); renderTeams(); renderWheel(); renderEventList(); updateHud();});
+  ['teamCount','gameTime','targetScore','questionMode','turnAfter','wrongPenalty','soundSelect'].forEach(id=>$(id).addEventListener('change',()=>{saveSettings(); if(!started){setupTeams(false);renderTeams();updateHud();}}));
+  $('questionBank').addEventListener('input',()=>{saveSettings(); parseQuestions();});
+  $('startBtn').addEventListener('click',startGame);
+  $('showSettingsBtn').addEventListener('click',()=>{$('layout').classList.remove('playing');});
+  $('resetBtn').addEventListener('click',()=>{ if(confirm(t('confirmReset'))) resetGame(); });
+  $('fsBtn').addEventListener('click',toggleFullscreen);
+  $('spinBtn').addEventListener('click',spinWheel);
+  $('importBtn').addEventListener('click',()=>$('fileInput').click());
+  $('fileInput').addEventListener('change',importTxt);
+  $('exportBtn').addEventListener('click',exportTxt);
+  $('modalClose').addEventListener('click',closeModal);
+  $('modalBackdrop').addEventListener('click',e=>{ if(e.target === $('modalBackdrop')) closeModal(); });
+}
+
+function loadSettings(){
+  let saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
+  lang = saved.lang || 'zh';
+  $('langSelect').value = lang;
+  $('teamCount').value = saved.teamCount || '2';
+  $('gameTime').value = saved.gameTime || '300';
+  $('targetScore').value = saved.targetScore || '10';
+  $('questionMode').value = saved.questionMode || 'random';
+  $('turnAfter').value = saved.turnAfter || 'next';
+  $('wrongPenalty').value = saved.wrongPenalty || '1';
+  $('soundSelect').value = saved.soundSelect || 'on';
+  $('questionBank').value = saved.questionBank || DEFAULT_BANK;
+}
+function saveSettings(){
+  const data = {lang:$('langSelect').value, teamCount:$('teamCount').value, gameTime:$('gameTime').value, targetScore:$('targetScore').value, questionMode:$('questionMode').value, turnAfter:$('turnAfter').value, wrongPenalty:$('wrongPenalty').value, soundSelect:$('soundSelect').value, questionBank:$('questionBank').value};
+  localStorage.setItem(LS_KEY, JSON.stringify(data));
+}
+function applyI18n(){
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = t(el.dataset.i18n); });
+}
+
+function parseCSVLine(line){
+  const out=[]; let cur=''; let quoted=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(ch==='"'){ quoted=!quoted; continue; }
+    if(ch===',' && !quoted){ out.push(cur.trim()); cur=''; }
+    else cur += ch;
+  }
+  out.push(cur.trim());
+  return out.filter(v=>v.length>0);
+}
+function parseQuestions(){
+  questions = $('questionBank').value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean).map(line=>{
+    const parts = parseCSVLine(line);
+    if(parts.length < 2) return null;
+    const q = parts[0], answer = parts[1];
+    const options = parts.length >= 3 ? shuffle([answer, ...parts.slice(2)]) : [];
+    return {q, answer, options};
+  }).filter(Boolean);
+  if(questionIndex >= questions.length) questionIndex = 0;
+}
+function setupTeams(resetScores=true){
+  const count = parseInt($('teamCount').value,10) || 2;
+  const nameKeys = ['teamRed','teamBlue','teamGreen','teamPurple'];
+  const existing = teams;
+  teams = Array.from({length:count},(_,i)=>({
+    nameKey:nameKeys[i],
+    score: resetScores ? 0 : (existing[i]?.score || 0),
+    turns: resetScores ? 0 : (existing[i]?.turns || 0),
+    color: TEAM_COLORS[i]
+  }));
+  if(currentTeam >= teams.length) currentTeam = 0;
+}
+function renderTeams(){
+  $('teams').innerHTML = teams.map((team,i)=>{
+    const target = parseInt($('targetScore').value,10) || 0;
+    const pct = target ? Math.max(0, Math.min(100, team.score/target*100)) : Math.max(0, Math.min(100, team.score*10));
+    return `<div class="teamCard ${i===currentTeam?'active':''}">
+      <div class="teamName"><span class="teamDot" style="background:${team.color}"></span>${t(team.nameKey)}</div>
+      <div class="teamScore">${team.score}</div>
+      <div class="teamMeta">${t('rounds')}：${team.turns}</div>
+      <div class="bar"><div class="barFill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+}
+function updateHud(){
+  if(!teams.length) setupTeams(false);
+  $('turnText').textContent = `${t('turn')}：${t(teams[currentTeam].nameKey)}`;
+  $('roundInfo').textContent = started ? t('spinNow') : t('logReady');
+  const target = parseInt($('targetScore').value,10)||0;
+  $('goalInfo').innerHTML = `${target ? `${t('goal')}：${target}` : t('noGoal')}<small>${t('goalSmall')}</small>`;
+  timeLeft = started ? timeLeft : parseInt($('gameTime').value,10)||0;
+  $('timer').textContent = formatTime(timeLeft);
+}
+function formatTime(sec){
+  if(!sec) return '∞';
+  const m=Math.floor(sec/60), s=sec%60;
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+function renderWheel(){
+  const wheel = $('wheel');
+  const seg = 360 / EVENT_DEFS.length;
+  const gradient = EVENT_DEFS.map((ev,i)=>`${ev.color} ${i*seg}deg ${(i+1)*seg}deg`).join(',');
+  wheel.style.background = `conic-gradient(${gradient})`;
+  wheel.style.transform = `rotate(${rotation}deg)`;
+  wheel.innerHTML = EVENT_DEFS.map((ev,i)=>{
+    const angle = i*seg + seg/2;
+    return `<div class="wheelLabel" style="transform:rotate(${angle}deg) translateY(-158px) rotate(90deg)">${ev.icon}<br>${t(ev.id)}</div>`;
+  }).join('');
+}
+function renderEventList(){
+  const unique = [];
+  EVENT_DEFS.forEach(ev=>{ if(!unique.find(x=>x.id===ev.id)) unique.push(ev); });
+  $('eventList').innerHTML = unique.map(ev=>`<div class="eventItem"><span><b>${ev.icon}</b>${t(ev.id)}</span><span>${ev.quiz ? t('question') : t('wheelEvent')}</span></div>`).join('');
+}
+
+function startGame(){
+  parseQuestions();
+  if(!questions.length){ alert(t('bankEmpty')); return; }
+  saveSettings();
+  started = true; spinning = false; currentTeam = 0; questionIndex = 0; rotation = 0;
+  setupTeams(true);
+  timeLeft = parseInt($('gameTime').value,10) || 0;
+  $('layout').classList.add('playing');
+  $('resultBadge').innerHTML = `🎯 ${t('ready')}`;
+  $('eventLog').innerHTML = `🎡 ${t('spinNow')}`;
+  $('spinBtn').disabled = false;
+  clearInterval(timerId);
+  if(timeLeft>0){ timerId = setInterval(()=>{timeLeft--; $('timer').textContent=formatTime(timeLeft); if(timeLeft<=0) endGame(t('timeUp'));},1000); }
+  renderTeams(); renderWheel(); updateHud(); playSound('start');
+}
+function resetGame(){
+  started=false; spinning=false; currentTeam=0; clearInterval(timerId); timeLeft=parseInt($('gameTime').value,10)||0; setupTeams(true); rotation=0;
+  $('layout').classList.remove('playing'); $('spinBtn').disabled=false; $('resultBadge').innerHTML=`🎯 ${t('ready')}`; $('eventLog').innerHTML=`💡 ${t('logReady')}`;
+  closeModal(); renderTeams(); renderWheel(); updateHud();
+}
+function spinWheel(){
+  if(!started){ alert(t('pleaseStart')); return; }
+  if(spinning) return;
+  spinning = true; $('spinBtn').disabled = true;
+  playSound('spin');
+  const idx = Math.floor(Math.random()*EVENT_DEFS.length);
+  selectedEvent = EVENT_DEFS[idx];
+  const seg = 360 / EVENT_DEFS.length;
+  const center = idx*seg + seg/2;
+  const base = 360 - center;
+  rotation += 360*5 + ((base - rotation) % 360 + 360) % 360;
+  $('wheel').style.transform = `rotate(${rotation}deg)`;
+  $('resultBadge').innerHTML = `🎡 ${t('wheelEvent')}...`;
+  setTimeout(()=>{
+    $('resultBadge').innerHTML = `${selectedEvent.icon} ${t(selectedEvent.id)}`;
+    spinning = false;
+    handleEvent(selectedEvent);
+  },4100);
+}
+function handleEvent(ev){
+  teams[currentTeam].turns++;
+  if(ev.quiz){ currentQuizScore = ev.score; showQuestion(ev); return; }
+  let msg = '';
+  if(ev.id.startsWith('bonus')){ updateScore(currentTeam, ev.score); msg = fmt('gotPoints',{n:ev.score}); playSound('good'); }
+  else if(ev.id.startsWith('trap')){ updateScore(currentTeam, ev.score); msg = fmt('lostPoints',{n:Math.abs(ev.score)}); playSound('bad'); }
+  else if(ev.id==='steal'){ msg = doSteal(ev.score); }
+  else if(ev.id==='swap'){ msg = doSwap(); }
+  else if(ev.id==='pass'){ msg = t('passTurn'); playSound('bad'); }
+  renderTeams();
+  $('eventLog').innerHTML = `${ev.icon} <b>${t(teams[currentTeam].nameKey)}</b>：${t(ev.id)}，${msg}`;
+  showEventModal(ev, msg);
+  checkWin();
+}
+function doSteal(n){
+  const candidates = teams.map((tm,i)=>({tm,i})).filter(x=>x.i!==currentTeam && x.tm.score>0).sort((a,b)=>b.tm.score-a.tm.score);
+  if(!candidates.length){ playSound('bad'); return t('noSteal'); }
+  const target = candidates[0];
+  const amount = Math.min(n, target.tm.score);
+  target.tm.score -= amount; teams[currentTeam].score += amount; playSound('good');
+  return fmt('stole',{n:amount, team:t(target.tm.nameKey)});
+}
+function doSwap(){
+  const candidates = teams.map((tm,i)=>({tm,i})).filter(x=>x.i!==currentTeam).sort((a,b)=>b.tm.score-a.tm.score);
+  const target = candidates[0];
+  if(!target){ return t('passTurn'); }
+  const tmp = teams[currentTeam].score; teams[currentTeam].score = target.tm.score; target.tm.score = tmp; playSound('start');
+  return fmt('swapped',{team:t(target.tm.nameKey)});
+}
+function updateScore(i,delta){
+  teams[i].score += delta;
+  if(teams[i].score < 0) teams[i].score = 0;
+}
+function nextTurn(){
+  if($('turnAfter').value==='next') currentTeam = (currentTeam+1)%teams.length;
+  renderTeams(); updateHud(); $('spinBtn').disabled = !started;
+}
+function finishTurn(){
+  if(!started) return;
+  nextTurn();
+}
+
+function getNextQuestion(){
+  parseQuestions();
+  if(!questions.length) return null;
+  if($('questionMode').value==='random') return questions[Math.floor(Math.random()*questions.length)];
+  const q = questions[questionIndex % questions.length]; questionIndex++; return q;
+}
+function showQuestion(ev){
+  currentQuestion = getNextQuestion();
+  if(!currentQuestion){ alert(t('bankEmpty')); finishTurn(); return; }
+  const isMC = currentQuestion.options.length >= 2;
+  let body = `<div class="bigEvent">${ev.icon}</div><div class="eventText">${t(ev.id)} · ${t(teams[currentTeam].nameKey)}</div><hr style="border:none;border-top:1px solid #e5e7eb;margin:18px 0"><div class="question">${escapeHtml(currentQuestion.q)}</div>`;
+  if(isMC){
+    body += `<div class="options">${currentQuestion.options.map(opt=>`<button class="option" data-answer="${escapeAttr(opt)}">${escapeHtml(opt)}</button>`).join('')}</div><div class="hint">${t('chooseOption')}</div>`;
+  }else{
+    body += `<div class="answerBox" id="answerBox"><b>${t('correctAnswer')}：</b>${escapeHtml(currentQuestion.answer)}</div><div class="modalActions"><button id="showAnswerBtn">${t('showAnswer')}</button><button class="good" id="correctBtn">${t('correct')}</button><button class="bad" id="wrongBtn">${t('wrong')}</button></div>`;
+  }
+  openModal(t('question'), body);
+  if(isMC){
+    document.querySelectorAll('.option').forEach(btn=>btn.addEventListener('click',()=>judgeMC(btn)));
+  }else{
+    $('showAnswerBtn').addEventListener('click',()=>{$('answerBox').style.display='block';});
+    $('correctBtn').addEventListener('click',()=>judgeOpen(true));
+    $('wrongBtn').addEventListener('click',()=>judgeOpen(false));
+  }
+}
+function judgeMC(btn){
+  const chosen = btn.dataset.answer;
+  const correct = normalize(chosen) === normalize(currentQuestion.answer);
+  document.querySelectorAll('.option').forEach(b=>{
+    b.disabled=true;
+    if(normalize(b.dataset.answer)===normalize(currentQuestion.answer)) b.classList.add('correct');
+    else if(b===btn) b.classList.add('wrong');
+  });
+  applyQuizResult(correct);
+}
+function judgeOpen(isCorrect){ applyQuizResult(isCorrect); }
+function applyQuizResult(isCorrect){
+  const penalty = parseInt($('wrongPenalty').value,10)||0;
+  let msg='';
+  if(isCorrect){ updateScore(currentTeam, currentQuizScore); msg = fmt('answerRight',{n:currentQuizScore}); playSound('good'); }
+  else if(penalty>0){ updateScore(currentTeam, -penalty); msg = fmt('answerWrongPenalty',{n:penalty}); playSound('bad'); }
+  else { msg = t('answerWrong'); playSound('bad'); }
+  renderTeams();
+  $('eventLog').innerHTML = `❓ <b>${t(teams[currentTeam].nameKey)}</b>：${msg}`;
+  const existing = document.querySelector('.modalActions');
+  const actions = existing || document.createElement('div');
+  actions.className = 'modalActions';
+  actions.innerHTML = `<button class="primary" id="continueBtn">${t('continue')}</button>`;
+  if(!existing) $('modalBody').appendChild(actions);
+  $('continueBtn').addEventListener('click',()=>{ closeModal(); if(!checkWin()) finishTurn(); });
+  checkWin(false);
+}
+function showEventModal(ev,msg){
+  const body = `<div class="bigEvent">${ev.icon}</div><div class="eventText">${t(teams[currentTeam].nameKey)}<br>${t(ev.id)}<br><span style="font-size:.72em;color:#4b5563">${msg}</span></div><div class="modalActions"><button class="primary" id="continueBtn">${t('continue')}</button></div>`;
+  openModal(t('wheelEvent'), body);
+  $('continueBtn').addEventListener('click',()=>{ closeModal(); if(!checkWin()) finishTurn(); });
+}
+function checkWin(showEnd=true){
+  const target = parseInt($('targetScore').value,10)||0;
+  if(target && teams.some(t=>t.score>=target)){
+    if(showEnd) endGame(t('targetReached'));
+    return true;
+  }
+  return false;
+}
+function endGame(reason){
+  if(!started) return;
+  started=false; spinning=false; clearInterval(timerId); $('spinBtn').disabled = true; renderTeams(); updateHud(); playSound('end');
+  const sorted = teams.map((tm,i)=>({...tm,idx:i})).sort((a,b)=>b.score-a.score || b.turns-a.turns);
+  const medals = ['🥇','🥈','🥉','🏅'];
+  const body = `<div class="bigEvent">🏁</div><div class="eventText">${reason}</div><div class="rankList">${sorted.map((tm,i)=>`<div class="rankItem"><span><span class="rankMedal">${medals[i]||'🏅'}</span> ${t(tm.nameKey)}</span><span>${tm.score} ${t('score')} · ${tm.turns} ${t('rounds')}</span></div>`).join('')}</div><div class="modalActions"><button class="primary" id="closeEndBtn">${t('close')}</button></div>`;
+  openModal(t('gameOver'), body);
+  $('closeEndBtn').addEventListener('click',closeModal);
+}
+
+function openModal(title,body){ $('modalTitle').textContent=title; $('modalBody').innerHTML=body; $('modalBackdrop').classList.add('show'); }
+function closeModal(){ $('modalBackdrop').classList.remove('show'); }
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function normalize(s){ return String(s||'').trim().toLowerCase().replace(/\s+/g,' '); }
+function escapeHtml(s){ return String(s).replace(/[&<>"]/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])); }
+function escapeAttr(s){ return escapeHtml(s).replace(/'/g,'&#39;'); }
+
+function importTxt(e){
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { $('questionBank').value = ev.target.result; saveSettings(); parseQuestions(); };
+  reader.readAsText(file,'utf-8'); e.target.value='';
+}
+function exportTxt(){
+  const blob = new Blob([$('questionBank').value],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='lucky_wheel_quiz_questions.txt'; a.click(); URL.revokeObjectURL(a.href);
+}
+function toggleFullscreen(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+  else document.exitFullscreen?.();
+}
+function playSound(type){
+  if($('soundSelect').value==='off') return;
+  try{
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const o = ctx.createOscillator(); const g = ctx.createGain();
+    const freq = type==='good'?880:type==='bad'?180:type==='spin'?520:type==='end'?660:440;
+    o.frequency.value = freq; o.type = type==='bad'?'sawtooth':'sine';
+    g.gain.setValueAtTime(.001,ctx.currentTime); g.gain.exponentialRampToValueAtTime(.10,ctx.currentTime+.02); g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+(type==='spin'?.35:.18));
+    o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime+(type==='spin'?.38:.20));
+  }catch(e){}
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>大家来找碴(自帶后台)</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <h1>大家来找碴(自帶后台)</h1>
+    <div class="nav">
+      <button class="btn primary" id="navGame" type="button">前台游戏</button>
+      <button class="btn" id="navRanking" type="button">排行榜</button>
+      <button class="btn" id="navAdmin" type="button">后台管理</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="viewGame">
+      <div class="card">
+        <div class="grid hud">
+          <div class="stat"><div class="label">当前关卡</div><div class="value" id="levelText">1</div></div>
+          <div class="stat"><div class="label">剩余时间</div><div class="value" id="timerText">60</div></div>
+          <div class="stat"><div class="label">当前分数</div><div class="value" id="scoreText">0</div></div>
+          <div class="stat"><div class="label">提示次数</div><div class="value" id="hintText">3</div></div>
+          <div class="stat"><div class="label">已找到</div><div class="value" id="foundText">0/0</div></div>
+          <div class="stat"><div class="label">玩家名字</div><div class="value small" id="playerText">游客</div></div>
+        </div>
+
+        <div class="game-board">
+          <div class="img-panel">
+            <div class="panel-title">左图</div>
+            <div id="leftWrap" class="canvas-wrap">
+              <canvas id="leftCanvas" class="base-canvas"></canvas>
+              <canvas id="leftOverlay" class="overlay-canvas"></canvas>
+            </div>
+          </div>
+          <div class="img-panel">
+            <div class="panel-title">右图</div>
+            <div id="rightWrap" class="canvas-wrap">
+              <canvas id="rightCanvas" class="base-canvas"></canvas>
+              <canvas id="rightOverlay" class="overlay-canvas"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <button class="btn ok" id="btnStart" type="button">开始游戏</button>
+          <button class="btn warn" id="btnHint" type="button">提示</button>
+          <button class="btn" id="btnRestart" type="button">重新开始</button>
+          <button class="btn primary" id="btnNext" type="button">下一关</button>
+          <button class="btn" id="btnFullscreen" type="button">全屏</button>
+        </div>
+        <div class="msg" id="gameMsg"></div>
+      </div>
+    </section>
+
+    <section id="viewRanking" class="hidden">
+      <div class="card">
+        <h2>排行榜 Top 10</h2>
+        <div class="inline-form">
+          <input id="playerNameInput" placeholder="输入玩家名字后再开始游戏" />
+          <button class="btn primary" id="savePlayerName" type="button">保存玩家名字</button>
+          <button class="btn danger" id="clearRanking" type="button">清空排行榜</button>
+        </div>
+        <div class="rank-list" id="rankingList"></div>
+      </div>
+    </section>
+
+    <section id="viewAdmin" class="hidden">
+      <div id="adminLogin" class="card login-box">
+        <h2>后台管理员登录</h2>
+        <div class="stack">
+          <div><label>账号</label><input id="adminUser" value="admin" /></div>
+          <div><label>密码</label><input id="adminPass" type="password" value="123456" /></div>
+          <button class="btn primary" id="adminLoginBtn" type="button">登录</button>
+          <div class="hint-text">默认账号：admin　默认密码：123456</div>
+          <div id="adminLoginMsg" class="msg"></div>
+        </div>
+      </div>
+
+      <div id="adminPanel" class="hidden split">
+        <div class="card">
+          <div class="admin-head">
+            <h2>关卡管理</h2>
+            <div>
+              <button type="button" class="btn" id="newLevelBtn">新增关卡</button>
+              <button type="button" class="btn danger" id="adminLogoutBtn">登出</button>
+            </div>
+          </div>
+          <hr />
+          <div class="form-grid">
+            <div><label>关卡编号</label><input id="fLevelNumber" type="number" min="1" /></div>
+            <div><label>关卡名称</label><input id="fTitle" placeholder="例如：办公室找碴" /></div>
+            <div><label>时间限制（秒）</label><input id="fTimeLimit" type="number" min="10" value="60" /></div>
+            <div><label>提示次数</label><input id="fHintLimit" type="number" min="0" value="3" /></div>
+            <div>
+              <label>是否启用</label>
+              <select id="fActive"><option value="true">启用</option><option value="false">停用</option></select>
+            </div>
+            <div><label>差异数量（可留空，自动由答案图计算）</label><input id="fTotal" type="number" min="1" placeholder="自动计算可留空" /></div>
+            <div><label>左图</label><input id="fLeft" type="file" accept="image/*" /></div>
+            <div><label>右图</label><input id="fRight" type="file" accept="image/*" /></div>
+            <div class="wide"><label>答案图 PNG（红色区域才算正确答案）</label><input id="fMask" type="file" accept="image/*" /></div>
+            <div class="wide">
+              <label>答案图预览（右图为底图，答案 PNG 半透明覆盖）</label>
+              <div id="maskPreviewBox" class="preview-box">
+                <span id="maskPreviewEmpty" class="hint-text">尚未选择答案图</span>
+                <div id="maskPreviewStack" class="preview-stack hidden">
+                  <img id="maskPreviewRight" alt="右图预览" />
+                  <img id="maskPreviewImg" alt="答案图预览" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="toolbar">
+            <button type="button" class="btn primary" id="saveLevelBtn">保存关卡</button>
+            <button type="button" class="btn" id="resetFormBtn">清空表单</button>
+          </div>
+          <div id="adminMsg" class="msg"></div>
+        </div>
+
+        <div class="card">
+          <h2>关卡列表</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>#</th><th>标题</th><th>预览</th><th>状态</th><th>操作</th></tr></thead>
+              <tbody id="levelTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/utils.js"></script>
+  <script src="js/mask.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

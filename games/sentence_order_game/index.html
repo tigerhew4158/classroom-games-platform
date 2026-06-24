@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>句子排序挑战｜Sentence Order Challenge</title>
+  <style>
+    :root{
+      --bg:#101827; --panel:#172236; --panel2:#1f2d44; --text:#f8fafc; --muted:#b8c1d1;
+      --primary:#60a5fa; --good:#22c55e; --bad:#ef4444; --warn:#f59e0b;
+      --border:rgba(255,255,255,.13); --shadow:0 18px 50px rgba(0,0,0,.28);
+      --red:#ef4444; --blue:#3b82f6; --green:#22c55e; --purple:#a855f7;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans SC","Microsoft YaHei",Arial,sans-serif;background:radial-gradient(circle at top,#263956 0,#101827 45%,#0b1020 100%);color:var(--text);min-height:100vh}
+    button,select,textarea,input{font:inherit}
+    button{border:0;border-radius:14px;padding:10px 14px;cursor:pointer;font-weight:800;color:white;background:#31435f;transition:.18s transform,.18s filter,.18s background}
+    button:hover{filter:brightness(1.08);transform:translateY(-1px)}
+    button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .primary{background:linear-gradient(135deg,#2563eb,#7c3aed)}
+    .success{background:linear-gradient(135deg,#16a34a,#22c55e)}
+    .danger{background:linear-gradient(135deg,#dc2626,#fb7185)}
+    .warning{background:linear-gradient(135deg,#d97706,#f59e0b)}
+    .ghost{background:rgba(255,255,255,.08);border:1px solid var(--border)}
+    .app{display:grid;grid-template-columns:390px 1fr;gap:18px;padding:18px;min-height:100vh}
+    body.playing .app{grid-template-columns:1fr}
+    body.playing .settings{display:none}
+    .settings,.game{background:rgba(23,34,54,.88);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow);backdrop-filter:blur(10px)}
+    .settings{padding:18px;overflow:auto;max-height:calc(100vh - 36px)}
+    .game{padding:18px;display:flex;flex-direction:column;gap:14px;min-height:calc(100vh - 36px)}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+    .logo{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#60a5fa,#a855f7);display:grid;place-items:center;font-size:26px;box-shadow:0 12px 26px rgba(96,165,250,.2)}
+    h1{font-size:24px;line-height:1.15;margin:0}.sub{color:var(--muted);font-size:13px;margin-top:3px}
+    .section{border-top:1px solid var(--border);padding-top:14px;margin-top:14px}
+    .section h3{margin:0 0 10px;font-size:15px;color:#dbeafe}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+    label{display:block;color:var(--muted);font-size:12px;font-weight:800;margin-bottom:6px}
+    select,input,textarea{width:100%;border-radius:14px;border:1px solid var(--border);background:rgba(15,23,42,.85);color:var(--text);padding:10px;outline:none}
+    textarea{min-height:170px;resize:vertical;line-height:1.45;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:13px}
+    .hint{font-size:12px;color:var(--muted);line-height:1.45;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.18);padding:10px;border-radius:14px;margin-top:8px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}.file{display:none}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.status{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.pill{background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:999px;padding:8px 12px;font-weight:900;color:#e5e7eb}.timer{font-variant-numeric:tabular-nums;font-size:22px;background:rgba(0,0,0,.25);border-radius:16px;padding:8px 14px;border:1px solid var(--border)}
+    .scoreboard{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.teamCard{position:relative;overflow:hidden;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:18px;padding:12px;min-height:94px}.teamCard.active{outline:3px solid rgba(255,255,255,.52);box-shadow:0 0 0 5px rgba(96,165,250,.14)}.teamHead{display:flex;justify-content:space-between;align-items:center;font-weight:1000}.teamScore{font-size:26px;font-weight:1000}.track{height:12px;background:rgba(255,255,255,.12);border-radius:999px;margin-top:10px;overflow:hidden}.fill{height:100%;width:0%;border-radius:999px;transition:.3s width}.teamIcon{position:absolute;right:10px;bottom:4px;font-size:34px;opacity:.22}
+    .questionPanel{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;align-items:stretch}.questionBox,.sideBox{background:rgba(255,255,255,.065);border:1px solid var(--border);border-radius:22px;padding:16px}.questionLabel{font-size:12px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.06em}.questionText{font-size:28px;line-height:1.35;font-weight:1000;margin-top:8px}.answerPreview{font-size:14px;color:#cbd5e1;margin-top:10px;word-break:break-word}.turnName{font-size:34px;font-weight:1000;line-height:1.1}.message{min-height:48px;color:#e5e7eb;line-height:1.4;margin-top:10px}.message.good{color:#86efac}.message.bad{color:#fca5a5}.message.warn{color:#fcd34d}
+    .workarea{display:grid;grid-template-columns:1fr;gap:12px;flex:1}.bank,.answerArea{background:rgba(15,23,42,.55);border:1px solid var(--border);border-radius:22px;padding:14px}.bankTitle{font-size:13px;color:var(--muted);font-weight:900;margin-bottom:10px;display:flex;justify-content:space-between;gap:10px}.tokenWrap{display:flex;gap:10px;flex-wrap:wrap;align-items:center;min-height:76px}.token{user-select:none;touch-action:none;border:1px solid rgba(255,255,255,.18);background:linear-gradient(180deg,rgba(255,255,255,.17),rgba(255,255,255,.08));border-radius:16px;padding:12px 16px;font-size:20px;font-weight:1000;box-shadow:0 8px 18px rgba(0,0,0,.16);cursor:pointer}.token:hover{filter:brightness(1.1)}.token.dragging{opacity:.45}.slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}.slot{min-height:64px;border:2px dashed rgba(255,255,255,.20);border-radius:16px;display:flex;align-items:center;justify-content:center;padding:8px;background:rgba(255,255,255,.035);position:relative}.slot:before{content:attr(data-n);position:absolute;top:5px;left:8px;color:rgba(255,255,255,.26);font-weight:900;font-size:12px}.slot.over{border-color:#93c5fd;background:rgba(147,197,253,.12)}.slot .token{width:100%;text-align:center;margin:0}.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}.bigbtn{font-size:18px;padding:13px 20px}.rankModal{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;z-index:20;padding:20px}.rankCard{width:min(640px,100%);background:#172236;border:1px solid var(--border);border-radius:26px;box-shadow:var(--shadow);padding:22px}.rankCard h2{margin:0 0 12px;font-size:28px}.rankList{display:grid;gap:10px}.rankItem{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:16px;padding:12px 14px;font-size:18px;font-weight:900}.confetti{position:fixed;pointer-events:none;inset:0;overflow:hidden;z-index:30}.confetti i{position:absolute;width:10px;height:14px;top:-20px;animation:fall 1.8s linear forwards}@keyframes fall{to{transform:translateY(110vh) rotate(680deg);opacity:.2}}
+    @media(max-width:980px){.app{grid-template-columns:1fr}.settings{max-height:none}.questionPanel{grid-template-columns:1fr}.scoreboard{grid-template-columns:repeat(2,1fr)}.questionText{font-size:24px}.turnName{font-size:28px}}
+    @media(max-width:560px){.app{padding:10px}.game,.settings{border-radius:18px;padding:12px}.row,.row3{grid-template-columns:1fr}.scoreboard{grid-template-columns:1fr}.token{font-size:18px}.slots{grid-template-columns:1fr}.topbar{align-items:flex-start}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="settings" id="settingsPanel">
+      <div class="brand"><div class="logo">🔀</div><div><h1 data-i18n="title">句子排序挑战</h1><div class="sub" data-i18n="subtitle">把词语、句子或步骤排回正确顺序</div></div></div>
+      <div class="section" style="border-top:0;margin-top:0;padding-top:0">
+        <div class="row">
+          <div><label data-i18n="uiLang">介面语言</label><select id="langSelect"><option value="zh">简体中文</option><option value="en">English</option><option value="ms">Bahasa Melayu</option></select></div>
+          <div><label data-i18n="teamCount">队伍数量</label><select id="teamCount"><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div>
+        </div>
+        <div class="row">
+          <div><label data-i18n="gameTime">游戏时间</label><select id="gameMinutes"><option value="0">不限时</option><option value="3">3 分钟</option><option value="5" selected>5 分钟</option><option value="8">8 分钟</option><option value="10">10 分钟</option></select></div>
+          <div><label data-i18n="targetScore">目标分</label><input id="targetScore" type="number" min="1" max="50" value="8"></div>
+        </div>
+        <div class="row">
+          <div><label data-i18n="questionMode">出题方式</label><select id="questionMode"><option value="random">随机</option><option value="order">顺序</option></select></div>
+          <div><label data-i18n="wrongPenalty">答错扣分</label><select id="wrongPenalty"><option value="no">不扣分</option><option value="yes">扣 1 分</option></select></div>
+        </div>
+        <div class="row">
+          <div><label data-i18n="rightTurn">答对后</label><select id="rightTurn"><option value="next">换下一队</option><option value="same">本队继续</option></select></div>
+          <div><label data-i18n="wrongTurn">答错后</label><select id="wrongTurn"><option value="next">换下一队</option><option value="same">本队继续</option></select></div>
+        </div>
+        <div class="row">
+          <div><label data-i18n="showAnswer">答错显示答案</label><select id="showAnswer"><option value="yes">显示</option><option value="no">不显示</option></select></div>
+          <div><label data-i18n="sound">音效</label><select id="soundOn"><option value="yes">开启</option><option value="no">关闭</option></select></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 data-i18n="questionBank">题库设定</h3>
+        <textarea id="bankInput" spellcheck="false"></textarea>
+        <div class="hint" data-i18n="formatHint">格式：提示 | 正确顺序。项目请用 / 分隔。例如：AI流程 | 收集资料 / 标注图片 / 训练模型 / 测试模型。</div>
+        <div class="actions" style="margin-top:10px">
+          <button class="ghost" id="importBtn" data-i18n="importTxt">汇入 TXT</button><input class="file" id="fileInput" type="file" accept=".txt,text/plain">
+          <button class="ghost" id="exportBtn" data-i18n="exportTxt">导出 TXT</button>
+          <button class="ghost" id="sampleBtn" data-i18n="loadSample">载入范例</button>
+        </div>
+      </div>
+      <div class="section">
+        <button class="primary bigbtn" id="startBtn" style="width:100%" data-i18n="startGame">开始游戏</button>
+      </div>
+    </aside>
+
+    <main class="game">
+      <div class="topbar">
+        <div class="status">
+          <div class="pill" id="gameTitle" data-i18n="title">句子排序挑战</div>
+          <div class="pill"><span data-i18n="round">回合</span> <span id="roundNo">0</span></div>
+          <div class="timer" id="timer">05:00</div>
+        </div>
+        <div class="actions">
+          <button class="ghost" id="showSettingsBtn" data-i18n="showSettings">显示老师设定</button>
+          <button class="ghost" id="fullscreenBtn" data-i18n="fullscreen">全屏</button>
+          <button class="warning" id="nextBtn" data-i18n="nextQuestion">下一题</button>
+          <button class="danger" id="resetBtn" data-i18n="reset">重置</button>
+        </div>
+      </div>
+
+      <section class="scoreboard" id="scoreboard"></section>
+
+      <section class="questionPanel">
+        <div class="questionBox">
+          <div class="questionLabel" data-i18n="currentQuestion">当前题目</div>
+          <div class="questionText" id="questionText">请先设定题库，然后开始游戏。</div>
+          <div class="answerPreview" id="answerHint"></div>
+        </div>
+        <div class="sideBox">
+          <div class="questionLabel" data-i18n="currentTeam">当前队伍</div>
+          <div class="turnName" id="turnName">-</div>
+          <div class="message" id="message" data-i18n="readyMsg">准备开始。老师点击“开始游戏”后，设定区会隐藏。</div>
+        </div>
+      </section>
+
+      <section class="workarea">
+        <div class="answerArea">
+          <div class="bankTitle"><span data-i18n="answerArea">答案排序区</span><span id="filledCount">0/0</span></div>
+          <div class="slots" id="slots"></div>
+        </div>
+        <div class="bank">
+          <div class="bankTitle"><span data-i18n="wordBank">词语卡片区</span><span data-i18n="clickTip">点击或拖动卡片来排序</span></div>
+          <div class="tokenWrap" id="wordBank"></div>
+        </div>
+      </section>
+
+      <div class="controls">
+        <button class="ghost bigbtn" id="clearBtn" data-i18n="clearAnswer">清空答案</button>
+        <button class="success bigbtn" id="checkBtn" data-i18n="submitAnswer">提交答案</button>
+      </div>
+    </main>
+  </div>
+
+  <div class="rankModal" id="rankModal">
+    <div class="rankCard">
+      <h2 id="endTitle">游戏结束</h2>
+      <div class="rankList" id="rankList"></div>
+      <div class="actions" style="justify-content:flex-end;margin-top:16px">
+        <button class="ghost" id="closeRankBtn" data-i18n="close">关闭</button>
+        <button class="primary" id="playAgainBtn" data-i18n="playAgain">再玩一次</button>
+      </div>
+    </div>
+  </div>
+  <div class="confetti" id="confetti"></div>
+
+<script>
+const I18N={
+ zh:{title:'句子排序挑战',subtitle:'把词语、句子或步骤排回正确顺序',uiLang:'介面语言',teamCount:'队伍数量',gameTime:'游戏时间',targetScore:'目标分',questionMode:'出题方式',wrongPenalty:'答错扣分',rightTurn:'答对后',wrongTurn:'答错后',showAnswer:'答错显示答案',sound:'音效',questionBank:'题库设定',formatHint:'格式：提示 | 正确顺序。项目请用 / 分隔。例如：AI流程 | 收集资料 / 标注图片 / 训练模型 / 测试模型。',importTxt:'汇入 TXT',exportTxt:'导出 TXT',loadSample:'载入范例',startGame:'开始游戏',round:'回合',showSettings:'显示老师设定',fullscreen:'全屏',nextQuestion:'下一题',reset:'重置',currentQuestion:'当前题目',currentTeam:'当前队伍',readyMsg:'准备开始。老师点击“开始游戏”后，设定区会隐藏。',answerArea:'答案排序区',wordBank:'词语卡片区',clickTip:'点击或拖动卡片来排序',clearAnswer:'清空答案',submitAnswer:'提交答案',close:'关闭',playAgain:'再玩一次',teamRed:'红队',teamBlue:'蓝队',teamGreen:'绿队',teamPurple:'紫队',unlimited:'不限时',min3:'3 分钟',min5:'5 分钟',min8:'8 分钟',min10:'10 分钟',random:'随机',order:'顺序',yes:'是',no:'否',show:'显示',hide:'不显示',on:'开启',off:'关闭',next:'换下一队',same:'本队继续',needStart:'请先点击开始游戏。',bankError:'题库至少需要 1 题，每题至少 2 个排序项目。',notFull:'还没有排完整。',correct:'答对了！排序正确。',wrong:'答错了！',correctAnswer:'正确顺序：',gameOver:'游戏结束',winner:'获胜队伍',timeUp:'时间到！',targetReached:'达到目标分！',question:'题目',score:'分数',rank:'排名',loaded:'已载入题库。',settingsShown:'老师设定区已显示。',settingsHidden:'老师设定区已隐藏。',noQuestion:'没有可用题目。'},
+ en:{title:'Sentence Order Challenge',subtitle:'Put words, sentences, or steps back in the correct order',uiLang:'UI Language',teamCount:'Number of Teams',gameTime:'Game Time',targetScore:'Target Score',questionMode:'Question Mode',wrongPenalty:'Wrong Answer Penalty',rightTurn:'After Correct',wrongTurn:'After Wrong',showAnswer:'Show Answer After Wrong',sound:'Sound',questionBank:'Question Bank',formatHint:'Format: Prompt | Correct order. Use / to separate items. Example: AI Process | Collect data / Label images / Train model / Test model.',importTxt:'Import TXT',exportTxt:'Export TXT',loadSample:'Load Sample',startGame:'Start Game',round:'Round',showSettings:'Show Teacher Settings',fullscreen:'Fullscreen',nextQuestion:'Next Question',reset:'Reset',currentQuestion:'Current Question',currentTeam:'Current Team',readyMsg:'Ready. After the teacher clicks Start Game, the settings panel will be hidden.',answerArea:'Answer Order Area',wordBank:'Word Card Area',clickTip:'Click or drag cards to arrange',clearAnswer:'Clear Answer',submitAnswer:'Submit Answer',close:'Close',playAgain:'Play Again',teamRed:'Red Team',teamBlue:'Blue Team',teamGreen:'Green Team',teamPurple:'Purple Team',unlimited:'Unlimited',min3:'3 minutes',min5:'5 minutes',min8:'8 minutes',min10:'10 minutes',random:'Random',order:'In order',yes:'Yes',no:'No',show:'Show',hide:'Hide',on:'On',off:'Off',next:'Next team',same:'Same team continues',needStart:'Please start the game first.',bankError:'The bank needs at least 1 question, and each question needs at least 2 items.',notFull:'The answer is not complete yet.',correct:'Correct! The order is right.',wrong:'Wrong order!',correctAnswer:'Correct order: ',gameOver:'Game Over',winner:'Winner',timeUp:'Time is up!',targetReached:'Target score reached!',question:'Question',score:'Score',rank:'Rank',loaded:'Question bank loaded.',settingsShown:'Teacher settings are shown.',settingsHidden:'Teacher settings are hidden.',noQuestion:'No available question.'},
+ ms:{title:'Cabaran Susun Ayat',subtitle:'Susun perkataan, ayat atau langkah mengikut urutan yang betul',uiLang:'Bahasa Antara Muka',teamCount:'Bilangan Kumpulan',gameTime:'Masa Permainan',targetScore:'Markah Sasaran',questionMode:'Mod Soalan',wrongPenalty:'Denda Jawapan Salah',rightTurn:'Selepas Betul',wrongTurn:'Selepas Salah',showAnswer:'Tunjuk Jawapan Selepas Salah',sound:'Bunyi',questionBank:'Bank Soalan',formatHint:'Format: Arahan | Urutan betul. Guna / untuk pisahkan item. Contoh: Proses AI | Kumpul data / Label imej / Latih model / Uji model.',importTxt:'Import TXT',exportTxt:'Eksport TXT',loadSample:'Muat Sampel',startGame:'Mula Permainan',round:'Pusingan',showSettings:'Tunjuk Tetapan Guru',fullscreen:'Skrin Penuh',nextQuestion:'Soalan Seterusnya',reset:'Tetap Semula',currentQuestion:'Soalan Semasa',currentTeam:'Kumpulan Semasa',readyMsg:'Sedia. Selepas guru klik Mula Permainan, panel tetapan akan disembunyikan.',answerArea:'Ruang Susunan Jawapan',wordBank:'Ruang Kad Perkataan',clickTip:'Klik atau seret kad untuk susun',clearAnswer:'Kosongkan Jawapan',submitAnswer:'Hantar Jawapan',close:'Tutup',playAgain:'Main Lagi',teamRed:'Kumpulan Merah',teamBlue:'Kumpulan Biru',teamGreen:'Kumpulan Hijau',teamPurple:'Kumpulan Ungu',unlimited:'Tiada had',min3:'3 minit',min5:'5 minit',min8:'8 minit',min10:'10 minit',random:'Rawak',order:'Mengikut turutan',yes:'Ya',no:'Tidak',show:'Tunjuk',hide:'Tidak tunjuk',on:'Buka',off:'Tutup',next:'Tukar kumpulan',same:'Kumpulan sama teruskan',needStart:'Sila mulakan permainan dahulu.',bankError:'Bank soalan perlu sekurang-kurangnya 1 soalan, dan setiap soalan perlu sekurang-kurangnya 2 item.',notFull:'Jawapan belum lengkap.',correct:'Betul! Susunan tepat.',wrong:'Salah susunan!',correctAnswer:'Susunan betul: ',gameOver:'Permainan Tamat',winner:'Pemenang',timeUp:'Masa tamat!',targetReached:'Markah sasaran dicapai!',question:'Soalan',score:'Markah',rank:'Kedudukan',loaded:'Bank soalan dimuatkan.',settingsShown:'Tetapan guru dipaparkan.',settingsHidden:'Tetapan guru disembunyikan.',noQuestion:'Tiada soalan tersedia.'}
+};
+const SAMPLE=`英文句子 | I / like / to / eat / apples
+华文句子 | 我 / 今天 / 去 / 学校
+马来文句子 | Saya / suka / membaca / buku
+AI项目流程 | 收集资料 / 标注图片 / 训练模型 / 测试模型 / 展示成果
+历史顺序 | 马六甲王朝建立 / 葡萄牙占领马六甲 / 英国殖民马来亚 / 马来西亚独立
+网络安全步骤 | 发现可疑链接 / 不要点击 / 告诉老师或家长 / 删除信息
+科学实验步骤 | 提出问题 / 作出假设 / 进行实验 / 记录结果 / 得出结论
+作文结构 | 开头 / 发展 / 高潮 / 结尾`;
+let state={lang:'zh',started:false,teams:[],teamCount:2,currentTeam:0,questions:[],qIndex:0,round:0,active:null,tokens:[],answer:[],timer:null,timeLeft:300,targetScore:8,settings:{}};
+const $=id=>document.getElementById(id); const t=k=>I18N[state.lang][k]||I18N.zh[k]||k;
+const els=['langSelect','teamCount','gameMinutes','targetScore','questionMode','wrongPenalty','rightTurn','wrongTurn','showAnswer','soundOn','bankInput'];
+function save(){const data={}; els.forEach(id=>data[id]=$(id).value); localStorage.setItem('sentenceOrderGameSettings',JSON.stringify(data));}
+function load(){try{const d=JSON.parse(localStorage.getItem('sentenceOrderGameSettings')||'{}'); els.forEach(id=>{if(d[id]!=null)$(id).value=d[id]});}catch(e){} if(!$('bankInput').value.trim())$('bankInput').value=SAMPLE; state.lang=$('langSelect').value||'zh';}
+function applyLang(){state.lang=$('langSelect').value; document.documentElement.lang=state.lang==='zh'?'zh-CN':state.lang; document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)}); const gm=$('gameMinutes'); [...gm.options].forEach(o=>{const map={'0':'unlimited','3':'min3','5':'min5','8':'min8','10':'min10'}; o.textContent=t(map[o.value])}); const qm=$('questionMode'); qm.options[0].textContent=t('random'); qm.options[1].textContent=t('order'); $('wrongPenalty').options[0].textContent=t('no'); $('wrongPenalty').options[1].textContent=t('yes'); $('showAnswer').options[0].textContent=t('show'); $('showAnswer').options[1].textContent=t('hide'); $('soundOn').options[0].textContent=t('on'); $('soundOn').options[1].textContent=t('off'); ['rightTurn','wrongTurn'].forEach(id=>{const s=$(id); s.options[0].textContent=t('next'); s.options[1].textContent=t('same')}); renderScoreboard(); updateHeader(); save();}
+function parseBank(text){const qs=[]; text.split(/\r?\n/).forEach((line,idx)=>{line=line.trim(); if(!line||line.startsWith('#'))return; let prompt='', order=line; if(line.includes('|')){const parts=line.split('|'); prompt=parts.shift().trim(); order=parts.join('|').trim();}else if(line.includes('=>')){const parts=line.split('=>'); prompt=parts.shift().trim(); order=parts.join('=>').trim();}else if(line.includes('\t')){const parts=line.split('\t'); prompt=parts.shift().trim(); order=parts.join('\t').trim();}else{prompt=t('question')+' '+(idx+1);} let segs=splitSegments(order); if(segs.length>=2)qs.push({prompt,segments:segs,raw:line});}); return qs;}
+function splitSegments(s){s=s.trim(); let arr=[]; if(s.includes('/')) arr=s.split('/'); else if(s.includes('→')) arr=s.split('→'); else if(/\s/.test(s)) arr=s.split(/\s+/); else {try{arr=[...s.matchAll(/[\p{Script=Han}]|[A-Za-z0-9]+|[^\s]/gu)].map(m=>m[0]);}catch(e){arr=s.split('')}} return arr.map(x=>x.trim()).filter(Boolean);}
+function shuffle(a){const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]];} return b;}
+function makeTeams(n){const keys=['teamRed','teamBlue','teamGreen','teamPurple'], colors=['var(--red)','var(--blue)','var(--green)','var(--purple)'], icons=['🐎','🏎️','🚀','⛵']; return Array.from({length:n},(_,i)=>({name:t(keys[i]),score:0,color:colors[i],icon:icons[i]}));}
+function readSettings(){state.teamCount=parseInt($('teamCount').value,10); state.targetScore=Math.max(1,parseInt($('targetScore').value,10)||8); state.settings={minutes:parseInt($('gameMinutes').value,10),mode:$('questionMode').value,wrongPenalty:$('wrongPenalty').value==='yes',rightTurn:$('rightTurn').value,wrongTurn:$('wrongTurn').value,showAnswer:$('showAnswer').value==='yes',sound:$('soundOn').value==='yes'};}
+function startGame(){readSettings(); const qs=parseBank($('bankInput').value); if(!qs.length){toast(t('bankError'),'bad'); return;} state.questions=state.settings.mode==='random'?shuffle(qs):qs; state.qIndex=0; state.round=0; state.currentTeam=0; state.teams=makeTeams(state.teamCount); state.started=true; state.timeLeft=state.settings.minutes>0?state.settings.minutes*60:0; document.body.classList.add('playing'); $('rankModal').style.display='none'; renderScoreboard(); updateTimer(); clearInterval(state.timer); if(state.settings.minutes>0){state.timer=setInterval(()=>{state.timeLeft--; updateTimer(); if(state.timeLeft<=0)endGame(t('timeUp'));},1000);} nextQuestion(false); toast(t('settingsHidden'),'warn'); save();}
+function updateTimer(){if(state.settings.minutes===0){$('timer').textContent='∞'; return;} const m=Math.floor(state.timeLeft/60), s=state.timeLeft%60; $('timer').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
+function renderScoreboard(){const board=$('scoreboard'); board.innerHTML=''; const teams=state.teams.length?state.teams:makeTeams(parseInt($('teamCount').value,10)||2); board.style.gridTemplateColumns=`repeat(${Math.min(teams.length,4)},1fr)`; teams.forEach((team,i)=>{const pct=Math.max(0,Math.min(100,(team.score/(state.targetScore||8))*100)); const div=document.createElement('div'); div.className='teamCard '+(state.started&&i===state.currentTeam?'active':''); div.innerHTML=`<div class="teamHead"><span>${team.name}</span><span class="teamScore">${team.score}</span></div><div class="track"><div class="fill" style="width:${pct}%;background:${team.color}"></div></div><div class="teamIcon">${team.icon}</div>`; board.appendChild(div);});}
+function updateHeader(){$('gameTitle').textContent=t('title'); $('turnName').textContent=state.teams[state.currentTeam]?.name||'-'; $('roundNo').textContent=state.round||0;}
+function nextQuestion(advanceTurn=true){if(!state.started){toast(t('needStart'),'warn'); return;} if(advanceTurn) state.currentTeam=(state.currentTeam+1)%state.teams.length; if(state.settings.mode==='random' && state.qIndex>=state.questions.length){state.questions=shuffle(parseBank($('bankInput').value)); state.qIndex=0;} if(state.settings.mode==='order' && state.qIndex>=state.questions.length) state.qIndex=0; const q=state.questions[state.qIndex++]; if(!q){toast(t('noQuestion'),'bad');return;} state.active=q; state.round++; let shuffled=shuffle(q.segments.map((text,i)=>({id:'tok'+Date.now()+'_'+i,text,placed:null}))); let guard=0; while(shuffled.map(x=>x.text).join('\u0001')===q.segments.join('\u0001') && q.segments.length>2 && guard++<8) shuffled=shuffle(shuffled); state.tokens=shuffled; state.answer=Array(q.segments.length).fill(null); $('questionText').textContent=q.prompt||t('question'); $('answerHint').textContent=''; renderTokens(); renderScoreboard(); updateHeader(); toast('', ''); save();}
+function renderTokens(){const bank=$('wordBank'), slots=$('slots'); bank.innerHTML=''; slots.innerHTML=''; state.tokens.filter(tok=>tok.placed==null).forEach(tok=>bank.appendChild(tokenEl(tok))); state.answer.forEach((tok,i)=>{const slot=document.createElement('div'); slot.className='slot'; slot.dataset.n=i+1; slot.dataset.index=i; slot.addEventListener('dragover',e=>{e.preventDefault(); slot.classList.add('over')}); slot.addEventListener('dragleave',()=>slot.classList.remove('over')); slot.addEventListener('drop',e=>{e.preventDefault(); slot.classList.remove('over'); const id=e.dataTransfer.getData('text/plain'); placeToken(id,i);}); if(tok) slot.appendChild(tokenEl(tok,true)); slots.appendChild(slot);}); bank.addEventListener('dragover',e=>e.preventDefault()); bank.addEventListener('drop',e=>{e.preventDefault(); const id=e.dataTransfer.getData('text/plain'); unplaceToken(id)}); $('filledCount').textContent=`${state.answer.filter(Boolean).length}/${state.answer.length}`;}
+function tokenEl(tok,inSlot=false){const el=document.createElement('div'); el.className='token'; el.draggable=true; el.textContent=tok.text; el.dataset.id=tok.id; el.addEventListener('dragstart',e=>{el.classList.add('dragging'); e.dataTransfer.setData('text/plain',tok.id)}); el.addEventListener('dragend',()=>el.classList.remove('dragging')); el.addEventListener('click',()=>{if(inSlot)unplaceToken(tok.id); else placeToken(tok.id,firstEmpty());}); return el;}
+function firstEmpty(){return state.answer.findIndex(x=>!x)}
+function findToken(id){return state.tokens.find(x=>x.id===id)}
+function placeToken(id,index){if(index<0)return; const tok=findToken(id); if(!tok)return; if(tok.placed!=null) state.answer[tok.placed]=null; if(state.answer[index]) state.answer[index].placed=null; tok.placed=index; state.answer[index]=tok; renderTokens();}
+function unplaceToken(id){const tok=findToken(id); if(!tok)return; if(tok.placed!=null){state.answer[tok.placed]=null; tok.placed=null; renderTokens();}}
+function clearAnswer(){state.tokens.forEach(t=>t.placed=null); state.answer=Array(state.active?.segments.length||0).fill(null); renderTokens();}
+function checkAnswer(){if(!state.started||!state.active){toast(t('needStart'),'warn'); return;} if(state.answer.some(x=>!x)){toast(t('notFull'),'warn'); return;} const user=state.answer.map(x=>x.text); const ok=user.length===state.active.segments.length && user.every((v,i)=>v===state.active.segments[i]); if(ok) handleCorrect(); else handleWrong();}
+function handleCorrect(){const team=state.teams[state.currentTeam]; team.score++; sound('good'); toast(t('correct'),'good'); confetti(); renderScoreboard(); if(team.score>=state.targetScore){endGame(t('targetReached')); return;} setTimeout(()=>{if(state.settings.rightTurn==='next') nextQuestion(true); else nextQuestion(false);},900);}
+function handleWrong(){const team=state.teams[state.currentTeam]; if(state.settings.wrongPenalty) team.score--; sound('bad'); renderScoreboard(); const ans=state.active.segments.join(' / '); toast(t('wrong')+(state.settings.showAnswer?' '+t('correctAnswer')+ans:''),'bad'); $('answerHint').textContent=state.settings.showAnswer?t('correctAnswer')+ans:''; setTimeout(()=>{if(state.settings.wrongTurn==='next') nextQuestion(true); else nextQuestion(false);}, state.settings.showAnswer?1800:900);}
+function toast(msg,type){const m=$('message'); m.textContent=msg||''; m.className='message '+(type||'');}
+function sound(kind){if(!state.settings.sound)return; try{const ctx=new (window.AudioContext||window.webkitAudioContext)(); const o=ctx.createOscillator(), g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value=kind==='good'?740:170; o.type=kind==='good'?'triangle':'sawtooth'; g.gain.setValueAtTime(.0001,ctx.currentTime); g.gain.exponentialRampToValueAtTime(.12,ctx.currentTime+.02); g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.22); o.start(); o.stop(ctx.currentTime+.24);}catch(e){}}
+function endGame(reason){if(!state.started)return; clearInterval(state.timer); state.started=false; document.body.classList.remove('playing'); const ranked=state.teams.slice().sort((a,b)=>b.score-a.score); $('endTitle').textContent=`${t('gameOver')} · ${reason}`; const list=$('rankList'); list.innerHTML=''; ranked.forEach((team,i)=>{const item=document.createElement('div'); item.className='rankItem'; item.innerHTML=`<span>${i+1}. ${team.name} ${i===0?'🏆':''}</span><span>${team.score} ${t('score')}</span>`; list.appendChild(item);}); $('rankModal').style.display='flex'; renderScoreboard(); updateHeader();}
+function resetGame(){clearInterval(state.timer); state.started=false; document.body.classList.remove('playing'); state.teams=makeTeams(parseInt($('teamCount').value,10)||2); state.currentTeam=0; state.round=0; state.active=null; state.tokens=[]; state.answer=[]; $('rankModal').style.display='none'; $('questionText').textContent=t('readyMsg'); $('answerHint').textContent=''; $('wordBank').innerHTML=''; $('slots').innerHTML=''; $('filledCount').textContent='0/0'; toast(t('readyMsg'),''); readSettings(); state.timeLeft=state.settings.minutes*60; updateTimer(); renderScoreboard(); updateHeader();}
+function confetti(){const c=$('confetti'); c.innerHTML=''; const colors=['#60a5fa','#22c55e','#f59e0b','#ef4444','#a855f7','#f472b6']; for(let i=0;i<38;i++){const x=document.createElement('i'); x.style.left=Math.random()*100+'vw'; x.style.background=colors[i%colors.length]; x.style.animationDelay=(Math.random()*.25)+'s'; x.style.transform=`rotate(${Math.random()*360}deg)`; c.appendChild(x);} setTimeout(()=>c.innerHTML='',2100);}
+function exportTxt(){const blob=new Blob([$('bankInput').value],{type:'text/plain;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='sentence_order_questions.txt'; a.click(); URL.revokeObjectURL(a.href);}
+function importTxt(file){const r=new FileReader(); r.onload=()=>{$('bankInput').value=r.result; toast(t('loaded'),'good'); save();}; r.readAsText(file,'utf-8');}
+function fullscreen(){const el=document.documentElement; if(!document.fullscreenElement) el.requestFullscreen?.(); else document.exitFullscreen?.();}
+$('langSelect').addEventListener('change',applyLang); ['teamCount','gameMinutes','targetScore','questionMode','wrongPenalty','rightTurn','wrongTurn','showAnswer','soundOn','bankInput'].forEach(id=>$(id).addEventListener('change',save)); $('bankInput').addEventListener('input',save);
+$('startBtn').addEventListener('click',startGame); $('showSettingsBtn').addEventListener('click',()=>{document.body.classList.toggle('playing'); toast(document.body.classList.contains('playing')?t('settingsHidden'):t('settingsShown'),'warn')}); $('fullscreenBtn').addEventListener('click',fullscreen); $('nextBtn').addEventListener('click',()=>nextQuestion(true)); $('resetBtn').addEventListener('click',resetGame); $('clearBtn').addEventListener('click',clearAnswer); $('checkBtn').addEventListener('click',checkAnswer); $('sampleBtn').addEventListener('click',()=>{$('bankInput').value=SAMPLE; save(); toast(t('loaded'),'good')}); $('exportBtn').addEventListener('click',exportTxt); $('importBtn').addEventListener('click',()=>$('fileInput').click()); $('fileInput').addEventListener('change',e=>{if(e.target.files[0]) importTxt(e.target.files[0])}); $('closeRankBtn').addEventListener('click',()=>$('rankModal').style.display='none'); $('playAgainBtn').addEventListener('click',()=>{ $('rankModal').style.display='none'; startGame();});
+load(); applyLang(); resetGame();
+</script>
+</body>
+</html>

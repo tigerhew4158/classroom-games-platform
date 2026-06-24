@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="220" viewBox="0 0 260 220">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f8ffff"/><stop offset="1" stop-color="#d8f4ff"/></linearGradient></defs>
+        <ellipse cx="130" cy="190" rx="88" ry="20" fill="#00000020"/>
+        <ellipse cx="130" cy="182" rx="92" ry="28" fill="#7bc96f"/>
+        <rect x="58" y="92" width="144" height="74" rx="16" fill="url(#g)" stroke="#8b5cf6" stroke-width="5"/>
+        <rect x="30" y="72" width="18" height="74" rx="6" fill="#f8fafc" stroke="#8b5cf6" stroke-width="3"/><rect x="56" y="66" width="18" height="74" rx="6" fill="#f8fafc" stroke="#8b5cf6" stroke-width="3"/><rect x="82" y="72" width="18" height="74" rx="6" fill="#f8fafc" stroke="#8b5cf6" stroke-width="3"/><rect x="108" y="66" width="18" height="74" rx="6" fill="#f8fafc" stroke="#8b5cf6" stroke-width="3"/>
+        <ellipse cx="130" cy="84" rx="38" ry="26" fill="#ffffff" stroke="#8b5cf6" stroke-width="5"/>
+        <rect x="118" y="128" width="24" height="38" rx="7" fill="#8b5cf6"/>
+        <path d="M130 34 L130 74" stroke="#6b7280" stroke-width="5"/><path d="M130 36 C158 42, 168 52, 150 67 C142 58,136 54,130 53 Z" fill="#5b21b6"/>
+        <circle cx="38" cy="28" r="5" fill="#facc15"/><circle cx="66" cy="28" r="5" fill="#facc15"/><circle cx="94" cy="28" r="5" fill="#facc15"/>
+        <text x="130" y="210" text-anchor="middle" font-family="Arial" font-size="18" font-weight="800" fill="#fff">Castle Lv.3</text>
+        </svg>
