@@ -1,3 +1,4 @@
+// LOGIN_FIXED_20260624_2
 
 const GAME_DATA = [
   {id:'memory_match', code:'S001', preview:'previews/memory_match.svg', icon:'🃏', price:20, free:true, path:'games/memory_match_game/index.html', download:'downloads/memory_match.zip'},
