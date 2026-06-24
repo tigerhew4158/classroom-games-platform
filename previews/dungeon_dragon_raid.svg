@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="340" viewBox="0 0 600 340">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3b0b0b"/><stop offset="1" stop-color="#0f172a"/></linearGradient></defs>
+<rect width="600" height="340" rx="28" fill="url(#bg)"/>
+<rect x="24" y="24" width="86" height="36" rx="14" fill="#111827"/><text x="67" y="48" fill="#fff" text-anchor="middle" font-size="22" font-family="Arial" font-weight="900">H003</text>
+<text x="130" y="48" fill="#fff" font-size="24" font-family="Arial,Microsoft YaHei" font-weight="900">地牢巨龍討伐戰</text>
+<rect x="42" y="84" width="160" height="180" rx="20" fill="rgba(59,130,246,.18)" stroke="rgba(96,165,250,.6)"/><text x="122" y="170" text-anchor="middle" font-size="62">🛡️</text><rect x="62" y="220" width="120" height="16" rx="8" fill="#22c55e"/>
+<rect x="398" y="84" width="160" height="180" rx="20" fill="rgba(168,85,247,.18)" stroke="rgba(168,85,247,.6)"/><text x="478" y="170" text-anchor="middle" font-size="62">🧙</text><rect x="418" y="220" width="120" height="16" rx="8" fill="#22c55e"/>
+<text x="300" y="190" text-anchor="middle" font-size="110">🐲</text><rect x="210" y="236" width="180" height="20" rx="10" fill="#7f1d1d"/><rect x="210" y="236" width="125" height="20" rx="10" fill="#ef4444"/>
+<text x="42" y="300" fill="#fecaca" font-size="18" font-family="Arial,Microsoft YaHei">Boss Raid｜答題攻擊｜HP 戰鬥</text>
+</svg>

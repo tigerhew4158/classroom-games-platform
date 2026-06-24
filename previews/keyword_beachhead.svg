@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#0284c7"/>
+    <stop offset="100%" stop-color="#0b1220"/>
+  </linearGradient>
+  <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#c0843d" stop-opacity=".9"/>
+    <stop offset="100%" stop-color="#0f172a" stop-opacity=".95"/>
+  </linearGradient>
+</defs>
+<rect width="1200" height="700" rx="32" fill="url(#bg)"/>
+<circle cx="190" cy="180" r="110" fill="rgba(255,255,255,.12)"/>
+<circle cx="1030" cy="540" r="140" fill="rgba(255,255,255,.08)"/>
+<rect x="70" y="78" width="1060" height="544" rx="28" fill="rgba(8,15,30,.55)" stroke="rgba(255,255,255,.15)"/>
+<rect x="110" y="130" width="380" height="430" rx="26" fill="url(#card)"/>
+<text x="300" y="320" font-size="150" text-anchor="middle">🏖️</text>
+<rect x="540" y="150" width="520" height="80" rx="18" fill="rgba(255,255,255,.12)"/>
+<rect x="540" y="260" width="240" height="240" rx="20" fill="rgba(255,255,255,.08)"/>
+<rect x="820" y="260" width="240" height="110" rx="20" fill="rgba(255,255,255,.08)"/>
+<rect x="820" y="390" width="240" height="110" rx="20" fill="rgba(255,255,255,.08)"/>
+<text x="540" y="108" fill="#ffffff" font-size="44" font-family="Arial,Microsoft YaHei,sans-serif" font-weight="700">P007 关键词抢滩战</text>
+<text x="540" y="560" fill="#dbeafe" font-size="26" font-family="Arial,Microsoft YaHei,sans-serif">两队抢答关键词｜海滩推进｜词卡竞赛</text>
+</svg>

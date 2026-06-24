@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="340" viewBox="0 0 600 340">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0f172a"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+  <linearGradient id="card" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eff6ff"/><stop offset="1" stop-color="#dbeafe"/></linearGradient>
+</defs>
+<rect width="600" height="340" rx="28" fill="url(#bg)"/>
+<rect x="22" y="22" width="88" height="36" rx="14" fill="#111827"/><text x="66" y="47" fill="#fff" text-anchor="middle" font-size="22" font-family="Arial" font-weight="900">H009</text>
+<text x="130" y="48" fill="#fff" font-size="20" font-family="Arial,Microsoft YaHei" font-weight="900">大家来找碴(自帶后台)</text>
+<text x="130" y="76" fill="#bfdbfe" font-size="15" font-family="Arial,Microsoft YaHei">双图找不同｜红区答案图｜后台关卡管理</text>
+<rect x="46" y="105" width="220" height="150" rx="20" fill="url(#card)" stroke="#93c5fd" stroke-width="4"/>
+<rect x="334" y="105" width="220" height="150" rx="20" fill="url(#card)" stroke="#fca5a5" stroke-width="4"/>
+<g transform="translate(70,125)"><rect x="0" y="60" width="54" height="58" rx="10" fill="#22c55e"/><circle cx="92" cy="52" r="28" fill="#38bdf8"/><polygon points="150,28 190,96 110,96" fill="#f97316"/><circle cx="162" cy="112" r="16" fill="#facc15"/></g>
+<g transform="translate(358,125)"><rect x="0" y="60" width="54" height="58" rx="10" fill="#ef4444"/><circle cx="92" cy="52" r="28" fill="#eab308"/><polygon points="150,28 190,96 110,96" fill="#38bdf8"/><circle cx="162" cy="112" r="16" fill="#ffffff"/></g>
+<circle cx="448" cy="178" r="38" fill="none" stroke="#22c55e" stroke-width="5"/><circle cx="520" cy="236" r="30" fill="none" stroke="#22c55e" stroke-width="5"/>
+<path d="M198 248 L230 280 M230 248 L198 280" stroke="#ef4444" stroke-width="8" stroke-linecap="round"/>
+<rect x="70" y="280" width="460" height="26" rx="13" fill="#ffffff22"/><text x="300" y="299" fill="#fff" text-anchor="middle" font-size="16" font-family="Arial,Microsoft YaHei" font-weight="800">支持排行榜、提示、下一关、后台新增 / 编辑 / 删除关卡</text>
+</svg>

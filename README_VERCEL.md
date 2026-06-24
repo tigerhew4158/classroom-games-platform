@@ -1,0 +1,48 @@
+# 課堂游戲網站｜Vercel 測試版
+
+## 本版內容
+
+- 免登入，打開首頁直接進入老師後台與遊戲庫。
+- H009 大家来找碴(自帶后台) 已放在高階分類。
+- 可在老師後台填寫題庫 / 素材說明。
+- 可白板模式打開各遊戲。
+- 已加入 `vercel.json` 與 `package.json`，可直接部署到 Vercel。
+
+## Vercel 部署方式
+
+### 方法一：Vercel Dashboard 上傳 / 匯入
+
+1. 解壓本 ZIP。
+2. 把整個資料夾上傳到 GitHub，或用 Vercel 匯入專案。
+3. Framework Preset 選 `Other`。
+4. Build Command 可留空，或使用：`npm run build`。
+5. Output Directory 填 `.` 或留空。
+6. Deploy。
+
+### 方法二：Vercel CLI
+
+```bash
+npm i -g vercel
+vercel
+```
+
+## 測試流程
+
+1. 打開首頁。
+2. 不需要登入，直接進入老師後台。
+3. 在老師後台選遊戲版型與填題庫。
+4. 點遊戲卡片的「白板上課」。
+5. 測試遊戲是否能在 iframe 播放。
+6. 測試高階分類中的「大家来找碴(自帶后台)」。
+
+## 注意
+
+這是純前端靜態版，沒有後端與資料庫。老師設定資料目前保存在瀏覽器 localStorage，下載遊戲包是靜態離線包。
+
+
+## 混合账号版测试账号
+
+管理员：`admin@lead.ai / admin123`  
+示范老师：`teacher@example.com / 123456`
+
+老师可在登入页注册申请账号；管理员登入后可批准申请。

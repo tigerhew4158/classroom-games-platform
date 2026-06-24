@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 380 214">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#422006"/><stop offset="1" stop-color="#020617"/></linearGradient></defs>
+  <rect width="380" height="214" rx="22" fill="url(#bg)"/>
+  <rect x="18" y="16" width="344" height="182" rx="18" fill="rgba(15,23,42,.58)" stroke="#fde68a" stroke-opacity=".35"/>
+  <text x="32" y="42" fill="#fde68a" font-size="17" font-family="Arial" font-weight="900">P010</text>
+  <text x="348" y="42" text-anchor="end" fill="#fff" font-size="22">🏃</text>
+  <rect x="62" y="82" width="230" height="18" rx="9" fill="#020617" stroke="rgba(255,255,255,.18)"/><rect x="62" y="82" width="80" height="18" rx="9" fill="#ef4444"/><text x="155" y="103" font-size="24">🏃</text>
+<rect x="62" y="120" width="230" height="18" rx="9" fill="#020617" stroke="rgba(255,255,255,.18)"/><rect x="62" y="120" width="128" height="18" rx="9" fill="#3b82f6"/><text x="203" y="141" font-size="24">🏃</text>
+<rect x="62" y="158" width="230" height="18" rx="9" fill="#020617" stroke="rgba(255,255,255,.18)"/><rect x="62" y="158" width="176" height="18" rx="9" fill="#22c55e"/><text x="251" y="179" font-size="24">🏃</text>
+<rect x="305" y="72" width="12" height="108" rx="6" fill="#facc15"/>
+  <rect x="26" y="174" width="328" height="18" rx="9" fill="rgba(255,255,255,.08)"/>
+  <text x="190" y="188" text-anchor="middle" fill="#fff" font-size="13" font-family="Arial" font-weight="800">Team Relay Quiz</text>
+</svg>

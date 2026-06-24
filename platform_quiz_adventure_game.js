@@ -1,0 +1,708 @@
+
+(() => {
+  const I18N = {
+    zh:{
+      title:'平台闯关问答小游戏', subtitle:'键盘控制角色闯关，到达关卡门口后回答问题，答对才能继续前进。', fullscreen:'全屏', teacherSettings:'老师设定', loadDemo:'载入示例', teamCount:'队伍数量', levelCount:'关卡数量', timeLimit:'游戏总时间', noLimit:'不限时', questionSeconds:'每题倒数', hearts:'每队生命', difficulty:'闯关难度', easy:'简单', normal:'普通', hard:'挑战', correctPolicy:'答对后', wrongPolicy:'答错后', switchTeam:'换下一队', sameTeam:'本队继续', wrongPenalty:'答错扣分', no:'否', yes:'是', sound:'音效', on:'开启', off:'关闭', questionBank:'题库', bankHint:'格式：题目,正确答案,错误选项1,错误选项2,错误选项3。只有两栏时为开放题，可自动判断，也可由老师判对/判错。', exportTxt:'导出 TXT', clear:'清空', startGame:'开始游戏', settingsNote:'开始后会隐藏老师设定区，只保留闯关画面，方便投影给学生。', showSettings:'显示老师设定', restart:'重新开始', endGame:'结束游戏', readyStatus:'请先完成老师设定，然后点击开始游戏。', controlHint:'操作：← → 或 A/D 移动，空白键 / ↑ / W 跳跃；连续按两下可二段跳。', time:'时间', level:'关卡', jump:'跳跃', doubleJump:'双跳', questionTime:'答题倒数', submitAnswer:'提交答案', teacherCorrect:'老师判对', teacherWrong:'老师判错', showAnswer:'显示答案', gameOver:'游戏结束', close:'关闭', playAgain:'再玩一次', editSettings:'回到老师设定', red:'红队', blue:'蓝队', green:'绿队', purple:'紫队', solo:'挑战者', score:'分数', hp:'生命', progress:'进度', currentTeam:'当前队伍', reachGate:'请控制角色到达关卡门口。', questionGate:'到达关卡门口，请回答问题！', correct:'答对了！可以进入下一关。', wrong:'答错了！请重新挑战。', timeUp:'时间到！', completed:'完成所有关卡！', defeated:'生命归零', finalWinner:'冠军', openQuestion:'关卡问题', answerIs:'正确答案', chooseAnswer:'请选择正确答案', typeAnswer:'请输入答案', demoLoaded:'已载入示例题库', started:'游戏开始！老师设定区已隐藏。', imported:'题库已汇入', emptyBank:'题库不能为空', invalidLevel:'关卡数量必须至少 1 关', pausedForQuestion:'答题中', noActiveTeam:'所有队伍都完成或被淘汰。', checkpoint:'检查点', door:'闯关门'
+    },
+    en:{
+      title:'Platform Quiz Adventure', subtitle:'Control the character with the keyboard. Reach the gate, answer correctly, and continue to the next level.', fullscreen:'Fullscreen', teacherSettings:'Teacher Settings', loadDemo:'Load Demo', teamCount:'Number of Teams', levelCount:'Number of Levels', timeLimit:'Total Game Time', noLimit:'No limit', questionSeconds:'Question Timer', hearts:'Hearts per Team', difficulty:'Difficulty', easy:'Easy', normal:'Normal', hard:'Challenge', correctPolicy:'After Correct', wrongPolicy:'After Wrong', switchTeam:'Next team', sameTeam:'Same team', wrongPenalty:'Penalty for Wrong', no:'No', yes:'Yes', sound:'Sound', on:'On', off:'Off', questionBank:'Question Bank', bankHint:'Format: Question,Correct Answer,Wrong Option 1,Wrong Option 2,Wrong Option 3. Two columns = open question; auto-check or teacher judgment is supported.', exportTxt:'Export TXT', clear:'Clear', startGame:'Start Game', settingsNote:'After starting, the teacher settings panel will be hidden for classroom projection.', showSettings:'Show Settings', restart:'Restart', endGame:'End Game', readyStatus:'Complete the settings, then click Start Game.', controlHint:'Controls: ← → or A/D to move, Space / ↑ / W to jump; press twice for double jump.', time:'Time', level:'Level', jump:'Jump', doubleJump:'Double Jump', questionTime:'Question time', submitAnswer:'Submit', teacherCorrect:'Mark Correct', teacherWrong:'Mark Wrong', showAnswer:'Show Answer', gameOver:'Game Over', close:'Close', playAgain:'Play Again', editSettings:'Back to Settings', red:'Red Team', blue:'Blue Team', green:'Green Team', purple:'Purple Team', solo:'Player', score:'Score', hp:'HP', progress:'Progress', currentTeam:'Current Team', reachGate:'Move the character to the level gate.', questionGate:'You reached the gate. Answer the question!', correct:'Correct! You may continue to the next level.', wrong:'Wrong! Try the level again.', timeUp:'Time is up!', completed:'Completed all levels!', defeated:'No hearts left', finalWinner:'Winner', openQuestion:'Level Question', answerIs:'Correct answer', chooseAnswer:'Choose the correct answer', typeAnswer:'Type your answer', demoLoaded:'Demo questions loaded', started:'Game started. Teacher settings are hidden.', imported:'Question bank imported', emptyBank:'Question bank cannot be empty', invalidLevel:'Level count must be at least 1', pausedForQuestion:'Answering question', noActiveTeam:'All teams have completed or are out.', checkpoint:'Checkpoint', door:'Gate'
+    },
+    ms:{
+      title:'Permainan Pengembaraan Kuiz', subtitle:'Kawal watak dengan papan kekunci. Sampai ke pintu, jawab dengan betul, dan terus ke tahap seterusnya.', fullscreen:'Skrin penuh', teacherSettings:'Tetapan Guru', loadDemo:'Muat Contoh', teamCount:'Bilangan Pasukan', levelCount:'Bilangan Tahap', timeLimit:'Masa Permainan', noLimit:'Tiada had', questionSeconds:'Masa Soalan', hearts:'Nyawa Setiap Pasukan', difficulty:'Kesukaran', easy:'Mudah', normal:'Biasa', hard:'Cabaran', correctPolicy:'Selepas Betul', wrongPolicy:'Selepas Salah', switchTeam:'Pasukan seterusnya', sameTeam:'Pasukan sama', wrongPenalty:'Tolak Markah Salah', no:'Tidak', yes:'Ya', sound:'Bunyi', on:'Buka', off:'Tutup', questionBank:'Bank Soalan', bankHint:'Format: Soalan,Jawapan Betul,Pilihan Salah 1,Pilihan Salah 2,Pilihan Salah 3. Dua lajur = soalan terbuka; boleh semak automatik atau guru tentukan.', exportTxt:'Eksport TXT', clear:'Kosongkan', startGame:'Mula Permainan', settingsNote:'Selepas mula, tetapan guru akan disembunyikan untuk paparan kelas.', showSettings:'Papar Tetapan', restart:'Mula Semula', endGame:'Tamat Permainan', readyStatus:'Lengkapkan tetapan, kemudian klik Mula Permainan.', controlHint:'Kawalan: ← → atau A/D untuk bergerak, Space / ↑ / W untuk lompat; tekan dua kali untuk lompat berganda.', time:'Masa', level:'Tahap', jump:'Lompat', doubleJump:'Lompat 2x', questionTime:'Masa soalan', submitAnswer:'Hantar', teacherCorrect:'Guru Betulkan', teacherWrong:'Guru Salahkan', showAnswer:'Papar Jawapan', gameOver:'Permainan Tamat', close:'Tutup', playAgain:'Main Lagi', editSettings:'Kembali ke Tetapan', red:'Pasukan Merah', blue:'Pasukan Biru', green:'Pasukan Hijau', purple:'Pasukan Ungu', solo:'Pemain', score:'Markah', hp:'Nyawa', progress:'Kemajuan', currentTeam:'Pasukan Semasa', reachGate:'Gerakkan watak ke pintu tahap.', questionGate:'Anda sampai ke pintu. Jawab soalan!', correct:'Betul! Teruskan ke tahap seterusnya.', wrong:'Salah! Cuba semula tahap ini.', timeUp:'Masa tamat!', completed:'Selesai semua tahap!', defeated:'Nyawa habis', finalWinner:'Juara', openQuestion:'Soalan Tahap', answerIs:'Jawapan betul', chooseAnswer:'Pilih jawapan betul', typeAnswer:'Taip jawapan anda', demoLoaded:'Soalan contoh dimuatkan', started:'Permainan bermula. Tetapan guru disembunyikan.', imported:'Bank soalan telah diimport', emptyBank:'Bank soalan tidak boleh kosong', invalidLevel:'Bilangan tahap mesti sekurang-kurangnya 1', pausedForQuestion:'Menjawab soalan', noActiveTeam:'Semua pasukan selesai atau tersingkir.', checkpoint:'Pusat Semak', door:'Pintu'
+    }
+  };
+
+  const $ = sel => document.querySelector(sel);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
+  const els = {
+    langSelect: $('#langSelect'), settingsPanel: $('#settingsPanel'), layout: $('#layout'), teamCount: $('#teamCount'), levelCount: $('#levelCount'), timeLimit: $('#timeLimit'), questionSeconds: $('#questionSeconds'), hearts: $('#hearts'), difficulty: $('#difficulty'), correctPolicy: $('#correctPolicy'), wrongPolicy: $('#wrongPolicy'), wrongPenalty: $('#wrongPenalty'), soundOn: $('#soundOn'), questionBank: $('#questionBank'), importFile: $('#importFile'), exportBtn: $('#exportBtn'), clearBtn: $('#clearBtn'), startBtn: $('#startBtn'), loadDemoBtn: $('#loadDemoBtn'), fullscreenBtn: $('#fullscreenBtn'), showSettingsBtn: $('#showSettingsBtn'), restartBtn: $('#restartBtn'), endBtn: $('#endBtn'), scoreboard: $('#scoreboard'), bigStatus: $('#bigStatus'), miniStatus: $('#miniStatus'), timerText: $('#timerText'), levelText: $('#levelText'), canvas: $('#gameCanvas'), questionModal: $('#questionModal'), questionTitle: $('#questionTitle'), questionTimer: $('#questionTimer'), questionMeta: $('#questionMeta'), questionText: $('#questionText'), options: $('#options'), openAnswer: $('#openAnswer'), answerInput: $('#answerInput'), submitAnswerBtn: $('#submitAnswerBtn'), teacherJudge: $('#teacherJudge'), judgeCorrectBtn: $('#judgeCorrectBtn'), judgeWrongBtn: $('#judgeWrongBtn'), showAnswerBtn: $('#showAnswerBtn'), resultMsg: $('#resultMsg'), endModal: $('#endModal'), winnerText: $('#winnerText'), rankList: $('#rankList'), closeEndBtn: $('#closeEndBtn'), playAgainBtn: $('#playAgainBtn'), editSettingsBtn: $('#editSettingsBtn'), toast: $('#toast')
+  };
+  const ctx = els.canvas.getContext('2d');
+
+  let lang = localStorage.getItem('platformQuizLang') || 'zh';
+  let settings = {};
+  let questions = [];
+  let teams = [];
+  let currentTeamIndex = 0;
+  let running = false;
+  let paused = false;
+  let gameStartTime = 0;
+  let remainingTotal = 0;
+  let totalTimer = null;
+  let qTimer = null;
+  let qRemaining = 0;
+  let currentQuestion = null;
+  let lastTimestamp = 0;
+  let cameraX = 0;
+  let messageFlash = '';
+  let messageUntil = 0;
+  let keys = {left:false,right:false,jump:false};
+  let mobileKeys = {left:false,right:false,jump:false};
+  let jumpQueued = false;
+  let level = null;
+  let player = null;
+  let seed = 1;
+  let audioCtx = null;
+
+  const DEFAULT_BANK = `马来西亚首都是哪里？,吉隆坡,新山,槟城,马六甲
+AI 可以随便用同学照片做搞笑图吗？,不可以,可以,只要好笑就可以,老师没看到就可以
+password 的中文意思是什么？,密码
+水的化学式是什么？,H2O,CO2,O2,NaCl
+早安 的马来文是什么？,selamat pagi,terima kasih,selamat malam,apa khabar
+植物会进行什么作用制造养分？,光合作用,呼吸作用,蒸发作用,摩擦作用
+CPU 的中文意思是什么？,中央处理器,显示器,键盘,记忆卡
+网上看到陌生链接应该怎样？,先确认安全再点击,马上点击,转发给朋友,输入密码试试看
+太阳从哪里升起？,东方,西方,南方,北方
+人工智能的英文缩写是什么？,AI,BI,CI,DI
+保护个人资料最重要的做法是什么？,不要随便公开个人资料,把密码告诉朋友,公开住址,随便下载软件
+1 公里等于多少米？,1000,100,10,10000`;
+
+  function t(key){ return (I18N[lang] && I18N[lang][key]) || I18N.zh[key] || key; }
+
+  function applyI18n(){
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+    els.langSelect.value = lang;
+    $$('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if(I18N[lang][key]) el.textContent = I18N[lang][key];
+    });
+    if(!running){
+      els.bigStatus.textContent = t('readyStatus');
+      els.miniStatus.textContent = t('controlHint');
+    } else {
+      updateStatus();
+    }
+    renderScoreboard();
+  }
+
+  function loadSaved(){
+    const saved = JSON.parse(localStorage.getItem('platformQuizSettings') || '{}');
+    ['teamCount','levelCount','timeLimit','questionSeconds','hearts','difficulty','correctPolicy','wrongPolicy','wrongPenalty','soundOn'].forEach(id => {
+      if(saved[id] != null && els[id]) els[id].value = saved[id];
+    });
+    els.questionBank.value = saved.questionBank || DEFAULT_BANK;
+  }
+  function saveSettings(){
+    const data = { questionBank: els.questionBank.value };
+    ['teamCount','levelCount','timeLimit','questionSeconds','hearts','difficulty','correctPolicy','wrongPolicy','wrongPenalty','soundOn'].forEach(id => data[id] = els[id].value);
+    localStorage.setItem('platformQuizSettings', JSON.stringify(data));
+  }
+
+  function showToast(msg){
+    els.toast.textContent = msg;
+    els.toast.classList.add('show');
+    clearTimeout(showToast._timer);
+    showToast._timer = setTimeout(()=>els.toast.classList.remove('show'), 1900);
+  }
+
+  function parseCSVLine(line){
+    const out=[]; let cur=''; let quoted=false;
+    for(let i=0;i<line.length;i++){
+      const ch=line[i];
+      if(ch==='"'){
+        if(quoted && line[i+1]==='"'){cur+='"'; i++;}
+        else quoted=!quoted;
+      } else if((ch===',' || ch==='，') && !quoted){ out.push(cur.trim()); cur=''; }
+      else cur += ch;
+    }
+    out.push(cur.trim());
+    return out;
+  }
+  function parseQuestions(text){
+    return text.split(/\r?\n/).map(s=>s.trim()).filter(s=>s && !s.startsWith('#')).map((line,idx)=>{
+      const parts = parseCSVLine(line).filter(Boolean);
+      if(parts.length < 2) return null;
+      return { id: idx+1, question: parts[0], answer: parts[1], options: parts.slice(1), open: parts.length <= 2 };
+    }).filter(Boolean);
+  }
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+    return a;
+  }
+  function normalize(s){ return String(s||'').trim().toLowerCase().replace(/\s+/g,'').replace(/[。！!,.，、？?]/g,''); }
+  function clamp(n,min,max){return Math.max(min,Math.min(max,n));}
+  function rand(){ seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+
+  function beep(type='ok'){
+    if(!settings.soundOn) return;
+    try{
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+      if(type==='ok'){
+        o.frequency.setValueAtTime(540, now); o.frequency.exponentialRampToValueAtTime(880, now+.12);
+      }else if(type==='bad'){
+        o.frequency.setValueAtTime(220, now); o.frequency.exponentialRampToValueAtTime(120, now+.16);
+      }else if(type==='jump'){
+        o.frequency.setValueAtTime(330, now); o.frequency.exponentialRampToValueAtTime(500, now+.08);
+      }else{
+        o.frequency.setValueAtTime(440, now);
+      }
+      g.gain.setValueAtTime(.0001, now); g.gain.exponentialRampToValueAtTime(.08, now+.02); g.gain.exponentialRampToValueAtTime(.0001, now+.18);
+      o.start(now); o.stop(now+.2);
+    }catch(e){}
+  }
+
+  const TEAM_COLORS = ['#fb7185','#38bdf8','#34d399','#a78bfa'];
+  function makeTeams(count){
+    const names = count===1 ? [t('solo')] : [t('red'), t('blue'), t('green'), t('purple')].slice(0,count);
+    return names.map((name,i)=>({name, color:TEAM_COLORS[i], score:0, levelIndex:0, hearts:settings.hearts, finished:false, defeated:false, lastMsg:''}));
+  }
+
+  function renderScoreboard(){
+    if(!teams.length){
+      els.scoreboard.innerHTML = '<div class="miniStatus">'+ t('readyStatus') +'</div>';
+      return;
+    }
+    els.scoreboard.innerHTML = teams.map((team,i)=>{
+      const active = i===currentTeamIndex && running && !team.finished && !team.defeated;
+      const status = team.finished ? ' ✅' : team.defeated ? ' 💀' : '';
+      const progress = Math.min(team.levelIndex, settings.levelCount || Number(els.levelCount.value));
+      return `<div class="teamCard ${active?'active':''} ${(team.finished||team.defeated)?'finished':''}">
+        <div class="teamName"><span class="teamColor" style="background:${team.color}"></span>${escapeHtml(team.name)}${status}</div>
+        <div class="teamStats"><span>${t('score')}: ${team.score}</span><span>${t('hp')}: ${team.hearts}</span><span>${t('progress')}: ${progress}/${settings.levelCount || '-'}</span></div>
+      </div>`;
+    }).join('');
+  }
+
+  function escapeHtml(s){return String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+  function readSettings(){
+    const levelCount = Number(els.levelCount.value);
+    if(!els.questionBank.value.trim()){showToast(t('emptyBank')); return null;}
+    if(!levelCount || levelCount < 1){showToast(t('invalidLevel')); return null;}
+    const qs = parseQuestions(els.questionBank.value);
+    if(!qs.length){showToast(t('emptyBank')); return null;}
+    return {
+      teamCount: Number(els.teamCount.value),
+      levelCount: clamp(levelCount,1,30),
+      timeLimit: Number(els.timeLimit.value),
+      questionSeconds: Number(els.questionSeconds.value),
+      hearts: clamp(Number(els.hearts.value)||3,1,10),
+      difficulty: els.difficulty.value,
+      correctPolicy: els.correctPolicy.value,
+      wrongPolicy: els.wrongPolicy.value,
+      wrongPenalty: els.wrongPenalty.value === '1',
+      soundOn: els.soundOn.value === '1'
+    };
+  }
+
+  function startGame(){
+    const s = readSettings();
+    if(!s) return;
+    settings = s;
+    questions = parseQuestions(els.questionBank.value);
+    saveSettings();
+    teams = makeTeams(settings.teamCount);
+    currentTeamIndex = 0;
+    running = true;
+    paused = false;
+    remainingTotal = settings.timeLimit;
+    gameStartTime = Date.now();
+    els.settingsPanel.classList.add('hidden');
+    els.layout.classList.add('playing');
+    els.endModal.classList.remove('show');
+    els.questionModal.classList.remove('show');
+    startTotalTimer();
+    beginTurn(true);
+    showToast(t('started'));
+    renderScoreboard();
+  }
+
+  function startTotalTimer(){
+    clearInterval(totalTimer);
+    if(settings.timeLimit === 0){ els.timerText.textContent = '--:--'; return; }
+    updateTotalTimer();
+    totalTimer = setInterval(()=>{
+      if(!running || paused) return;
+      const elapsed = Math.floor((Date.now()-gameStartTime)/1000);
+      remainingTotal = Math.max(0, settings.timeLimit - elapsed);
+      updateTotalTimer();
+      if(remainingTotal <= 0){ endGame(t('timeUp')); }
+    },300);
+  }
+  function updateTotalTimer(){
+    if(settings.timeLimit === 0){ els.timerText.textContent = '--:--'; return; }
+    els.timerText.textContent = formatTime(remainingTotal);
+  }
+  function formatTime(sec){
+    sec = Math.max(0, Math.floor(sec));
+    const m = Math.floor(sec/60), s=sec%60;
+    return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  }
+
+  function activeTeam(){ return teams[currentTeamIndex]; }
+  function nextActiveTeam(startFrom){
+    if(!teams.some(t=>!t.finished && !t.defeated)) return -1;
+    for(let step=1; step<=teams.length; step++){
+      const idx = (startFrom + step) % teams.length;
+      if(!teams[idx].finished && !teams[idx].defeated) return idx;
+    }
+    return -1;
+  }
+  function switchTeam(){
+    const idx = nextActiveTeam(currentTeamIndex);
+    if(idx < 0){ endGame(t('noActiveTeam')); return; }
+    currentTeamIndex = idx;
+    beginTurn(false);
+  }
+
+  function beginTurn(force=false){
+    const team = activeTeam();
+    if(!team || team.finished || team.defeated){ switchTeam(); return; }
+    createLevel(team.levelIndex);
+    resetPlayer();
+    paused = false;
+    updateStatus();
+    renderScoreboard();
+  }
+
+  function updateStatus(extra=''){
+    const team = activeTeam();
+    if(!team){ return; }
+    const lv = Math.min(team.levelIndex+1, settings.levelCount);
+    els.levelText.textContent = `${lv}/${settings.levelCount}`;
+    els.bigStatus.textContent = `${t('currentTeam')}：${team.name}　${t('level')} ${lv}/${settings.levelCount}`;
+    els.miniStatus.textContent = extra || t('reachGate') + '　' + t('controlHint');
+  }
+
+  function createLevel(levelIndex){
+    const w = 1720 + levelIndex * 95;
+    seed = (levelIndex+1) * 7919 + settings.difficulty.length * 101;
+    const groundY = 470;
+    const platforms = [{x:0,y:groundY,w:w,h:80,type:'ground'}];
+    const difficultyMap = {easy:0, normal:1, hard:2};
+    const d = difficultyMap[settings.difficulty] || 1;
+    const platformCount = 5 + levelIndex + d*2;
+    let x = 240;
+    for(let i=0;i<platformCount;i++){
+      const pw = 130 + Math.floor(rand()*120) - d*10;
+      const py = 360 - Math.floor(rand()*150) + (i%2)*30;
+      platforms.push({x:x,y:clamp(py,220,405),w:clamp(pw,90,220),h:22,type:'platform'});
+      x += 180 + Math.floor(rand()*135) + d*15;
+      if(x > w-360) break;
+    }
+    const spikes = [];
+    const spikeCount = 3 + d*2 + Math.floor(levelIndex/2);
+    for(let i=0;i<spikeCount;i++){
+      const sx = 360 + Math.floor(rand()*(w-700));
+      spikes.push({x:sx,y:groundY-24,w:46,h:24});
+    }
+    const coins = [];
+    for(let i=0;i<6+levelIndex;i++){
+      coins.push({x:220 + Math.floor(rand()*(w-500)), y:250+Math.floor(rand()*150), r:10, taken:false});
+    }
+    level = {
+      index:levelIndex,
+      width:w, height:540,
+      groundY,
+      platforms,
+      spikes,
+      coins,
+      gate:{x:w-130,y:groundY-96,w:70,h:96,opened:false},
+      checkpoint:{x:Math.floor(w*.55), y:groundY-70, hit:false}
+    };
+  }
+
+  function resetPlayer(toCheckpoint=false){
+    const startX = toCheckpoint && level?.checkpoint?.hit ? level.checkpoint.x : 50;
+    player = {x:startX,y:360,w:34,h:46,vx:0,vy:0,onGround:false,jumpsUsed:0,face:1,inv:0,coins:0};
+    cameraX = Math.max(0, player.x - 220);
+  }
+
+  function getQuestionForLevel(levelIndex){
+    return questions[levelIndex % questions.length];
+  }
+
+  function update(dt){
+    if(!running || paused || !level || !player) return;
+    const left = keys.left || mobileKeys.left;
+    const right = keys.right || mobileKeys.right;
+    const doJump = jumpQueued;
+    jumpQueued = false;
+    const speed = settings.difficulty === 'hard' ? 245 : settings.difficulty === 'easy' ? 215 : 230;
+    const gravity = 1250;
+    const jumpV = settings.difficulty === 'hard' ? -535 : settings.difficulty === 'easy' ? -520 : -530;
+    const secondJumpV = settings.difficulty === 'hard' ? -505 : -500;
+    player.vx = 0;
+    if(left){ player.vx = -speed; player.face = -1; }
+    if(right){ player.vx = speed; player.face = 1; }
+    if(doJump){
+      if(player.onGround){
+        player.vy = jumpV;
+        player.onGround = false;
+        player.jumpsUsed = 1;
+        beep('jump');
+      }else if(player.jumpsUsed < 2){
+        player.vy = secondJumpV;
+        player.jumpsUsed = 2;
+        beep('jump');
+      }
+    }
+    player.vy += gravity * dt;
+    player.x += player.vx * dt;
+    collideX();
+    player.y += player.vy * dt;
+    collideY();
+    player.x = clamp(player.x, 0, level.width - player.w);
+    if(player.y > 700){ damagePlayer('fall'); }
+    for(const coin of level.coins){
+      if(!coin.taken && rectCircle(player,coin)){ coin.taken=true; player.coins++; activeTeam().score += 1; beep('ok'); renderScoreboard(); }
+    }
+    if(!level.checkpoint.hit && rects(player,{x:level.checkpoint.x,y:level.checkpoint.y,w:26,h:70})){ level.checkpoint.hit=true; flash(t('checkpoint')); beep('ok'); }
+    for(const sp of level.spikes){ if(player.inv<=0 && rects(player,sp)){ damagePlayer('spike'); break; } }
+    if(player.inv>0) player.inv -= dt;
+    if(rects(player, level.gate)){ openQuestion(); }
+    cameraX = clamp(player.x - 300, 0, Math.max(0, level.width - 960));
+  }
+
+  function collideX(){
+    for(const p of level.platforms){
+      if(rects(player,p)){
+        if(player.vx > 0) player.x = p.x - player.w;
+        if(player.vx < 0) player.x = p.x + p.w;
+      }
+    }
+  }
+  function collideY(){
+    player.onGround = false;
+    for(const p of level.platforms){
+      if(rects(player,p)){
+        if(player.vy > 0){ player.y = p.y - player.h; player.vy = 0; player.onGround=true; player.jumpsUsed=0; }
+        else if(player.vy < 0){ player.y = p.y + p.h; player.vy = 0; }
+      }
+    }
+  }
+  function rects(a,b){ return a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y; }
+  function rectCircle(r,c){
+    const cx = clamp(c.x, r.x, r.x+r.w), cy = clamp(c.y, r.y, r.y+r.h);
+    const dx=c.x-cx, dy=c.y-cy;
+    return dx*dx+dy*dy < c.r*c.r;
+  }
+
+  function damagePlayer(kind){
+    const team = activeTeam();
+    if(!team) return;
+    team.hearts = Math.max(0, team.hearts-1);
+    beep('bad');
+    flash(team.hearts <= 0 ? t('defeated') : 'Ouch!');
+    if(team.hearts <= 0){
+      team.defeated = true;
+      renderScoreboard();
+      const idx = nextActiveTeam(currentTeamIndex);
+      if(idx < 0) endGame(t('noActiveTeam'));
+      else { currentTeamIndex = idx; beginTurn(false); }
+    } else {
+      resetPlayer(true);
+      renderScoreboard();
+    }
+  }
+
+  function flash(msg){ messageFlash = msg; messageUntil = performance.now()+1400; }
+
+  function draw(){
+    if(!level){ drawIntro(); return; }
+    const W=960,H=540;
+    ctx.clearRect(0,0,W,H);
+    // sky
+    const grad = ctx.createLinearGradient(0,0,0,H);
+    grad.addColorStop(0,'#7dd3fc'); grad.addColorStop(.62,'#bae6fd'); grad.addColorStop(1,'#dbeafe');
+    ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
+    // clouds
+    ctx.save(); ctx.translate(-cameraX*.22,0);
+    for(let i=0;i<12;i++) drawCloud(110+i*245+(i%3)*20,70+(i%4)*34);
+    ctx.restore();
+    // mountains
+    ctx.save(); ctx.translate(-cameraX*.12,0);
+    for(let i=0;i<8;i++){
+      ctx.fillStyle=i%2?'#93c5fd':'#60a5fa';
+      ctx.beginPath(); ctx.moveTo(i*330-80,470); ctx.lineTo(i*330+110,210+(i%3)*40); ctx.lineTo(i*330+300,470); ctx.closePath(); ctx.fill();
+    }
+    ctx.restore();
+
+    ctx.save(); ctx.translate(-cameraX,0);
+    // platforms
+    for(const p of level.platforms){ drawPlatform(p); }
+    // checkpoint
+    drawCheckpoint(level.checkpoint);
+    // coins
+    for(const coin of level.coins){ if(!coin.taken) drawCoin(coin); }
+    // spikes
+    for(const sp of level.spikes) drawSpike(sp);
+    // gate
+    drawGate(level.gate);
+    // player
+    drawPlayer(player, activeTeam()?.color || '#fbbf24');
+    ctx.restore();
+
+    // overlays
+    if(performance.now() < messageUntil){
+      ctx.save();
+      ctx.fillStyle='rgba(15,23,42,.82)'; roundRect(ctx, W/2-150, 80, 300, 62, 20); ctx.fill();
+      ctx.fillStyle='#fff'; ctx.font='900 26px system-ui'; ctx.textAlign='center'; ctx.fillText(messageFlash, W/2, 120);
+      ctx.restore();
+    }
+    drawMiniMap();
+  }
+
+  function drawIntro(){
+    const W=960,H=540;
+    ctx.clearRect(0,0,W,H);
+    const grad = ctx.createLinearGradient(0,0,0,H);
+    grad.addColorStop(0,'#1e3a8a'); grad.addColorStop(1,'#0f172a'); ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='rgba(255,255,255,.08)';
+    for(let i=0;i<16;i++){ ctx.beginPath(); ctx.arc((i*81)%W,80+(i*47)%360,20+(i%4)*9,0,Math.PI*2); ctx.fill(); }
+    ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.font='900 42px system-ui'; ctx.fillText(t('title'), W/2, 220);
+    ctx.font='500 20px system-ui'; ctx.fillStyle='rgba(255,255,255,.78)'; ctx.fillText(t('subtitle'), W/2, 265);
+    ctx.font='800 18px system-ui'; ctx.fillStyle='#fbbf24'; ctx.fillText(t('controlHint'), W/2, 320);
+  }
+  function drawCloud(x,y){
+    ctx.fillStyle='rgba(255,255,255,.8)';
+    ctx.beginPath(); ctx.arc(x,y,22,0,Math.PI*2); ctx.arc(x+22,y-10,28,0,Math.PI*2); ctx.arc(x+54,y,24,0,Math.PI*2); ctx.arc(x+30,y+8,25,0,Math.PI*2); ctx.fill();
+  }
+  function drawPlatform(p){
+    if(p.type==='ground'){
+      ctx.fillStyle='#3f8f46'; ctx.fillRect(p.x,p.y,p.w,p.h);
+      ctx.fillStyle='#60b15c'; ctx.fillRect(p.x,p.y,p.w,18);
+      ctx.fillStyle='rgba(0,0,0,.12)';
+      for(let x=p.x; x<p.x+p.w; x+=42) ctx.fillRect(x,p.y+18,22,8);
+    }else{
+      ctx.fillStyle='#92400e'; roundRect(ctx,p.x,p.y,p.w,p.h,8); ctx.fill();
+      ctx.fillStyle='#f59e0b'; roundRect(ctx,p.x,p.y,p.w,8,5); ctx.fill();
+    }
+  }
+  function drawCoin(c){
+    ctx.fillStyle='#fbbf24'; ctx.beginPath(); ctx.arc(c.x,c.y,c.r,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='rgba(146,64,14,.4)'; ctx.lineWidth=3; ctx.stroke();
+    ctx.fillStyle='#fff7'; ctx.beginPath(); ctx.arc(c.x-3,c.y-4,3,0,Math.PI*2); ctx.fill();
+  }
+  function drawSpike(s){
+    ctx.fillStyle='#475569';
+    ctx.beginPath(); ctx.moveTo(s.x,s.y+s.h); ctx.lineTo(s.x+s.w/2,s.y); ctx.lineTo(s.x+s.w,s.y+s.h); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle='#0f172a55'; ctx.stroke();
+  }
+  function drawCheckpoint(cp){
+    ctx.fillStyle=cp.hit?'#22c55e':'#f97316'; ctx.fillRect(cp.x, cp.y, 7, 70);
+    ctx.beginPath(); ctx.moveTo(cp.x+7,cp.y); ctx.lineTo(cp.x+55,cp.y+14); ctx.lineTo(cp.x+7,cp.y+28); ctx.closePath(); ctx.fill();
+  }
+  function drawGate(g){
+    ctx.fillStyle='#7c2d12'; roundRect(ctx,g.x,g.y,g.w,g.h,12); ctx.fill();
+    ctx.fillStyle='#fbbf24'; roundRect(ctx,g.x+9,g.y+12,g.w-18,g.h-18,10); ctx.fill();
+    ctx.fillStyle='#7c2d12'; ctx.fillRect(g.x+16,g.y+24,g.w-32,g.h-30);
+    ctx.fillStyle='#fff'; ctx.font='900 18px system-ui'; ctx.textAlign='center'; ctx.fillText('?', g.x+g.w/2, g.y+58);
+    ctx.fillStyle='#f8fafc'; ctx.font='800 12px system-ui'; ctx.fillText(t('door'), g.x+g.w/2, g.y-8);
+  }
+  function drawPlayer(p,color){
+    if(!p) return;
+    ctx.save();
+    ctx.globalAlpha = p.inv>0 && Math.floor(performance.now()/90)%2 ? .45 : 1;
+    const x=p.x,y=p.y;
+    // shadow
+    ctx.fillStyle='rgba(0,0,0,.18)'; ctx.beginPath(); ctx.ellipse(x+p.w/2,y+p.h+5,22,7,0,0,Math.PI*2); ctx.fill();
+    // body
+    ctx.fillStyle=color; roundRect(ctx,x+4,y+16,26,28,10); ctx.fill();
+    // head
+    ctx.fillStyle='#fed7aa'; ctx.beginPath(); ctx.arc(x+17,y+12,14,0,Math.PI*2); ctx.fill();
+    // cap
+    ctx.fillStyle=color; ctx.beginPath(); ctx.arc(x+17,y+7,14,Math.PI,0); ctx.fill(); ctx.fillRect(x+7,y+6,25,6);
+    // eye
+    ctx.fillStyle='#111827'; ctx.beginPath(); ctx.arc(x+(p.face>0?22:12),y+12,2.4,0,Math.PI*2); ctx.fill();
+    // legs
+    ctx.fillStyle='#1e293b'; ctx.fillRect(x+8,y+40,8,8); ctx.fillRect(x+20,y+40,8,8);
+    ctx.restore();
+  }
+  function drawMiniMap(){
+    if(!level || !player) return;
+    const x=24,y=20,w=220,h=12;
+    ctx.fillStyle='rgba(15,23,42,.55)'; roundRect(ctx,x-8,y-8,w+16,30,13); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.35)'; roundRect(ctx,x,y,w,h,8); ctx.fill();
+    const px = x + (player.x / level.width) * w;
+    const gx = x + (level.gate.x / level.width) * w;
+    ctx.fillStyle=activeTeam()?.color || '#fbbf24'; ctx.beginPath(); ctx.arc(px,y+h/2,8,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#fbbf24'; ctx.fillRect(gx-2,y-6,4,h+12);
+  }
+  function roundRect(ctx,x,y,w,h,r){
+    r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+  }
+
+  function openQuestion(){
+    if(paused || !running) return;
+    paused = true;
+    const team = activeTeam();
+    currentQuestion = getQuestionForLevel(team.levelIndex);
+    els.questionModal.classList.add('show');
+    els.questionTitle.textContent = t('openQuestion');
+    els.questionMeta.textContent = `${team.name} · ${t('level')} ${team.levelIndex+1}/${settings.levelCount}`;
+    els.questionText.textContent = currentQuestion.question;
+    els.resultMsg.textContent = '';
+    els.options.innerHTML = '';
+    els.openAnswer.style.display = 'none';
+    els.teacherJudge.style.display = 'none';
+    updateStatus(t('pausedForQuestion'));
+
+    if(currentQuestion.open){
+      els.openAnswer.style.display = 'flex';
+      els.teacherJudge.style.display = 'flex';
+      els.answerInput.placeholder = t('typeAnswer');
+      els.answerInput.value = '';
+      setTimeout(()=>els.answerInput.focus(),80);
+    } else {
+      els.questionMeta.textContent += ' · ' + t('chooseAnswer');
+      const opts = shuffle(currentQuestion.options);
+      els.options.innerHTML = opts.map(opt=>`<button class="optionBtn" data-answer="${escapeHtml(opt)}">${escapeHtml(opt)}</button>`).join('');
+      $$('.optionBtn').forEach(btn => btn.addEventListener('click', () => checkAnswer(btn.getAttribute('data-answer'))));
+    }
+    startQuestionTimer();
+  }
+
+  function startQuestionTimer(){
+    clearInterval(qTimer);
+    qRemaining = settings.questionSeconds;
+    els.questionTimer.textContent = qRemaining ? qRemaining + 's' : '--';
+    if(!qRemaining) return;
+    qTimer = setInterval(()=>{
+      qRemaining--;
+      els.questionTimer.textContent = qRemaining + 's';
+      if(qRemaining <= 0){ clearInterval(qTimer); handleWrong(true); }
+    },1000);
+  }
+  function checkAnswer(answer){
+    if(!currentQuestion) return;
+    if(normalize(answer) === normalize(currentQuestion.answer)) handleCorrect();
+    else handleWrong(false);
+  }
+  function submitOpenAnswer(){
+    const ans = els.answerInput.value;
+    if(normalize(ans) === normalize(currentQuestion.answer)) handleCorrect();
+    else {
+      els.resultMsg.textContent = `${t('wrong')} ${t('answerIs')}：${currentQuestion.answer}`;
+      // Do not immediately close, allow teacher to override if needed.
+      beep('bad');
+    }
+  }
+  function handleCorrect(){
+    clearInterval(qTimer);
+    const team = activeTeam();
+    team.score += 10;
+    team.levelIndex += 1;
+    els.resultMsg.textContent = t('correct');
+    beep('ok');
+    renderScoreboard();
+    setTimeout(()=>{
+      els.questionModal.classList.remove('show');
+      if(team.levelIndex >= settings.levelCount){
+        team.finished = true; team.score += 20; flash(t('completed')); beep('ok'); renderScoreboard();
+        if(!teams.some(tm=>!tm.finished && !tm.defeated)){ endGame(t('completed')); return; }
+        if(settings.correctPolicy === 'continue'){
+          const idx = nextActiveTeam(currentTeamIndex);
+          if(idx>=0) currentTeamIndex = idx;
+          beginTurn(false);
+        } else switchTeam();
+      } else {
+        if(settings.correctPolicy === 'continue') beginTurn(false);
+        else switchTeam();
+      }
+    }, 900);
+  }
+  function handleWrong(isTime=false){
+    clearInterval(qTimer);
+    const team = activeTeam();
+    if(settings.wrongPenalty) team.score = Math.max(0, team.score - 2);
+    team.hearts = Math.max(0, team.hearts - 1);
+    els.resultMsg.textContent = isTime ? t('timeUp') : t('wrong');
+    beep('bad');
+    renderScoreboard();
+    setTimeout(()=>{
+      els.questionModal.classList.remove('show');
+      if(team.hearts <= 0){ team.defeated = true; renderScoreboard(); }
+      if(!teams.some(tm=>!tm.finished && !tm.defeated)){ endGame(t('noActiveTeam')); return; }
+      if(settings.wrongPolicy === 'continue' && !team.defeated) beginTurn(false);
+      else switchTeam();
+    }, 900);
+  }
+
+  function endGame(reason=''){
+    running = false; paused = true;
+    clearInterval(totalTimer); clearInterval(qTimer);
+    els.questionModal.classList.remove('show');
+    const sorted = teams.slice().sort((a,b)=> (b.finished-a.finished) || b.levelIndex-a.levelIndex || b.score-a.score || b.hearts-a.hearts);
+    const winner = sorted[0];
+    els.winnerText.textContent = `${t('finalWinner')}：${winner ? winner.name : '-'}${reason ? ' · ' + reason : ''}`;
+    els.rankList.innerHTML = sorted.map((team,i)=>`<div class="rankItem">
+      <div class="rankLeft">${i+1}. <span style="color:${team.color}">●</span> ${escapeHtml(team.name)}</div>
+      <div class="rankRight">${t('score')}: ${team.score} · ${t('progress')}: ${Math.min(team.levelIndex,settings.levelCount)}/${settings.levelCount} · ${t('hp')}: ${team.hearts}</div>
+    </div>`).join('');
+    els.endModal.classList.add('show');
+    renderScoreboard();
+    draw();
+  }
+
+  function restartGame(){ startGame(); }
+
+  function gameLoop(ts){
+    const dt = Math.min(.033, (ts - lastTimestamp) / 1000 || .016);
+    lastTimestamp = ts;
+    update(dt);
+    draw();
+    requestAnimationFrame(gameLoop);
+  }
+
+  // Events
+  els.langSelect.addEventListener('change', e=>{ lang=e.target.value; localStorage.setItem('platformQuizLang',lang); applyI18n(); });
+  els.startBtn.addEventListener('click', startGame);
+  els.restartBtn.addEventListener('click', () => { if(confirm(t('restart')+'?')) restartGame(); });
+  els.endBtn.addEventListener('click', () => { if(running) endGame(t('gameOver')); });
+  els.showSettingsBtn.addEventListener('click', () => { els.settingsPanel.classList.toggle('hidden'); els.layout.classList.toggle('playing', els.settingsPanel.classList.contains('hidden')); });
+  els.loadDemoBtn.addEventListener('click', () => { els.questionBank.value = DEFAULT_BANK; saveSettings(); showToast(t('demoLoaded')); });
+  els.clearBtn.addEventListener('click', () => { els.questionBank.value=''; saveSettings(); });
+  els.exportBtn.addEventListener('click', () => {
+    const blob = new Blob([els.questionBank.value], {type:'text/plain;charset=utf-8'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'platform_quiz_questions.txt'; a.click(); URL.revokeObjectURL(a.href);
+  });
+  els.importFile.addEventListener('change', e=>{
+    const file = e.target.files[0]; if(!file) return;
+    const reader = new FileReader(); reader.onload = () => { els.questionBank.value = String(reader.result||''); saveSettings(); showToast(t('imported')); }; reader.readAsText(file);
+  });
+  els.fullscreenBtn.addEventListener('click', () => {
+    if(!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.();
+  });
+  ['teamCount','levelCount','timeLimit','questionSeconds','hearts','difficulty','correctPolicy','wrongPolicy','wrongPenalty','soundOn','questionBank'].forEach(id => els[id].addEventListener('change', saveSettings));
+  els.submitAnswerBtn.addEventListener('click', submitOpenAnswer);
+  els.answerInput.addEventListener('keydown', e=>{ if(e.key==='Enter') submitOpenAnswer(); });
+  els.judgeCorrectBtn.addEventListener('click', handleCorrect);
+  els.judgeWrongBtn.addEventListener('click', () => handleWrong(false));
+  els.showAnswerBtn.addEventListener('click', () => { els.resultMsg.textContent = `${t('answerIs')}：${currentQuestion?.answer || ''}`; });
+  els.closeEndBtn.addEventListener('click', ()=>els.endModal.classList.remove('show'));
+  els.playAgainBtn.addEventListener('click', startGame);
+  els.editSettingsBtn.addEventListener('click', ()=>{ els.endModal.classList.remove('show'); els.settingsPanel.classList.remove('hidden'); els.layout.classList.remove('playing'); });
+
+  document.addEventListener('keydown', e=>{
+    if(['ArrowLeft','ArrowRight','ArrowUp','Space'].includes(e.code)) e.preventDefault();
+    if(e.code==='ArrowLeft' || e.code==='KeyA') keys.left=true;
+    if(e.code==='ArrowRight' || e.code==='KeyD') keys.right=true;
+    if(e.code==='Space' || e.code==='ArrowUp' || e.code==='KeyW'){
+      if(!keys.jump && !e.repeat) jumpQueued = true;
+      keys.jump=true;
+    }
+  }, {passive:false});
+  document.addEventListener('keyup', e=>{
+    if(e.code==='ArrowLeft' || e.code==='KeyA') keys.left=false;
+    if(e.code==='ArrowRight' || e.code==='KeyD') keys.right=false;
+    if(e.code==='Space' || e.code==='ArrowUp' || e.code==='KeyW') keys.jump=false;
+  });
+  $$('.padBtn').forEach(btn=>{
+    const key=btn.dataset.pad;
+    const on=ev=>{ev.preventDefault(); if(key==='jump' && !mobileKeys[key]) jumpQueued = true; mobileKeys[key]=true;};
+    const off=ev=>{ev.preventDefault(); mobileKeys[key]=false;};
+    btn.addEventListener('pointerdown',on); btn.addEventListener('pointerup',off); btn.addEventListener('pointerleave',off); btn.addEventListener('pointercancel',off);
+  });
+
+  loadSaved();
+  applyI18n();
+  renderScoreboard();
+  requestAnimationFrame(gameLoop);
+})();
