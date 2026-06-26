@@ -1,4 +1,4 @@
-// FORMAL_LOGIN_TEMPLATE_20260626_1
+// TEMPLATE_EXPLAINER_PAGE_20260626_1
 
 const GAME_DATA = [
   {id:'memory_match', code:'S001', preview:'previews/memory_match.svg', icon:'🃏', price:20, free:true, path:'games/memory_match_game/index.html', download:'downloads/memory_match.zip'},
@@ -66,48 +66,712 @@ const LEVEL_TEXT = {
 };
 
 const LANGS = [
-  {id:'zh', label:'中文'},
+  {id:'zh', label:'简体中文'},
   {id:'en', label:'English'},
-  {id:'ms', label:'Bahasa Melayu'}
+  {id:'ms', label:'Melayu'}
 ];
+
+const TEMPLATE_COPY = {
+  "zh": {
+    "kicker": "Classroom Game Template Platform",
+    "title": "课堂游戏模板网站",
+    "subtitle": "让老师套用现成模板，快速制作互动白板课堂游戏。",
+    "heroText": "不用从零开发。选择模板、放入题库或图片素材，就能把复习、抢答、分类、拼图、地图策略等活动变成可玩的课堂游戏。",
+    "primary": "查看 24 款模板",
+    "secondary": "老师登录 / 购买",
+    "stats": [
+      [
+        "24",
+        "课堂游戏模板"
+      ],
+      [
+        "3",
+        "初阶 / 进阶 / 高阶"
+      ],
+      [
+        "白板",
+        "大按钮互动设计"
+      ]
+    ],
+    "stepsTitle": "老师使用流程",
+    "steps": [
+      [
+        "选择模板",
+        "按照科目与课堂目标，选择最合适的游戏模板。"
+      ],
+      [
+        "设定题库",
+        "登录后在老师后台输入题目、答案、图片或事件卡。"
+      ],
+      [
+        "白板上课",
+        "一键打开白板模式，让学生分组互动、抢答与闯关。"
+      ]
+    ],
+    "catalogTitle": "24 款课堂游戏模板说明",
+    "catalogSub": "按初阶、进阶、高阶分类。点击每一款模板可展开查看适合科目、玩法和准备方式。",
+    "subject": "适合科目",
+    "play": "核心玩法",
+    "setup": "老师准备",
+    "best": "适合场景",
+    "ctaTitle": "准备开始制作课堂游戏？",
+    "ctaText": "老师登录后可进入模板库与老师后台；管理员可管理老师账号与授权。",
+    "plansTitle": "登录 / 购买入口",
+    "plans": [
+      [
+        "单款模板",
+        "RM20 / 款",
+        "适合先测试一款游戏。"
+      ],
+      [
+        "五款组合",
+        "RM50",
+        "适合一个单元或一个月课堂活动。"
+      ],
+      [
+        "全部模板",
+        "RM100",
+        "适合学校、培训班或长期使用。"
+      ]
+    ],
+    "loginTitle": "老师 / 管理员登录",
+    "email": "电子邮件",
+    "password": "密码",
+    "login": "登录",
+    "registerTitle": "老师账号申请",
+    "name": "姓名",
+    "phone": "电话",
+    "apply": "送出申请",
+    "invalidEmail": "请输入有效电子邮件。",
+    "registerSuccess": "申请已送出，请等待管理员批准。"
+  },
+  "en": {
+    "kicker": "Classroom Game Template Platform",
+    "title": "Classroom Game Template Platform",
+    "subtitle": "Ready-made templates for interactive whiteboard classroom games.",
+    "heroText": "No need to build from scratch. Choose a template, add questions or images, and turn review, quizzes, sorting, puzzles and strategy activities into playable classroom games.",
+    "primary": "View 24 Templates",
+    "secondary": "Teacher Login / Purchase",
+    "stats": [
+      [
+        "24",
+        "Game templates"
+      ],
+      [
+        "3",
+        "Beginner / Intermediate / Advanced"
+      ],
+      [
+        "Whiteboard",
+        "Large touch-friendly controls"
+      ]
+    ],
+    "stepsTitle": "How Teachers Use It",
+    "steps": [
+      [
+        "Choose a template",
+        "Select the best game format for your subject and lesson goal."
+      ],
+      [
+        "Set content",
+        "After login, enter questions, answers, images or event cards in the teacher backend."
+      ],
+      [
+        "Teach on whiteboard",
+        "Launch whiteboard mode for teams to play, answer and compete."
+      ]
+    ],
+    "catalogTitle": "24 Classroom Game Template Guide",
+    "catalogSub": "Grouped into Beginner, Intermediate and Advanced. Expand each template to view subjects, gameplay and preparation.",
+    "subject": "Suitable subjects",
+    "play": "Gameplay",
+    "setup": "Teacher setup",
+    "best": "Best use",
+    "ctaTitle": "Ready to create your classroom game?",
+    "ctaText": "Teachers can log in to use templates and backend settings. Admins can manage teacher accounts and authorization.",
+    "plansTitle": "Login / Purchase Area",
+    "plans": [
+      [
+        "Single template",
+        "RM20 / template",
+        "Good for testing one game first."
+      ],
+      [
+        "Five-template pack",
+        "RM50",
+        "Good for a unit or monthly activities."
+      ],
+      [
+        "All templates",
+        "RM100",
+        "Good for schools, centres or long-term use."
+      ]
+    ],
+    "loginTitle": "Teacher / Admin Login",
+    "email": "Email",
+    "password": "Password",
+    "login": "Login",
+    "registerTitle": "Teacher Account Request",
+    "name": "Name",
+    "phone": "Phone",
+    "apply": "Submit Request",
+    "invalidEmail": "Please enter a valid email address.",
+    "registerSuccess": "Your request has been submitted. Please wait for admin approval."
+  },
+  "ms": {
+    "kicker": "Platform Templat Permainan Kelas",
+    "title": "Platform Templat Permainan Kelas",
+    "subtitle": "Templat sedia ada untuk permainan kelas papan putih interaktif.",
+    "heroText": "Tidak perlu bina dari kosong. Pilih templat, masukkan soalan atau gambar, dan jadikan ulang kaji, kuiz, klasifikasi, puzzle dan strategi sebagai permainan kelas.",
+    "primary": "Lihat 24 Templat",
+    "secondary": "Log Masuk / Pembelian",
+    "stats": [
+      [
+        "24",
+        "Templat permainan"
+      ],
+      [
+        "3",
+        "Asas / Pertengahan / Lanjutan"
+      ],
+      [
+        "Papan putih",
+        "Butang besar mesra sentuhan"
+      ]
+    ],
+    "stepsTitle": "Cara Guru Menggunakannya",
+    "steps": [
+      [
+        "Pilih templat",
+        "Pilih format permainan yang sesuai dengan subjek dan objektif kelas."
+      ],
+      [
+        "Tetapkan kandungan",
+        "Selepas log masuk, masukkan soalan, jawapan, imej atau kad peristiwa."
+      ],
+      [
+        "Main di papan putih",
+        "Lancarkan mod papan putih untuk aktiviti kumpulan."
+      ]
+    ],
+    "catalogTitle": "Panduan 24 Templat Permainan Kelas",
+    "catalogSub": "Dibahagikan kepada Asas, Pertengahan dan Lanjutan. Buka setiap templat untuk melihat subjek, cara bermain dan persediaan.",
+    "subject": "Subjek sesuai",
+    "play": "Cara bermain",
+    "setup": "Persediaan guru",
+    "best": "Kegunaan sesuai",
+    "ctaTitle": "Sedia untuk membina permainan kelas?",
+    "ctaText": "Guru boleh log masuk untuk menggunakan templat dan tetapan backend. Admin boleh mengurus akaun guru dan kebenaran.",
+    "plansTitle": "Log Masuk / Pembelian",
+    "plans": [
+      [
+        "Satu templat",
+        "RM20 / templat",
+        "Sesuai untuk mencuba satu permainan dahulu."
+      ],
+      [
+        "Pakej lima templat",
+        "RM50",
+        "Sesuai untuk satu unit atau aktiviti bulanan."
+      ],
+      [
+        "Semua templat",
+        "RM100",
+        "Sesuai untuk sekolah, pusat tuisyen atau penggunaan jangka panjang."
+      ]
+    ],
+    "loginTitle": "Log Masuk Guru / Admin",
+    "email": "Emel",
+    "password": "Kata Laluan",
+    "login": "Log Masuk",
+    "registerTitle": "Permohonan Akaun Guru",
+    "name": "Nama",
+    "phone": "Telefon",
+    "apply": "Hantar Permohonan",
+    "invalidEmail": "Sila masukkan alamat emel yang sah.",
+    "registerSuccess": "Permohonan telah dihantar. Sila tunggu kelulusan admin."
+  }
+};
+
+const TEMPLATE_DETAILS = {
+  "zh": {
+    "memory_match": {
+      "subjects": "语文词汇、英文 / Melayu 单词、数学口诀、科学概念",
+      "play": "学生翻开两张卡，找出正确配对，例如词语与解释、图片与名称、问题与答案。",
+      "setup": "老师输入配对内容即可使用，适合 5–10 分钟暖身。",
+      "best": "适合低年级、复习课、词汇记忆与概念配对。"
+    },
+    "true_false": {
+      "subjects": "任何科目快速判断题、AI素养、安全教育、科学常识",
+      "play": "屏幕快速出现判断题，学生选择真或假，系统即时反馈。",
+      "setup": "老师准备是非题，适合快速检查全班理解。",
+      "best": "适合课堂导入、结课前检测、抢答活动。"
+    },
+    "sentence_order": {
+      "subjects": "华文、英文、Melayu、历史事件、科学流程、作文结构",
+      "play": "学生拖动句子或步骤，把内容排成正确顺序。",
+      "setup": "老师输入句子、步骤或时间线，学生按逻辑排序。",
+      "best": "适合语文句序、流程学习、历史时间线。"
+    },
+    "treasure_box": {
+      "subjects": "语文、数学、科学、常识、道德教育",
+      "play": "学生选择宝箱抽题，答对获得奖励或触发惊喜。",
+      "setup": "老师输入题库，系统随机抽题，游戏节奏轻松。",
+      "best": "适合复习课、奖励机制、低压力互动。"
+    },
+    "lucky_wheel": {
+      "subjects": "全科复习、班级抢答、主题活动",
+      "play": "转盘决定题目或挑战，学生分组回答。",
+      "setup": "老师输入题目或任务，转盘随机抽取。",
+      "best": "适合制造期待感、课堂破冰、复习活动。"
+    },
+    "text_match": {
+      "subjects": "词语配对、拼字、定义配对、公式与答案",
+      "play": "学生把文字、答案或标签拖到正确位置，完成对应。",
+      "setup": "老师输入两组对应资料，可用于词汇或概念配对。",
+      "best": "适合语文词汇、英语单词、数学公式。"
+    },
+    "whack_mole": {
+      "subjects": "快速问答、乘法表、词汇认读、科学概念",
+      "play": "地鼠出现题目或答案，学生快速点击正确目标。",
+      "setup": "老师准备题库，系统以快节奏呈现。",
+      "best": "适合互动白板、高参与度练习、快速复习。"
+    },
+    "classification_conveyor": {
+      "subjects": "科学分类、语文词性、数学图形、图片分类",
+      "play": "学生把输送带上的项目分到正确类别。",
+      "setup": "老师设置分类名称，并加入文字或图片项目。",
+      "best": "适合概念分类、图片识别、知识归纳。"
+    },
+    "image_puzzle_speed_race": {
+      "subjects": "美术、科学图片、地理地图、课文插图、活动照片",
+      "play": "老师上传图片，各组轮流拼图，系统记录完成时间。",
+      "setup": "上传一张图片，设定拼图难度与组别。",
+      "best": "适合看图复习、图像观察、分组竞赛。"
+    },
+    "bomb_quiz": {
+      "subjects": "全科限时复习、考试前抢答、概念检测",
+      "play": "倒数炸弹增加紧张感，学生必须在时间内回答。",
+      "setup": "输入题库与倒计时，适合短时间高强度复习。",
+      "best": "适合高年级、考试复习、竞赛型课堂。"
+    },
+    "knowledge_race": {
+      "subjects": "常识、科学、历史、语言问答、综合测验",
+      "play": "答对即可推动赛马或队伍前进，先到终点者获胜。",
+      "setup": "老师输入题库与队伍名称，系统自动推进。",
+      "best": "适合全班分组对抗与知识竞赛。"
+    },
+    "monster_defense": {
+      "subjects": "数学运算、词汇问答、科学概念、综合复习",
+      "play": "怪兽进攻时学生答题防守，答对可击退怪兽。",
+      "setup": "输入题库与难度，学生分组合作守关。",
+      "best": "适合团队合作、即时反馈、课堂高潮。"
+    },
+    "find_difference": {
+      "subjects": "观察力训练、美术、科学图像、语文细节理解",
+      "play": "学生在两张图片中找出不同点。",
+      "setup": "老师上传图片或使用示范图，设置差异数量。",
+      "best": "适合观察训练、低年级视觉辨识。"
+    },
+    "keyword_beachhead": {
+      "subjects": "关键词复习、阅读理解、历史重点、科学术语",
+      "play": "学生抢占关键词据点，答对后占领区域。",
+      "setup": "老师输入关键词与提示，分组抢答。",
+      "best": "适合主题复习、概念整理、分组抢答。"
+    },
+    "timeline_sort_challenge": {
+      "subjects": "历史时间线、科学实验步骤、作文流程、项目步骤",
+      "play": "学生把事件或步骤按正确时间 / 逻辑排序。",
+      "setup": "老师输入事件卡片，系统打乱后让学生排列。",
+      "best": "适合历史、科学流程、说明文结构。"
+    },
+    "image_label_match": {
+      "subjects": "识图、科学器官、地图、词汇、物品名称",
+      "play": "学生把标签拖到对应图片或图片位置。",
+      "setup": "老师上传图片并输入标签，学生完成配对。",
+      "best": "适合图片教学、实物认知、双语词汇。"
+    },
+    "team_relay_quiz": {
+      "subjects": "全科复习、分组竞赛、单元测验",
+      "play": "各组轮流答题，答对推进接力进度。",
+      "setup": "老师设置组别、题库与胜利条件。",
+      "best": "适合大型课堂、分组合作与课堂总结。"
+    },
+    "platform_quiz": {
+      "subjects": "语文、英文、数学、科学、主题综合问答",
+      "play": "角色在平台地图上闯关，遇到题目答对才能继续。",
+      "setup": "老师输入关卡题目，学生控制角色挑战。",
+      "best": "适合高参与度闯关课、电脑室或白板互动。"
+    },
+    "dungeon_dragon_raid": {
+      "subjects": "综合复习、故事化问答、团队合作课程",
+      "play": "两队进入地牢，答题打怪、补血、找钥匙，最后讨伐巨龙。",
+      "setup": "老师准备题库与关卡，系统生成 RPG 流程。",
+      "best": "适合较长课堂、游戏化复习、成果活动。"
+    },
+    "picture_word_guess": {
+      "subjects": "华文字词、英文单词、Melayu 词汇、看图说话",
+      "play": "图片逐格揭开，学生抢答猜词语或答案。",
+      "setup": "老师上传图片与答案，设置组数与揭图速度。",
+      "best": "适合词汇教学、识图猜词、课堂抢答。"
+    },
+    "two_team_puzzle_duel": {
+      "subjects": "图像观察、地图、科学图片、课文插图",
+      "play": "两组同时拼同一张图，最快完成者获胜。",
+      "setup": "老师上传图片，设置拼图切割与组别。",
+      "best": "适合白板分组竞赛、图像复习、活动暖场。"
+    },
+    "island_conquest": {
+      "subjects": "策略问答、地理、历史、综合复习、团队竞赛",
+      "play": "两队在岛屿地图上抢占土地，答题决定行动结果。",
+      "setup": "老师设置地图、起点、障碍、回合与题库。",
+      "best": "适合高阶策略型课堂与长时段活动。"
+    },
+    "kingdom_resource_battle": {
+      "subjects": "综合问答、AI素养、经济概念、资源管理、项目复习",
+      "play": "队伍开发农田、森林与金矿，答题获得资源并触发事件卡。",
+      "setup": "老师设置题库、事件卡、回合和目标分数。",
+      "best": "适合项目式复习、成果课、分组策略对抗。"
+    },
+    "spot_diff_v2": {
+      "subjects": "观察力训练、图片阅读、艺术、科学图像、安全教育",
+      "play": "学生在左图与右图中找碴，系统可显示红色答案图。",
+      "setup": "自带后台，可新增、编辑、删除关卡，上传左右图与答案图。",
+      "best": "适合多关卡观察挑战、亲子活动、白板互动。"
+    }
+  },
+  "en": {
+    "memory_match": {
+      "subjects": "Languages, vocabulary, math facts, science terms",
+      "play": "Students flip two cards and match pairs such as word-definition, image-label or question-answer.",
+      "setup": "Enter matching pairs; ideal for 5–10 minute warm-ups.",
+      "best": "Warm-up, vocabulary memory and concept matching."
+    },
+    "true_false": {
+      "subjects": "All subjects, AI literacy, safety education, science facts",
+      "play": "Students answer true/false statements with instant feedback.",
+      "setup": "Prepare quick statements to check whole-class understanding.",
+      "best": "Lesson starters, exit tickets and quick checks."
+    },
+    "sentence_order": {
+      "subjects": "Chinese, English, Malay, history, science procedures, writing",
+      "play": "Students drag sentences or steps into the correct order.",
+      "setup": "Enter sentences, steps or events; the system shuffles them.",
+      "best": "Sequencing, process learning and reading logic."
+    },
+    "treasure_box": {
+      "subjects": "Languages, mathematics, science, general knowledge, values education",
+      "play": "Students open treasure boxes to draw questions and earn rewards.",
+      "setup": "Enter a question bank; the game randomly draws questions.",
+      "best": "Low-pressure review and reward-based interaction."
+    },
+    "lucky_wheel": {
+      "subjects": "All-subject review, class quiz, theme activities",
+      "play": "A wheel decides the question or challenge for teams.",
+      "setup": "Enter questions or tasks; spin to select randomly.",
+      "best": "Class warm-up, review and engagement."
+    },
+    "text_match": {
+      "subjects": "Vocabulary, spelling, definitions, formulas and answers",
+      "play": "Students drag matching text, answers or labels to the right places.",
+      "setup": "Enter two sets of matching items.",
+      "best": "Language vocabulary, formula matching and concept review."
+    },
+    "whack_mole": {
+      "subjects": "Quick quiz, multiplication, vocabulary reading, science concepts",
+      "play": "Students quickly click the correct mole/target.",
+      "setup": "Prepare a question bank for fast-paced practice.",
+      "best": "Whiteboard interaction and rapid recall practice."
+    },
+    "classification_conveyor": {
+      "subjects": "Science classification, grammar, shapes, image sorting",
+      "play": "Students sort conveyor items into correct categories.",
+      "setup": "Set category names and add text or image items.",
+      "best": "Concept grouping, image recognition and knowledge organization."
+    },
+    "image_puzzle_speed_race": {
+      "subjects": "Art, science images, geography maps, textbook pictures",
+      "play": "Groups solve image puzzles and the system records time.",
+      "setup": "Upload an image and set difficulty/team mode.",
+      "best": "Image observation and team competition."
+    },
+    "bomb_quiz": {
+      "subjects": "Timed review, exam preparation, concept checks",
+      "play": "A countdown bomb creates urgency while students answer.",
+      "setup": "Enter questions and timer settings.",
+      "best": "Older students, exam review and fast competition."
+    },
+    "knowledge_race": {
+      "subjects": "General knowledge, science, history, language quiz",
+      "play": "Correct answers move the team forward in a race.",
+      "setup": "Set questions and teams; the race advances automatically.",
+      "best": "Whole-class quiz competition."
+    },
+    "monster_defense": {
+      "subjects": "Math, vocabulary, science, unit review",
+      "play": "Students answer questions to defend against monsters.",
+      "setup": "Enter questions and difficulty for team defense.",
+      "best": "Teamwork and exciting lesson peaks."
+    },
+    "find_difference": {
+      "subjects": "Observation, art, science images, reading details",
+      "play": "Students find differences between two images.",
+      "setup": "Upload or use sample images and set the number of differences.",
+      "best": "Visual discrimination and observation training."
+    },
+    "keyword_beachhead": {
+      "subjects": "Keywords, reading comprehension, history points, science terms",
+      "play": "Teams capture keyword zones by answering correctly.",
+      "setup": "Enter keywords and clues for team play.",
+      "best": "Theme review, concept consolidation and team response."
+    },
+    "timeline_sort_challenge": {
+      "subjects": "History, science experiments, writing process, project steps",
+      "play": "Students arrange events or steps in the correct order.",
+      "setup": "Enter event cards; the game shuffles them.",
+      "best": "History timelines and process learning."
+    },
+    "image_label_match": {
+      "subjects": "Image recognition, science diagrams, maps, vocabulary",
+      "play": "Students drag labels to the matching image or position.",
+      "setup": "Upload images and enter labels.",
+      "best": "Visual learning, diagrams and bilingual vocabulary."
+    },
+    "team_relay_quiz": {
+      "subjects": "All-subject review, team competition, unit tests",
+      "play": "Teams answer in relay turns; correct answers advance progress.",
+      "setup": "Set teams, questions and win condition.",
+      "best": "Large classes and team cooperation."
+    },
+    "platform_quiz": {
+      "subjects": "Languages, math, science, integrated quiz",
+      "play": "A character clears platform stages by answering questions.",
+      "setup": "Enter stage questions for adventure play.",
+      "best": "High-engagement challenge lessons."
+    },
+    "dungeon_dragon_raid": {
+      "subjects": "Integrated review, story quiz, teamwork",
+      "play": "Teams raid a dungeon, fight monsters, heal, find keys and defeat a dragon.",
+      "setup": "Prepare question bank and stage settings.",
+      "best": "Longer review sessions and gamified events."
+    },
+    "picture_word_guess": {
+      "subjects": "Chinese words, English vocabulary, Malay words, picture speaking",
+      "play": "Image tiles reveal gradually; teams buzz to guess the word/answer.",
+      "setup": "Upload image and answer; set teams and reveal speed.",
+      "best": "Vocabulary teaching and picture-based guessing."
+    },
+    "two_team_puzzle_duel": {
+      "subjects": "Image observation, maps, science pictures, textbook images",
+      "play": "Two teams solve the same image puzzle at the same time.",
+      "setup": "Upload image and set puzzle grid/team mode.",
+      "best": "Whiteboard team duel and visual review."
+    },
+    "island_conquest": {
+      "subjects": "Strategy quiz, geography, history, integrated review",
+      "play": "Teams conquer hex islands and answer questions to move.",
+      "setup": "Set map, starting points, obstacles, rounds and questions.",
+      "best": "Advanced strategy lessons and long activities."
+    },
+    "kingdom_resource_battle": {
+      "subjects": "Integrated quiz, AI literacy, economics, resource management",
+      "play": "Teams develop farms, forests and mines, earn resources and trigger event cards.",
+      "setup": "Set questions, event cards, rounds and target score.",
+      "best": "Project-based review and strategic team battle."
+    },
+    "spot_diff_v2": {
+      "subjects": "Observation, image reading, art, science images, safety education",
+      "play": "Students spot differences between left/right images with optional red answer mask.",
+      "setup": "Built-in admin allows levels to be added, edited and deleted.",
+      "best": "Multi-level observation challenges and whiteboard play."
+    }
+  },
+  "ms": {
+    "memory_match": {
+      "subjects": "Bahasa, kosa kata, fakta matematik, konsep sains",
+      "play": "Murid membuka dua kad dan memadankan pasangan yang betul.",
+      "setup": "Guru masukkan pasangan padanan; sesuai untuk pemanasan 5–10 minit.",
+      "best": "Pemanasan, ingatan kosa kata dan padanan konsep."
+    },
+    "true_false": {
+      "subjects": "Semua subjek, literasi AI, keselamatan, fakta sains",
+      "play": "Murid memilih betul atau salah dengan maklum balas segera.",
+      "setup": "Sediakan soalan benar/salah untuk semak kefahaman kelas.",
+      "best": "Set induksi, penutup dan semakan pantas."
+    },
+    "sentence_order": {
+      "subjects": "Bahasa Cina, Inggeris, Melayu, sejarah, proses sains",
+      "play": "Murid menyusun ayat atau langkah mengikut urutan betul.",
+      "setup": "Masukkan ayat, langkah atau peristiwa; sistem akan mengacaknya.",
+      "best": "Urutan ayat, proses dan logik bacaan."
+    },
+    "treasure_box": {
+      "subjects": "Bahasa, matematik, sains, pengetahuan am, nilai",
+      "play": "Murid memilih peti harta untuk mendapatkan soalan dan ganjaran.",
+      "setup": "Masukkan bank soalan; sistem memilih secara rawak.",
+      "best": "Ulang kaji santai dan interaksi ganjaran."
+    },
+    "lucky_wheel": {
+      "subjects": "Ulang kaji semua subjek, kuiz kelas, aktiviti tema",
+      "play": "Roda menentukan soalan atau cabaran untuk kumpulan.",
+      "setup": "Masukkan soalan atau tugasan; putar untuk pilih.",
+      "best": "Pemanasan, ulang kaji dan penglibatan murid."
+    },
+    "text_match": {
+      "subjects": "Kosa kata, ejaan, definisi, formula dan jawapan",
+      "play": "Murid menyeret teks, jawapan atau label ke tempat betul.",
+      "setup": "Masukkan dua set item padanan.",
+      "best": "Kosa kata, formula dan ulang kaji konsep."
+    },
+    "whack_mole": {
+      "subjects": "Kuiz pantas, sifir, bacaan perkataan, konsep sains",
+      "play": "Murid klik sasaran yang betul dengan cepat.",
+      "setup": "Sediakan bank soalan untuk latihan pantas.",
+      "best": "Papan putih interaktif dan hafalan pantas."
+    },
+    "classification_conveyor": {
+      "subjects": "Klasifikasi sains, tatabahasa, bentuk, gambar",
+      "play": "Murid mengelaskan item pada tali sawat ke kategori betul.",
+      "setup": "Tetapkan kategori dan tambah item teks atau gambar.",
+      "best": "Pengelasan konsep dan pengenalan imej."
+    },
+    "image_puzzle_speed_race": {
+      "subjects": "Seni, gambar sains, peta, ilustrasi buku teks",
+      "play": "Kumpulan menyusun puzzle gambar dan masa direkodkan.",
+      "setup": "Muat naik imej dan tetapkan tahap/kumpulan.",
+      "best": "Pemerhatian imej dan pertandingan kumpulan."
+    },
+    "bomb_quiz": {
+      "subjects": "Ulang kaji berwaktu, persediaan peperiksaan, semakan konsep",
+      "play": "Bom kira detik mewujudkan cabaran masa.",
+      "setup": "Masukkan soalan dan tetapan masa.",
+      "best": "Murid tahap tinggi dan ulang kaji kompetitif."
+    },
+    "knowledge_race": {
+      "subjects": "Pengetahuan am, sains, sejarah, bahasa",
+      "play": "Jawapan betul menggerakkan pasukan dalam perlumbaan.",
+      "setup": "Tetapkan soalan dan pasukan.",
+      "best": "Pertandingan kuiz kelas."
+    },
+    "monster_defense": {
+      "subjects": "Matematik, kosa kata, sains, ulang kaji unit",
+      "play": "Murid menjawab soalan untuk mempertahankan diri daripada raksasa.",
+      "setup": "Masukkan soalan dan tahap kesukaran.",
+      "best": "Kerjasama pasukan dan suasana aktif."
+    },
+    "find_difference": {
+      "subjects": "Pemerhatian, seni, imej sains, perincian bacaan",
+      "play": "Murid mencari perbezaan antara dua gambar.",
+      "setup": "Muat naik imej atau guna contoh dan tetapkan jumlah perbezaan.",
+      "best": "Latihan pemerhatian dan diskriminasi visual."
+    },
+    "keyword_beachhead": {
+      "subjects": "Kata kunci, kefahaman bacaan, sejarah, istilah sains",
+      "play": "Pasukan menawan zon kata kunci dengan jawapan betul.",
+      "setup": "Masukkan kata kunci dan petunjuk.",
+      "best": "Ulang kaji tema dan pengukuhan konsep."
+    },
+    "timeline_sort_challenge": {
+      "subjects": "Sejarah, eksperimen sains, proses menulis, langkah projek",
+      "play": "Murid menyusun peristiwa atau langkah mengikut urutan betul.",
+      "setup": "Masukkan kad peristiwa dan sistem mengacaknya.",
+      "best": "Garis masa sejarah dan pembelajaran proses."
+    },
+    "image_label_match": {
+      "subjects": "Pengenalan gambar, rajah sains, peta, kosa kata",
+      "play": "Murid menyeret label ke gambar atau posisi yang betul.",
+      "setup": "Muat naik imej dan masukkan label.",
+      "best": "Pembelajaran visual dan kosa kata dwibahasa."
+    },
+    "team_relay_quiz": {
+      "subjects": "Ulang kaji semua subjek, pertandingan kumpulan, ujian unit",
+      "play": "Pasukan menjawab secara bergilir dan maju apabila betul.",
+      "setup": "Tetapkan pasukan, soalan dan syarat kemenangan.",
+      "best": "Kelas besar dan kerjasama kumpulan."
+    },
+    "platform_quiz": {
+      "subjects": "Bahasa, matematik, sains, kuiz integrasi",
+      "play": "Watak melepasi platform dengan menjawab soalan.",
+      "setup": "Masukkan soalan untuk setiap peringkat.",
+      "best": "Kelas cabaran yang sangat menarik."
+    },
+    "dungeon_dragon_raid": {
+      "subjects": "Ulang kaji integrasi, kuiz cerita, kerjasama",
+      "play": "Pasukan menyerbu dungeon, melawan raksasa dan mengalahkan naga.",
+      "setup": "Sediakan bank soalan dan tetapan peringkat.",
+      "best": "Sesi ulang kaji panjang dan acara gamifikasi."
+    },
+    "picture_word_guess": {
+      "subjects": "Perkataan Cina, Inggeris, Melayu, bercerita berdasarkan gambar",
+      "play": "Bahagian gambar dibuka sedikit demi sedikit dan pasukan meneka.",
+      "setup": "Muat naik gambar dan jawapan; tetapkan kumpulan dan kelajuan.",
+      "best": "Pengajaran kosa kata dan teka gambar."
+    },
+    "two_team_puzzle_duel": {
+      "subjects": "Pemerhatian gambar, peta, gambar sains, ilustrasi buku",
+      "play": "Dua pasukan menyusun gambar yang sama serentak.",
+      "setup": "Muat naik gambar dan tetapkan grid/kumpulan.",
+      "best": "Pertandingan papan putih dan ulang kaji visual."
+    },
+    "island_conquest": {
+      "subjects": "Kuiz strategi, geografi, sejarah, ulang kaji integrasi",
+      "play": "Pasukan menawan pulau heksagon melalui jawapan betul.",
+      "setup": "Tetapkan peta, titik mula, halangan, pusingan dan soalan.",
+      "best": "Aktiviti strategi tahap tinggi."
+    },
+    "kingdom_resource_battle": {
+      "subjects": "Kuiz integrasi, literasi AI, ekonomi, pengurusan sumber",
+      "play": "Pasukan membangunkan ladang, hutan dan lombong serta mencetuskan kad peristiwa.",
+      "setup": "Tetapkan soalan, kad peristiwa, pusingan dan skor sasaran.",
+      "best": "Ulang kaji berasaskan projek dan strategi kumpulan."
+    },
+    "spot_diff_v2": {
+      "subjects": "Pemerhatian, pembacaan imej, seni, imej sains, keselamatan",
+      "play": "Murid mencari perbezaan antara gambar kiri dan kanan.",
+      "setup": "Admin terbina membolehkan guru tambah, edit dan padam tahap.",
+      "best": "Cabaran pemerhatian berbilang tahap."
+    }
+  }
+};
+
 
 const I18N = {
   zh: {
-    appTitle:'課堂游戲網站',
-    tagline:'免登入｜老師後台｜白板專用｜離線下載',
+    appTitle:'课堂游戏模板网站',
+    tagline:'老师后台｜模板套用｜白板上课｜离线下载',
     authBullet1:'管理員可控制每個用戶能使用哪些遊戲。',
     authBullet2:'免費註冊即可先用 2 個遊戲，完善資料後再送 1 個。',
     authBullet3:'播放器採用白板專用安全模式，並提供離線 ZIP 下載。',
     authBullet4:'適合互動白板、投影機、電腦螢幕。',
-    login:'登入', register:'免費註冊', username:'帳號', password:'密碼', confirmPassword:'確認密碼',
-    name:'姓名', quickAdmin:'管理員登入', resetDemo:'重置 Demo', loginFail:'登入失敗，請檢查帳號或密碼。',
-    fillAll:'請完整填寫資料', passwordMismatch:'兩次密碼不一致', accountExists:'帳號已存在', registerSuccess:'註冊成功，請登入',
+    login:'登录', register:'账号申请', username:'账号', password:'密码', confirmPassword:'确认密码',
+    name:'姓名', quickAdmin:'管理员登录', resetDemo:'重置 Demo', loginFail:'登录失败，请检查账号或密码。',
+    fillAll:'请完整填写资料', passwordMismatch:'两次密码不一致', accountExists:'账号已存在', registerSuccess:'注册成功，请登录',
     demoAccounts:'測試帳號：admin / admin123 ｜ 一般用戶：teacher / 123456',
     dashboardSub:'免登入版本，老師可直接進入後台設定題庫與遊戲包',
-    currentUser:'目前用戶', admin:'管理員', user:'用戶', logout:'登出',
-    accountInfo:'帳號資訊', role:'角色', package:'配套', normalUser:'一般用戶',
-    planInfo:'方案說明', single:'配套 1', pick5:'配套 2', all_access:'配套 3',
+    currentUser:'目前用户', admin:'管理员', user:'用户', logout:'退出',
+    accountInfo:'账号资讯', role:'角色', package:'配套', normalUser:'一般用户',
+    planInfo:'方案说明', single:'配套 1', pick5:'配套 2', all_access:'配套 3',
     singleDesc:'單個購買，每個 RM20', pick5Desc:'RM50 任選五個', allAccessDesc:'RM100 任意使用全部遊戲，包括之後開發的',
     demoBuy:'Demo 購買', chooseSingle:'請在遊戲卡片上選擇要單獨購買的遊戲。',
     openAdmin:'打開老師後台', adminPanel:'老師後台', collapse:'收起',
     adminHelp:'此版本不需要登入；老師可直接設定題庫、素材與遊戲包。',
-    authorizedGames:'已授權遊戲', operation:'操作', save:'儲存設定', selectAll:'全選', clear:'清除',
-    freeUser:'免費用戶', pack2:'配套 2（五選）', pack3:'配套 3（全授權）',
+    authorizedGames:'已授权游戏', operation:'操作', save:'保存设置', selectAll:'全选', clear:'清除',
+    freeUser:'免费用户', pack2:'配套 2（五選）', pack3:'配套 3（全授權）',
     playerFeatures:'播放器特色', featureLines:'• 全屏時保持中央安全區<br>• 自動等比放大<br>• 不出現上下軸<br>• 適合互動白板',
     whiteboardMode:'白板專用模式', whiteboardDesc:'打開遊戲後會自動進入中央安全區，按鈕放大，適合互動白板上課。',
     enabled:'預設已開啟', offlineZip:'離線 ZIP 下載', offlineDesc:'老師先制作題庫，再套用版型生成完整遊戲壓縮包。',
-    downloadAll:'下載全部離線包', gameMaker:'遊戲制作', makerDesc:'先整理課堂標題與題庫；正式版可自動寫入設定並打包下載。',
-    openMaker:'打開制作區', makerTitle:'遊戲制作資料填寫區',
+    downloadAll:'下载全部离线包', gameMaker:'遊戲制作', makerDesc:'先整理課堂標題與題庫；正式版可自動寫入設定並打包下載。',
+    openMaker:'打开制作区', makerTitle:'遊戲制作資料填寫區',
     makerHelp:'老師先選擇遊戲版型，再填入題庫或上傳素材。按「生成遊戲包」後，系統會把版型與題庫打包成完整 ZIP。',
     titlePlaceholder:'課堂遊戲標題，例如：第3課 詞語複習', subjectPlaceholder:'科目 / 年級，例如：華文 三年級',
     questionsPlaceholder:'輸入題目資料。建議格式：\\n題目 | 答案 | 選項A,選項B,選項C\\n或直接貼上你的題庫內容',
-    downloadQuestionTxt:'下載題庫 TXT', availableGames:'可用遊戲', lockedGames:'尚未授權',
+    downloadQuestionTxt:'下載題庫 TXT', availableGames:'可用游戏', lockedGames:'尚未授权',
     freeGamesNote:'註冊送 2 個遊戲，完善資料再送 1 個，其餘可單購或升級配套', lockedNote:'管理員可授權，或使用 Demo 購買',
-    free:'免費', paid:'付費', available:'已可使用', locked:'未授權', whiteboardClass:'白板上課', downloadZip:'下載ZIP', make:'制作',
+    free:'免費', paid:'付費', available:'已可使用', locked:'未授权', whiteboardClass:'白板上课', downloadZip:'下载ZIP', make:'制作',
     singleBuy:'單個 RM20', addPick5:'加入五選配套', playing:'正在播放', playerSubtitle:'白板專用｜中央安全區｜無上下軸｜三語切換',
     safe169:'16:9 安全區', safe43:'4:3 安全區', auto:'自動', browserFullscreen:'瀏覽器全屏', close:'關閉',
     announcements1:'免費註冊可先使用 3 個基礎遊戲。', announcements2:'平台已加入三語切換、白板安全顯示、圖片拼圖與孤島搶奪賽。',
-    language:'語言',
+    language:'语言',
     gameNames: {
       memory_match:'翻翻樂', true_false:'真假判斷快閃', sentence_order:'句子排序挑戰', treasure_box:'寶箱開開看',
       lucky_wheel:'幸運轉盤問答', classification_conveyor:'分類運輸帶', platform_quiz:'平台闖關問答',
@@ -514,88 +1178,56 @@ function render(){
   bindLangSelects();
 }
 
+
 function authCopy(){
   const lang = state.lang || 'zh';
-  const copies = {
-    zh: {
-      kicker:'Teacher Game Templates',
-      title:'课堂游戏模板网站',
-      subtitle:'套用现成模板，快速制作互动白板课堂游戏',
-      badge:'模板库 · 题库设定 · 白板上课',
-      features:[['24+','课堂游戏模板'],['3','难度分类'],['一键','白板上课']],
-      loginTitle:'老师 / 管理员登录',
-      email:'电子邮件',
-      password:'密码',
-      login:'登录',
-      registerTitle:'老师账号申请',
-      name:'姓名',
-      phone:'电话',
-      apply:'送出申请',
-      invalidEmail:'请输入有效电子邮件。',
-      registerSuccess:'申请已送出，请等待管理员批准。'
-    },
-    en: {
-      kicker:'Teacher Game Templates',
-      title:'Classroom Game Template Platform',
-      subtitle:'Use ready-made templates to create whiteboard classroom games quickly.',
-      badge:'Templates · Question Banks · Whiteboard Play',
-      features:[['24+','Game templates'],['3','Level categories'],['1-click','Whiteboard play']],
-      loginTitle:'Teacher / Admin Login',
-      email:'Email',
-      password:'Password',
-      login:'Login',
-      registerTitle:'Teacher Account Request',
-      name:'Name',
-      phone:'Phone',
-      apply:'Submit Request',
-      invalidEmail:'Please enter a valid email address.',
-      registerSuccess:'Your request has been submitted. Please wait for admin approval.'
-    },
-    ms: {
-      kicker:'Templat Permainan Guru',
-      title:'Platform Templat Permainan Kelas',
-      subtitle:'Gunakan templat sedia ada untuk membina permainan kelas papan putih dengan cepat.',
-      badge:'Templat · Bank Soalan · Papan Putih',
-      features:[['24+','Templat permainan'],['3','Tahap kategori'],['1 klik','Main di papan putih']],
-      loginTitle:'Log Masuk Guru / Admin',
-      email:'Emel',
-      password:'Kata Laluan',
-      login:'Log Masuk',
-      registerTitle:'Permohonan Akaun Guru',
-      name:'Nama',
-      phone:'Telefon',
-      apply:'Hantar Permohonan',
-      invalidEmail:'Sila masukkan alamat emel yang sah.',
-      registerSuccess:'Permohonan telah dihantar. Sila tunggu kelulusan admin.'
-    }
-  };
-  return copies[lang] || copies.zh;
+  return TEMPLATE_COPY[lang] || TEMPLATE_COPY.zh;
 }
-
-function renderAuth(){
-  const c = authCopy();
-  return `
-  <div class="auth-wrap hybrid-auth-wrap formal-auth-wrap">
-    <div class="card auth-card hybrid-auth-card formal-auth-card">
-      <div class="auth-left formal-auth-left">
-        <div class="formal-brand-row">
-          <div class="logo formal-logo">🎮</div>
-          <div>
-            <div class="formal-kicker">${c.kicker}</div>
-            <h1>${c.title}</h1>
-            <div class="sub formal-subtitle">${c.subtitle}</div>
+function templateInfo(id){
+  const lang = state.lang || 'zh';
+  return (TEMPLATE_DETAILS[lang] && TEMPLATE_DETAILS[lang][id]) || TEMPLATE_DETAILS.zh[id] || {subjects:'', play:'', setup:'', best:''};
+}
+function renderLandingStats(c){
+  return `<div class="template-stat-grid">${c.stats.map(item=>`<div class="template-stat"><b>${item[0]}</b><span>${item[1]}</span></div>`).join('')}</div>`;
+}
+function renderLandingSteps(c){
+  return `<section class="template-section template-steps-section"><div class="template-section-head"><h2>${c.stepsTitle}</h2></div><div class="template-step-grid">${c.steps.map((s,i)=>`<div class="template-step"><em>${i+1}</em><h3>${s[0]}</h3><p>${s[1]}</p></div>`).join('')}</div></section>`;
+}
+function renderTemplateDirectory(c){
+  return `<section id="templateCatalog" class="template-section template-catalog-section">
+    <div class="template-section-head"><div><h2>${c.catalogTitle}</h2><p>${c.catalogSub}</p></div></div>
+    <div class="template-level-list">
+      ${LEVEL_ORDER.map(level=>{
+        const info = levelText(level);
+        const games = (GAME_LEVELS[level] || []).map(id=>findGame(id)).filter(Boolean);
+        return `<div class="template-level-block ${level}">
+          <div class="template-level-title"><div><b>${info.label}</b><span>${info.desc}</span></div><em>${games.length}</em></div>
+          <div class="template-detail-list">
+            ${games.map(g=>{
+              const d = templateInfo(g.id);
+              return `<details class="template-detail-card">
+                <summary><span class="template-code ${level}">${g.code}</span><span class="template-icon">${g.icon || '🎮'}</span><strong>${gameName(g.id)}</strong><small>${gameDesc(g.id)}</small></summary>
+                <div class="template-detail-body">
+                  <div><b>${c.subject}</b><p>${d.subjects}</p></div>
+                  <div><b>${c.play}</b><p>${d.play}</p></div>
+                  <div><b>${c.setup}</b><p>${d.setup}</p></div>
+                  <div><b>${c.best}</b><p>${d.best}</p></div>
+                </div>
+              </details>`;
+            }).join('')}
           </div>
-        </div>
-        <div class="formal-badge">${c.badge}</div>
-        <div class="formal-feature-grid">
-          ${c.features.map(item=>`<div class="formal-feature"><b>${item[0]}</b><span>${item[1]}</span></div>`).join('')}
-        </div>
-      </div>
-      <div class="auth-right formal-auth-right">
-        <div class="formal-auth-top">
-          <h3>${c.loginTitle}</h3>
-          <div class="formal-lang-wrap">${langSelect('authLangSelect')}</div>
-        </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </section>`;
+}
+function renderPurchaseLogin(c){
+  return `<section id="loginPurchase" class="template-section login-purchase-section">
+    <div class="template-section-head"><div><h2>${c.plansTitle}</h2><p>${c.ctaText}</p></div></div>
+    <div class="purchase-login-grid">
+      <div class="plan-grid">${c.plans.map(p=>`<div class="plan-card"><h3>${p[0]}</h3><b>${p[1]}</b><p>${p[2]}</p></div>`).join('')}</div>
+      <div class="auth-right formal-auth-right landing-login-panel">
+        <div class="formal-auth-top"><h3>${c.loginTitle}</h3></div>
         <div class="formal-form-block">
           <input id="loginEmail" class="input" placeholder="${c.email}" />
           <input id="loginPassword" class="input" placeholder="${c.password}" type="password" />
@@ -613,6 +1245,35 @@ function renderAuth(){
         </div>
       </div>
     </div>
+  </section>`;
+}
+function renderAuth(){
+  const c = authCopy();
+  return `
+  <div class="template-landing-wrap">
+    <header class="template-nav">
+      <div class="template-brand"><div class="logo formal-logo">🎮</div><div><b>${c.title}</b><span>${c.subtitle}</span></div></div>
+      <div class="template-nav-actions">${langSelect('authLangSelect')}<a class="btn secondary small" href="#templateCatalog">${c.primary}</a><a class="btn small" href="#loginPurchase">${c.secondary}</a></div>
+    </header>
+    <main class="template-landing-main">
+      <section class="template-hero">
+        <div class="template-hero-copy">
+          <div class="formal-kicker">${c.kicker}</div>
+          <h1>${c.title}</h1>
+          <p>${c.heroText}</p>
+          ${renderLandingStats(c)}
+          <div class="template-hero-actions"><a class="btn big" href="#templateCatalog">${c.primary}</a><a class="btn secondary big" href="#loginPurchase">${c.secondary}</a></div>
+        </div>
+        <div class="template-hero-card">
+          <div class="template-preview-window"><div class="preview-toolbar"><i></i><i></i><i></i></div><div class="preview-board"><span>🧩</span><span>🎡</span><span>🏰</span><span>🔎</span></div></div>
+          <h3>${c.badge}</h3><p>${c.subtitle}</p>
+        </div>
+      </section>
+      ${renderLandingSteps(c)}
+      ${renderTemplateDirectory(c)}
+      <section class="template-cta-band"><h2>${c.ctaTitle}</h2><p>${c.ctaText}</p><a class="btn big" href="#loginPurchase">${c.secondary}</a></section>
+      ${renderPurchaseLogin(c)}
+    </main>
   </div>`;
 }
 
@@ -1356,5 +2017,60 @@ I18N.en.gameNames.spot_diff_v2='Spot the Difference (Built-in Admin)';
 I18N.en.gameDesc.spot_diff_v2='Advanced spot-the-difference game with left/right images, red answer mask, rankings, hints, and an admin level editor.';
 I18N.ms.gameNames.spot_diff_v2='Cari Perbezaan (Admin Terbina)';
 I18N.ms.gameDesc.spot_diff_v2='Permainan cari perbezaan tahap tinggi dengan imej kiri/kanan, mask jawapan merah, ranking, petunjuk dan editor tahap admin.';
+
+
+// Simplified Chinese display names and descriptions for the template explainer page.
+Object.assign(I18N.zh.gameNames, {
+  memory_match:'翻翻乐',
+  true_false:'真假判断快闪',
+  sentence_order:'句子排序挑战',
+  treasure_box:'宝箱开开看',
+  lucky_wheel:'幸运转盘问答',
+  classification_conveyor:'分类输送带',
+  platform_quiz:'平台闯关问答',
+  monster_defense:'怪兽防守战',
+  whack_mole:'打地鼠问答',
+  text_match:'文字对应',
+  bomb_quiz:'炸弹倒数抢答',
+  knowledge_race:'知识赛马',
+  dungeon_dragon_raid:'地牢巨龙讨伐战',
+  picture_word_guess:'看图猜生字',
+  image_puzzle_speed_race:'图片拼图竞速赛',
+  two_team_puzzle_duel:'双组拼图对战',
+  island_conquest:'孤岛抢夺赛',
+  timeline_sort_challenge:'时间线排序挑战',
+  image_label_match:'图片标签配对赛',
+  team_relay_quiz:'团队答题接力赛',
+  find_difference:'大家来找不同',
+  keyword_beachhead:'关键词抢滩战',
+  kingdom_resource_battle:'王国资源争夺战',
+  spot_diff_v2:'大家来找碴(自带后台)'
+});
+Object.assign(I18N.zh.gameDesc, {
+  memory_match:'记忆翻牌配对，适合暖身与小组竞赛。',
+  true_false:'快速判断题，提升反应力与概念辨识。',
+  sentence_order:'适合语文课堂，训练句子与流程排序。',
+  treasure_box:'抽题与闯关式互动，增加课堂惊喜感。',
+  lucky_wheel:'转盘抽题，适合班级抢答活动。',
+  classification_conveyor:'支持图片与文字分类，老师可按分类上传图片。',
+  platform_quiz:'角色闯关搭配问答，游戏感较强。',
+  monster_defense:'答题防守玩法，适合团体合作。',
+  whack_mole:'互动白板很好玩，学生参与度高。',
+  text_match:'词语、拼字、配对类题目都适合。',
+  bomb_quiz:'限时压力感强，适合复习与竞赛。',
+  knowledge_race:'比赛感强，适合全班分组对抗。',
+  dungeon_dragon_raid:'地牢 RPG 闯关，两队答题打怪、补血、找钥匙，最后讨伐巨龙。',
+  picture_word_guess:'老师上传图片与答案，图片逐格揭开，由学生抢答猜词。',
+  image_puzzle_speed_race:'老师上传图片作为题目，各组轮流拼图，系统记录时间。',
+  two_team_puzzle_duel:'两组同时拼同一张图片，最快完成者胜利。',
+  island_conquest:'两队在六边形岛屿地图上抢占土地，可设置胜利条件与回合限制。',
+  timeline_sort_challenge:'老师输入事件或步骤，学生拖动卡片排成正确时间线。',
+  image_label_match:'老师上传图片并输入标签，学生把正确标签拖到对应图片。',
+  team_relay_quiz:'分组轮流答题，答对前进，先完成接力进度的队伍获胜。',
+  find_difference:'图片找不同玩法，训练观察力与细节辨识。',
+  keyword_beachhead:'围绕关键词抢占据点，适合阅读重点与概念复习。',
+  kingdom_resource_battle:'围绕中央王都开发农田、森林与金矿，并触发随机事件。',
+  spot_diff_v2:'高阶找不同游戏，自带后台，可新增 / 编辑 / 删除关卡。'
+});
 
 render();

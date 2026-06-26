@@ -29,7 +29,7 @@
       </div>
     </div>
   </div>
-  <script src="./app.js?v=formal-login-template-20260626-1"></script>
+  <script src="./app.js?v=template-explainer-20260626-1"></script>
   <script>
     window.addEventListener('error', function(e){
       console.error('Page script error:', e.message, e.filename, e.lineno, e.colno);
@@ -37,7 +37,7 @@
     setTimeout(function(){
       var app = document.getElementById('app');
       if(app && app.innerHTML.trim().length === 0){
-        app.innerHTML = '<div style="min-height:100vh;display:grid;place-items:center;background:#071426;color:white;font-family:Microsoft YaHei,Arial,sans-serif;padding:24px"><div style="max-width:720px;background:#10233f;border:1px solid rgba(255,255,255,.18);border-radius:22px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.35)"><h1 style="margin:0 0 12px;font-size:34px">網站程式未成功載入</h1><p style="line-height:1.7;color:#dbeafe">請確認 GitHub 根目錄有 <b>app.js</b>、<b>styles.css</b>、<b>index.html</b>，然後在 Vercel 重新部署。也可以按 Ctrl + F5 強制刷新。</p><p style="color:#fde68a">若仍然看到此畫面，代表 app.js 沒有成功載入或被舊快取擋住。</p></div></div>';
+        app.innerHTML = '<div style="min-height:100vh;display:grid;place-items:center;background:#071426;color:white;font-family:Microsoft YaHei,Arial,sans-serif;padding:24px"><div style="max-width:720px;background:#10233f;border:1px solid rgba(255,255,255,.18);border-radius:22px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.35)"><h1 style="margin:0 0 12px;font-size:34px">网站程序未成功载入</h1><p style="line-height:1.7;color:#dbeafe">请确认 GitHub 根目錄有 <b>app.js</b>、<b>styles.css</b>、<b>index.html</b>，然后在 Vercel 重新部署。也可以按 Ctrl + F5 強制刷新。</p><p style="color:#fde68a">若仍然看到此畫面，代表 app.js 沒有成功載入或被舊快取擋住。</p></div></div>';
       }
     }, 1200);
   </script>
