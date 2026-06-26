@@ -1,4 +1,4 @@
-// TEMPLATE_EXPLAINER_PAGE_20260626_5_LOGIN_MAKER_FIX
+// TEMPLATE_EXPLAINER_PAGE_20260626_6_PURCHASE_APPROVAL_FLOW
 
 const GAME_DATA = [
   {id:'memory_match', code:'S001', preview:'previews/memory_match.svg', icon:'🃏', price:20, free:true, path:'games/memory_match_game/index.html', download:'downloads/memory_match.zip'},
@@ -1012,6 +1012,35 @@ let currentAspectMode = 'auto';
 let currentPlayerGame = null;
 let makerSelectedGameId = null;
 
+let pendingReceiptData = null;
+let pendingReceiptName = '';
+
+const PURCHASE_COPY = {
+  zh:{
+    panelTitle:'模板订购与付款上传', panelDesc:'选择要购买的模板或配套，使用 Touch n Go / 银行 App 扫描二维码付款后上传收据。管理员确认收款后，系统会开放对应模板授权。',
+    selectPackage:'选择订购方式', single:'购买单一模板', combo:'4+1 组合特惠', all:'全部模板特惠', singleHint:'勾选需要购买的单一模板，系统会按阶级计算价格：初阶 RM20、进阶 RM30、高阶 RM50。', comboHint:'初阶或进阶任选 4 个模板，再加 1 个高阶模板，特惠 RM100。', allHint:'一次购买全部模板，原价 RM790，特惠 RM300，并包括未来新开发的新游戏。',
+    beginnerIntermediate:'初阶 / 进阶模板', advancedTemplate:'高阶模板', paymentTitle:'付款方式', paymentHint:'请用 TNG 或任何支持 DuitNow QR 的银行 / 电子钱包扫描付款。', qrName:'收款人：HEW KIM FOO', uploadReceipt:'上传付款收据', receiptRequired:'请先上传付款收据图片。', submitOrder:'送出订购申请', noTemplateSelected:'请先选择要购买的模板。', comboRule:'4+1 组合必须选择 4 个初阶或进阶模板，再选择 1 个高阶模板。', orderSubmitted:'订购申请已送出，请等待管理员确认收款。', amount:'应付金额', myOrders:'我的订购记录', noOrders:'目前没有订购记录。', pendingPayment:'待确认收款', confirmed:'已确认并授权', rejected:'已拒绝', orderId:'订单编号', receipt:'付款收据',
+    adminOrdersTitle:'订购 / 付款审核', adminOrdersDesc:'管理员在这里查看老师订购的模板、付款收据，并在确认收款后开放模板授权。', noPurchaseOrders:'目前没有订购申请。', confirmPayment:'确认收款并授权', rejectOrder:'拒绝', orderTeacher:'申请老师', orderPackage:'购买项目', orderGames:'模板授权', orderAmount:'金额', orderStatus:'状态', orderedAt:'申请时间', trialTemplates:'系统体验模板', trialTemplatesDesc:'注册批准后系统赠送 S001 与 S002 两个初阶体验模板，无需购买。', alreadyAuthorized:'已授权', notPurchasableTrial:'体验模板，无需购买'
+  },
+  en:{
+    panelTitle:'Template Purchase & Payment Upload', panelDesc:'Select templates or a package, pay with Touch n Go / banking app by scanning the QR code, then upload the receipt. After the admin confirms payment, the selected templates will be unlocked.',
+    selectPackage:'Select purchase option', single:'Buy individual templates', combo:'4+1 bundle offer', all:'All-template offer', singleHint:'Tick the individual templates you want to buy. Prices are calculated by level: Beginner RM20, Intermediate RM30, Advanced RM50.', comboHint:'Choose 4 templates from Beginner or Intermediate, plus 1 Advanced template. Special price RM100.', allHint:'Get all templates. Normal total RM790, special price RM300, including future new games.',
+    beginnerIntermediate:'Beginner / Intermediate templates', advancedTemplate:'Advanced template', paymentTitle:'Payment method', paymentHint:'Pay by scanning with TNG or any DuitNow QR-supported banking / e-wallet app.', qrName:'Receiver: HEW KIM FOO', uploadReceipt:'Upload payment receipt', receiptRequired:'Please upload a receipt image first.', submitOrder:'Submit purchase request', noTemplateSelected:'Please select at least one template.', comboRule:'The 4+1 bundle requires 4 Beginner or Intermediate templates plus 1 Advanced template.', orderSubmitted:'Purchase request submitted. Please wait for admin payment confirmation.', amount:'Amount payable', myOrders:'My purchase records', noOrders:'No purchase records yet.', pendingPayment:'Pending payment confirmation', confirmed:'Confirmed and unlocked', rejected:'Rejected', orderId:'Order ID', receipt:'Payment receipt',
+    adminOrdersTitle:'Purchase / Payment Review', adminOrdersDesc:'Admins can review teacher template purchases and payment receipts, then unlock the purchased templates after confirming payment.', noPurchaseOrders:'No purchase requests yet.', confirmPayment:'Confirm payment & unlock', rejectOrder:'Reject', orderTeacher:'Teacher', orderPackage:'Purchase', orderGames:'Templates', orderAmount:'Amount', orderStatus:'Status', orderedAt:'Submitted', trialTemplates:'System trial templates', trialTemplatesDesc:'After approval, teachers receive S001 and S002 Beginner trial templates free of charge.', alreadyAuthorized:'Authorized', notPurchasableTrial:'Trial template, no purchase needed'
+  },
+  ms:{
+    panelTitle:'Pembelian Templat & Muat Naik Resit', panelDesc:'Pilih templat atau pakej, bayar menggunakan Touch n Go / aplikasi bank dengan mengimbas kod QR, kemudian muat naik resit. Selepas admin mengesahkan bayaran, templat yang dipilih akan dibuka.',
+    selectPackage:'Pilih pilihan pembelian', single:'Beli templat individu', combo:'Promosi kombo 4+1', all:'Promosi semua templat', singleHint:'Tandakan templat individu yang ingin dibeli. Harga mengikut tahap: Asas RM20, Pertengahan RM30, Lanjutan RM50.', comboHint:'Pilih 4 templat daripada Asas atau Pertengahan, dan tambah 1 templat Lanjutan. Harga promosi RM100.', allHint:'Dapatkan semua templat. Jumlah asal RM790, harga promosi RM300, termasuk permainan baharu akan datang.',
+    beginnerIntermediate:'Templat Asas / Pertengahan', advancedTemplate:'Templat Lanjutan', paymentTitle:'Cara bayaran', paymentHint:'Bayar dengan mengimbas menggunakan TNG atau mana-mana aplikasi bank / e-dompet yang menyokong DuitNow QR.', qrName:'Penerima: HEW KIM FOO', uploadReceipt:'Muat naik resit bayaran', receiptRequired:'Sila muat naik imej resit dahulu.', submitOrder:'Hantar permohonan pembelian', noTemplateSelected:'Sila pilih sekurang-kurangnya satu templat.', comboRule:'Kombo 4+1 memerlukan 4 templat Asas atau Pertengahan dan 1 templat Lanjutan.', orderSubmitted:'Permohonan pembelian telah dihantar. Sila tunggu pengesahan bayaran oleh admin.', amount:'Jumlah perlu dibayar', myOrders:'Rekod pembelian saya', noOrders:'Belum ada rekod pembelian.', pendingPayment:'Menunggu pengesahan bayaran', confirmed:'Disahkan dan dibuka', rejected:'Ditolak', orderId:'ID pesanan', receipt:'Resit bayaran',
+    adminOrdersTitle:'Semakan Pembelian / Bayaran', adminOrdersDesc:'Admin boleh menyemak pembelian templat dan resit bayaran guru, kemudian membuka akses templat selepas bayaran disahkan.', noPurchaseOrders:'Belum ada permohonan pembelian.', confirmPayment:'Sahkan bayaran & buka akses', rejectOrder:'Tolak', orderTeacher:'Guru', orderPackage:'Pembelian', orderGames:'Templat', orderAmount:'Jumlah', orderStatus:'Status', orderedAt:'Dihantar', trialTemplates:'Templat percubaan sistem', trialTemplatesDesc:'Selepas diluluskan, guru menerima templat percubaan Asas S001 dan S002 secara percuma.', alreadyAuthorized:'Dibenarkan', notPurchasableTrial:'Templat percubaan, tidak perlu dibeli'
+  }
+};
+function pc(key, vars={}){
+  const lang = state?.lang || 'zh';
+  const base = PURCHASE_COPY[lang] || PURCHASE_COPY.zh;
+  return String(base[key] || PURCHASE_COPY.zh[key] || key).replace(/\{(\w+)\}/g, (_, k)=>Object.prototype.hasOwnProperty.call(vars,k)?vars[k]:'');
+}
+
 function L(){ return I18N[state.lang || 'zh'] || I18N.zh; }
 function t(key){ const lang = state.lang || 'zh'; return UI_OVERRIDE[lang]?.[key] ?? L()[key] ?? I18N.zh[key] ?? key; }
 function tt(key, vars={}){
@@ -1050,6 +1079,7 @@ function defaultState(){
   return {
     lang:'zh',
     feedback:[],
+    purchaseOrders:[],
     users:[
       {
         id:'u_admin',
@@ -1074,8 +1104,9 @@ function defaultState(){
         role:'user',
         accountStatus:'approved',
         disabled:false,
-        ownedGames: GAME_DATA.map(g=>g.id),
-        package:'all_access',
+        ownedGames: [],
+        promoGift: BASE_FREE_GAMES,
+        package:'free',
         profileCompleted:true,
         profile:{email:'teacher@example.com', phone:'', chineseName:'示範老師', englishName:'Demo Teacher', state:'Johor', orgTypes:['學校老師']}
       }
@@ -1109,8 +1140,9 @@ function ensureDefaultAccounts(parsed){
     }
     if(def.email === 'teacher@example.com') {
       existing.password = '123456';
-      existing.package = 'all_access';
-      existing.ownedGames = GAME_DATA.map(g=>g.id);
+      existing.package = 'free';
+      existing.ownedGames = [];
+      existing.promoGift = freeTrialTemplates();
     }
     existing.profile = existing.profile || def.profile;
     existing.profileCompleted = true;
@@ -1126,6 +1158,7 @@ function loadState(){
       if(!parsed.users || !Array.isArray(parsed.users)) return defaultState();
       if(!parsed.lang) parsed.lang='zh';
       if(!Array.isArray(parsed.feedback)) parsed.feedback=[];
+      if(!Array.isArray(parsed.purchaseOrders)) parsed.purchaseOrders=[];
       parsed.users.forEach(u=>{
         if(!u.email) u.email = u.username && u.username.includes('@') ? u.username : (u.username==='admin'?'admin@lead.ai':`${u.username || 'teacher'}@example.com`);
         u.username = u.email;
@@ -1221,7 +1254,9 @@ function login(email, password){
     teacher.role = 'user';
     teacher.accountStatus = 'approved';
     teacher.disabled = false;
-    teacher.package = teacher.package || 'free';
+    teacher.package = 'free';
+    teacher.ownedGames = [];
+    teacher.promoGift = freeTrialTemplates();
     state.currentUser = teacher.id;
     saveState();
     render();
@@ -1493,6 +1528,163 @@ function renderFeedbackPanel(){
     </div>
   </div>`;
 }
+
+function gamePrice(gameId){
+  const level = gameLevel(gameId);
+  if(level === 'beginner') return 20;
+  if(level === 'intermediate') return 30;
+  if(level === 'advanced') return 50;
+  return 20;
+}
+function formatGameLabel(id){ return `${gameCode(id)}｜${gameName(id)}`; }
+function purchasableGamesForUser(user){ return GAME_DATA.filter(g => !g.free && !userHasAccess(user, g.id)); }
+function teacherOrders(user){ return (state.purchaseOrders || []).filter(o => o.teacherId === user?.id); }
+function orderStatusLabel(status){
+  if(status === 'confirmed') return pc('confirmed');
+  if(status === 'rejected') return pc('rejected');
+  return pc('pendingPayment');
+}
+function orderPackageLabel(o){
+  if(o.packageType === 'all_access') return `${pc('all')}｜RM300`;
+  if(o.packageType === 'combo') return `${pc('combo')}｜RM100`;
+  return `${pc('single')}｜RM${o.amount}`;
+}
+function orderGamesText(o){
+  if(o.packageType === 'all_access') return GAME_DATA.filter(g=>!g.free).map(g=>formatGameLabel(g.id)).join('，');
+  return (o.gameIds || []).map(formatGameLabel).join('，');
+}
+function calcOrderAmount(type, ids){
+  if(type === 'all_access') return 300;
+  if(type === 'combo') return 100;
+  return [...new Set(ids || [])].reduce((sum,id)=>sum+gamePrice(id),0);
+}
+function renderGamePurchaseChecks(games, className){
+  if(!games.length) return `<div class="muted">${pc('alreadyAuthorized')}</div>`;
+  return `<div class="purchase-check-grid">${games.map(g=>`<label class="purchase-check"><input type="checkbox" class="${className}" value="${g.id}"> <b>${gameCode(g.id)}</b><span>${gameName(g.id)}</span><em>RM${gamePrice(g.id)}</em></label>`).join('')}</div>`;
+}
+function renderMyOrders(user){
+  const orders = teacherOrders(user).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+  return `<div class="my-orders-box"><h4>${pc('myOrders')}</h4>${orders.length ? orders.map(o=>`<div class="order-mini ${o.status}"><b>${pc('orderId')}: ${o.id}</b><span>${orderPackageLabel(o)}</span><span>${pc('orderStatus')}: ${orderStatusLabel(o.status)}</span></div>`).join('') : `<div class="muted">${pc('noOrders')}</div>`}</div>`;
+}
+function renderPurchasePanel(user){
+  if(!user || user.role === 'admin') return '';
+  const locked = purchasableGamesForUser(user);
+  const singleGames = locked;
+  const biGames = locked.filter(g => ['beginner','intermediate'].includes(gameLevel(g.id)));
+  const advGames = locked.filter(g => gameLevel(g.id) === 'advanced');
+  return `<div class="card purchase-panel" id="purchasePanel">
+    <div class="filter-row"><div><h3>${pc('panelTitle')}</h3><div class="muted">${pc('panelDesc')}</div></div></div>
+    <div class="notice trial-notice"><b>${pc('trialTemplates')}</b><br>${pc('trialTemplatesDesc')}</div>
+    <div class="purchase-layout">
+      <div class="purchase-left">
+        <h4>${pc('selectPackage')}</h4>
+        <div class="package-tabs">
+          <label><input type="radio" name="purchaseType" value="single" checked> ${pc('single')}</label>
+          <label><input type="radio" name="purchaseType" value="combo"> ${pc('combo')}</label>
+          <label><input type="radio" name="purchaseType" value="all_access"> ${pc('all')}</label>
+        </div>
+        <div class="package-box" data-package-box="single"><p>${pc('singleHint')}</p>${renderGamePurchaseChecks(singleGames,'purchase-single-game')}</div>
+        <div class="package-box hidden" data-package-box="combo"><p>${pc('comboHint')}</p><h5>${pc('beginnerIntermediate')}</h5>${renderGamePurchaseChecks(biGames,'purchase-combo-bi')}<h5>${pc('advancedTemplate')}</h5>${renderGamePurchaseChecks(advGames,'purchase-combo-adv')}</div>
+        <div class="package-box hidden" data-package-box="all_access"><p>${pc('allHint')}</p><b class="purchase-amount">RM300</b></div>
+      </div>
+      <div class="purchase-right">
+        <h4>${pc('paymentTitle')}</h4>
+        <p class="muted">${pc('paymentHint')}</p>
+        <div class="qr-card"><img src="assets/tng_payment_qr.png" alt="Touch n Go QR"><b>${pc('qrName')}</b></div>
+        <label class="receipt-upload"><span>${pc('uploadReceipt')}</span><input id="purchaseReceiptInput" type="file" accept="image/*"></label>
+        <img id="receiptPreview" class="receipt-preview hidden" alt="receipt preview">
+        <div id="purchaseAmountPreview" class="purchase-amount-preview">${pc('amount')}: RM0</div>
+        <button id="submitPurchaseBtn" class="btn maker block">${pc('submitOrder')}</button>
+        <div id="purchaseMsg" class="muted"></div>
+      </div>
+    </div>
+    ${renderMyOrders(user)}
+  </div>`;
+}
+function getSelectedPurchase(){
+  const type = document.querySelector('input[name="purchaseType"]:checked')?.value || 'single';
+  let ids=[];
+  if(type === 'single') ids = $$('.purchase-single-game:checked').map(x=>x.value);
+  if(type === 'combo') ids = [...$$('.purchase-combo-bi:checked').map(x=>x.value), ...$$('.purchase-combo-adv:checked').map(x=>x.value)];
+  if(type === 'all_access') ids = GAME_DATA.filter(g=>!g.free).map(g=>g.id);
+  return {type, ids:[...new Set(ids)], amount:calcOrderAmount(type, ids)};
+}
+function validatePurchaseSelection(sel){
+  if(sel.type === 'all_access') return {ok:true};
+  if(sel.type === 'single') return sel.ids.length ? {ok:true} : {ok:false, msg:pc('noTemplateSelected')};
+  const bi = sel.ids.filter(id=>['beginner','intermediate'].includes(gameLevel(id))).length;
+  const adv = sel.ids.filter(id=>gameLevel(id)==='advanced').length;
+  if(bi !== 4 || adv !== 1) return {ok:false, msg:pc('comboRule')};
+  return {ok:true};
+}
+function updatePurchaseAmountPreview(){
+  const sel = getSelectedPurchase();
+  const el = $('#purchaseAmountPreview');
+  if(el) el.textContent = `${pc('amount')}: RM${sel.amount}`;
+}
+function handleReceiptFileChange(ev){
+  const file = ev.target.files?.[0];
+  pendingReceiptData = null; pendingReceiptName = '';
+  const preview = $('#receiptPreview');
+  if(!file){ if(preview) preview.classList.add('hidden'); return; }
+  pendingReceiptName = file.name;
+  const reader = new FileReader();
+  reader.onload = () => { pendingReceiptData = String(reader.result || ''); if(preview){ preview.src=pendingReceiptData; preview.classList.remove('hidden'); } };
+  reader.readAsDataURL(file);
+}
+function submitPurchaseOrder(){
+  const user = getUser();
+  const msg = $('#purchaseMsg');
+  const sel = getSelectedPurchase();
+  const valid = validatePurchaseSelection(sel);
+  if(!valid.ok){ if(msg) msg.textContent = valid.msg; return; }
+  if(!pendingReceiptData){ if(msg) msg.textContent = pc('receiptRequired'); return; }
+  const order = {
+    id:'PO'+Date.now(), teacherId:user.id, teacherName:user.name, teacherEmail:user.email,
+    teacherPhone:user.profile?.phone || '', packageType:sel.type, gameIds:sel.ids, amount:sel.amount,
+    receiptData:pendingReceiptData, receiptName:pendingReceiptName, status:'pending', createdAt:new Date().toLocaleString()
+  };
+  if(!Array.isArray(state.purchaseOrders)) state.purchaseOrders=[];
+  state.purchaseOrders.push(order);
+  pendingReceiptData=null; pendingReceiptName='';
+  saveState(); render();
+  setTimeout(()=>{ const m=$('#purchaseMsg'); if(m) m.textContent=pc('orderSubmitted'); }, 50);
+}
+function renderPurchaseOrdersPanel(){
+  const orders = [...(state.purchaseOrders || [])].sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+  return `<div class="purchase-admin-box"><h3>${pc('adminOrdersTitle')}</h3><div class="muted">${pc('adminOrdersDesc')}</div>
+    ${orders.length ? `<div class="purchase-order-list">${orders.map(o=>`<div class="purchase-order ${o.status}">
+      <div><b>${pc('orderId')}: ${o.id}</b><br><span>${pc('orderTeacher')}: ${o.teacherName}｜${o.teacherEmail}｜${o.teacherPhone||''}</span><br><span>${pc('orderedAt')}: ${o.createdAt}</span></div>
+      <div><b>${pc('orderPackage')}</b><p>${orderPackageLabel(o)}</p><b>${pc('orderGames')}</b><p>${orderGamesText(o)}</p></div>
+      <div><b>${pc('orderAmount')}</b><p>RM${o.amount}</p><b>${pc('orderStatus')}</b><p>${orderStatusLabel(o.status)}</p></div>
+      <div>${o.receiptData?`<a href="${o.receiptData}" target="_blank"><img class="admin-receipt" src="${o.receiptData}" alt="receipt"></a>`:`<span class="muted">${pc('receiptRequired')}</span>`}</div>
+      <div class="account-actions">${o.status==='pending'?`<button class="btn good small approve-purchase-btn" data-order="${o.id}">${pc('confirmPayment')}</button><button class="btn danger small reject-purchase-btn" data-order="${o.id}">${pc('rejectOrder')}</button>`:''}</div>
+    </div>`).join('')}</div>` : `<div class="muted">${pc('noPurchaseOrders')}</div>`}
+  </div>`;
+}
+function grantOrderAccess(order){
+  const user = state.users.find(u=>u.id===order.teacherId); if(!user) return;
+  if(order.packageType === 'all_access'){
+    user.package='all_access';
+    user.ownedGames = GAME_DATA.filter(g=>!g.free).map(g=>g.id);
+  } else {
+    const set = new Set(user.ownedGames || []);
+    (order.gameIds || []).forEach(id=>set.add(id));
+    user.ownedGames = [...set];
+    if(order.packageType === 'combo') user.package='pick5';
+    else if(user.package === 'free') user.package='single';
+  }
+}
+function approvePurchaseOrder(orderId){
+  const o = (state.purchaseOrders||[]).find(x=>x.id===orderId); if(!o) return;
+  o.status='confirmed'; o.confirmedAt=new Date().toLocaleString();
+  grantOrderAccess(o); saveState(); render();
+}
+function rejectPurchaseOrder(orderId){
+  const o = (state.purchaseOrders||[]).find(x=>x.id===orderId); if(!o) return;
+  o.status='rejected'; o.rejectedAt=new Date().toLocaleString();
+  saveState(); render();
+}
 function renderDashboard(user){
   const available = availableGamesForUser(user);
   const locked = lockedGamesForUser(user);
@@ -1522,7 +1714,9 @@ function renderDashboard(user){
       <div class="summary-game-list">${available.map(g=>`<span class="summary-game ${gameLevel(g.id)}">${gameCode(g.id)}｜${gameName(g.id)}</span>`).join('')}</div>
     </div>
 
-    ${renderTeacherBackendPanel()}
+    ${user.role==='admin' ? renderAdminPanel() : ''}
+    ${user.role!=='admin' ? renderTeacherBackendPanel() : ''}
+    ${user.role!=='admin' ? renderPurchasePanel(user) : ''}
 
     <div class="teacher-simple-layout">
       <div class="card main simplified-main">
@@ -1639,6 +1833,7 @@ function renderAdminPanel(){
   <div id="adminPanel" class="card admin-account-panel">
     <div class="filter-row"><h3>${t('adminAccountPanelTitle')}</h3><div class="muted">${tt('adminAccountStats', {pending: pendingCount, total: teachers.length})}</div></div>
     <div class="notice">${t('adminAccountNotice')}</div>
+    ${renderPurchaseOrdersPanel()}
 
     <div class="add-teacher-box">
       <h4>${t('addTeacherAccount')}</h4>
@@ -1864,12 +2059,22 @@ function bindDashboard(){
   $$('.reset-password-btn').forEach(btn => btn.onclick = () => resetTeacherPassword(btn.dataset.user));
   const addTeacherBtn = $('#addTeacherBtn');
   if(addTeacherBtn) addTeacherBtn.onclick = addTeacherAccount;
+  const receiptInput = $('#purchaseReceiptInput'); if(receiptInput) receiptInput.onchange = handleReceiptFileChange;
+  const submitPurchaseBtn = $('#submitPurchaseBtn'); if(submitPurchaseBtn) submitPurchaseBtn.onclick = submitPurchaseOrder;
+  $$('input[name="purchaseType"], .purchase-single-game, .purchase-combo-bi, .purchase-combo-adv').forEach(el => el.onchange = () => {
+    const type = document.querySelector('input[name="purchaseType"]:checked')?.value || 'single';
+    $$('[data-package-box]').forEach(box => box.classList.toggle('hidden', box.dataset.packageBox !== type));
+    updatePurchaseAmountPreview();
+  });
+  updatePurchaseAmountPreview();
+  $$('.approve-purchase-btn').forEach(btn => btn.onclick = () => approvePurchaseOrder(btn.dataset.order));
+  $$('.reject-purchase-btn').forEach(btn => btn.onclick = () => rejectPurchaseOrder(btn.dataset.order));
 
-  $('#closePlayerBtn').onclick = closePlayer;
-  $('#fullscreenBtn').onclick = toggleBrowserFullscreen;
-  $('#fit169Btn').onclick = () => { currentAspectMode = '16:9'; fitFrame(); };
-  $('#fit43Btn').onclick = () => { currentAspectMode = '4:3'; fitFrame(); };
-  $('#fitAutoBtn').onclick = () => { currentAspectMode = 'auto'; fitFrame(); };
+  const closePlayerBtn = $('#closePlayerBtn'); if(closePlayerBtn) closePlayerBtn.onclick = closePlayer;
+  const fullscreenBtn = $('#fullscreenBtn'); if(fullscreenBtn) fullscreenBtn.onclick = toggleBrowserFullscreen;
+  const fit169Btn = $('#fit169Btn'); if(fit169Btn) fit169Btn.onclick = () => { currentAspectMode = '16:9'; fitFrame(); };
+  const fit43Btn = $('#fit43Btn'); if(fit43Btn) fit43Btn.onclick = () => { currentAspectMode = '4:3'; fitFrame(); };
+  const fitAutoBtn = $('#fitAutoBtn'); if(fitAutoBtn) fitAutoBtn.onclick = () => { currentAspectMode = 'auto'; fitFrame(); };
   window.onresize = () => { if(!$('#playerOverlay').classList.contains('hidden')) fitFrame(); };
 }
 

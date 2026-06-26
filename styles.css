@@ -782,3 +782,26 @@ textarea.input{
 /* 2026-06-26: direct game opening + authorized-only backend hints */
 .backend-hint{display:block;margin-top:6px;font-size:12px;color:#93c5fd;line-height:1.45}
 .tag.free-trial{background:rgba(34,197,94,.18);border-color:rgba(34,197,94,.45);color:#bbf7d0}
+
+
+/* Purchase workflow */
+.purchase-panel{margin:18px 0;border-color:rgba(250,204,21,.25)!important}
+.purchase-layout{display:grid;grid-template-columns:1.4fr .9fr;gap:16px;margin-top:14px}
+.package-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 14px}
+.package-tabs label{padding:10px 12px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.05);font-weight:900;cursor:pointer}
+.package-box{padding:14px;border-radius:18px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);margin-bottom:12px}
+.package-box h5{margin:12px 0 8px;color:#fde68a;font-size:15px}
+.purchase-check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-top:10px}
+.purchase-check{display:grid;grid-template-columns:auto 48px 1fr auto;gap:8px;align-items:center;padding:10px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(15,23,42,.65)}
+.purchase-check b{color:#a7f3d0}.purchase-check em{color:#fde047;font-style:normal;font-weight:900}
+.qr-card{display:grid;place-items:center;gap:8px;padding:12px;border:1px solid rgba(56,189,248,.25);border-radius:18px;background:#f8fafc;color:#0f172a;text-align:center}
+.qr-card img{max-width:230px;width:100%;border-radius:12px;border:1px solid #dbeafe}
+.receipt-upload{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:12px;border:1px dashed rgba(167,139,250,.55);border-radius:14px;cursor:pointer;color:#ddd6fe;font-weight:900}
+.receipt-upload input{max-width:210px}.receipt-preview{margin-top:10px;max-width:220px;max-height:180px;border-radius:12px;border:1px solid rgba(255,255,255,.18)}
+.purchase-amount-preview,.purchase-amount{margin:10px 0;color:#fde047;font-size:24px;font-weight:950}.trial-notice{margin:12px 0}.my-orders-box{margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}
+.order-mini{display:flex;gap:14px;flex-wrap:wrap;padding:10px;border-radius:12px;margin:8px 0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.purchase-admin-box{margin:18px 0;padding:16px;border-radius:18px;background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.18)}
+.purchase-order-list{display:grid;gap:12px;margin-top:12px}.purchase-order{display:grid;grid-template-columns:1.3fr 1.4fr .7fr 120px 160px;gap:12px;align-items:start;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(15,23,42,.72)}
+.purchase-order p{margin:4px 0;color:#dbeafe}.admin-receipt{width:110px;max-height:130px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,.18)}
+.purchase-order.confirmed{border-color:rgba(34,197,94,.35)}.purchase-order.rejected{border-color:rgba(239,68,68,.35);opacity:.78}
+@media(max-width:950px){.purchase-layout,.purchase-order{grid-template-columns:1fr}.receipt-upload{display:grid;gap:8px}.purchase-check{grid-template-columns:auto 48px 1fr}}
