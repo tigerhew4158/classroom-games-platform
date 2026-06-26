@@ -601,3 +601,14 @@ Built-in admin account is protected from old localStorage lockout: admin@lead.ai
 - 订购成功后会显示提交成功，并进入“我的订购记录”。
 - 管理员后台的“已授权游戏”改成按初阶 / 进阶 / 高阶分组显示。
 - 每个授权模板现在显示游戏编号、游戏名称与价格，方便管理员判断授权类别。
+
+
+## 2026-06-26 修正：团队答题接力赛字段三语化
+
+已修正 `P010 团队答题接力赛` 老师设置页：
+
+- 补上所有字段标签：队伍数量、接力终点步数、游戏时间（秒）、答错处理方式、题库内容。
+- 解释数字字段：`8` 为接力终点步数，`300` 为游戏时间秒数。
+- `select option` 已做中文 / English / Melayu 对应翻译。
+- English 和 Melayu 界面不再显示“答错停留”等中文选项。
+- 离线包 `team_relay_quiz.zip` 与 `all_classroom_games_offline_pack.zip` 已同步更新。
