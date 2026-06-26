@@ -808,3 +808,23 @@ textarea.input{
 
 .user-category-current{font-weight:900;color:#fde68a;margin-bottom:8px;font-size:13px;line-height:1.35}
 .account-table .admin-package-select{min-width:180px}
+
+
+/* Purchase submit and admin authorization readability fix */
+.purchase-msg{min-height:22px;margin-top:10px;color:#fde68a;font-weight:900;line-height:1.55}
+#submitPurchaseBtn:disabled{opacity:.62;cursor:not-allowed;filter:grayscale(.2)}
+.admin-auth-games{display:grid;gap:12px;max-height:390px;overflow:auto;padding-right:6px;min-width:390px}
+.admin-auth-level{border:1px solid rgba(255,255,255,.10);border-radius:16px;background:rgba(15,23,42,.55);overflow:hidden}
+.admin-auth-level.beginner{border-color:rgba(34,197,94,.28)}
+.admin-auth-level.intermediate{border-color:rgba(250,204,21,.30)}
+.admin-auth-level.advanced{border-color:rgba(139,92,246,.36)}
+.admin-auth-level-head{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(255,255,255,.05);font-weight:950}
+.admin-auth-level-head b{color:#fff}.admin-auth-level.beginner .admin-auth-level-head b{color:#bbf7d0}.admin-auth-level.intermediate .admin-auth-level-head b{color:#fde68a}.admin-auth-level.advanced .admin-auth-level-head b{color:#ddd6fe}
+.admin-auth-level-head em{font-style:normal;display:grid;place-items:center;min-width:28px;height:24px;border-radius:999px;background:#0f172a;border:1px solid rgba(255,255,255,.16);font-size:12px}
+.admin-auth-game-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;padding:10px}
+.admin-game-check-card{display:grid;grid-template-columns:auto 54px 1fr auto;align-items:center;gap:7px;padding:9px 10px;border-radius:12px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);cursor:pointer}
+.admin-game-check-card:hover{border-color:rgba(125,211,252,.38);background:rgba(56,189,248,.08)}
+.admin-game-code{font-weight:950;color:#a7f3d0;font-size:12px}.admin-game-check-card.intermediate .admin-game-code{color:#fde68a}.admin-game-check-card.advanced .admin-game-code{color:#ddd6fe}
+.admin-game-name{font-size:13px;font-weight:800;line-height:1.25;color:#e5eefc}.admin-game-price{font-size:12px;color:#facc15;font-weight:950;white-space:nowrap}
+.account-table th:nth-child(4),.account-table td:nth-child(4){min-width:430px}
+@media(max-width:900px){.admin-auth-games{min-width:0}.admin-auth-game-list{grid-template-columns:1fr}.admin-game-check-card{grid-template-columns:auto 50px 1fr auto}.account-table th:nth-child(4),.account-table td:nth-child(4){min-width:320px}}

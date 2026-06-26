@@ -1014,6 +1014,7 @@ let makerSelectedGameId = null;
 
 let pendingReceiptData = null;
 let pendingReceiptName = '';
+let lastPurchaseMessage = '';
 
 const PURCHASE_COPY = {
   zh:{
@@ -1213,7 +1214,15 @@ function loadState(){
   return initial;
 }
 
-function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    return true;
+  }catch(e){
+    console.error('Save state failed:', e);
+    return false;
+  }
+}
 function resetDemo(){ state = defaultState(); saveState(); render(); }
 function getUser(){ return state.users.find(u=>u.id===state.currentUser) || null; }
 function findGame(id){ return GAME_DATA.find(g=>g.id===id); }
@@ -1622,7 +1631,7 @@ function renderPurchasePanel(user){
         <img id="receiptPreview" class="receipt-preview hidden" alt="receipt preview">
         <div id="purchaseAmountPreview" class="purchase-amount-preview">${pc('amount')}: RM0</div>
         <button id="submitPurchaseBtn" class="btn maker block">${pc('submitOrder')}</button>
-        <div id="purchaseMsg" class="muted"></div>
+        <div id="purchaseMsg" class="purchase-msg">${lastPurchaseMessage || ''}</div>
       </div>
     </div>
     ${renderMyOrders(user)}
@@ -1651,21 +1660,48 @@ function updatePurchaseAmountPreview(){
 }
 function handleReceiptFileChange(ev){
   const file = ev.target.files?.[0];
-  pendingReceiptData = null; pendingReceiptName = '';
+  pendingReceiptData = null; pendingReceiptName = ''; lastPurchaseMessage = '';
   const preview = $('#receiptPreview');
+  const msg = $('#purchaseMsg');
+  if(msg) msg.textContent = '';
   if(!file){ if(preview) preview.classList.add('hidden'); return; }
   pendingReceiptName = file.name;
   const reader = new FileReader();
-  reader.onload = () => { pendingReceiptData = String(reader.result || ''); if(preview){ preview.src=pendingReceiptData; preview.classList.remove('hidden'); } };
+  reader.onload = () => {
+    const raw = String(reader.result || '');
+    const img = new Image();
+    img.onload = () => {
+      const maxSide = 900;
+      const ratio = Math.min(1, maxSide / Math.max(img.width, img.height));
+      const w = Math.max(1, Math.round(img.width * ratio));
+      const h = Math.max(1, Math.round(img.height * ratio));
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+      pendingReceiptData = canvas.toDataURL('image/jpeg', 0.72);
+      if(preview){ preview.src = pendingReceiptData; preview.classList.remove('hidden'); }
+    };
+    img.onerror = () => {
+      pendingReceiptData = raw;
+      if(preview){ preview.src = pendingReceiptData; preview.classList.remove('hidden'); }
+    };
+    img.src = raw;
+  };
   reader.readAsDataURL(file);
 }
 function submitPurchaseOrder(){
   const user = getUser();
   const msg = $('#purchaseMsg');
+  const btn = $('#submitPurchaseBtn');
+  if(msg) msg.textContent = '';
   const sel = getSelectedPurchase();
   const valid = validatePurchaseSelection(sel);
   if(!valid.ok){ if(msg) msg.textContent = valid.msg; return; }
   if(!pendingReceiptData){ if(msg) msg.textContent = pc('receiptRequired'); return; }
+  if(btn) btn.disabled = true;
   const order = {
     id:'PO'+Date.now(), teacherId:user.id, teacherName:user.name, teacherEmail:user.email,
     teacherPhone:user.profile?.phone || '', packageType:sel.type, gameIds:sel.ids, amount:sel.amount,
@@ -1674,8 +1710,19 @@ function submitPurchaseOrder(){
   if(!Array.isArray(state.purchaseOrders)) state.purchaseOrders=[];
   state.purchaseOrders.push(order);
   pendingReceiptData=null; pendingReceiptName='';
-  saveState(); render();
-  setTimeout(()=>{ const m=$('#purchaseMsg'); if(m) m.textContent=pc('orderSubmitted'); }, 50);
+  lastPurchaseMessage = pc('orderSubmitted');
+  const saved = saveState();
+  if(!saved){
+    state.purchaseOrders = state.purchaseOrders.filter(o => o.id !== order.id);
+    lastPurchaseMessage = '';
+    if(msg) msg.textContent = (state.lang==='en' ? 'The receipt image is too large. Please upload a smaller image.' : state.lang==='ms' ? 'Imej resit terlalu besar. Sila muat naik imej yang lebih kecil.' : '收据图片太大，请上传较小的图片。');
+    if(btn) btn.disabled = false;
+    return;
+  }
+  render();
+  setTimeout(()=>{
+    const panel = $('#purchasePanel'); if(panel) panel.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 50);
 }
 function renderPurchaseOrdersPanel(){
   const orders = [...(state.purchaseOrders || [])].sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
@@ -1930,7 +1977,19 @@ function accountStatusBadge(u){
 
 
 function renderGameChecks(user){
-  return `<div class="check-grid">${GAME_DATA.filter(g=>!g.free).map(g=>`<label class="check-item"><input type="checkbox" class="admin-game-check" data-user="${user.id}" data-game="${g.id}" ${(user.ownedGames||[]).includes(g.id)?'checked':''}/> <span>${gameName(g.id)}</span></label>`).join('')}</div>`;
+  return `<div class="admin-auth-games">${LEVEL_ORDER.map(level=>{
+    const group = GAME_DATA.filter(g=>!g.free && gameLevel(g.id)===level);
+    if(!group.length) return '';
+    return `<div class="admin-auth-level ${level}">
+      <div class="admin-auth-level-head"><b>${levelText(level).label}</b><em>${group.length}</em></div>
+      <div class="admin-auth-game-list">${group.map(g=>`<label class="admin-game-check-card ${level}">
+        <input type="checkbox" class="admin-game-check" data-user="${user.id}" data-game="${g.id}" ${(user.ownedGames||[]).includes(g.id)?'checked':''}/>
+        <span class="admin-game-code">${gameCode(g.id)}</span>
+        <span class="admin-game-name">${gameName(g.id)}</span>
+        <span class="admin-game-price">RM${gamePrice(g.id)}</span>
+      </label>`).join('')}</div>
+    </div>`;
+  }).join('')}</div>`;
 }
 function packageName(pkg){ return packageLabel(pkg); }
 function packageDesc(pkg){
