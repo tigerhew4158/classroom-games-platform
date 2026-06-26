@@ -138,7 +138,7 @@ const TEMPLATE_COPY = {
       [
         "组合特惠模板",
         "特惠 RM100",
-        "初阶 + 进阶任选 4 个模板，再加 1 个高阶模板。"
+        "初阶或进阶任选 4 个模板，再加 1 个高阶模板。"
       ],
       [
         "全部模板",
@@ -222,7 +222,7 @@ const TEMPLATE_COPY = {
       [
         "Combo promo template pack",
         "Promo RM100",
-        "Choose 4 templates from Beginner + Intermediate, plus 1 Advanced template."
+        "Choose 4 templates from Beginner or Intermediate, plus 1 Advanced template."
       ],
       [
         "All templates",
@@ -306,7 +306,7 @@ const TEMPLATE_COPY = {
       [
         "Pakej promosi kombo",
         "Promosi RM100",
-        "Pilih 4 templat daripada Asas + Pertengahan, dan tambah 1 templat Lanjutan."
+        "Pilih 4 templat daripada Asas atau Pertengahan, dan tambah 1 templat Lanjutan."
       ],
       [
         "Semua templat",
@@ -786,7 +786,7 @@ const I18N = {
     currentUser:'目前用户', admin:'管理员', user:'用户', logout:'退出',
     accountInfo:'账号资讯', role:'角色', package:'配套', normalUser:'一般用户',
     planInfo:'方案说明', single:'配套 1', pick5:'配套 2', all_access:'配套 3',
-    singleDesc:'初阶 RM20 / 款；进阶 RM30 / 款；高阶 RM50 / 款', pick5Desc:'特惠 RM100：初阶 + 进阶任选 4 个，再加 1 个高阶模板', allAccessDesc:'原价 RM790，特惠 RM300，包含未来新开发游戏',
+    singleDesc:'初阶 RM20 / 款；进阶 RM30 / 款；高阶 RM50 / 款', pick5Desc:'特惠 RM100：初阶或进阶任选 4 个，再加 1 个高阶模板', allAccessDesc:'原价 RM790，特惠 RM300，包含未来新开发游戏',
     demoBuy:'Demo 購買', chooseSingle:'請在遊戲卡片上選擇要單獨購買的遊戲。',
     openAdmin:'打開老師後台', adminPanel:'老師後台', collapse:'收起',
     adminHelp:'此版本不需要登入；老師可直接設定題庫、素材與遊戲包。',
