@@ -516,10 +516,3 @@ index.html
 - `gamePreview()`
 
 同时更新 `index.html` 的 `app.js` 版本号，避免浏览器继续读取旧缓存。
-
-
-## 语言切换正式版更新
-
-- 语言选单改为：简体中文 / English / Melayu。
-- 中文界面改以简体中文为主。
-- 更新 `index.html` 的 `app.js` 版本号，避免 Vercel / 浏览器继续读取旧缓存。

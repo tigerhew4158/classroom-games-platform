@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>课堂游戏网站｜三语白板版</title>
+  <title>課堂游戲網站｜三語白板版</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -11,25 +11,25 @@
   <div id="playerOverlay" class="player-overlay hidden" aria-hidden="true">
     <div class="player-topbar">
       <div>
-        <div id="playerGameTitle" class="player-title">游戏播放器</div>
-        <div id="playerSubtitle" class="player-subtitle">白板专用｜中央安全区｜无上下轴｜三语切換</div>
+        <div id="playerGameTitle" class="player-title">遊戲播放器</div>
+        <div id="playerSubtitle" class="player-subtitle">白板專用｜中央安全區｜無上下軸｜三語切換</div>
       </div>
       <div class="player-actions">
-        <button id="fit169Btn" class="btn secondary small">16:9 安全区</button>
-        <button id="fit43Btn" class="btn secondary small">4:3 安全区</button>
+        <button id="fit169Btn" class="btn secondary small">16:9 安全區</button>
+        <button id="fit43Btn" class="btn secondary small">4:3 安全區</button>
         <button id="fitAutoBtn" class="btn secondary small">自動</button>
-        <button id="fullscreenBtn" class="btn small">浏览器全屏</button>
-        <button id="closePlayerBtn" class="btn danger small">关闭</button>
+        <button id="fullscreenBtn" class="btn small">瀏覽器全屏</button>
+        <button id="closePlayerBtn" class="btn danger small">關閉</button>
       </div>
     </div>
     <div id="playerStage" class="player-stage">
       <div class="stage-safe-area"></div>
       <div id="frameShell" class="frame-shell">
-        <iframe id="gameFrame" title="课堂游戏播放器" scrolling="no" allowfullscreen></iframe>
+        <iframe id="gameFrame" title="課堂游戲播放器" scrolling="no" allowfullscreen></iframe>
       </div>
     </div>
   </div>
-  <script src="./app.js?v=lang-formal-20260624-1"></script>
+  <script src="./app.js?v=formal-login-template-20260626-1"></script>
   <script>
     window.addEventListener('error', function(e){
       console.error('Page script error:', e.message, e.filename, e.lineno, e.colno);
@@ -37,7 +37,7 @@
     setTimeout(function(){
       var app = document.getElementById('app');
       if(app && app.innerHTML.trim().length === 0){
-        app.innerHTML = '<div style="min-height:100vh;display:grid;place-items:center;background:#071426;color:white;font-family:Microsoft YaHei,Arial,sans-serif;padding:24px"><div style="max-width:720px;background:#10233f;border:1px solid rgba(255,255,255,.18);border-radius:22px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.35)"><h1 style="margin:0 0 12px;font-size:34px">网站程式未成功載入</h1><p style="line-height:1.7;color:#dbeafe">請确认 GitHub 根目錄有 <b>app.js</b>、<b>styles.css</b>、<b>index.html</b>，然后在 Vercel 重新部署。也可以按 Ctrl + F5 強制刷新。</p><p style="color:#fde68a">若仍然看到此画面，代表 app.js 沒有成功載入或被舊快取擋住。</p></div></div>';
+        app.innerHTML = '<div style="min-height:100vh;display:grid;place-items:center;background:#071426;color:white;font-family:Microsoft YaHei,Arial,sans-serif;padding:24px"><div style="max-width:720px;background:#10233f;border:1px solid rgba(255,255,255,.18);border-radius:22px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.35)"><h1 style="margin:0 0 12px;font-size:34px">網站程式未成功載入</h1><p style="line-height:1.7;color:#dbeafe">請確認 GitHub 根目錄有 <b>app.js</b>、<b>styles.css</b>、<b>index.html</b>，然後在 Vercel 重新部署。也可以按 Ctrl + F5 強制刷新。</p><p style="color:#fde68a">若仍然看到此畫面，代表 app.js 沒有成功載入或被舊快取擋住。</p></div></div>';
       }
     }, 1200);
   </script>

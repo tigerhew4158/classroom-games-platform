@@ -1,4 +1,4 @@
-// GAMELEVEL_FIXED_20260624_3
+// FORMAL_LOGIN_TEMPLATE_20260626_1
 
 const GAME_DATA = [
   {id:'memory_match', code:'S001', preview:'previews/memory_match.svg', icon:'🃏', price:20, free:true, path:'games/memory_match_game/index.html', download:'downloads/memory_match.zip'},
@@ -44,7 +44,7 @@ const LEVEL_ORDER = ['beginner','intermediate','advanced'];
 const BASE_FREE_GAMES = ['memory_match','true_false'];
 const PROFILE_REWARD_GAME = 'sentence_order';
 const MALAYSIA_STATES = ['Johor','Kedah','Kelantan','Melaka','Negeri Sembilan','Pahang','Perak','Perlis','Pulau Pinang','Sabah','Sarawak','Selangor','Terengganu'];
-const ORG_TYPES = ['小学','中学','補习中心','幼兒園','其他'];
+const ORG_TYPES = ['小學','中學','補習中心','幼兒園','其他'];
 
 
 const LEVEL_TEXT = {
@@ -66,62 +66,62 @@ const LEVEL_TEXT = {
 };
 
 const LANGS = [
-  {id:'zh', label:'简体中文'},
+  {id:'zh', label:'中文'},
   {id:'en', label:'English'},
-  {id:'ms', label:'Melayu'}
+  {id:'ms', label:'Bahasa Melayu'}
 ];
 
 const I18N = {
   zh: {
-    appTitle:'课堂游戏网站',
-    tagline:'免登录｜老師后台｜白板专用｜离线下载',
-    authBullet1:'管理员可控制每个用户能使用哪些游戏。',
-    authBullet2:'免费注册即可先用 2 个游戏，完善资料后再送 1 个。',
-    authBullet3:'播放器採用白板专用安全模式，并提供离线 ZIP 下载。',
-    authBullet4:'适合互動白板、投影机、电脑荧幕。',
-    login:'登录', register:'免费注册', username:'账号', password:'密码', confirmPassword:'确认密码',
-    name:'姓名', quickAdmin:'管理员登录', resetDemo:'重置 Demo', loginFail:'登录失敗，請檢查账号或密码。',
-    fillAll:'請完整填写资料', passwordMismatch:'兩次密码不一致', accountExists:'账号已存在', registerSuccess:'注册成功，請登录',
-    demoAccounts:'测试账号：admin / admin123 ｜ 一般用户：teacher / 123456',
-    dashboardSub:'免登录版本，老師可直接进入后台设置题库与游戏包',
-    currentUser:'目前用户', admin:'管理员', user:'用户', logout:'登出',
-    accountInfo:'账号资讯', role:'角色', package:'配套', normalUser:'一般用户',
+    appTitle:'課堂游戲網站',
+    tagline:'免登入｜老師後台｜白板專用｜離線下載',
+    authBullet1:'管理員可控制每個用戶能使用哪些遊戲。',
+    authBullet2:'免費註冊即可先用 2 個遊戲，完善資料後再送 1 個。',
+    authBullet3:'播放器採用白板專用安全模式，並提供離線 ZIP 下載。',
+    authBullet4:'適合互動白板、投影機、電腦螢幕。',
+    login:'登入', register:'免費註冊', username:'帳號', password:'密碼', confirmPassword:'確認密碼',
+    name:'姓名', quickAdmin:'管理員登入', resetDemo:'重置 Demo', loginFail:'登入失敗，請檢查帳號或密碼。',
+    fillAll:'請完整填寫資料', passwordMismatch:'兩次密碼不一致', accountExists:'帳號已存在', registerSuccess:'註冊成功，請登入',
+    demoAccounts:'測試帳號：admin / admin123 ｜ 一般用戶：teacher / 123456',
+    dashboardSub:'免登入版本，老師可直接進入後台設定題庫與遊戲包',
+    currentUser:'目前用戶', admin:'管理員', user:'用戶', logout:'登出',
+    accountInfo:'帳號資訊', role:'角色', package:'配套', normalUser:'一般用戶',
     planInfo:'方案說明', single:'配套 1', pick5:'配套 2', all_access:'配套 3',
-    singleDesc:'单个购买，每个 RM20', pick5Desc:'RM50 任选五个', allAccessDesc:'RM100 任意使用全部游戏，包括之后开发的',
-    demoBuy:'Demo 购买', chooseSingle:'請在游戏卡片上选择要单獨购买的游戏。',
-    openAdmin:'打开老師后台', adminPanel:'老師后台', collapse:'收起',
-    adminHelp:'此版本不需要登录；老師可直接设置题库、素材与游戏包。',
-    authorizedGames:'已授权游戏', operation:'操作', save:'保存设置', selectAll:'全选', clear:'清除',
-    freeUser:'免费用户', pack2:'配套 2（五选）', pack3:'配套 3（全授权）',
-    playerFeatures:'播放器特色', featureLines:'• 全屏时保持中央安全区<br>• 自動等比放大<br>• 不出現上下轴<br>• 适合互動白板',
-    whiteboardMode:'白板专用模式', whiteboardDesc:'打开游戏后会自動进入中央安全区，按鈕放大，适合互動白板上课。',
-    enabled:'预設已开启', offlineZip:'离线 ZIP 下载', offlineDesc:'老師先制作题库，再套用版型生成完整游戏压缩包。',
-    downloadAll:'下载全部离线包', gameMaker:'游戏制作', makerDesc:'先整理课堂标题与题库；正式版可自動写入设置并打包下载。',
-    openMaker:'打开制作区', makerTitle:'游戏制作资料填写区',
-    makerHelp:'老師先选择游戏版型，再填入题库或上传素材。按「生成游戏包」后，系统会把版型与题库打包成完整 ZIP。',
-    titlePlaceholder:'课堂游戏标题，例如：第3课 词语复习', subjectPlaceholder:'科目 / 年級，例如：华文 三年級',
-    questionsPlaceholder:'输入题目资料。建議格式：\\n题目 | 答案 | 选项A,选项B,选项C\\n或直接貼上你的题库内容',
-    downloadQuestionTxt:'下载题库 TXT', availableGames:'可用游戏', lockedGames:'尚未授权',
-    freeGamesNote:'注册送 2 个游戏，完善资料再送 1 个，其餘可单购或升級配套', lockedNote:'管理员可授权，或使用 Demo 购买',
-    free:'免费', paid:'付費', available:'已可使用', locked:'未授权', whiteboardClass:'白板上课', downloadZip:'下载ZIP', make:'制作',
-    singleBuy:'单个 RM20', addPick5:'加入五选配套', playing:'正在播放', playerSubtitle:'白板专用｜中央安全区｜无上下轴｜三语切換',
-    safe169:'16:9 安全区', safe43:'4:3 安全区', auto:'自動', browserFullscreen:'浏览器全屏', close:'关闭',
-    announcements1:'免费注册可先使用 3 个基礎游戏。', announcements2:'平台已加入三语切換、白板安全显示、图片拼图与孤島抢奪赛。',
-    language:'语言',
+    singleDesc:'單個購買，每個 RM20', pick5Desc:'RM50 任選五個', allAccessDesc:'RM100 任意使用全部遊戲，包括之後開發的',
+    demoBuy:'Demo 購買', chooseSingle:'請在遊戲卡片上選擇要單獨購買的遊戲。',
+    openAdmin:'打開老師後台', adminPanel:'老師後台', collapse:'收起',
+    adminHelp:'此版本不需要登入；老師可直接設定題庫、素材與遊戲包。',
+    authorizedGames:'已授權遊戲', operation:'操作', save:'儲存設定', selectAll:'全選', clear:'清除',
+    freeUser:'免費用戶', pack2:'配套 2（五選）', pack3:'配套 3（全授權）',
+    playerFeatures:'播放器特色', featureLines:'• 全屏時保持中央安全區<br>• 自動等比放大<br>• 不出現上下軸<br>• 適合互動白板',
+    whiteboardMode:'白板專用模式', whiteboardDesc:'打開遊戲後會自動進入中央安全區，按鈕放大，適合互動白板上課。',
+    enabled:'預設已開啟', offlineZip:'離線 ZIP 下載', offlineDesc:'老師先制作題庫，再套用版型生成完整遊戲壓縮包。',
+    downloadAll:'下載全部離線包', gameMaker:'遊戲制作', makerDesc:'先整理課堂標題與題庫；正式版可自動寫入設定並打包下載。',
+    openMaker:'打開制作區', makerTitle:'遊戲制作資料填寫區',
+    makerHelp:'老師先選擇遊戲版型，再填入題庫或上傳素材。按「生成遊戲包」後，系統會把版型與題庫打包成完整 ZIP。',
+    titlePlaceholder:'課堂遊戲標題，例如：第3課 詞語複習', subjectPlaceholder:'科目 / 年級，例如：華文 三年級',
+    questionsPlaceholder:'輸入題目資料。建議格式：\\n題目 | 答案 | 選項A,選項B,選項C\\n或直接貼上你的題庫內容',
+    downloadQuestionTxt:'下載題庫 TXT', availableGames:'可用遊戲', lockedGames:'尚未授權',
+    freeGamesNote:'註冊送 2 個遊戲，完善資料再送 1 個，其餘可單購或升級配套', lockedNote:'管理員可授權，或使用 Demo 購買',
+    free:'免費', paid:'付費', available:'已可使用', locked:'未授權', whiteboardClass:'白板上課', downloadZip:'下載ZIP', make:'制作',
+    singleBuy:'單個 RM20', addPick5:'加入五選配套', playing:'正在播放', playerSubtitle:'白板專用｜中央安全區｜無上下軸｜三語切換',
+    safe169:'16:9 安全區', safe43:'4:3 安全區', auto:'自動', browserFullscreen:'瀏覽器全屏', close:'關閉',
+    announcements1:'免費註冊可先使用 3 個基礎遊戲。', announcements2:'平台已加入三語切換、白板安全顯示、圖片拼圖與孤島搶奪賽。',
+    language:'語言',
     gameNames: {
-      memory_match:'翻翻乐', true_false:'真假判斷快閃', sentence_order:'句子排序挑战', treasure_box:'宝箱开开看',
-      lucky_wheel:'幸运转盘问答', classification_conveyor:'分类运输带', platform_quiz:'平台闖关问答',
-      monster_defense:'怪獸防守战', whack_mole:'打地鼠问答', text_match:'文字对应', bomb_quiz:'炸弹倒数抢答',
-      knowledge_race:'知識赛马', dungeon_dragon_raid:'地牢巨龙討伐战', image_puzzle_speed_race:'图片拼图竞速赛', two_team_puzzle_duel:'双组拼图对战', island_conquest:'孤岛抢夺赛', timeline_sort_challenge:'时间线排序挑战', image_label_match:'图片标签配对赛', team_relay_quiz:'团队答题接力赛', find_difference:'大家來找不同', keyword_beachhead:'关键词抢滩战', kingdom_resource_battle:'王国资源争夺战：围绕中央王都开发农田、森林与金矿，并触发随机好坏事件。'
+      memory_match:'翻翻樂', true_false:'真假判斷快閃', sentence_order:'句子排序挑戰', treasure_box:'寶箱開開看',
+      lucky_wheel:'幸運轉盤問答', classification_conveyor:'分類運輸帶', platform_quiz:'平台闖關問答',
+      monster_defense:'怪獸防守戰', whack_mole:'打地鼠問答', text_match:'文字對應', bomb_quiz:'炸彈倒數搶答',
+      knowledge_race:'知識賽馬', dungeon_dragon_raid:'地牢巨龍討伐戰', image_puzzle_speed_race:'图片拼图竞速赛', two_team_puzzle_duel:'双组拼图对战', island_conquest:'孤岛抢夺赛', timeline_sort_challenge:'时间线排序挑战', image_label_match:'图片标签配对赛', team_relay_quiz:'团队答题接力赛', find_difference:'大家來找不同', keyword_beachhead:'关键词抢滩战', kingdom_resource_battle:'王国资源争夺战：围绕中央王都开发农田、森林与金矿，并触发随机好坏事件。'
     },
     gameDesc: {
-      memory_match:'記憶翻牌配对，适合暖身与小组競赛。', true_false:'快速判斷题，提升反应力与概念辨識。',
-      sentence_order:'适合语文课堂，訓练句子与流程排序。', treasure_box:'抽题与闖关式互動，增加课堂驚喜感。',
-      lucky_wheel:'转盘抽题，适合班級抢答活動。', classification_conveyor:'支援图片与文字分类，老師可按分类上传图片，学生在运输带上点选正确分类。',
-      platform_quiz:'角色闖关搭配问答，游戏感較強。', monster_defense:'答题防守玩法，适合團体合作。',
-      whack_mole:'互動白板很好玩，学生參与度高。', text_match:'词语、拼字、配对类题目都适合。',
-      bomb_quiz:'限时压力感強，适合复习与競赛。', knowledge_race:'比赛感強，适合全班分组对抗。',
-      dungeon_dragon_raid:'地牢RPG闖关，兩隊答题打怪、補血、找鑰匙，最后討伐巨龙。',
+      memory_match:'記憶翻牌配對，適合暖身與小組競賽。', true_false:'快速判斷題，提升反應力與概念辨識。',
+      sentence_order:'適合語文課堂，訓練句子與流程排序。', treasure_box:'抽題與闖關式互動，增加課堂驚喜感。',
+      lucky_wheel:'轉盤抽題，適合班級搶答活動。', classification_conveyor:'支援圖片與文字分類，老師可按分類上傳圖片，學生在運輸帶上點選正確分類。',
+      platform_quiz:'角色闖關搭配問答，遊戲感較強。', monster_defense:'答題防守玩法，適合團體合作。',
+      whack_mole:'互動白板很好玩，學生參與度高。', text_match:'詞語、拼字、配對類題目都適合。',
+      bomb_quiz:'限時壓力感強，適合複習與競賽。', knowledge_race:'比賽感強，適合全班分組對抗。',
+      dungeon_dragon_raid:'地牢RPG闖關，兩隊答題打怪、補血、找鑰匙，最後討伐巨龍。',
       image_puzzle_speed_race:'老师上传图片作为题目，各组轮流拼图，系统记录时间，最快组别胜利。',
       two_team_puzzle_duel:'两组同时拼同一张图片，适合互动白板分组竞赛，最快完成者胜利。',
       island_conquest:'两队在大海上的六边形岛屿抢占土地，可设定胜利条件、起点、海草障碍与回合限制。',
@@ -131,7 +131,7 @@ const I18N = {
     }
   },
   en: {
-    appTitle:'Classroom Games Platform',
+    appTitle:'Classroom Game Template Platform',
     tagline:'Admin control | User access | Whiteboard mode | Offline ZIP',
     authBullet1:'Admins can control which games each user can use.',
     authBullet2:'Free registration includes 2 games, and completing the profile unlocks 1 more.',
@@ -192,7 +192,7 @@ const I18N = {
     }
   },
   ms: {
-    appTitle:'Platform Permainan Kelas',
+    appTitle:'Platform Templat Permainan Kelas',
     tagline:'Kawalan admin | Akses pengguna | Mod papan putih | ZIP luar talian',
     authBullet1:'Admin boleh mengawal permainan yang boleh digunakan oleh setiap pengguna.',
     authBullet2:'Pendaftaran percuma menyediakan 2 permainan, dan lengkap profil untuk membuka 1 lagi.',
@@ -302,14 +302,14 @@ function defaultState(){
         email:'admin@lead.ai',
         username:'admin@lead.ai',
         password:'admin123',
-        name:'系统管理员',
+        name:'系統管理員',
         role:'admin',
         accountStatus:'approved',
         disabled:false,
         ownedGames: GAME_DATA.map(g=>g.id),
         package:'all_access',
         profileCompleted:true,
-        profile:{email:'admin@lead.ai', phone:'', chineseName:'系统管理员', englishName:'Admin', state:'Johor', orgTypes:['其他']}
+        profile:{email:'admin@lead.ai', phone:'', chineseName:'系統管理員', englishName:'Admin', state:'Johor', orgTypes:['其他']}
       },
       {
         id:'u_teacher',
@@ -323,7 +323,7 @@ function defaultState(){
         ownedGames: GAME_DATA.map(g=>g.id),
         package:'all_access',
         profileCompleted:true,
-        profile:{email:'teacher@example.com', phone:'', chineseName:'示範老師', englishName:'Demo Teacher', state:'Johor', orgTypes:['学校老師']}
+        profile:{email:'teacher@example.com', phone:'', chineseName:'示範老師', englishName:'Demo Teacher', state:'Johor', orgTypes:['學校老師']}
       }
     ],
     currentUser:null
@@ -427,24 +427,26 @@ function login(email, password){
     user = state.users.find(u => normalizeEmail(u.email || u.username)==='teacher@example.com');
   }
   if(!user) return {ok:false, msg:t('loginFail')};
-  if(user.disabled) return {ok:false, msg:'此账号已停用，請联络管理员。'};
-  if(user.accountStatus !== 'approved') return {ok:false, msg:'账号申請已送出，請等待管理员批准。'};
+  if(user.disabled) return {ok:false, msg:'此帳號已停用，請聯絡管理員。'};
+  if(user.accountStatus !== 'approved') return {ok:false, msg:'帳號申請已送出，請等待管理員批准。'};
   state.currentUser = user.id;
   saveState();
   render();
   return {ok:true, msg:''};
 }
-function registerTeacherAccount(name, email, password){
+function registerTeacherAccount(name, email, phone){
   const normalized = normalizeEmail(email);
   const teacherName = String(name || '').trim();
-  if(!teacherName || !normalized || !password) return {ok:false, msg:t('fillAll')};
-  if(!isValidEmail(normalized)) return {ok:false, msg:'請输入有效电郵。'};
+  const phoneText = String(phone || '').trim();
+  const c = authCopy();
+  if(!teacherName || !normalized || !phoneText) return {ok:false, msg:t('fillAll')};
+  if(!isValidEmail(normalized)) return {ok:false, msg:c.invalidEmail};
   if(state.users.some(u => normalizeEmail(u.email || u.username)===normalized)) return {ok:false, msg:t('accountExists')};
   state.users.push({
     id:'u_'+Date.now(),
     email:normalized,
     username:normalized,
-    password,
+    password:'123456',
     name:teacherName,
     role:'user',
     accountStatus:'pending',
@@ -452,13 +454,13 @@ function registerTeacherAccount(name, email, password){
     ownedGames:[],
     package:'free',
     profileCompleted:false,
-    profile:{email:normalized, phone:'', chineseName:teacherName, englishName:'', state:'Johor', orgTypes:[]}
+    profile:{email:normalized, phone:phoneText, chineseName:teacherName, englishName:'', state:'Johor', orgTypes:[]}
   });
   saveState();
-  return {ok:true, msg:'申請已送出。請等待管理员批准后再登录。'};
+  return {ok:true, msg:c.registerSuccess};
 }
 function register(email, password){
-  return registerTeacherAccount(email, email, password);
+  return registerTeacherAccount(email, email, '');
 }
 function isProfileComplete(user){
   const p = user?.profile || {};
@@ -512,50 +514,103 @@ function render(){
   bindLangSelects();
 }
 
+function authCopy(){
+  const lang = state.lang || 'zh';
+  const copies = {
+    zh: {
+      kicker:'Teacher Game Templates',
+      title:'课堂游戏模板网站',
+      subtitle:'套用现成模板，快速制作互动白板课堂游戏',
+      badge:'模板库 · 题库设定 · 白板上课',
+      features:[['24+','课堂游戏模板'],['3','难度分类'],['一键','白板上课']],
+      loginTitle:'老师 / 管理员登录',
+      email:'电子邮件',
+      password:'密码',
+      login:'登录',
+      registerTitle:'老师账号申请',
+      name:'姓名',
+      phone:'电话',
+      apply:'送出申请',
+      invalidEmail:'请输入有效电子邮件。',
+      registerSuccess:'申请已送出，请等待管理员批准。'
+    },
+    en: {
+      kicker:'Teacher Game Templates',
+      title:'Classroom Game Template Platform',
+      subtitle:'Use ready-made templates to create whiteboard classroom games quickly.',
+      badge:'Templates · Question Banks · Whiteboard Play',
+      features:[['24+','Game templates'],['3','Level categories'],['1-click','Whiteboard play']],
+      loginTitle:'Teacher / Admin Login',
+      email:'Email',
+      password:'Password',
+      login:'Login',
+      registerTitle:'Teacher Account Request',
+      name:'Name',
+      phone:'Phone',
+      apply:'Submit Request',
+      invalidEmail:'Please enter a valid email address.',
+      registerSuccess:'Your request has been submitted. Please wait for admin approval.'
+    },
+    ms: {
+      kicker:'Templat Permainan Guru',
+      title:'Platform Templat Permainan Kelas',
+      subtitle:'Gunakan templat sedia ada untuk membina permainan kelas papan putih dengan cepat.',
+      badge:'Templat · Bank Soalan · Papan Putih',
+      features:[['24+','Templat permainan'],['3','Tahap kategori'],['1 klik','Main di papan putih']],
+      loginTitle:'Log Masuk Guru / Admin',
+      email:'Emel',
+      password:'Kata Laluan',
+      login:'Log Masuk',
+      registerTitle:'Permohonan Akaun Guru',
+      name:'Nama',
+      phone:'Telefon',
+      apply:'Hantar Permohonan',
+      invalidEmail:'Sila masukkan alamat emel yang sah.',
+      registerSuccess:'Permohonan telah dihantar. Sila tunggu kelulusan admin.'
+    }
+  };
+  return copies[lang] || copies.zh;
+}
+
 function renderAuth(){
+  const c = authCopy();
   return `
-  <div class="auth-wrap hybrid-auth-wrap">
-    <div class="card auth-card hybrid-auth-card">
-      <div class="auth-left">
-        <div class="brand"><div class="logo">🎮</div><div><h1>${t('appTitle')}</h1><div class="sub">老師账号登录｜管理员管理｜白板游戏库</div></div></div>
-        <ul class="auth-list">
-          <li>老師需要账号登录后才能进入游戏库。</li>
-          <li>老師可自行注册申請账号，等待管理员批准。</li>
-          <li>管理员可新增、批准、停用、刪除老師账号。</li>
-          <li>登录后可在老師后台设置题库、课堂标题与素材。</li>
-        </ul>
-        <div class="notice">
-          测试老師：teacher@example.com / 123456<br>
-          管理员：admin@lead.ai / admin123
+  <div class="auth-wrap hybrid-auth-wrap formal-auth-wrap">
+    <div class="card auth-card hybrid-auth-card formal-auth-card">
+      <div class="auth-left formal-auth-left">
+        <div class="formal-brand-row">
+          <div class="logo formal-logo">🎮</div>
+          <div>
+            <div class="formal-kicker">${c.kicker}</div>
+            <h1>${c.title}</h1>
+            <div class="sub formal-subtitle">${c.subtitle}</div>
+          </div>
+        </div>
+        <div class="formal-badge">${c.badge}</div>
+        <div class="formal-feature-grid">
+          ${c.features.map(item=>`<div class="formal-feature"><b>${item[0]}</b><span>${item[1]}</span></div>`).join('')}
         </div>
       </div>
-      <div class="auth-right">
-        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px">
-          <h3 style="margin:0">老師 / 管理员登录</h3>
-          ${langSelect('authLangSelect')}
+      <div class="auth-right formal-auth-right">
+        <div class="formal-auth-top">
+          <h3>${c.loginTitle}</h3>
+          <div class="formal-lang-wrap">${langSelect('authLangSelect')}</div>
         </div>
-        <div class="form-row one">
-          <input id="loginEmail" class="input" placeholder="电郵 Email" value="teacher@example.com" />
-          <input id="loginPassword" class="input" placeholder="${t('password')}" type="password" value="123456" />
+        <div class="formal-form-block">
+          <input id="loginEmail" class="input" placeholder="${c.email}" />
+          <input id="loginPassword" class="input" placeholder="${c.password}" type="password" />
+          <button id="loginBtn" type="button" class="btn formal-primary-btn" onclick="handleLoginClick()">${c.login}</button>
+          <p id="loginMsg" class="muted formal-msg"></p>
         </div>
-        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-          <button id="loginBtn" type="button" class="btn" onclick="handleLoginClick()">登录</button>
-          <button id="quickAdminBtn" type="button" class="btn secondary" onclick="handleQuickAdminClick()">管理员登录</button>
-          <button id="resetDemoBtn" type="button" class="btn secondary" onclick="resetDemo()">重置 Demo</button>
+        <div class="formal-divider"></div>
+        <h3 class="formal-section-title">${c.registerTitle}</h3>
+        <div class="formal-form-block compact">
+          <input id="regName" class="input" placeholder="${c.name}" />
+          <input id="regEmail" class="input" placeholder="${c.email}" />
+          <input id="regPhone" class="input" placeholder="${c.phone}" />
+          <button id="registerBtn" type="button" class="btn maker formal-secondary-btn" onclick="handleRegisterClick()">${c.apply}</button>
+          <p id="regMsg" class="muted formal-msg"></p>
         </div>
-        <p id="loginMsg" class="muted"></p>
-        <hr style="border:none;border-top:1px solid rgba(255,255,255,.08);margin:22px 0" />
-        <h3>老師注册申請账号</h3>
-        <div class="form-row one">
-          <input id="regName" class="input" placeholder="老師姓名" />
-          <input id="regEmail" class="input" placeholder="电郵 Email" />
-          <input id="regPassword" class="input" type="password" placeholder="设置密码" />
-          <input id="regPassword2" class="input" type="password" placeholder="再次输入密码" />
-        </div>
-        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-          <button id="registerBtn" type="button" class="btn maker" onclick="handleRegisterClick()">送出申請</button>
-        </div>
-        <p id="regMsg" class="muted"></p>
       </div>
     </div>
   </div>`;
@@ -585,8 +640,8 @@ function renderAuthorizedSummary(user, available){
   const list = available.map(g=>`<span class="summary-game ${gameLevel(g.id)}">${gameCode(g.id)}｜${gameName(g.id)}</span>`).join('');
   return `<div class="authorized-summary">
     <div>
-      <h3>目前授权可使用：${available.length} 款</h3>
-      <p>已授权游戏会出現在下方「可使用游戏」区；未授权游戏会集中在「未授权游戏」区。</p>
+      <h3>目前授權可使用：${available.length} 款</h3>
+      <p>已授權遊戲會出現在下方「可使用遊戲」區；未授權遊戲會集中在「未授權遊戲」區。</p>
     </div>
     <div class="summary-game-list">${list}</div>
   </div>`;
@@ -598,14 +653,14 @@ function renderProfilePanel(user){
   return `<div class="profile-panel ${completed?'completed':'incomplete'}">
     <div class="profile-head">
       <div>
-        <h3>${completed?'老師资料已完成':'完善老師资料，再送 1 个游戏'}</h3>
-        <p>${completed?'已解鎖资料完善奖励游戏。':'請填写电話、姓名、州屬与服務类型。完成后会自動解鎖 S003 句子排序挑战。'}</p>
+        <h3>${completed?'老師資料已完成':'完善老師資料，再送 1 個遊戲'}</h3>
+        <p>${completed?'已解鎖資料完善獎勵遊戲。':'請填寫電話、姓名、州屬與服務類型。完成後會自動解鎖 S003 句子排序挑戰。'}</p>
       </div>
       <span>${completed?'已完成':'未完成'}</span>
     </div>
     <div class="profile-form">
       <input id="profileEmail" class="input" value="${user.email}" disabled />
-      <input id="profilePhone" class="input" placeholder="电話 / WhatsApp" value="${p.phone||''}" />
+      <input id="profilePhone" class="input" placeholder="電話 / WhatsApp" value="${p.phone||''}" />
       <input id="profileChineseName" class="input" placeholder="中文姓名" value="${p.chineseName||''}" />
       <input id="profileEnglishName" class="input" placeholder="英文姓名" value="${p.englishName||''}" />
       <select id="profileState" class="select">
@@ -614,19 +669,19 @@ function renderProfilePanel(user){
       <div class="org-checks">
         ${ORG_TYPES.map(type=>`<label><input type="checkbox" class="profileOrgType" value="${type}" ${(p.orgTypes||[]).includes(type)?'checked':''}> ${type}</label>`).join('')}
       </div>
-      <button id="saveProfileBtn" class="btn good">保存老師资料</button>
+      <button id="saveProfileBtn" class="btn good">儲存老師資料</button>
     </div>
   </div>`;
 }
 function renderFeedbackPanel(){
   return `<div class="feedback-panel">
     <div class="filter-row">
-      <h3>回饋 / 询问</h3>
-      <div class="muted">若有针对某个游戏，請写明游戏代号，例如 S001、P001、H007。</div>
+      <h3>回饋 / 詢問</h3>
+      <div class="muted">若有針對某個遊戲，請寫明遊戲代號，例如 S001、P001、H007。</div>
     </div>
     <div class="feedback-form">
-      <input id="feedbackGameCode" class="input" placeholder="游戏代号，可留空，例如 H007" />
-      <textarea id="feedbackMessage" class="input" placeholder="請输入回饋、问题、建議或希望新增的功能"></textarea>
+      <input id="feedbackGameCode" class="input" placeholder="遊戲代號，可留空，例如 H007" />
+      <textarea id="feedbackMessage" class="input" placeholder="請輸入回饋、問題、建議或希望新增的功能"></textarea>
       <button id="submitFeedbackBtn" class="btn maker">送出回饋</button>
     </div>
   </div>`;
@@ -635,7 +690,7 @@ function renderFeedbackPanel(){
 function renderDashboard(user){
   const available = user.role==='admin' ? GAME_DATA : availableGamesForUser(user);
   const locked = user.role==='admin' ? [] : lockedGamesForUser(user);
-  const roleText = user.role==='admin' ? '管理员' : '老師';
+  const roleText = user.role==='admin' ? '管理員' : '老師';
   return `
   <div class="page simplified-page hybrid-dashboard">
     <div class="hero">
@@ -643,7 +698,7 @@ function renderDashboard(user){
         <div class="logo">🎮</div>
         <div>
           <h1>${t('appTitle')}</h1>
-          <div class="sub">老師账号制｜管理员后台｜题库设置｜白板上课</div>
+          <div class="sub">老師帳號制｜管理員後台｜題庫設定｜白板上課</div>
         </div>
       </div>
       <div class="top-actions">
@@ -655,8 +710,8 @@ function renderDashboard(user){
 
     <div class="authorized-summary">
       <div>
-        <h3>${user.role==='admin' ? '管理员后台' : '老師游戏库'}｜目前可使用：${available.length} 款</h3>
-        <p>${user.role==='admin' ? '管理员可新增老師、批准申請、重設密码、停用账号，也可进入游戏库测试所有游戏。' : '老師登录后，可使用已授权游戏，并在老師后台设置题库、课堂标题与素材。'}</p>
+        <h3>${user.role==='admin' ? '管理員後台' : '老師遊戲庫'}｜目前可使用：${available.length} 款</h3>
+        <p>${user.role==='admin' ? '管理員可新增老師、批准申請、重設密碼、停用帳號，也可進入遊戲庫測試所有遊戲。' : '老師登入後，可使用已授權遊戲，並在老師後台設定題庫、課堂標題與素材。'}</p>
       </div>
       <div class="summary-game-list">${available.map(g=>`<span class="summary-game ${gameLevel(g.id)}">${gameCode(g.id)}｜${gameName(g.id)}</span>`).join('')}</div>
     </div>
@@ -667,11 +722,11 @@ function renderDashboard(user){
     <div class="teacher-simple-layout">
       <div class="card main simplified-main">
         <div class="filter-row">
-          <h3>游戏库</h3>
-          <div class="muted">点开初階 / 进階 / 高階，即可查看該階級游戏。可直接白板上课，或套用版型进入老師后台。</div>
+          <h3>遊戲庫</h3>
+          <div class="muted">點開初階 / 進階 / 高階，即可查看該階級遊戲。可直接白板上課，或套用版型進入老師後台。</div>
         </div>
         ${renderGameGroups(available, true, user)}
-        ${locked.length ? `<div class="filter-row locked-title"><h3>未授权游戏（${locked.length}）</h3><div class="muted">請由管理员授权后使用。</div></div>${renderGameGroups(locked, false, user)}`:''}
+        ${locked.length ? `<div class="filter-row locked-title"><h3>未授權遊戲（${locked.length}）</h3><div class="muted">請由管理員授權後使用。</div></div>${renderGameGroups(locked, false, user)}`:''}
         ${renderFeedbackPanel()}
       </div>
     </div>
@@ -683,20 +738,20 @@ function renderTeacherBackendPanel(){
   <div id="makerPanel" class="card teacher-backend-panel">
     <div class="filter-row">
       <div>
-        <h3>老師后台｜题库与游戏包设置</h3>
-        <div class="muted">老師登录后可选择游戏版型，再输入题库 / 素材說明，生成设置资料与对应游戏包。</div>
+        <h3>老師後台｜題庫與遊戲包設定</h3>
+        <div class="muted">老師登入後可選擇遊戲版型，再輸入題庫 / 素材說明，生成設定資料與對應遊戲包。</div>
       </div>
-      <button id="closeMakerBtn" class="btn secondary small">收起后台</button>
+      <button id="closeMakerBtn" class="btn secondary small">收起後台</button>
     </div>
     <div class="backend-grid">
       <div class="backend-field">
-        <label>选择游戏版型</label>
+        <label>選擇遊戲版型</label>
         <select id="makerGameSelect" class="select">
           ${GAME_DATA.map(g=>`<option value="${g.id}">${gameCode(g.id)}｜${gameName(g.id)}</option>`).join('')}
         </select>
       </div>
       <div class="backend-field">
-        <label>课堂游戏标题</label>
+        <label>課堂遊戲標題</label>
         <input id="makerTitleInput" class="input" placeholder="${t('titlePlaceholder')}" />
       </div>
       <div class="backend-field">
@@ -704,17 +759,17 @@ function renderTeacherBackendPanel(){
         <input id="makerSubject" class="input" placeholder="${t('subjectPlaceholder')}" />
       </div>
       <div class="backend-field full">
-        <label>题库 / 素材设置</label>
+        <label>題庫 / 素材設定</label>
         <textarea id="makerQuestions" class="input maker-textarea" placeholder="${t('questionsPlaceholder')}"></textarea>
       </div>
     </div>
     <div class="notice backend-notice">
-      建議题库格式：题目｜答案｜选项A,选项B,选项C。图片类游戏可在此記錄图片名稱、答案位置或上传素材說明；正式部署可再接入自動写入 game-config.json。
+      建議題庫格式：題目｜答案｜選項A,選項B,選項C。圖片類遊戲可在此記錄圖片名稱、答案位置或上傳素材說明；正式部署可再接入自動寫入 game-config.json。
     </div>
     <div class="backend-actions">
-      <button id="downloadMakerTxtBtn" class="btn secondary">下载题库 TXT</button>
-      <button id="generateTemplateZipBtn" class="btn download">生成 / 下载游戏包</button>
-      <button id="downloadAllOfflineBtn" class="btn maker">下载全部离线包</button>
+      <button id="downloadMakerTxtBtn" class="btn secondary">下載題庫 TXT</button>
+      <button id="generateTemplateZipBtn" class="btn download">生成 / 下載遊戲包</button>
+      <button id="downloadAllOfflineBtn" class="btn maker">下載全部離線包</button>
     </div>
   </div>`;
 }
@@ -756,7 +811,7 @@ function gameCard(g, accessible, user){
       </div>
       <div class="spacer"></div>
       ${accessible
-        ? `<div class="card-actions"><button class="btn whiteboard open-game-btn" data-game="${g.id}">${t('whiteboardClass')}</button><button class="btn maker small make-game-btn" data-game="${g.id}">套用版型</button><button class="btn download small generate-game-btn" data-game="${g.id}">生成游戏包</button></div>`
+        ? `<div class="card-actions"><button class="btn whiteboard open-game-btn" data-game="${g.id}">${t('whiteboardClass')}</button><button class="btn maker small make-game-btn" data-game="${g.id}">套用版型</button><button class="btn download small generate-game-btn" data-game="${g.id}">生成遊戲包</button></div>`
         : `<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary small buy-single-btn" data-game="${g.id}">${t('singleBuy')}</button><button class="btn small buy-pick5-fast-btn" data-game="${g.id}">${t('addPick5')}</button></div>`}
     </div>`;
 }
@@ -768,19 +823,20 @@ function renderAdminPanel(){
   const feedback = state.feedback || [];
   return `
   <div id="adminPanel" class="card admin-account-panel">
-    <div class="filter-row"><h3>管理员后台｜老師账号管理</h3><div class="muted">待批准：${pendingCount} 位｜老師總数：${teachers.length} 位</div></div>
-    <div class="notice">管理员可新增老師账号、批准老師申請、停用 / 启用账号、重設密码，也可设置老師可使用的游戏。</div>
+    <div class="filter-row"><h3>管理員後台｜老師帳號管理</h3><div class="muted">待批准：${pendingCount} 位｜老師總數：${teachers.length} 位</div></div>
+    <div class="notice">管理員可新增老師帳號、批准老師申請、停用 / 啟用帳號、重設密碼，也可設定老師可使用的遊戲。</div>
 
     <div class="add-teacher-box">
-      <h4>新增老師账号</h4>
+      <h4>新增老師帳號</h4>
       <div class="backend-grid admin-add-grid">
-        <input id="newTeacherName" class="input" placeholder="老師姓名" />
-        <input id="newTeacherEmail" class="input" placeholder="老師电郵 Email" />
-        <input id="newTeacherPassword" class="input" placeholder="初始密码，例如 123456" />
+        <input id="newTeacherName" class="input" placeholder="老师姓名" />
+        <input id="newTeacherEmail" class="input" placeholder="老师电子邮件" />
+        <input id="newTeacherPhone" class="input" placeholder="电话" />
+        <input id="newTeacherPassword" class="input" placeholder="初始密码" />
         <select id="newTeacherPackage" class="select">
-          <option value="all_access">全部游戏授权</option>
-          <option value="free">免费 / 基礎授权</option>
-          <option value="pick5">五选授权</option>
+          <option value="all_access">全部遊戲授權</option>
+          <option value="free">免費 / 基礎授權</option>
+          <option value="pick5">五選授權</option>
         </select>
       </div>
       <button id="addTeacherBtn" class="btn maker small">新增老師</button>
@@ -788,10 +844,10 @@ function renderAdminPanel(){
     </div>
 
     <table class="admin-table account-table">
-      <thead><tr><th>老師账号</th><th>状态</th><th>${t('package')}</th><th>${t('authorizedGames')}</th><th>${t('operation')}</th></tr></thead>
+      <thead><tr><th>老師帳號</th><th>狀態</th><th>${t('package')}</th><th>${t('authorizedGames')}</th><th>${t('operation')}</th></tr></thead>
       <tbody>
       ${teachers.map(u=>`<tr class="${u.accountStatus==='pending'?'pending-row':''} ${u.disabled?'disabled-row':''}">
-        <td><b>${u.name}</b><br><span class="muted">${u.email || u.username}</span><br><span class="muted">密码：${u.password}</span></td>
+        <td><b>${u.name}</b><br><span class="muted">${u.email || u.username}</span><br><span class="muted">${u.profile?.phone ? '电话：' + u.profile.phone : '电话未填'}</span></td>
         <td>${accountStatusBadge(u)}</td>
         <td>
           <select class="select admin-package-select" data-user="${u.id}">
@@ -805,8 +861,8 @@ function renderAdminPanel(){
           <button class="btn small save-user-btn" data-user="${u.id}">${t('save')}</button>
           ${u.accountStatus==='pending'?`<button class="btn good small approve-teacher-btn" data-user="${u.id}">批准</button>`:''}
           <button class="btn secondary small grant-all-btn" data-user="${u.id}">${t('selectAll')}</button>
-          <button class="btn secondary small reset-password-btn" data-user="${u.id}">重設密码</button>
-          <button class="btn ${u.disabled?'maker':'danger'} small disable-teacher-btn" data-user="${u.id}">${u.disabled?'启用':'停用'}</button>
+          <button class="btn secondary small reset-password-btn" data-user="${u.id}">重設密碼</button>
+          <button class="btn ${u.disabled?'maker':'danger'} small disable-teacher-btn" data-user="${u.id}">${u.disabled?'啟用':'停用'}</button>
           <button class="btn danger small delete-teacher-btn" data-user="${u.id}">刪除</button>
         </td>
       </tr>`).join('')}
@@ -814,9 +870,9 @@ function renderAdminPanel(){
     </table>
 
     <div class="feedback-admin">
-      <h3>老師回饋 / 询问</h3>
+      <h3>老師回饋 / 詢問</h3>
       ${feedback.length ? feedback.map(f=>`<div class="feedback-item">
-        <b>${f.gameCode || '未指定游戏'}</b>
+        <b>${f.gameCode || '未指定遊戲'}</b>
         <span>${f.date}｜${f.userName || ''}｜${f.userEmail || ''}</span>
         <p>${f.message}</p>
       </div>`).join('') : `<div class="muted">目前沒有回饋。</div>`}
@@ -867,18 +923,15 @@ function handleQuickAdminClick(){
 function handleRegisterClick(){
   const name = $('#regName')?.value?.trim() || '';
   const email = $('#regEmail')?.value?.trim() || '';
-  const p1 = $('#regPassword')?.value || '';
-  const p2 = $('#regPassword2')?.value || '';
+  const phone = $('#regPhone')?.value?.trim() || '';
   const msg = $('#regMsg');
-  if(!name || !email || !p1){ if(msg) msg.textContent=t('fillAll'); return; }
-  if(p1 !== p2){ if(msg) msg.textContent=t('passwordMismatch'); return; }
-  const result = registerTeacherAccount(name, email, p1);
+  if(!name || !email || !phone){ if(msg) msg.textContent=t('fillAll'); return; }
+  const result = registerTeacherAccount(name, email, phone);
   if(msg) msg.textContent = result.msg;
   if(result.ok){
     if($('#regName')) $('#regName').value='';
     if($('#regEmail')) $('#regEmail').value='';
-    if($('#regPassword')) $('#regPassword').value='';
-    if($('#regPassword2')) $('#regPassword2').value='';
+    if($('#regPhone')) $('#regPhone').value='';
   }
 }
 
@@ -897,20 +950,21 @@ function bindAuth(){
 function addTeacherAccount(){
   const name = $('#newTeacherName')?.value?.trim() || '';
   const email = $('#newTeacherEmail')?.value?.trim() || '';
+  const phone = $('#newTeacherPhone')?.value?.trim() || '';
   const password = $('#newTeacherPassword')?.value?.trim() || '123456';
   const pkg = $('#newTeacherPackage')?.value || 'all_access';
   const normalized = normalizeEmail(email);
   const msg = $('#addTeacherMsg');
-  if(!name || !normalized){ if(msg) msg.textContent='請填写老師姓名与电郵。'; return; }
-  if(!isValidEmail(normalized)){ if(msg) msg.textContent='請输入有效电郵。'; return; }
-  if(state.users.some(u=>normalizeEmail(u.email || u.username)===normalized)){ if(msg) msg.textContent='此电郵已存在。'; return; }
+  if(!name || !normalized){ if(msg) msg.textContent='請填寫老师姓名與電郵。'; return; }
+  if(!isValidEmail(normalized)){ if(msg) msg.textContent='請輸入有效電郵。'; return; }
+  if(state.users.some(u=>normalizeEmail(u.email || u.username)===normalized)){ if(msg) msg.textContent='此電郵已存在。'; return; }
   state.users.push({
     id:'u_'+Date.now(), email:normalized, username:normalized, password, name,
     role:'user', accountStatus:'approved', disabled:false,
     ownedGames: pkg==='all_access' ? GAME_DATA.map(g=>g.id) : [],
     package:pkg,
     profileCompleted:true,
-    profile:{email:normalized, phone:'', chineseName:name, englishName:'', state:'Johor', orgTypes:['学校老師']}
+    profile:{email:normalized, phone, chineseName:name, englishName:'', state:'Johor', orgTypes:['学校老师']}
   });
   saveState();
   render();
@@ -928,13 +982,13 @@ function toggleTeacherDisabled(userId){
 }
 function deleteTeacherAccount(userId){
   const u = state.users.find(x=>x.id===userId); if(!u) return;
-  if(!confirm(`确定刪除老師账号：${u.name || u.email}？`)) return;
+  if(!confirm(`確定刪除老師帳號：${u.name || u.email}？`)) return;
   state.users = state.users.filter(x=>x.id!==userId);
   saveState(); render();
 }
 function resetTeacherPassword(userId){
   const u = state.users.find(x=>x.id===userId); if(!u) return;
-  const p = prompt(`請输入 ${u.name || u.email} 的新密码：`, '123456');
+  const p = prompt(`請輸入 ${u.name || u.email} 的新密碼：`, '123456');
   if(!p) return;
   u.password = p;
   saveState(); render();
@@ -957,7 +1011,7 @@ function bindDashboard(){
   const submitFeedbackBtn = $('#submitFeedbackBtn');
   if(submitFeedbackBtn) submitFeedbackBtn.onclick = () => {
     const ok = submitFeedback($('#feedbackGameCode')?.value || '', $('#feedbackMessage')?.value || '');
-    if(!ok) alert('請先输入回饋内容。');
+    if(!ok) alert('請先輸入回饋內容。');
   };
   $$('.open-game-btn').forEach(btn => btn.onclick = () => openGame(btn.dataset.game));
   $$('.make-game-btn').forEach(btn => btn.onclick = () => openMaker(btn.dataset.game));
@@ -1011,14 +1065,14 @@ function openMaker(gameId){
   if(sel && makerSelectedGameId) sel.value = makerSelectedGameId;
   const title = $('#makerTitleInput');
   if(makerSelectedGameId && title){
-    title.value = `${gameCode(makerSelectedGameId)}｜${gameName(makerSelectedGameId)}｜课堂题库`;
+    title.value = `${gameCode(makerSelectedGameId)}｜${gameName(makerSelectedGameId)}｜課堂題庫`;
   }
 }
 
 function generateGamePackage(gameId){
   const id = gameId || $('#makerGameSelect')?.value || makerSelectedGameId;
   if(!id){
-    alert('請先选择一个游戏版型。');
+    alert('請先選擇一個遊戲版型。');
     openMaker();
     return;
   }
@@ -1028,16 +1082,16 @@ function generateGamePackage(gameId){
   const subject = $('#makerSubject')?.value?.trim() || '';
   const questions = $('#makerQuestions')?.value?.trim() || '';
   const meta = [
-    `游戏代碼：${gameCode(id)}`,
-    `游戏版型：${gameName(id)}`,
-    `课堂标题：${title}`,
+    `遊戲代碼：${gameCode(id)}`,
+    `遊戲版型：${gameName(id)}`,
+    `課堂標題：${title}`,
     `科目 / 年級：${subject}`,
     '',
-    '题库 / 素材說明：',
-    questions || '尚未填入题库。'
+    '題庫 / 素材說明：',
+    questions || '尚未填入題庫。'
   ].join('\\n');
 
-  downloadTextFile(`${gameCode(id)}_${title.replace(/[\\/:*?"<>|]/g,'_')}_设置资料.txt`, meta);
+  downloadTextFile(`${gameCode(id)}_${title.replace(/[\\/:*?"<>|]/g,'_')}_設定資料.txt`, meta);
 
   // Static demo limitation:
   // The template ZIP is already prepared in downloads/. In the production version,
@@ -1288,15 +1342,15 @@ document.addEventListener('fullscreenchange', () => {
   if(!$('#playerOverlay').classList.contains('hidden')) stabilizeFrameFit();
 });
 
-I18N.zh.gameNames.picture_word_guess='看图猜生字';
-I18N.zh.gameDesc.picture_word_guess='老師上传图片与答案。图片切成 5×5，每 3 秒自動揭开一片，由 2–4 组学生抢答，老師判斷正确后加分。';
+I18N.zh.gameNames.picture_word_guess='看圖猜生字';
+I18N.zh.gameDesc.picture_word_guess='老師上傳圖片與答案。圖片切成 5×5，每 3 秒自動揭開一片，由 2–4 組學生搶答，老師判斷正確後加分。';
 I18N.en.gameNames.picture_word_guess='Picture Word Guess';
 I18N.en.gameDesc.picture_word_guess='Teachers upload an image and answer. The image is split into 5×5 tiles, reveals one tile every 3 seconds, and 2–4 teams buzz in to guess.';
 I18N.ms.gameNames.picture_word_guess='Teka Perkataan Melalui Gambar';
 I18N.ms.gameDesc.picture_word_guess='Guru memuat naik gambar dan jawapan. Gambar dipotong 5×5, satu bahagian dibuka setiap 3 saat, dan 2–4 kumpulan menekan buzzer untuk meneka.';
 
 
-I18N.zh.gameNames.spot_diff_v2='大家来找碴(自带后台)';
+I18N.zh.gameNames.spot_diff_v2='大家来找碴(自帶后台)';
 I18N.zh.gameDesc.spot_diff_v2='高阶找不同游戏。支持左图、右图与红色答案图，后台可新增 / 编辑 / 删除关卡，适合制作多关卡观察力挑战。';
 I18N.en.gameNames.spot_diff_v2='Spot the Difference (Built-in Admin)';
 I18N.en.gameDesc.spot_diff_v2='Advanced spot-the-difference game with left/right images, red answer mask, rankings, hints, and an admin level editor.';
