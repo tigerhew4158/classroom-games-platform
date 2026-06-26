@@ -119,19 +119,29 @@ const TEMPLATE_COPY = {
     "plansTitle": "登录 / 购买入口",
     "plans": [
       [
-        "单款模板",
+        "初阶单一模板",
         "RM20 / 款",
-        "适合先测试一款游戏。"
+        "适合先测试基础互动游戏。"
       ],
       [
-        "五款组合",
-        "RM50",
-        "适合一个单元或一个月课堂活动。"
+        "进阶单一模板",
+        "RM30 / 款",
+        "适合需要图片、排序、配对或小组竞赛的课堂。"
+      ],
+      [
+        "高阶单一模板",
+        "RM50 / 款",
+        "适合地图闯关、策略对抗与自带后台的高互动游戏。"
+      ],
+      [
+        "任选五款模板",
+        "RM100",
+        "可从初阶、进阶、高阶任意选择 5 个模板。"
       ],
       [
         "全部模板",
-        "RM100",
-        "适合学校、培训班或长期使用。"
+        "原价 RM790｜特惠 RM300",
+        "一次取得全部模板，并包括未来新开发的新游戏。"
       ]
     ],
     "loginTitle": "老师 / 管理员登录",
@@ -192,19 +202,29 @@ const TEMPLATE_COPY = {
     "plansTitle": "Login / Purchase Area",
     "plans": [
       [
-        "Single template",
+        "Beginner single template",
         "RM20 / template",
-        "Good for testing one game first."
+        "Good for testing a basic classroom game first."
       ],
       [
-        "Five-template pack",
-        "RM50",
-        "Good for a unit or monthly activities."
+        "Intermediate single template",
+        "RM30 / template",
+        "Good for image, sorting, matching or team-competition lessons."
+      ],
+      [
+        "Advanced single template",
+        "RM50 / template",
+        "Good for map stages, strategy battles and high-interaction templates with built-in settings."
+      ],
+      [
+        "Any 5 templates",
+        "RM100",
+        "Choose any 5 templates from Beginner, Intermediate or Advanced."
       ],
       [
         "All templates",
-        "RM100",
-        "Good for schools, centres or long-term use."
+        "Total RM790｜Promo RM300",
+        "Includes all current templates and future newly developed games."
       ]
     ],
     "loginTitle": "Teacher / Admin Login",
@@ -265,19 +285,29 @@ const TEMPLATE_COPY = {
     "plansTitle": "Log Masuk / Pembelian",
     "plans": [
       [
-        "Satu templat",
+        "Satu templat asas",
         "RM20 / templat",
-        "Sesuai untuk mencuba satu permainan dahulu."
+        "Sesuai untuk mencuba permainan interaktif asas dahulu."
       ],
       [
-        "Pakej lima templat",
-        "RM50",
-        "Sesuai untuk satu unit atau aktiviti bulanan."
+        "Satu templat pertengahan",
+        "RM30 / templat",
+        "Sesuai untuk aktiviti bergambar, susunan, padanan atau pertandingan kumpulan."
+      ],
+      [
+        "Satu templat lanjutan",
+        "RM50 / templat",
+        "Sesuai untuk peta misi, strategi kumpulan dan templat interaktif dengan tetapan terbina."
+      ],
+      [
+        "Pilih mana-mana 5 templat",
+        "RM100",
+        "Boleh pilih mana-mana 5 templat daripada Asas, Pertengahan atau Lanjutan."
       ],
       [
         "Semua templat",
-        "RM100",
-        "Sesuai untuk sekolah, pusat tuisyen atau penggunaan jangka panjang."
+        "Jumlah RM790｜Promosi RM300",
+        "Termasuk semua templat semasa dan permainan baharu yang dibangunkan pada masa depan."
       ]
     ],
     "loginTitle": "Log Masuk Guru / Admin",
@@ -751,7 +781,7 @@ const I18N = {
     currentUser:'目前用户', admin:'管理员', user:'用户', logout:'退出',
     accountInfo:'账号资讯', role:'角色', package:'配套', normalUser:'一般用户',
     planInfo:'方案说明', single:'配套 1', pick5:'配套 2', all_access:'配套 3',
-    singleDesc:'單個購買，每個 RM20', pick5Desc:'RM50 任選五個', allAccessDesc:'RM100 任意使用全部遊戲，包括之後開發的',
+    singleDesc:'初阶 RM20 / 款；进阶 RM30 / 款；高阶 RM50 / 款', pick5Desc:'RM100 任选五个模板', allAccessDesc:'原价 RM790，特惠 RM300，包含未来新开发游戏',
     demoBuy:'Demo 購買', chooseSingle:'請在遊戲卡片上選擇要單獨購買的遊戲。',
     openAdmin:'打開老師後台', adminPanel:'老師後台', collapse:'收起',
     adminHelp:'此版本不需要登入；老師可直接設定題庫、素材與遊戲包。',
@@ -768,7 +798,7 @@ const I18N = {
     downloadQuestionTxt:'下載題庫 TXT', availableGames:'可用游戏', lockedGames:'尚未授权',
     freeGamesNote:'註冊送 2 個遊戲，完善資料再送 1 個，其餘可單購或升級配套', lockedNote:'管理員可授權，或使用 Demo 購買',
     free:'免費', paid:'付費', available:'已可使用', locked:'未授权', whiteboardClass:'白板上课', downloadZip:'下载ZIP', make:'制作',
-    singleBuy:'單個 RM20', addPick5:'加入五選配套', playing:'正在播放', playerSubtitle:'白板專用｜中央安全區｜無上下軸｜三語切換',
+    singleBuy:'单款购买', addPick5:'加入五選配套', playing:'正在播放', playerSubtitle:'白板專用｜中央安全區｜無上下軸｜三語切換',
     safe169:'16:9 安全區', safe43:'4:3 安全區', auto:'自動', browserFullscreen:'瀏覽器全屏', close:'關閉',
     announcements1:'免費註冊可先使用 3 個基礎遊戲。', announcements2:'平台已加入三語切換、白板安全顯示、圖片拼圖與孤島搶奪賽。',
     language:'语言',
@@ -809,7 +839,7 @@ const I18N = {
     currentUser:'Current user', admin:'Admin', user:'User', logout:'Logout',
     accountInfo:'Account info', role:'Role', package:'Package', normalUser:'Standard user',
     planInfo:'Package plans', single:'Plan 1', pick5:'Plan 2', all_access:'Plan 3',
-    singleDesc:'Buy individually, RM20 per game', pick5Desc:'RM50 for any 5 games', allAccessDesc:'RM100 for all games, including future games',
+    singleDesc:'Beginner RM20, Intermediate RM30, Advanced RM50 per template', pick5Desc:'RM100 for any 5 templates', allAccessDesc:'Total RM790, promo RM300, including future new games',
     demoBuy:'Demo purchase', chooseSingle:'Please choose an individual game from the game card.',
     openAdmin:'Open admin panel', adminPanel:'Admin panel', collapse:'Collapse',
     adminHelp:'Admins can set which games each user may use. Free games do not require extra authorization.',
@@ -826,7 +856,7 @@ const I18N = {
     downloadQuestionTxt:'Download question TXT', availableGames:'Available games', lockedGames:'Not authorized',
     freeGamesNote:'2 games after registration, 1 more after completing profile. Other games can be bought or unlocked with a package.', lockedNote:'Admin may authorize it, or use demo purchase.',
     free:'Free', paid:'Paid', available:'Available', locked:'Locked', whiteboardClass:'Whiteboard class', downloadZip:'Download ZIP', make:'Make',
-    singleBuy:'Single RM20', addPick5:'Add to pick-5 plan', playing:'Now playing', playerSubtitle:'Whiteboard mode | Central safe area | No scrollbars | Trilingual',
+    singleBuy:'Buy single', addPick5:'Add to pick-5 plan', playing:'Now playing', playerSubtitle:'Whiteboard mode | Central safe area | No scrollbars | Trilingual',
     safe169:'16:9 Safe', safe43:'4:3 Safe', auto:'Auto', browserFullscreen:'Browser fullscreen', close:'Close',
     announcements1:'Free registration includes 3 basic games.', announcements2:'Chinese, English and Malay language switching has been added, while keeping whiteboard-safe display.',
     language:'Language',
@@ -870,7 +900,7 @@ const I18N = {
     currentUser:'Pengguna semasa', admin:'Admin', user:'Pengguna', logout:'Log keluar',
     accountInfo:'Maklumat akaun', role:'Peranan', package:'Pakej', normalUser:'Pengguna biasa',
     planInfo:'Pakej', single:'Pakej 1', pick5:'Pakej 2', all_access:'Pakej 3',
-    singleDesc:'Beli satu-satu, RM20 setiap permainan', pick5Desc:'RM50 pilih mana-mana 5 permainan', allAccessDesc:'RM100 untuk semua permainan, termasuk permainan akan datang',
+    singleDesc:'Asas RM20, Pertengahan RM30, Lanjutan RM50 setiap templat', pick5Desc:'RM100 pilih mana-mana 5 templat', allAccessDesc:'Jumlah RM790, promosi RM300, termasuk permainan baharu akan datang',
     demoBuy:'Beli demo', chooseSingle:'Sila pilih permainan individu daripada kad permainan.',
     openAdmin:'Buka panel admin', adminPanel:'Panel admin', collapse:'Tutup',
     adminHelp:'Admin boleh menetapkan permainan yang boleh digunakan oleh setiap pengguna. Permainan percuma tidak memerlukan kebenaran tambahan.',
@@ -887,7 +917,7 @@ const I18N = {
     downloadQuestionTxt:'Muat turun TXT soalan', availableGames:'Permainan tersedia', lockedGames:'Belum dibenarkan',
     freeGamesNote:'2 permainan selepas daftar, 1 lagi selepas lengkap profil. Permainan lain boleh dibeli atau dibuka melalui pakej.', lockedNote:'Admin boleh memberi kebenaran, atau gunakan pembelian demo.',
     free:'Percuma', paid:'Berbayar', available:'Boleh digunakan', locked:'Dikunci', whiteboardClass:'Kelas papan putih', downloadZip:'Muat turun ZIP', make:'Bina',
-    singleBuy:'Satu RM20', addPick5:'Tambah ke pakej pilih-5', playing:'Sedang dimainkan', playerSubtitle:'Mod papan putih | Kawasan selamat tengah | Tiada skrol | Tiga bahasa',
+    singleBuy:'Beli satu', addPick5:'Tambah ke pakej pilih-5', playing:'Sedang dimainkan', playerSubtitle:'Mod papan putih | Kawasan selamat tengah | Tiada skrol | Tiga bahasa',
     safe169:'Selamat 16:9', safe43:'Selamat 4:3', auto:'Auto', browserFullscreen:'Skrin penuh', close:'Tutup',
     announcements1:'Pendaftaran percuma menyediakan 3 permainan asas.', announcements2:'Pertukaran bahasa Cina, Inggeris dan Melayu telah ditambah, dengan paparan selamat papan putih.',
     language:'Bahasa',
