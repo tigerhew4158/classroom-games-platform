@@ -784,14 +784,14 @@ const I18N = {
     demoAccounts:'測試帳號：admin / admin123 ｜ 一般用戶：teacher / 123456',
     dashboardSub:'免登入版本，老師可直接進入後台設定題庫與遊戲包',
     currentUser:'目前用户', admin:'管理员', user:'用户', logout:'退出',
-    accountInfo:'账号资讯', role:'角色', package:'配套', normalUser:'一般用户',
+    accountInfo:'账号资讯', role:'角色', package:'用户分类', normalUser:'一般用户',
     planInfo:'方案说明', single:'配套 1', pick5:'配套 2', all_access:'配套 3',
     singleDesc:'初阶 RM20 / 款；进阶 RM30 / 款；高阶 RM50 / 款', pick5Desc:'特惠 RM100：初阶或进阶任选 4 个，再加 1 个高阶模板', allAccessDesc:'原价 RM790，特惠 RM300，包含未来新开发游戏',
     demoBuy:'Demo 購買', chooseSingle:'請在遊戲卡片上選擇要單獨購買的遊戲。',
     openAdmin:'打開老師後台', adminPanel:'老師後台', collapse:'收起',
     adminHelp:'此版本不需要登入；老師可直接設定題庫、素材與遊戲包。',
     authorizedGames:'已授权游戏', operation:'操作', save:'保存设置', selectAll:'全选', clear:'清除',
-    freeUser:'免费用户', pack2:'配套 2（4+1组合）', pack3:'配套 3（全授權）',
+    freeUser:'免费用户', freePendingUser:'免费用户｜新注册未批准', trialUser:'体验用户｜已批准＋2 个免费模板', singleAuthUser:'单一授权用户', multiAuthUser:'多授权用户', bundleAuthUser:'4+1 授权用户', allAuthUser:'全部授权用户', pack2:'配套 2（4+1组合）', pack3:'配套 3（全授權）',
     playerFeatures:'播放器特色', featureLines:'• 全屏時保持中央安全區<br>• 自動等比放大<br>• 不出現上下軸<br>• 適合互動白板',
     whiteboardMode:'白板專用模式', whiteboardDesc:'打開遊戲後會自動進入中央安全區，按鈕放大，適合互動白板上課。',
     enabled:'預設已開啟', offlineZip:'離線 ZIP 下載', offlineDesc:'老師先制作題庫，再套用版型生成完整遊戲壓縮包。',
@@ -842,14 +842,14 @@ const I18N = {
     demoAccounts:'Demo accounts: admin / admin123 | Teacher: teacher / 123456',
     dashboardSub:'After admin authorization, users only see the games they can use',
     currentUser:'Current user', admin:'Admin', user:'User', logout:'Logout',
-    accountInfo:'Account info', role:'Role', package:'Package', normalUser:'Standard user',
+    accountInfo:'Account info', role:'Role', package:'User Category', normalUser:'Standard user',
     planInfo:'Package plans', single:'Plan 1', pick5:'Plan 2', all_access:'Plan 3',
     singleDesc:'Beginner RM20, Intermediate RM30, Advanced RM50 per template', pick5Desc:'Promo RM100: 4 Beginner/Intermediate templates + 1 Advanced template', allAccessDesc:'Total RM790, promo RM300, including future new games',
     demoBuy:'Demo purchase', chooseSingle:'Please choose an individual game from the game card.',
     openAdmin:'Open admin panel', adminPanel:'Admin panel', collapse:'Collapse',
     adminHelp:'Admins can set which games each user may use. Free games do not require extra authorization.',
     authorizedGames:'Authorized games', operation:'Actions', save:'Save', selectAll:'Select all', clear:'Clear',
-    freeUser:'Free user', pack2:'Plan 2 (pick 5)', pack3:'Plan 3 (all access)',
+    freeUser:'Free user', freePendingUser:'Free user | Newly registered, not approved', trialUser:'Trial user | Approved + 2 free templates', singleAuthUser:'Single-template user', multiAuthUser:'Multi-template user', bundleAuthUser:'4+1 authorized user', allAuthUser:'All-access user', pack2:'Plan 2 (pick 5)', pack3:'Plan 3 (all access)',
     playerFeatures:'Player features', featureLines:'• Keeps content in the central safe area<br>• Auto proportional scaling<br>• No vertical scrollbars<br>• Suitable for interactive whiteboards',
     whiteboardMode:'Whiteboard mode', whiteboardDesc:'Games open in a central safe area with larger controls for whiteboard teaching.',
     enabled:'Enabled by default', offlineZip:'Offline ZIP download', offlineDesc:'Teachers create content first, then apply a template to generate a complete game ZIP.',
@@ -903,14 +903,14 @@ const I18N = {
     demoAccounts:'Akaun demo: admin / admin123 | Guru: teacher / 123456',
     dashboardSub:'Selepas kebenaran admin, pengguna hanya melihat permainan yang dibenarkan',
     currentUser:'Pengguna semasa', admin:'Admin', user:'Pengguna', logout:'Log keluar',
-    accountInfo:'Maklumat akaun', role:'Peranan', package:'Pakej', normalUser:'Pengguna biasa',
+    accountInfo:'Maklumat akaun', role:'Peranan', package:'Kategori Pengguna', normalUser:'Pengguna biasa',
     planInfo:'Pakej', single:'Pakej 1', pick5:'Pakej 2', all_access:'Pakej 3',
     singleDesc:'Asas RM20, Pertengahan RM30, Lanjutan RM50 setiap templat', pick5Desc:'Promosi RM100: 4 templat Asas/Pertengahan + 1 templat Lanjutan', allAccessDesc:'Jumlah RM790, promosi RM300, termasuk permainan baharu akan datang',
     demoBuy:'Beli demo', chooseSingle:'Sila pilih permainan individu daripada kad permainan.',
     openAdmin:'Buka panel admin', adminPanel:'Panel admin', collapse:'Tutup',
     adminHelp:'Admin boleh menetapkan permainan yang boleh digunakan oleh setiap pengguna. Permainan percuma tidak memerlukan kebenaran tambahan.',
     authorizedGames:'Permainan dibenarkan', operation:'Tindakan', save:'Simpan', selectAll:'Pilih semua', clear:'Kosongkan',
-    freeUser:'Pengguna percuma', pack2:'Pakej 2 (kombo 4+1)', pack3:'Pakej 3 (akses penuh)',
+    freeUser:'Pengguna percuma', freePendingUser:'Pengguna percuma | Baru daftar, belum diluluskan', trialUser:'Pengguna percubaan | Diluluskan + 2 templat percuma', singleAuthUser:'Pengguna satu templat', multiAuthUser:'Pengguna pelbagai templat', bundleAuthUser:'Pengguna akses 4+1', allAuthUser:'Pengguna akses semua', pack2:'Pakej 2 (kombo 4+1)', pack3:'Pakej 3 (akses penuh)',
     playerFeatures:'Ciri pemain', featureLines:'• Kekalkan kandungan di kawasan selamat tengah<br>• Skala automatik berkadar<br>• Tiada bar skrol menegak<br>• Sesuai untuk papan putih interaktif',
     whiteboardMode:'Mod papan putih', whiteboardDesc:'Permainan dibuka dalam kawasan selamat tengah dengan butang yang lebih besar untuk pengajaran.',
     enabled:'Diaktifkan secara lalai', offlineZip:'Muat turun ZIP luar talian', offlineDesc:'Guru menyediakan kandungan dahulu, kemudian menggunakan templat untuk menjana ZIP permainan lengkap.',
@@ -967,7 +967,7 @@ const UI_OVERRIDE = {
     downloadQuestionTxt:'下载题库 TXT', generateDownloadPack:'生成 / 下载游戏包', downloadAll:'下载全部离线包', whiteboardClass:'白板上课', applyTemplate:'套用模板', generateGamePack:'生成游戏包', available:'已可使用', locked:'未授权', freeExperienceTemplate:'体验模板｜无需购买', authorizedOnlyHint:'这里只显示你已授权可使用的游戏模板。', notAuthorizedTemplate:'你尚未授权使用这个游戏模板。', noAuthorizedGamesForBackend:'目前还没有可使用的游戏模板。', singleBuy:'单款购买', addPick5:'加入 4+1 组合',
     feedbackTitle:'反馈 / 询问', feedbackHint:'若有针对某个游戏，请写明游戏代号，例如 S001、P001、H007。', feedbackGameCodePlaceholder:'游戏代号，可留空，例如 H007', feedbackMessagePlaceholder:'请输入反馈、问题、建议或希望新增的功能', submitFeedback:'送出反馈', feedbackRequired:'请先输入反馈内容。',
     adminAccountPanelTitle:'管理员后台｜老师账号管理', adminAccountStats:'待批准：{pending} 位｜老师总数：{total} 位', adminAccountNotice:'管理员可新增老师账号、批准老师申请、停用 / 启用账号、重设密码，也可设置老师可使用的游戏。推广期间，新老师批准后可免费体验 S001 与 S002 两个初阶模板，无需购买。',
-    addTeacherAccount:'新增老师账号', teacherNamePlaceholder:'老师姓名', teacherEmailPlaceholder:'老师电子邮件', phonePlaceholder:'电话', initialPasswordPlaceholder:'初始密码', allGamesAccess:'全部游戏授权', freeBasicAccess:'免费 / 基础授权', pick5Access:'4+1 组合授权', addTeacher:'新增老师', teacherAccount:'老师账号', status:'状态', package:'配套', authorizedGames:'已授权游戏', operation:'操作', save:'保存设置', selectAll:'全选', clear:'清除', freeUser:'免费用户', pack2:'4+1 组合授权', pack3:'全部游戏授权', phoneLabel:'电话：', phoneNotProvided:'电话未填', promoGiftLabel:'体验模板：', approve:'批准', resetPassword:'重设密码', enableAccount:'启用', disableAccount:'停用', deleteAccount:'删除', teacherFeedbackTitle:'老师反馈 / 询问', noGameSpecified:'未指定游戏', noFeedback:'目前没有反馈。', disabledStatus:'已停用', pendingStatus:'待批准', approvedStatus:'已批准',
+    addTeacherAccount:'新增老师账号', teacherNamePlaceholder:'老师姓名', teacherEmailPlaceholder:'老师电子邮件', phonePlaceholder:'电话', initialPasswordPlaceholder:'初始密码', allGamesAccess:'全部授权用户', freeBasicAccess:'体验用户', pick5Access:'4+1 授权用户', addTeacher:'新增老师', teacherAccount:'老师账号', status:'状态', package:'用户分类', authorizedGames:'已授权游戏', operation:'操作', save:'保存设置', selectAll:'全选', clear:'清除', freeUser:'免费用户', freePendingUser:'免费用户｜新注册未批准', trialUser:'体验用户｜已批准＋2 个免费模板', singleAuthUser:'单一授权用户', multiAuthUser:'多授权用户', bundleAuthUser:'4+1 授权用户', allAuthUser:'全部授权用户', pack2:'4+1 授权用户', pack3:'全部授权用户', phoneLabel:'电话：', phoneNotProvided:'电话未填', promoGiftLabel:'体验模板：', approve:'批准', resetPassword:'重设密码', enableAccount:'启用', disableAccount:'停用', deleteAccount:'删除', teacherFeedbackTitle:'老师反馈 / 询问', noGameSpecified:'未指定游戏', noFeedback:'目前没有反馈。', disabledStatus:'已停用', pendingStatus:'待批准', approvedStatus:'已批准',
     teacherNameEmailRequired:'请填写老师姓名与电子邮件。', validEmailRequired:'请输入有效电子邮件。', emailExists:'此电子邮件已存在。', schoolTeacherOrg:'学校老师', confirmDeleteTeacher:'确定删除老师账号：{name}？', promptNewPassword:'请输入 {name} 的新密码：', classQuestionBankSuffix:'课堂题库', selectTemplateFirst:'请先选择一个游戏模板。', gameCodeLabel:'游戏代码', gameTemplateLabel:'游戏模板', classTitleLabel:'课堂标题', noQuestionBankYet:'尚未填入题库。', settingsFileSuffix:'设定资料',
     profileCompletedTitle:'老师资料已完成', profileIncompleteTitle:'完善老师资料，再送 1 个游戏', profileCompletedDesc:'已解锁资料完善奖励游戏。', profileIncompleteDesc:'请填写电话、姓名、州属与服务类型。完成后会自动解锁 S003 句子排序挑战。', completed:'已完成', incomplete:'未完成', namePlaceholder:'姓名', englishNamePlaceholder:'英文姓名', saveTeacherProfile:'保存老师资料', authorizedSummaryTitle:'目前授权可使用：{n} 款', authorizedSummaryDesc:'已授权游戏会出现在下方「可使用游戏」区；未授权游戏会集中在「未授权游戏」区。',
     make:'制作', playerSubtitle:'白板专用｜中央安全区｜无上下轴｜三语切换', safe169:'16:9 安全区', safe43:'4:3 安全区', auto:'自动', browserFullscreen:'浏览器全屏', close:'关闭'
@@ -982,7 +982,7 @@ const UI_OVERRIDE = {
     downloadQuestionTxt:'Download Question TXT', generateDownloadPack:'Generate / Download Game Pack', downloadAll:'Download all offline packs', whiteboardClass:'Whiteboard Class', applyTemplate:'Apply Template', generateGamePack:'Generate Game Pack', available:'Available', locked:'Locked', freeExperienceTemplate:'Trial template | No purchase needed', authorizedOnlyHint:'Only templates authorized for your account are shown here.', notAuthorizedTemplate:'This template is not authorized for your account yet.', noAuthorizedGamesForBackend:'No authorized templates available yet.', singleBuy:'Buy single template', addPick5:'Add to 4+1 combo',
     feedbackTitle:'Feedback / Inquiry', feedbackHint:'If the feedback is about a specific game, include the game code, such as S001, P001 or H007.', feedbackGameCodePlaceholder:'Game code, optional, e.g. H007', feedbackMessagePlaceholder:'Enter feedback, questions, suggestions or requested new features', submitFeedback:'Submit Feedback', feedbackRequired:'Please enter feedback first.',
     adminAccountPanelTitle:'Admin Console | Teacher Account Management', adminAccountStats:'Pending: {pending} | Total teachers: {total}', adminAccountNotice:'Admins can add teacher accounts, approve applications, enable / disable accounts, reset passwords and assign game access. During the promotion period, approved teacher accounts receive 2 free Beginner trial templates. These samples do not need to be purchased.',
-    addTeacherAccount:'Add Teacher Account', teacherNamePlaceholder:'Teacher name', teacherEmailPlaceholder:'Teacher email', phonePlaceholder:'Phone', initialPasswordPlaceholder:'Initial password', allGamesAccess:'All games access', freeBasicAccess:'Free / basic access', pick5Access:'4+1 combo access', addTeacher:'Add Teacher', teacherAccount:'Teacher Account', status:'Status', package:'Package', authorizedGames:'Authorized Games', operation:'Action', save:'Save', selectAll:'Select all', clear:'Clear', freeUser:'Free user', pack2:'4+1 Combo', pack3:'All Games Access', phoneLabel:'Phone: ', phoneNotProvided:'Phone not provided', promoGiftLabel:'Trial templates: ', approve:'Approve', resetPassword:'Reset Password', enableAccount:'Enable', disableAccount:'Disable', deleteAccount:'Delete', teacherFeedbackTitle:'Teacher Feedback / Inquiry', noGameSpecified:'No game specified', noFeedback:'No feedback yet.', disabledStatus:'Disabled', pendingStatus:'Pending', approvedStatus:'Approved',
+    addTeacherAccount:'Add Teacher Account', teacherNamePlaceholder:'Teacher name', teacherEmailPlaceholder:'Teacher email', phonePlaceholder:'Phone', initialPasswordPlaceholder:'Initial password', allGamesAccess:'All-access user', freeBasicAccess:'Trial user', pick5Access:'4+1 authorized user', addTeacher:'Add Teacher', teacherAccount:'Teacher Account', status:'Status', package:'User Category', authorizedGames:'Authorized Games', operation:'Action', save:'Save', selectAll:'Select all', clear:'Clear', freeUser:'Free user', freePendingUser:'Free user | Newly registered, not approved', trialUser:'Trial user | Approved + 2 free templates', singleAuthUser:'Single-template user', multiAuthUser:'Multi-template user', bundleAuthUser:'4+1 authorized user', allAuthUser:'All-access user', pack2:'4+1 authorized user', pack3:'All-access user', phoneLabel:'Phone: ', phoneNotProvided:'Phone not provided', promoGiftLabel:'Trial templates: ', approve:'Approve', resetPassword:'Reset Password', enableAccount:'Enable', disableAccount:'Disable', deleteAccount:'Delete', teacherFeedbackTitle:'Teacher Feedback / Inquiry', noGameSpecified:'No game specified', noFeedback:'No feedback yet.', disabledStatus:'Disabled', pendingStatus:'Pending', approvedStatus:'Approved',
     teacherNameEmailRequired:'Please enter teacher name and email.', validEmailRequired:'Please enter a valid email.', emailExists:'This email already exists.', schoolTeacherOrg:'School teacher', confirmDeleteTeacher:'Delete teacher account: {name}?', promptNewPassword:'Enter a new password for {name}:', classQuestionBankSuffix:'Class Question Bank', selectTemplateFirst:'Please select a game template first.', gameCodeLabel:'Game code', gameTemplateLabel:'Game template', classTitleLabel:'Class title', noQuestionBankYet:'No question bank entered yet.', settingsFileSuffix:'settings',
     profileCompletedTitle:'Teacher profile completed', profileIncompleteTitle:'Complete profile to unlock 1 more game', profileCompletedDesc:'Profile completion reward has been unlocked.', profileIncompleteDesc:'Fill in phone, name, state and organization type to unlock S003 Sentence Order Challenge.', completed:'Completed', incomplete:'Incomplete', namePlaceholder:'Name', englishNamePlaceholder:'English name', saveTeacherProfile:'Save Teacher Profile', authorizedSummaryTitle:'Authorized: {n} games', authorizedSummaryDesc:'Authorized games appear in the available games section; unauthorized games are grouped separately.',
     make:'Make', playerSubtitle:'Whiteboard mode | Center safe area | No scroll bars | Three languages', safe169:'16:9 Safe Area', safe43:'4:3 Safe Area', auto:'Auto', browserFullscreen:'Browser Fullscreen', close:'Close'
@@ -997,7 +997,7 @@ const UI_OVERRIDE = {
     downloadQuestionTxt:'Muat turun TXT soalan', generateDownloadPack:'Jana / Muat Turun Pek Permainan', downloadAll:'Muat turun semua pek luar talian', whiteboardClass:'Kelas Papan Putih', applyTemplate:'Guna Templat', generateGamePack:'Jana Pek Permainan', available:'Boleh digunakan', locked:'Dikunci', freeExperienceTemplate:'Templat percubaan | Tidak perlu dibeli', authorizedOnlyHint:'Hanya templat yang dibenarkan untuk akaun anda dipaparkan di sini.', notAuthorizedTemplate:'Templat ini belum dibenarkan untuk akaun anda.', noAuthorizedGamesForBackend:'Belum ada templat yang dibenarkan.', singleBuy:'Beli satu templat', addPick5:'Tambah ke kombo 4+1',
     feedbackTitle:'Maklum Balas / Pertanyaan', feedbackHint:'Jika berkaitan permainan tertentu, masukkan kod permainan seperti S001, P001 atau H007.', feedbackGameCodePlaceholder:'Kod permainan, pilihan, contoh H007', feedbackMessagePlaceholder:'Masukkan maklum balas, soalan, cadangan atau fungsi baharu yang diingini', submitFeedback:'Hantar Maklum Balas', feedbackRequired:'Sila masukkan maklum balas dahulu.',
     adminAccountPanelTitle:'Konsol Admin | Pengurusan Akaun Guru', adminAccountStats:'Menunggu: {pending} | Jumlah guru: {total}', adminAccountNotice:'Admin boleh tambah akaun guru, luluskan permohonan, aktif / nyahaktifkan akaun, tetapkan semula kata laluan dan tetapkan akses permainan. Semasa promosi, akaun guru yang diluluskan menerima 2 templat Asas percubaan percuma. Templat ini tidak perlu dibeli.',
-    addTeacherAccount:'Tambah Akaun Guru', teacherNamePlaceholder:'Nama guru', teacherEmailPlaceholder:'E-mel guru', phonePlaceholder:'Telefon', initialPasswordPlaceholder:'Kata laluan awal', allGamesAccess:'Akses semua permainan', freeBasicAccess:'Akses percuma / asas', pick5Access:'Akses kombo 4+1', addTeacher:'Tambah Guru', teacherAccount:'Akaun Guru', status:'Status', package:'Pakej', authorizedGames:'Permainan Dibenarkan', operation:'Tindakan', save:'Simpan', selectAll:'Pilih semua', clear:'Kosongkan', freeUser:'Pengguna percuma', pack2:'Kombo 4+1', pack3:'Akses Semua Permainan', phoneLabel:'Telefon: ', phoneNotProvided:'Telefon belum diisi', promoGiftLabel:'Templat percubaan: ', approve:'Luluskan', resetPassword:'Tetap Semula Kata Laluan', enableAccount:'Aktifkan', disableAccount:'Nyahaktifkan', deleteAccount:'Padam', teacherFeedbackTitle:'Maklum Balas / Pertanyaan Guru', noGameSpecified:'Tiada permainan dinyatakan', noFeedback:'Belum ada maklum balas.', disabledStatus:'Dinyahaktifkan', pendingStatus:'Menunggu', approvedStatus:'Diluluskan',
+    addTeacherAccount:'Tambah Akaun Guru', teacherNamePlaceholder:'Nama guru', teacherEmailPlaceholder:'E-mel guru', phonePlaceholder:'Telefon', initialPasswordPlaceholder:'Kata laluan awal', allGamesAccess:'Pengguna akses semua', freeBasicAccess:'Pengguna percubaan', pick5Access:'Pengguna akses 4+1', addTeacher:'Tambah Guru', teacherAccount:'Akaun Guru', status:'Status', package:'Kategori Pengguna', authorizedGames:'Permainan Dibenarkan', operation:'Tindakan', save:'Simpan', selectAll:'Pilih semua', clear:'Kosongkan', freeUser:'Pengguna percuma', freePendingUser:'Pengguna percuma | Baru daftar, belum diluluskan', trialUser:'Pengguna percubaan | Diluluskan + 2 templat percuma', singleAuthUser:'Pengguna satu templat', multiAuthUser:'Pengguna pelbagai templat', bundleAuthUser:'Pengguna akses 4+1', allAuthUser:'Pengguna akses semua', pack2:'Pengguna akses 4+1', pack3:'Pengguna akses semua', phoneLabel:'Telefon: ', phoneNotProvided:'Telefon belum diisi', promoGiftLabel:'Templat percubaan: ', approve:'Luluskan', resetPassword:'Tetap Semula Kata Laluan', enableAccount:'Aktifkan', disableAccount:'Nyahaktifkan', deleteAccount:'Padam', teacherFeedbackTitle:'Maklum Balas / Pertanyaan Guru', noGameSpecified:'Tiada permainan dinyatakan', noFeedback:'Belum ada maklum balas.', disabledStatus:'Dinyahaktifkan', pendingStatus:'Menunggu', approvedStatus:'Diluluskan',
     teacherNameEmailRequired:'Sila isi nama dan e-mel guru.', validEmailRequired:'Sila masukkan e-mel yang sah.', emailExists:'E-mel ini sudah wujud.', schoolTeacherOrg:'Guru sekolah', confirmDeleteTeacher:'Padam akaun guru: {name}?', promptNewPassword:'Masukkan kata laluan baharu untuk {name}:', classQuestionBankSuffix:'Bank Soalan Kelas', selectTemplateFirst:'Sila pilih templat permainan dahulu.', gameCodeLabel:'Kod permainan', gameTemplateLabel:'Templat permainan', classTitleLabel:'Tajuk kelas', noQuestionBankYet:'Bank soalan belum dimasukkan.', settingsFileSuffix:'tetapan',
     profileCompletedTitle:'Profil guru lengkap', profileIncompleteTitle:'Lengkapkan profil untuk buka 1 lagi permainan', profileCompletedDesc:'Ganjaran lengkap profil telah dibuka.', profileIncompleteDesc:'Isi telefon, nama, negeri dan jenis organisasi untuk membuka S003 Cabaran Susun Ayat.', completed:'Lengkap', incomplete:'Belum lengkap', namePlaceholder:'Nama', englishNamePlaceholder:'Nama Inggeris', saveTeacherProfile:'Simpan Profil Guru', authorizedSummaryTitle:'Dibenarkan: {n} permainan', authorizedSummaryDesc:'Permainan yang dibenarkan muncul dalam bahagian tersedia; permainan belum dibenarkan dikumpulkan berasingan.',
     make:'Bina', playerSubtitle:'Mod papan putih | Kawasan selamat tengah | Tiada skrol | Tiga bahasa', safe169:'Kawasan Selamat 16:9', safe43:'Kawasan Selamat 4:3', auto:'Auto', browserFullscreen:'Skrin Penuh Pelayar', close:'Tutup'
@@ -1065,6 +1065,32 @@ function gameCode(id){
 function gamePreview(id){
   const game = GAME_DATA.find(g => g.id === id);
   return game?.preview || '';
+}
+
+function paidAuthorizedGameIds(user){
+  return [...new Set((user?.ownedGames || []).filter(id => !BASE_FREE_GAMES.includes(id)))];
+}
+function teacherUserCategoryKey(user){
+  if(!user) return 'freePendingUser';
+  if(user.role === 'admin') return 'admin';
+  if(user.accountStatus === 'pending') return 'freePendingUser';
+  if(user.package === 'all_access') return 'allAuthUser';
+  if(user.package === 'pick5') return 'bundleAuthUser';
+  const paidCount = paidAuthorizedGameIds(user).length;
+  if(user.package === 'multi' || paidCount > 1) return 'multiAuthUser';
+  if(user.package === 'single' || paidCount === 1) return 'singleAuthUser';
+  return 'trialUser';
+}
+function teacherUserCategoryLabel(user){
+  return t(teacherUserCategoryKey(user));
+}
+function updateTeacherPackageByOwnedGames(user){
+  if(!user || user.role === 'admin') return;
+  if(user.package === 'all_access' || user.package === 'pick5') return;
+  const paidCount = paidAuthorizedGameIds(user).length;
+  if(paidCount > 1) user.package = 'multi';
+  else if(paidCount === 1) user.package = 'single';
+  else user.package = 'free';
 }
 function langSelect(id='langSelect'){
   return `<label class="lang-wrap">${t('language')} <select id="${id}" class="select lang-select">${LANGS.map(l=>`<option value="${l.id}" ${state.lang===l.id?'selected':''}>${l.label}</option>`).join('')}</select></label>`;
@@ -1173,6 +1199,7 @@ function loadState(){
         if(u.role !== 'admin' && u.package === 'free' && u.promoGift && !Array.isArray(u.promoGift)){
           u.promoGift = freeTrialTemplates();
         }
+        if(u.role !== 'admin') updateTeacherPackageByOwnedGames(u);
         if(u.role==='admin') u.profileCompleted = true;
         if(typeof u.profileCompleted !== 'boolean') u.profileCompleted = isProfileComplete(u);
       });
@@ -1672,7 +1699,7 @@ function grantOrderAccess(order){
     (order.gameIds || []).forEach(id=>set.add(id));
     user.ownedGames = [...set];
     if(order.packageType === 'combo') user.package='pick5';
-    else if(user.package === 'free') user.package='single';
+    else updateTeacherPackageByOwnedGames(user);
   }
 }
 function approvePurchaseOrder(orderId){
@@ -1843,9 +1870,11 @@ function renderAdminPanel(){
         <input id="newTeacherPhone" class="input" placeholder="${t('phonePlaceholder')}" />
         <input id="newTeacherPassword" class="input" placeholder="${t('initialPasswordPlaceholder')}" />
         <select id="newTeacherPackage" class="select">
-          <option value="all_access">${t('allGamesAccess')}</option>
-          <option value="free">${t('freeBasicAccess')}</option>
-          <option value="pick5">${t('pick5Access')}</option>
+          <option value="free">${t('trialUser')}</option>
+          <option value="single">${t('singleAuthUser')}</option>
+          <option value="multi">${t('multiAuthUser')}</option>
+          <option value="pick5">${t('bundleAuthUser')}</option>
+          <option value="all_access">${t('allAuthUser')}</option>
         </select>
       </div>
       <button id="addTeacherBtn" class="btn maker small">${t('addTeacher')}</button>
@@ -1859,10 +1888,13 @@ function renderAdminPanel(){
         <td><b>${u.name}</b><br><span class="muted">${u.email || u.username}</span><br><span class="muted">${u.profile?.phone ? t('phoneLabel') + u.profile.phone : t('phoneNotProvided')}</span>${u.promoGift ? `<br><span class="muted">${t('promoGiftLabel')}${(Array.isArray(u.promoGift)?u.promoGift:[u.promoGift]).map(id=>`${gameCode(id)}｜${gameName(id)}`).join('，')}</span>` : ''}</td>
         <td>${accountStatusBadge(u)}</td>
         <td>
+          <div class="user-category-current">${teacherUserCategoryLabel(u)}</div>
           <select class="select admin-package-select" data-user="${u.id}">
-            <option value="free" ${u.package==='free'?'selected':''}>${t('freeUser')}</option>
-            <option value="pick5" ${u.package==='pick5'?'selected':''}>${t('pack2')}</option>
-            <option value="all_access" ${u.package==='all_access'?'selected':''}>${t('pack3')}</option>
+            <option value="free" ${u.package==='free'?'selected':''}>${t('trialUser')}</option>
+            <option value="single" ${u.package==='single'?'selected':''}>${t('singleAuthUser')}</option>
+            <option value="multi" ${u.package==='multi'?'selected':''}>${t('multiAuthUser')}</option>
+            <option value="pick5" ${u.package==='pick5'?'selected':''}>${t('bundleAuthUser')}</option>
+            <option value="all_access" ${u.package==='all_access'?'selected':''}>${t('allAuthUser')}</option>
           </select>
         </td>
         <td>${renderGameChecks(u)}</td>
@@ -1900,18 +1932,20 @@ function accountStatusBadge(u){
 function renderGameChecks(user){
   return `<div class="check-grid">${GAME_DATA.filter(g=>!g.free).map(g=>`<label class="check-item"><input type="checkbox" class="admin-game-check" data-user="${user.id}" data-game="${g.id}" ${(user.ownedGames||[]).includes(g.id)?'checked':''}/> <span>${gameName(g.id)}</span></label>`).join('')}</div>`;
 }
-function packageName(pkg){ return t(pkg) || pkg; }
+function packageName(pkg){ return packageLabel(pkg); }
 function packageDesc(pkg){
-  if(pkg==='single') return t('singleDesc');
-  if(pkg==='pick5') return t('pick5Desc');
-  if(pkg==='all_access') return t('allAccessDesc');
-  return '';
+  if(pkg==='single') return t('singleAuthUser');
+  if(pkg==='multi') return t('multiAuthUser');
+  if(pkg==='pick5') return t('bundleAuthUser');
+  if(pkg==='all_access') return t('allAuthUser');
+  return t('trialUser');
 }
 function packageLabel(pkg){
-  if(pkg==='all_access') return `${t('all_access')}｜${t('pack3')}`;
-  if(pkg==='pick5') return `${t('pick5')}｜${t('pack2')}`;
-  if(pkg==='free') return t('freeUser');
-  return t('single');
+  if(pkg==='all_access') return t('allAuthUser');
+  if(pkg==='pick5') return t('bundleAuthUser');
+  if(pkg==='multi') return t('multiAuthUser');
+  if(pkg==='single') return t('singleAuthUser');
+  return t('trialUser');
 }
 
 
@@ -1986,6 +2020,8 @@ function approveTeacher(userId){
   const u = state.users.find(x=>x.id===userId); if(!u) return;
   u.accountStatus='approved'; u.disabled=false;
   if(!u.package) u.package='free';
+  if(!Array.isArray(u.promoGift)) u.promoGift = freeTrialTemplates();
+  updateTeacherPackageByOwnedGames(u);
   saveState(); render();
 }
 function toggleTeacherDisabled(userId){
@@ -2159,6 +2195,7 @@ function saveUserConfig(userId){
   if(!user) return;
   user.package = $(`.admin-package-select[data-user="${userId}"]`).value;
   user.ownedGames = $$(`.admin-game-check[data-user="${userId}"]`).filter(el=>el.checked).map(el=>el.dataset.game);
+  if(user.package === 'free') updateTeacherPackageByOwnedGames(user);
   saveState();
   render();
 }
@@ -2166,7 +2203,7 @@ function buySingle(gameId){
   const user = getUser();
   if(!user || user.role==='admin') return;
   if(!user.ownedGames.includes(gameId)) user.ownedGames.push(gameId);
-  if(user.package==='free') user.package = 'single';
+  updateTeacherPackageByOwnedGames(user);
   saveState(); render();
   setTimeout(()=>openGame(gameId), 100);
 }
@@ -2444,7 +2481,7 @@ Object.assign(I18N.zh, {
   questionFormatNotice:'建议题库格式：题目｜答案｜选项A,选项B,选项C。图片类游戏可在此记录图片名称、答案位置或上传素材说明；正式部署可再接入自动写入 game-config.json。', generateDownloadPack:'生成 / 下载游戏包', applyTemplate:'套用模板', generateGamePack:'生成游戏包',
   feedbackTitle:'反馈 / 询问', feedbackHint:'若有针对某个游戏，请写明游戏代号，例如 S001、P001、H007。', feedbackGameCodePlaceholder:'游戏代号，可留空，例如 H007', feedbackMessagePlaceholder:'请输入反馈、问题、建议或希望新增的功能', submitFeedback:'送出反馈', feedbackRequired:'请先输入反馈内容。',
   adminAccountPanelTitle:'管理员后台｜老师账号管理', adminAccountStats:'待批准：{pending} 位｜老师总数：{total} 位', adminAccountNotice:'管理员可新增老师账号、批准老师申请、停用 / 启用账号、重设密码，也可设置老师可使用的游戏。推广期间，新老师批准后可免费体验 S001 与 S002 两个初阶模板，无需购买。',
-  addTeacherAccount:'新增老师账号', teacherNamePlaceholder:'老师姓名', teacherEmailPlaceholder:'老师电子邮件', phonePlaceholder:'电话', initialPasswordPlaceholder:'初始密码', allGamesAccess:'全部游戏授权', freeBasicAccess:'免费 / 基础授权', pick5Access:'4+1 组合授权', addTeacher:'新增老师', teacherAccount:'老师账号', status:'状态', freeExperienceTemplate:'体验模板｜无需购买', authorizedOnlyHint:'这里只显示你已授权可使用的游戏模板。', notAuthorizedTemplate:'你尚未授权使用这个游戏模板。', noAuthorizedGamesForBackend:'目前还没有可使用的游戏模板。', phoneLabel:'电话：', phoneNotProvided:'电话未填', promoGiftLabel:'体验模板：', approve:'批准', resetPassword:'重设密码', enableAccount:'启用', disableAccount:'停用', deleteAccount:'删除', teacherFeedbackTitle:'老师反馈 / 询问', noGameSpecified:'未指定游戏', noFeedback:'目前没有反馈。', disabledStatus:'已停用', pendingStatus:'待批准', approvedStatus:'已批准',
+  addTeacherAccount:'新增老师账号', teacherNamePlaceholder:'老师姓名', teacherEmailPlaceholder:'老师电子邮件', phonePlaceholder:'电话', initialPasswordPlaceholder:'初始密码', allGamesAccess:'全部授权用户', freeBasicAccess:'体验用户', pick5Access:'4+1 授权用户', addTeacher:'新增老师', teacherAccount:'老师账号', status:'状态', freeExperienceTemplate:'体验模板｜无需购买', authorizedOnlyHint:'这里只显示你已授权可使用的游戏模板。', notAuthorizedTemplate:'你尚未授权使用这个游戏模板。', noAuthorizedGamesForBackend:'目前还没有可使用的游戏模板。', phoneLabel:'电话：', phoneNotProvided:'电话未填', promoGiftLabel:'体验模板：', approve:'批准', resetPassword:'重设密码', enableAccount:'启用', disableAccount:'停用', deleteAccount:'删除', teacherFeedbackTitle:'老师反馈 / 询问', noGameSpecified:'未指定游戏', noFeedback:'目前没有反馈。', disabledStatus:'已停用', pendingStatus:'待批准', approvedStatus:'已批准',
   teacherNameEmailRequired:'请填写老师姓名与电子邮件。', validEmailRequired:'请输入有效电子邮件。', emailExists:'此电子邮件已存在。', schoolTeacherOrg:'学校老师', confirmDeleteTeacher:'确定删除老师账号：{name}？', promptNewPassword:'请输入 {name} 的新密码：', classQuestionBankSuffix:'课堂题库', selectTemplateFirst:'请先选择一个游戏模板。', gameCodeLabel:'游戏代码', gameTemplateLabel:'游戏模板', classTitleLabel:'课堂标题', noQuestionBankYet:'尚未填入题库。', settingsFileSuffix:'设定资料',
   profileCompletedTitle:'老师资料已完成', profileIncompleteTitle:'完善老师资料，再送 1 个游戏', profileCompletedDesc:'已解锁资料完善奖励游戏。', profileIncompleteDesc:'请填写电话、姓名、州属与服务类型。完成后会自动解锁 S003 句子排序挑战。', completed:'已完成', incomplete:'未完成', namePlaceholder:'姓名', englishNamePlaceholder:'英文姓名', saveTeacherProfile:'保存老师资料', authorizedSummaryTitle:'目前授权可使用：{n} 款', authorizedSummaryDesc:'已授权游戏会出现在下方「可使用游戏」区；未授权游戏会集中在「未授权游戏」区。',
   make:'制作', addPick5:'加入 4+1 组合', playerSubtitle:'白板专用｜中央安全区｜无上下轴｜三语切换', safe169:'16:9 安全区', safe43:'4:3 安全区', auto:'自动', browserFullscreen:'浏览器全屏', close:'关闭'
@@ -2457,7 +2494,7 @@ Object.assign(I18N.en, {
   questionFormatNotice:'Suggested format: Question | Answer | Option A, Option B, Option C. For image-based games, record image file names, answer positions or material notes here; production deployment can later write directly to game-config.json.', generateDownloadPack:'Generate / Download Game Pack', applyTemplate:'Apply Template', generateGamePack:'Generate Game Pack',
   feedbackTitle:'Feedback / Inquiry', feedbackHint:'If the feedback is about a specific game, include the game code, such as S001, P001 or H007.', feedbackGameCodePlaceholder:'Game code, optional, e.g. H007', feedbackMessagePlaceholder:'Enter feedback, questions, suggestions or requested new features', submitFeedback:'Submit Feedback', feedbackRequired:'Please enter feedback first.',
   adminAccountPanelTitle:'Admin Console | Teacher Account Management', adminAccountStats:'Pending: {pending} | Total teachers: {total}', adminAccountNotice:'Admins can add teacher accounts, approve applications, enable / disable accounts, reset passwords and assign game access. During the promotion period, approved teacher accounts receive 2 free Beginner trial templates. These samples do not need to be purchased.',
-  addTeacherAccount:'Add Teacher Account', teacherNamePlaceholder:'Teacher name', teacherEmailPlaceholder:'Teacher email', phonePlaceholder:'Phone', initialPasswordPlaceholder:'Initial password', allGamesAccess:'All games access', freeBasicAccess:'Free / basic access', pick5Access:'4+1 combo access', addTeacher:'Add Teacher', teacherAccount:'Teacher Account', status:'Status', freeExperienceTemplate:'Trial template | No purchase needed', authorizedOnlyHint:'Only templates authorized for your account are shown here.', notAuthorizedTemplate:'This template is not authorized for your account yet.', noAuthorizedGamesForBackend:'No authorized templates available yet.', phoneLabel:'Phone: ', phoneNotProvided:'Phone not provided', promoGiftLabel:'Trial templates: ', approve:'Approve', resetPassword:'Reset Password', enableAccount:'Enable', disableAccount:'Disable', deleteAccount:'Delete', teacherFeedbackTitle:'Teacher Feedback / Inquiry', noGameSpecified:'No game specified', noFeedback:'No feedback yet.', disabledStatus:'Disabled', pendingStatus:'Pending', approvedStatus:'Approved',
+  addTeacherAccount:'Add Teacher Account', teacherNamePlaceholder:'Teacher name', teacherEmailPlaceholder:'Teacher email', phonePlaceholder:'Phone', initialPasswordPlaceholder:'Initial password', allGamesAccess:'All-access user', freeBasicAccess:'Trial user', pick5Access:'4+1 authorized user', addTeacher:'Add Teacher', teacherAccount:'Teacher Account', status:'Status', freeExperienceTemplate:'Trial template | No purchase needed', authorizedOnlyHint:'Only templates authorized for your account are shown here.', notAuthorizedTemplate:'This template is not authorized for your account yet.', noAuthorizedGamesForBackend:'No authorized templates available yet.', phoneLabel:'Phone: ', phoneNotProvided:'Phone not provided', promoGiftLabel:'Trial templates: ', approve:'Approve', resetPassword:'Reset Password', enableAccount:'Enable', disableAccount:'Disable', deleteAccount:'Delete', teacherFeedbackTitle:'Teacher Feedback / Inquiry', noGameSpecified:'No game specified', noFeedback:'No feedback yet.', disabledStatus:'Disabled', pendingStatus:'Pending', approvedStatus:'Approved',
   teacherNameEmailRequired:'Please enter teacher name and email.', validEmailRequired:'Please enter a valid email.', emailExists:'This email already exists.', schoolTeacherOrg:'School teacher', confirmDeleteTeacher:'Delete teacher account: {name}?', promptNewPassword:'Enter a new password for {name}:', classQuestionBankSuffix:'Class Question Bank', selectTemplateFirst:'Please select a game template first.', gameCodeLabel:'Game code', gameTemplateLabel:'Game template', classTitleLabel:'Class title', noQuestionBankYet:'No question bank entered yet.', settingsFileSuffix:'settings',
   profileCompletedTitle:'Teacher profile completed', profileIncompleteTitle:'Complete profile to unlock 1 more game', profileCompletedDesc:'Profile completion reward has been unlocked.', profileIncompleteDesc:'Fill in phone, name, state and organization type to unlock S003 Sentence Order Challenge.', completed:'Completed', incomplete:'Incomplete', namePlaceholder:'Name', englishNamePlaceholder:'English name', saveTeacherProfile:'Save Teacher Profile', authorizedSummaryTitle:'Authorized: {n} games', authorizedSummaryDesc:'Authorized games appear in the available games section; unauthorized games are grouped separately.',
   make:'Make', addPick5:'Add to 4+1 combo'
@@ -2470,7 +2507,7 @@ Object.assign(I18N.ms, {
   questionFormatNotice:'Format cadangan: Soalan | Jawapan | Pilihan A, Pilihan B, Pilihan C. Untuk permainan bergambar, catat nama fail imej, kedudukan jawapan atau nota bahan di sini; versi produksi boleh menulis terus ke game-config.json.', generateDownloadPack:'Jana / Muat Turun Pek Permainan', applyTemplate:'Guna Templat', generateGamePack:'Jana Pek Permainan',
   feedbackTitle:'Maklum Balas / Pertanyaan', feedbackHint:'Jika berkaitan permainan tertentu, masukkan kod permainan seperti S001, P001 atau H007.', feedbackGameCodePlaceholder:'Kod permainan, pilihan, contoh H007', feedbackMessagePlaceholder:'Masukkan maklum balas, soalan, cadangan atau fungsi baharu yang diingini', submitFeedback:'Hantar Maklum Balas', feedbackRequired:'Sila masukkan maklum balas dahulu.',
   adminAccountPanelTitle:'Konsol Admin | Pengurusan Akaun Guru', adminAccountStats:'Menunggu: {pending} | Jumlah guru: {total}', adminAccountNotice:'Admin boleh tambah akaun guru, luluskan permohonan, aktif / nyahaktifkan akaun, tetapkan semula kata laluan dan tetapkan akses permainan. Semasa promosi, akaun guru yang diluluskan menerima 2 templat Asas percubaan percuma. Templat ini tidak perlu dibeli.',
-  addTeacherAccount:'Tambah Akaun Guru', teacherNamePlaceholder:'Nama guru', teacherEmailPlaceholder:'E-mel guru', phonePlaceholder:'Telefon', initialPasswordPlaceholder:'Kata laluan awal', allGamesAccess:'Akses semua permainan', freeBasicAccess:'Akses percuma / asas', pick5Access:'Akses kombo 4+1', addTeacher:'Tambah Guru', teacherAccount:'Akaun Guru', status:'Status', freeExperienceTemplate:'Templat percubaan | Tidak perlu dibeli', authorizedOnlyHint:'Hanya templat yang dibenarkan untuk akaun anda dipaparkan di sini.', notAuthorizedTemplate:'Templat ini belum dibenarkan untuk akaun anda.', noAuthorizedGamesForBackend:'Belum ada templat yang dibenarkan.', phoneLabel:'Telefon: ', phoneNotProvided:'Telefon belum diisi', promoGiftLabel:'Templat percubaan: ', approve:'Luluskan', resetPassword:'Tetap Semula Kata Laluan', enableAccount:'Aktifkan', disableAccount:'Nyahaktifkan', deleteAccount:'Padam', teacherFeedbackTitle:'Maklum Balas / Pertanyaan Guru', noGameSpecified:'Tiada permainan dinyatakan', noFeedback:'Belum ada maklum balas.', disabledStatus:'Dinyahaktifkan', pendingStatus:'Menunggu', approvedStatus:'Diluluskan',
+  addTeacherAccount:'Tambah Akaun Guru', teacherNamePlaceholder:'Nama guru', teacherEmailPlaceholder:'E-mel guru', phonePlaceholder:'Telefon', initialPasswordPlaceholder:'Kata laluan awal', allGamesAccess:'Pengguna akses semua', freeBasicAccess:'Pengguna percubaan', pick5Access:'Pengguna akses 4+1', addTeacher:'Tambah Guru', teacherAccount:'Akaun Guru', status:'Status', freeExperienceTemplate:'Templat percubaan | Tidak perlu dibeli', authorizedOnlyHint:'Hanya templat yang dibenarkan untuk akaun anda dipaparkan di sini.', notAuthorizedTemplate:'Templat ini belum dibenarkan untuk akaun anda.', noAuthorizedGamesForBackend:'Belum ada templat yang dibenarkan.', phoneLabel:'Telefon: ', phoneNotProvided:'Telefon belum diisi', promoGiftLabel:'Templat percubaan: ', approve:'Luluskan', resetPassword:'Tetap Semula Kata Laluan', enableAccount:'Aktifkan', disableAccount:'Nyahaktifkan', deleteAccount:'Padam', teacherFeedbackTitle:'Maklum Balas / Pertanyaan Guru', noGameSpecified:'Tiada permainan dinyatakan', noFeedback:'Belum ada maklum balas.', disabledStatus:'Dinyahaktifkan', pendingStatus:'Menunggu', approvedStatus:'Diluluskan',
   teacherNameEmailRequired:'Sila isi nama dan e-mel guru.', validEmailRequired:'Sila masukkan e-mel yang sah.', emailExists:'E-mel ini sudah wujud.', schoolTeacherOrg:'Guru sekolah', confirmDeleteTeacher:'Padam akaun guru: {name}?', promptNewPassword:'Masukkan kata laluan baharu untuk {name}:', classQuestionBankSuffix:'Bank Soalan Kelas', selectTemplateFirst:'Sila pilih templat permainan dahulu.', gameCodeLabel:'Kod permainan', gameTemplateLabel:'Templat permainan', classTitleLabel:'Tajuk kelas', noQuestionBankYet:'Bank soalan belum dimasukkan.', settingsFileSuffix:'tetapan',
   profileCompletedTitle:'Profil guru lengkap', profileIncompleteTitle:'Lengkapkan profil untuk buka 1 lagi permainan', profileCompletedDesc:'Ganjaran lengkap profil telah dibuka.', profileIncompleteDesc:'Isi telefon, nama, negeri dan jenis organisasi untuk membuka S003 Cabaran Susun Ayat.', completed:'Lengkap', incomplete:'Belum lengkap', namePlaceholder:'Nama', englishNamePlaceholder:'Nama Inggeris', saveTeacherProfile:'Simpan Profil Guru', authorizedSummaryTitle:'Dibenarkan: {n} permainan', authorizedSummaryDesc:'Permainan yang dibenarkan muncul dalam bahagian tersedia; permainan belum dibenarkan dikumpulkan berasingan.',
   make:'Bina', addPick5:'Tambah ke kombo 4+1'
