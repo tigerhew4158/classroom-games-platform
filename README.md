@@ -624,3 +624,22 @@ Built-in admin account is protected from old localStorage lockout: admin@lead.ai
 - `downloads/all_classroom_games_offline_pack.zip` 也已包含全部题库范例。
 - 老师在游戏库卡片可点击「题库范例 TXT / Sample TXT / TXT Contoh」下载范例。
 - 老师进入「老师后台｜题库与游戏包设定」时，会自动载入所选模板的范例题库，方便直接修改。
+
+
+## 2026-06-26 修正
+
+- 修正 S001「翻翻乐」游戏内“载入示例”按钮无反应的问题。
+- 按钮现在会直接把内置题库范例写入配对题库栏，并显示载入成功提示。
+- 同步更新单独离线包 `memory_match.zip` 与全部离线包 `all_classroom_games_offline_pack.zip`。
+
+## 2026-06-27｜全模板「载入示例」修正
+
+本版修正所有带有「载入示例 / Load sample / Muat contoh」按钮且含题库输入栏的游戏模板：
+
+- 点击按钮后，会读取该模板内置的 `question-bank-example.txt`。
+- 会自动移除范例文件中的说明注释行，只把可直接使用的题库内容写入题库输入栏。
+- 支持常见题库栏位，例如 `bank`、`questionBank`、`questionText`、`textItems`、`roundTextArea`、`itemText`、`bankInput`、`wordBank`。
+- 对分类输送带会自动切换到文字分类模式，并根据范例题库建立分类。
+- 对文字对应模板会自动套用题库。
+- 图片型模板原本的图片示例逻辑保留，不强行覆盖。
+- 已同步更新各单独离线包与 `all_classroom_games_offline_pack.zip`。
