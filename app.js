@@ -1,4 +1,4 @@
-// TEMPLATE_EXPLAINER_PAGE_20260626_1
+// TEMPLATE_EXPLAINER_PAGE_20260626_2_PROMO_PRICE_REGPASSWORD
 
 const GAME_DATA = [
   {id:'memory_match', code:'S001', preview:'previews/memory_match.svg', icon:'🃏', price:20, free:true, path:'games/memory_match_game/index.html', download:'downloads/memory_match.zip'},
@@ -28,9 +28,11 @@ const GAME_DATA = [
 ];
 
 const PACKAGES = [
-  {id:'single', price:20, type:'single'},
-  {id:'pick5', price:50, type:'pick5'},
-  {id:'all_access', price:100, type:'all'}
+  {id:'single_beginner', price:20, type:'single', level:'beginner'},
+  {id:'single_intermediate', price:30, type:'single', level:'intermediate'},
+  {id:'single_advanced', price:50, type:'single', level:'advanced'},
+  {id:'pick4_plus_advanced1', price:100, type:'combo'},
+  {id:'all_access', price:300, originalPrice:790, type:'all'}
 ];
 
 const GAME_LEVELS = {
@@ -115,7 +117,7 @@ const TEMPLATE_COPY = {
     "setup": "老师准备",
     "best": "适合场景",
     "ctaTitle": "准备开始制作课堂游戏？",
-    "ctaText": "老师登录后可进入模板库与老师后台；管理员可管理老师账号与授权。",
+    "ctaText": "老师登录后可进入模板库与老师后台；管理员可管理老师账号、批准申请、停用账号与设置授权。",
     "plansTitle": "登录 / 购买入口",
     "plans": [
       [
@@ -134,9 +136,9 @@ const TEMPLATE_COPY = {
         "适合地图闯关、策略对抗与自带后台的高互动游戏。"
       ],
       [
-        "任选五款模板",
-        "RM100",
-        "可从初阶、进阶、高阶任意选择 5 个模板。"
+        "组合特惠模板",
+        "特惠 RM100",
+        "初阶 + 进阶任选 4 个模板，再加 1 个高阶模板。"
       ],
       [
         "全部模板",
@@ -149,11 +151,12 @@ const TEMPLATE_COPY = {
     "password": "密码",
     "login": "登录",
     "registerTitle": "老师账号申请",
+    "promoNote": "推广期间：申请账号随机赠送 1 个初阶游戏模板，批准后即可测试。",
     "name": "姓名",
     "phone": "电话",
     "apply": "送出申请",
     "invalidEmail": "请输入有效电子邮件。",
-    "registerSuccess": "申请已送出，请等待管理员批准。"
+    "registerSuccess": "申请已送出，请等待管理员批准。推广期间，系统已随机赠送 1 个初阶游戏模板，批准后即可测试。"
   },
   "en": {
     "kicker": "Classroom Game Template Platform",
@@ -198,7 +201,7 @@ const TEMPLATE_COPY = {
     "setup": "Teacher setup",
     "best": "Best use",
     "ctaTitle": "Ready to create your classroom game?",
-    "ctaText": "Teachers can log in to use templates and backend settings. Admins can manage teacher accounts and authorization.",
+    "ctaText": "Teachers can log in to use templates and backend settings. Admins can manage teacher accounts, approve applications, disable accounts and set template access.",
     "plansTitle": "Login / Purchase Area",
     "plans": [
       [
@@ -217,9 +220,9 @@ const TEMPLATE_COPY = {
         "Good for map stages, strategy battles and high-interaction templates with built-in settings."
       ],
       [
-        "Any 5 templates",
-        "RM100",
-        "Choose any 5 templates from Beginner, Intermediate or Advanced."
+        "Combo promo template pack",
+        "Promo RM100",
+        "Choose 4 templates from Beginner + Intermediate, plus 1 Advanced template."
       ],
       [
         "All templates",
@@ -232,11 +235,12 @@ const TEMPLATE_COPY = {
     "password": "Password",
     "login": "Login",
     "registerTitle": "Teacher Account Request",
+    "promoNote": "Promotion: each account request receives 1 random Beginner template after approval.",
     "name": "Name",
     "phone": "Phone",
     "apply": "Submit Request",
     "invalidEmail": "Please enter a valid email address.",
-    "registerSuccess": "Your request has been submitted. Please wait for admin approval."
+    "registerSuccess": "Your request has been submitted. Please wait for admin approval. During the promotion period, 1 Beginner template has been randomly gifted and can be tested after approval."
   },
   "ms": {
     "kicker": "Platform Templat Permainan Kelas",
@@ -281,7 +285,7 @@ const TEMPLATE_COPY = {
     "setup": "Persediaan guru",
     "best": "Kegunaan sesuai",
     "ctaTitle": "Sedia untuk membina permainan kelas?",
-    "ctaText": "Guru boleh log masuk untuk menggunakan templat dan tetapan backend. Admin boleh mengurus akaun guru dan kebenaran.",
+    "ctaText": "Guru boleh log masuk untuk menggunakan templat dan tetapan backend. Admin boleh mengurus akaun guru, meluluskan permohonan, menyahaktifkan akaun dan menetapkan akses templat.",
     "plansTitle": "Log Masuk / Pembelian",
     "plans": [
       [
@@ -300,9 +304,9 @@ const TEMPLATE_COPY = {
         "Sesuai untuk peta misi, strategi kumpulan dan templat interaktif dengan tetapan terbina."
       ],
       [
-        "Pilih mana-mana 5 templat",
-        "RM100",
-        "Boleh pilih mana-mana 5 templat daripada Asas, Pertengahan atau Lanjutan."
+        "Pakej promosi kombo",
+        "Promosi RM100",
+        "Pilih 4 templat daripada Asas + Pertengahan, dan tambah 1 templat Lanjutan."
       ],
       [
         "Semua templat",
@@ -315,11 +319,12 @@ const TEMPLATE_COPY = {
     "password": "Kata Laluan",
     "login": "Log Masuk",
     "registerTitle": "Permohonan Akaun Guru",
+    "promoNote": "Promosi: setiap permohonan menerima 1 templat Asas secara rawak selepas diluluskan.",
     "name": "Nama",
     "phone": "Telefon",
     "apply": "Hantar Permohonan",
     "invalidEmail": "Sila masukkan alamat emel yang sah.",
-    "registerSuccess": "Permohonan telah dihantar. Sila tunggu kelulusan admin."
+    "registerSuccess": "Permohonan telah dihantar. Sila tunggu kelulusan admin. Semasa tempoh promosi, 1 templat Asas diberikan secara rawak dan boleh diuji selepas diluluskan."
   }
 };
 
@@ -781,12 +786,12 @@ const I18N = {
     currentUser:'目前用户', admin:'管理员', user:'用户', logout:'退出',
     accountInfo:'账号资讯', role:'角色', package:'配套', normalUser:'一般用户',
     planInfo:'方案说明', single:'配套 1', pick5:'配套 2', all_access:'配套 3',
-    singleDesc:'初阶 RM20 / 款；进阶 RM30 / 款；高阶 RM50 / 款', pick5Desc:'RM100 任选五个模板', allAccessDesc:'原价 RM790，特惠 RM300，包含未来新开发游戏',
+    singleDesc:'初阶 RM20 / 款；进阶 RM30 / 款；高阶 RM50 / 款', pick5Desc:'特惠 RM100：初阶 + 进阶任选 4 个，再加 1 个高阶模板', allAccessDesc:'原价 RM790，特惠 RM300，包含未来新开发游戏',
     demoBuy:'Demo 購買', chooseSingle:'請在遊戲卡片上選擇要單獨購買的遊戲。',
     openAdmin:'打開老師後台', adminPanel:'老師後台', collapse:'收起',
     adminHelp:'此版本不需要登入；老師可直接設定題庫、素材與遊戲包。',
     authorizedGames:'已授权游戏', operation:'操作', save:'保存设置', selectAll:'全选', clear:'清除',
-    freeUser:'免费用户', pack2:'配套 2（五選）', pack3:'配套 3（全授權）',
+    freeUser:'免费用户', pack2:'配套 2（4+1组合）', pack3:'配套 3（全授權）',
     playerFeatures:'播放器特色', featureLines:'• 全屏時保持中央安全區<br>• 自動等比放大<br>• 不出現上下軸<br>• 適合互動白板',
     whiteboardMode:'白板專用模式', whiteboardDesc:'打開遊戲後會自動進入中央安全區，按鈕放大，適合互動白板上課。',
     enabled:'預設已開啟', offlineZip:'離線 ZIP 下載', offlineDesc:'老師先制作題庫，再套用版型生成完整遊戲壓縮包。',
@@ -839,7 +844,7 @@ const I18N = {
     currentUser:'Current user', admin:'Admin', user:'User', logout:'Logout',
     accountInfo:'Account info', role:'Role', package:'Package', normalUser:'Standard user',
     planInfo:'Package plans', single:'Plan 1', pick5:'Plan 2', all_access:'Plan 3',
-    singleDesc:'Beginner RM20, Intermediate RM30, Advanced RM50 per template', pick5Desc:'RM100 for any 5 templates', allAccessDesc:'Total RM790, promo RM300, including future new games',
+    singleDesc:'Beginner RM20, Intermediate RM30, Advanced RM50 per template', pick5Desc:'Promo RM100: 4 Beginner/Intermediate templates + 1 Advanced template', allAccessDesc:'Total RM790, promo RM300, including future new games',
     demoBuy:'Demo purchase', chooseSingle:'Please choose an individual game from the game card.',
     openAdmin:'Open admin panel', adminPanel:'Admin panel', collapse:'Collapse',
     adminHelp:'Admins can set which games each user may use. Free games do not require extra authorization.',
@@ -900,12 +905,12 @@ const I18N = {
     currentUser:'Pengguna semasa', admin:'Admin', user:'Pengguna', logout:'Log keluar',
     accountInfo:'Maklumat akaun', role:'Peranan', package:'Pakej', normalUser:'Pengguna biasa',
     planInfo:'Pakej', single:'Pakej 1', pick5:'Pakej 2', all_access:'Pakej 3',
-    singleDesc:'Asas RM20, Pertengahan RM30, Lanjutan RM50 setiap templat', pick5Desc:'RM100 pilih mana-mana 5 templat', allAccessDesc:'Jumlah RM790, promosi RM300, termasuk permainan baharu akan datang',
+    singleDesc:'Asas RM20, Pertengahan RM30, Lanjutan RM50 setiap templat', pick5Desc:'Promosi RM100: 4 templat Asas/Pertengahan + 1 templat Lanjutan', allAccessDesc:'Jumlah RM790, promosi RM300, termasuk permainan baharu akan datang',
     demoBuy:'Beli demo', chooseSingle:'Sila pilih permainan individu daripada kad permainan.',
     openAdmin:'Buka panel admin', adminPanel:'Panel admin', collapse:'Tutup',
     adminHelp:'Admin boleh menetapkan permainan yang boleh digunakan oleh setiap pengguna. Permainan percuma tidak memerlukan kebenaran tambahan.',
     authorizedGames:'Permainan dibenarkan', operation:'Tindakan', save:'Simpan', selectAll:'Pilih semua', clear:'Kosongkan',
-    freeUser:'Pengguna percuma', pack2:'Pakej 2 (pilih 5)', pack3:'Pakej 3 (akses penuh)',
+    freeUser:'Pengguna percuma', pack2:'Pakej 2 (kombo 4+1)', pack3:'Pakej 3 (akses penuh)',
     playerFeatures:'Ciri pemain', featureLines:'• Kekalkan kandungan di kawasan selamat tengah<br>• Skala automatik berkadar<br>• Tiada bar skrol menegak<br>• Sesuai untuk papan putih interaktif',
     whiteboardMode:'Mod papan putih', whiteboardDesc:'Permainan dibuka dalam kawasan selamat tengah dengan butang yang lebih besar untuk pengajaran.',
     enabled:'Diaktifkan secara lalai', offlineZip:'Muat turun ZIP luar talian', offlineDesc:'Guru menyediakan kandungan dahulu, kemudian menggunakan templat untuk menjana ZIP permainan lengkap.',
@@ -1128,24 +1133,33 @@ function login(email, password){
   render();
   return {ok:true, msg:''};
 }
-function registerTeacherAccount(name, email, phone){
+function randomBeginnerGift(){
+  const beginnerTemplates = (GAME_LEVELS.beginner || []).filter(id => id !== 'memory_match' && id !== 'true_false');
+  const pool = beginnerTemplates.length ? beginnerTemplates : (GAME_LEVELS.beginner || []);
+  return pool[Math.floor(Math.random() * pool.length)] || 'memory_match';
+}
+function registerTeacherAccount(name, email, phone, password){
   const normalized = normalizeEmail(email);
   const teacherName = String(name || '').trim();
   const phoneText = String(phone || '').trim();
+  const passwordText = String(password || '').trim();
   const c = authCopy();
-  if(!teacherName || !normalized || !phoneText) return {ok:false, msg:t('fillAll')};
+  if(!teacherName || !normalized || !phoneText || !passwordText) return {ok:false, msg:t('fillAll')};
   if(!isValidEmail(normalized)) return {ok:false, msg:c.invalidEmail};
+  if(passwordText.length < 6) return {ok:false, msg: state.lang==='en' ? 'Password must be at least 6 characters.' : (state.lang==='ms' ? 'Kata laluan mesti sekurang-kurangnya 6 aksara.' : '登录密码至少需要 6 个字符。')};
   if(state.users.some(u => normalizeEmail(u.email || u.username)===normalized)) return {ok:false, msg:t('accountExists')};
+  const giftGame = randomBeginnerGift();
   state.users.push({
     id:'u_'+Date.now(),
     email:normalized,
     username:normalized,
-    password:'123456',
+    password:passwordText,
     name:teacherName,
     role:'user',
     accountStatus:'pending',
     disabled:false,
-    ownedGames:[],
+    ownedGames:[giftGame],
+    promoGift:giftGame,
     package:'free',
     profileCompleted:false,
     profile:{email:normalized, phone:phoneText, chineseName:teacherName, englishName:'', state:'Johor', orgTypes:[]}
@@ -1154,7 +1168,7 @@ function registerTeacherAccount(name, email, phone){
   return {ok:true, msg:c.registerSuccess};
 }
 function register(email, password){
-  return registerTeacherAccount(email, email, '');
+  return registerTeacherAccount(email, email, '', password);
 }
 function isProfileComplete(user){
   const p = user?.profile || {};
@@ -1270,6 +1284,8 @@ function renderPurchaseLogin(c){
           <input id="regName" class="input" placeholder="${c.name}" />
           <input id="regEmail" class="input" placeholder="${c.email}" />
           <input id="regPhone" class="input" placeholder="${c.phone}" />
+          <input id="regPassword" class="input" placeholder="${c.password}" type="password" />
+          <div class="promo-register-note">${c.promoNote}</div>
           <button id="registerBtn" type="button" class="btn maker formal-secondary-btn" onclick="handleRegisterClick()">${c.apply}</button>
           <p id="regMsg" class="muted formal-msg"></p>
         </div>
@@ -1515,7 +1531,7 @@ function renderAdminPanel(){
   return `
   <div id="adminPanel" class="card admin-account-panel">
     <div class="filter-row"><h3>管理員後台｜老師帳號管理</h3><div class="muted">待批准：${pendingCount} 位｜老師總數：${teachers.length} 位</div></div>
-    <div class="notice">管理員可新增老師帳號、批准老師申請、停用 / 啟用帳號、重設密碼，也可設定老師可使用的遊戲。</div>
+    <div class="notice">管理员可新增老师账号、批准老师申请、停用 / 启用账号、重设密码，也可设置老师可使用的游戏。推广期间，老师申请账号会随机赠送 1 个初阶游戏模板，批准后即可测试。</div>
 
     <div class="add-teacher-box">
       <h4>新增老師帳號</h4>
@@ -1538,7 +1554,7 @@ function renderAdminPanel(){
       <thead><tr><th>老師帳號</th><th>狀態</th><th>${t('package')}</th><th>${t('authorizedGames')}</th><th>${t('operation')}</th></tr></thead>
       <tbody>
       ${teachers.map(u=>`<tr class="${u.accountStatus==='pending'?'pending-row':''} ${u.disabled?'disabled-row':''}">
-        <td><b>${u.name}</b><br><span class="muted">${u.email || u.username}</span><br><span class="muted">${u.profile?.phone ? '电话：' + u.profile.phone : '电话未填'}</span></td>
+        <td><b>${u.name}</b><br><span class="muted">${u.email || u.username}</span><br><span class="muted">${u.profile?.phone ? '电话：' + u.profile.phone : '电话未填'}</span>${u.promoGift ? `<br><span class="muted">推广赠送：${gameCode(u.promoGift)}｜${gameName(u.promoGift)}</span>` : ''}</td>
         <td>${accountStatusBadge(u)}</td>
         <td>
           <select class="select admin-package-select" data-user="${u.id}">
@@ -1615,14 +1631,16 @@ function handleRegisterClick(){
   const name = $('#regName')?.value?.trim() || '';
   const email = $('#regEmail')?.value?.trim() || '';
   const phone = $('#regPhone')?.value?.trim() || '';
+  const password = $('#regPassword')?.value?.trim() || '';
   const msg = $('#regMsg');
-  if(!name || !email || !phone){ if(msg) msg.textContent=t('fillAll'); return; }
-  const result = registerTeacherAccount(name, email, phone);
+  if(!name || !email || !phone || !password){ if(msg) msg.textContent=t('fillAll'); return; }
+  const result = registerTeacherAccount(name, email, phone, password);
   if(msg) msg.textContent = result.msg;
   if(result.ok){
     if($('#regName')) $('#regName').value='';
     if($('#regEmail')) $('#regEmail').value='';
     if($('#regPhone')) $('#regPhone').value='';
+    if($('#regPassword')) $('#regPassword').value='';
   }
 }
 
