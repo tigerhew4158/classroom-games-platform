@@ -929,5 +929,92 @@ school,学校
   resetRound(true);
 })();
 </script>
+
+<!-- built-in-sample-loader-fix -->
+<script>
+(function(){
+  const SAMPLE_TEXT = "# S006 文字对应｜题库范例\n# 用途：词语配对、拼字、概念对应。\n# 建议格式：词语 | 对应解释\n资料 | 用来分析和学习的信息\n算法 | 解决问题的步骤\n密码 | 保护账号的秘密文字\n网络安全 | 保护设备与个人资料的方法\n人工智能 | 让机器模拟人类思考的技术\n";
+  const TARGET_TEXTAREA_IDS = ["wordBank"];
+  const SAMPLE_BUTTON_IDS = ["sampleBtn"];
+  const SAMPLE_URL = 'question-bank-example.txt?v=sample-loader-fixed-20260627';
+  function $(id){ return document.getElementById(id); }
+  function cleanSampleText(text){
+    return String(text || '')
+      .replace(/
+/g,'
+')
+      .split('
+')
+      .map(line => line.trim())
+      .filter(line => line && !line.startsWith('#'))
+      .join('
+');
+  }
+  function findBankField(){
+    for (const id of TARGET_TEXTAREA_IDS){
+      const el = $(id);
+      if (el && ('value' in el)) return el;
+    }
+    return document.querySelector('textarea');
+  }
+  async function getBuiltInSampleText(){
+    try {
+      const res = await fetch(SAMPLE_URL, { cache:'no-store' });
+      if (res && res.ok) {
+        const text = await res.text();
+        if (cleanSampleText(text)) return text;
+      }
+    } catch(e) {}
+    return SAMPLE_TEXT;
+  }
+  function afterFill(field){
+    try { field.dispatchEvent(new Event('input', { bubbles:true })); } catch(e) {}
+    try { field.dispatchEvent(new Event('change', { bubbles:true })); } catch(e) {}
+    try {
+      if (field.id === 'textItems') {
+        const mode = $('mode'); if (mode) mode.value = 'text';
+        const lines = cleanSampleText(field.value).split('
+');
+        const categories = [];
+        lines.forEach(line => {
+          const parts = line.split('|').map(x => x.trim()).filter(Boolean);
+          if (parts[1] && !categories.includes(parts[1])) categories.push(parts[1]);
+        });
+        if (categories.length) {
+          try { cats = categories; } catch(e) {}
+          const catCount = $('catCount'); if (catCount) catCount.value = String(Math.min(Math.max(categories.length,2),5));
+          try { if (typeof renderCats === 'function') renderCats(); } catch(e) {}
+        }
+        try { if (typeof buildItems === 'function') buildItems(false); } catch(e) {}
+        try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
+      }
+      if (field.id === 'wordBank') { try { if (typeof applyBank === 'function') applyBank(true); } catch(e) {} }
+      try { if (typeof saveSettings === 'function') saveSettings(); } catch(e) {}
+      try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
+      try { if (typeof renderItems === 'function') renderItems(); } catch(e) {}
+      try { if (typeof setMessage === 'function') setMessage('已载入内置题库范例 / Built-in sample loaded / Contoh terbina telah dimuat'); } catch(e) {}
+      try { if (typeof toast === 'function') toast('已载入内置题库范例'); } catch(e) {}
+    } catch(e) { console.warn('Sample after-fill warning:', e); }
+  }
+  async function loadBuiltInSampleQuestionBank(event){
+    if (event) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); }
+    const field = findBankField();
+    if (!field) return;
+    const sampleText = cleanSampleText(await getBuiltInSampleText());
+    if (!sampleText) return;
+    field.value = sampleText;
+    afterFill(field);
+  }
+  window.loadBuiltInSampleQuestionBank = loadBuiltInSampleQuestionBank;
+  SAMPLE_BUTTON_IDS.forEach(id => {
+    const btn = $(id);
+    if (btn && !btn.dataset.sampleLoaderFixed) {
+      btn.dataset.sampleLoaderFixed = '1';
+      btn.addEventListener('click', loadBuiltInSampleQuestionBank, true);
+    }
+  });
+})();
+</script>
+<!-- /built-in-sample-loader-fix -->
 </body>
 </html>

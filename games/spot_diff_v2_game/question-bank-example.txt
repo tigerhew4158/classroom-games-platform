@@ -1,0 +1,6 @@
+# H009 大家来找碴(自带后台)｜题库范例
+# 用途：老师上传原图、修改图、答案图，让学生找出不同处。
+# 建议格式：关卡名称 | 原图 | 修改图 | 答案图 | 差异说明
+教室找碴 | classroom_original.png | classroom_changed.png | classroom_answer.png | 黑板文字不同；桌上多了书；窗边少了植物
+公园找碴 | park_original.png | park_changed.png | park_answer.png | 长椅颜色不同；树上多了鸟；地上少了球
+# 自带后台可新增 / 编辑 / 删除关卡，并可上传图片。

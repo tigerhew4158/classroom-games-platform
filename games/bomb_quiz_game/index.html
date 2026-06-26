@@ -1049,5 +1049,92 @@ selamat pagi 是什么意思？,早安,谢谢,再见,晚上好
     applyLanguage();
     resetGame();
   </script>
+
+<!-- built-in-sample-loader-fix -->
+<script>
+(function(){
+  const SAMPLE_TEXT = "# P003 炸弹倒数抢答｜题库范例\n# 用途：限时抢答，适合复习与竞赛。\n# 建议格式：题目 | 正确答案 | 选项A,选项B,选项C,选项D\nHTML 主要用来做什么？ | 网页结构 | 网页结构,数据储存,画图,播放音乐\n哪个是安全上网行为？ | 不随便下载不明文件 | 随便点击广告,不随便下载不明文件,公开密码,转发谣言\nAI 回答一定正确吗？ | 不一定，需要检查 | 一定正确,不一定，需要检查,永远错误,不能使用\n";
+  const TARGET_TEXTAREA_IDS = ["questionBank"];
+  const SAMPLE_BUTTON_IDS = ["btnDemo"];
+  const SAMPLE_URL = 'question-bank-example.txt?v=sample-loader-fixed-20260627';
+  function $(id){ return document.getElementById(id); }
+  function cleanSampleText(text){
+    return String(text || '')
+      .replace(/
+/g,'
+')
+      .split('
+')
+      .map(line => line.trim())
+      .filter(line => line && !line.startsWith('#'))
+      .join('
+');
+  }
+  function findBankField(){
+    for (const id of TARGET_TEXTAREA_IDS){
+      const el = $(id);
+      if (el && ('value' in el)) return el;
+    }
+    return document.querySelector('textarea');
+  }
+  async function getBuiltInSampleText(){
+    try {
+      const res = await fetch(SAMPLE_URL, { cache:'no-store' });
+      if (res && res.ok) {
+        const text = await res.text();
+        if (cleanSampleText(text)) return text;
+      }
+    } catch(e) {}
+    return SAMPLE_TEXT;
+  }
+  function afterFill(field){
+    try { field.dispatchEvent(new Event('input', { bubbles:true })); } catch(e) {}
+    try { field.dispatchEvent(new Event('change', { bubbles:true })); } catch(e) {}
+    try {
+      if (field.id === 'textItems') {
+        const mode = $('mode'); if (mode) mode.value = 'text';
+        const lines = cleanSampleText(field.value).split('
+');
+        const categories = [];
+        lines.forEach(line => {
+          const parts = line.split('|').map(x => x.trim()).filter(Boolean);
+          if (parts[1] && !categories.includes(parts[1])) categories.push(parts[1]);
+        });
+        if (categories.length) {
+          try { cats = categories; } catch(e) {}
+          const catCount = $('catCount'); if (catCount) catCount.value = String(Math.min(Math.max(categories.length,2),5));
+          try { if (typeof renderCats === 'function') renderCats(); } catch(e) {}
+        }
+        try { if (typeof buildItems === 'function') buildItems(false); } catch(e) {}
+        try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
+      }
+      if (field.id === 'wordBank') { try { if (typeof applyBank === 'function') applyBank(true); } catch(e) {} }
+      try { if (typeof saveSettings === 'function') saveSettings(); } catch(e) {}
+      try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
+      try { if (typeof renderItems === 'function') renderItems(); } catch(e) {}
+      try { if (typeof setMessage === 'function') setMessage('已载入内置题库范例 / Built-in sample loaded / Contoh terbina telah dimuat'); } catch(e) {}
+      try { if (typeof toast === 'function') toast('已载入内置题库范例'); } catch(e) {}
+    } catch(e) { console.warn('Sample after-fill warning:', e); }
+  }
+  async function loadBuiltInSampleQuestionBank(event){
+    if (event) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); }
+    const field = findBankField();
+    if (!field) return;
+    const sampleText = cleanSampleText(await getBuiltInSampleText());
+    if (!sampleText) return;
+    field.value = sampleText;
+    afterFill(field);
+  }
+  window.loadBuiltInSampleQuestionBank = loadBuiltInSampleQuestionBank;
+  SAMPLE_BUTTON_IDS.forEach(id => {
+    const btn = $(id);
+    if (btn && !btn.dataset.sampleLoaderFixed) {
+      btn.dataset.sampleLoaderFixed = '1';
+      btn.addEventListener('click', loadBuiltInSampleQuestionBank, true);
+    }
+  });
+})();
+</script>
+<!-- /built-in-sample-loader-fix -->
 </body>
 </html>
