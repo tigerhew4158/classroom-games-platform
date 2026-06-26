@@ -1177,18 +1177,60 @@ function login(email, password){
   const normalized = normalizeEmail(email);
   const passwordText = String(password || '').trim();
   ensureDefaultAccounts(state);
+
+  // Hard fallback for built-in admin account. This prevents old localStorage,
+  // accidental disable, missing password, or migration issues from locking the admin out.
+  if(normalized === 'admin@lead.ai' && passwordText === 'admin123'){
+    const adminDefault = defaultState().users.find(u => u.role === 'admin');
+    let admin = state.users.find(u => normalizeEmail(u.email || u.username) === 'admin@lead.ai');
+    if(!admin){
+      admin = {...adminDefault};
+      state.users.push(admin);
+    }
+    admin.id = admin.id || 'u_admin';
+    admin.email = 'admin@lead.ai';
+    admin.username = 'admin@lead.ai';
+    admin.password = 'admin123';
+    admin.name = admin.name || adminDefault.name || 'Admin';
+    admin.role = 'admin';
+    admin.accountStatus = 'approved';
+    admin.disabled = false;
+    admin.package = 'all_access';
+    admin.ownedGames = GAME_DATA.map(g=>g.id);
+    admin.profileCompleted = true;
+    admin.profile = admin.profile || adminDefault.profile;
+    state.currentUser = admin.id;
+    saveState();
+    render();
+    return {ok:true, msg:''};
+  }
+
+  // Hard fallback for demo teacher account.
+  if(normalized === 'teacher@example.com' && passwordText === '123456'){
+    const teacherDefault = defaultState().users.find(u => normalizeEmail(u.email) === 'teacher@example.com');
+    let teacher = state.users.find(u => normalizeEmail(u.email || u.username) === 'teacher@example.com');
+    if(!teacher){
+      teacher = {...teacherDefault};
+      state.users.push(teacher);
+    }
+    teacher.id = teacher.id || 'u_teacher';
+    teacher.email = 'teacher@example.com';
+    teacher.username = 'teacher@example.com';
+    teacher.password = '123456';
+    teacher.role = 'user';
+    teacher.accountStatus = 'approved';
+    teacher.disabled = false;
+    teacher.package = teacher.package || 'free';
+    state.currentUser = teacher.id;
+    saveState();
+    render();
+    return {ok:true, msg:''};
+  }
+
   let user = state.users.find(u => normalizeEmail(u.email || u.username)===normalized && String(u.password || '').trim()===passwordText);
-  if(!user && normalized==='admin@lead.ai' && passwordText==='admin123'){
-    ensureDefaultAccounts(state);
-    user = state.users.find(u => normalizeEmail(u.email || u.username)==='admin@lead.ai');
-  }
-  if(!user && normalized==='teacher@example.com' && passwordText==='123456'){
-    ensureDefaultAccounts(state);
-    user = state.users.find(u => normalizeEmail(u.email || u.username)==='teacher@example.com');
-  }
   if(!user) return {ok:false, msg:t('loginFail')};
-  if(user.disabled) return {ok:false, msg:'此帳號已停用，請聯絡管理員。'};
-  if(user.accountStatus !== 'approved') return {ok:false, msg:'帳號申請已送出，請等待管理員批准。'};
+  if(user.disabled) return {ok:false, msg:t('accountDisabled') || 'This account has been disabled. Please contact the administrator.'};
+  if(user.accountStatus !== 'approved') return {ok:false, msg:t('accountPending') || 'Your account request has been submitted. Please wait for admin approval.'};
   state.currentUser = user.id;
   saveState();
   render();

@@ -551,3 +551,7 @@ index.html
 - 老师账号申请字段：姓名、电子邮件、电话、登录密码
 - 推广期间：老师申请账号会随机赠送 1 个初阶游戏模板，批准后即可测试
 - 管理员可管理老师账号、批准申请、停用 / 启用账号、重设密码与设置授权
+
+
+## Admin login force-fix
+Built-in admin account is protected from old localStorage lockout: admin@lead.ai / admin123. If login still fails after deployment, press Ctrl+F5 and click Reset Demo once.
