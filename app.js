@@ -27,6 +27,34 @@ const GAME_DATA = [
   {id:'spot_diff_v2', code:'H009', preview:'previews/spot_diff_v2.svg', icon:'🔍', price:20, free:false, path:'games/spot_diff_v2_game/index.html', download:'downloads/spot_diff_v2.zip'},
 ];
 
+const SAMPLE_BANKS = {
+  "memory_match": "# S001 翻翻乐｜题库范例\n# 用途：记忆配对、词语配对、术语配对、图文配对。\n# 建议格式：配对A | 配对B\n苹果 | Apple\n香蕉 | Banana\n红色 | Red\n蓝色 | Blue\n人工智能 | Artificial Intelligence\n网络安全 | Cybersecurity\n数据 | Data\n算法 | Algorithm\n",
+  "true_false": "# S002 真假判断快闪｜题库范例\n# 用途：快速判断概念是否正确。\n# 建议格式：题目 | true/false\nAI 可以帮助老师准备课堂活动。 | true\n所有网络资料都一定正确。 | false\n密码越简单越安全。 | false\n遇到可疑链接，应先检查来源。 | true\n使用 AI 生成内容时，也要检查事实。 | true\n",
+  "sentence_order": "# S003 句子排序挑战｜题库范例\n# 用途：句子排序、步骤排序、流程排序。\n# 建议格式：正确顺序用 | 分隔\n我 | 喜欢 | 学习 | 人工智能\n先观察 | 再思考 | 最后回答\n打开电脑 | 输入密码 | 开始学习\n收集资料 | 分析资料 | 做出结论\n",
+  "treasure_box": "# S004 宝箱开开看｜题库范例\n# 用途：抽题、复习、奖励式问答。\n# 建议格式：题目 | 正确答案 | 选项A,选项B,选项C,选项D\nAI 的英文全名是什么？ | Artificial Intelligence | Artificial Intelligence,Auto Internet,Advanced Image,Active Input\n哪一种密码较安全？ | 长且混合不同字符 | 123456,生日日期,长且混合不同字符,名字拼音\n看到可疑链接时应该怎么做？ | 先检查来源 | 马上点击,先检查来源,输入密码,转发朋友\n",
+  "lucky_wheel": "# S005 幸运转盘问答｜题库范例\n# 用途：转盘抽题、随机复习、抢答。\n# 建议格式：题目 | 正确答案 | 选项A,选项B,选项C,选项D\n太阳系中最大的行星是？ | 木星 | 地球,木星,火星,土星\nAI 从什么学习？ | 训练资料 | 魔法,训练资料,猜测,什么都不需要\n个人资料可以随便公开吗？ | 不可以 | 可以,不可以,看心情,只有周末可以\n",
+  "text_match": "# S006 文字对应｜题库范例\n# 用途：词语配对、拼字、概念对应。\n# 建议格式：词语 | 对应解释\n资料 | 用来分析和学习的信息\n算法 | 解决问题的步骤\n密码 | 保护账号的秘密文字\n网络安全 | 保护设备与个人资料的方法\n人工智能 | 让机器模拟人类思考的技术\n",
+  "whack_mole": "# S007 打地鼠问答｜题库范例\n# 用途：快速点击正确答案，训练反应与复习。\n# 建议格式：题目 | 正确答案 | 错误选项1,错误选项2,错误选项3\n哪一个是水果？ | 苹果 | 书本,椅子,铅笔\n哪一个是安全密码？ | BlueSky!2026 | 123456,生日,名字\nAI 需要什么来学习？ | 数据 | 魔法,睡觉,糖果\n",
+  "classification_conveyor": "# P001 分类输送带｜题库范例\n# 用途：把项目归类到正确分类。\n# 建议格式：项目 | 正确分类\n苹果 | 水果\n香蕉 | 水果\n老虎 | 动物\n狮子 | 动物\n键盘 | 电脑设备\n鼠标 | 电脑设备\n密码 | 网络安全\n可疑链接 | 网络安全\n",
+  "image_puzzle_speed_race": "# P002 图片拼图竞速赛｜题库范例\n# 用途：上传图片作为拼图，学生拼图后回答相关问题。\n# 建议格式：图片文件名 | 题目 | 正确答案 | 选项A,选项B,选项C,选项D\nsolar-system.png | 太阳系中心是什么？ | 太阳 | 地球,太阳,月亮,火星\ncomputer-parts.png | 图片中负责输入文字的是？ | 键盘 | 屏幕,键盘,喇叭,打印机\nplant-growth.png | 植物生长需要什么？ | 阳光和水 | 阳光和水,石头,塑料,金属\n",
+  "bomb_quiz": "# P003 炸弹倒数抢答｜题库范例\n# 用途：限时抢答，适合复习与竞赛。\n# 建议格式：题目 | 正确答案 | 选项A,选项B,选项C,选项D\nHTML 主要用来做什么？ | 网页结构 | 网页结构,数据储存,画图,播放音乐\n哪个是安全上网行为？ | 不随便下载不明文件 | 随便点击广告,不随便下载不明文件,公开密码,转发谣言\nAI 回答一定正确吗？ | 不一定，需要检查 | 一定正确,不一定，需要检查,永远错误,不能使用\n",
+  "knowledge_race": "# P004 知识赛马｜题库范例\n# 用途：分组竞速答题，答对前进。\n# 建议格式：题目 | 正确答案 | 选项A,选项B,选项C,选项D\n地球绕太阳一周大约多久？ | 1年 | 1天,1个月,1年,10年\n哪一个是输入设备？ | 键盘 | 键盘,屏幕,投影机,喇叭\n保护账号最重要的是？ | 使用强密码 | 使用弱密码,公开密码,使用强密码,告诉陌生人\n",
+  "monster_defense": "# P005 怪兽防守战｜题库范例\n# 用途：答题防守，答对击退怪兽。\n# 建议格式：题目 | 正确答案 | 选项A,选项B,选项C,选项D\n网络安全中，OTP 是什么？ | 一次性密码 | 一次性密码,普通密码,公开号码,游戏分数\n可疑电邮要求输入密码，应怎么做？ | 不输入并报告老师或家长 | 马上输入,不输入并报告老师或家长,转发给朋友,截图发社交媒体\nAI 图片可能出错吗？ | 可能 | 不可能,可能,一定没有问题,只在晚上出错\n",
+  "find_difference": "# P006 大家来找不同｜题库范例\n# 用途：上传两张图片，让学生观察差异。\n# 建议格式：原图文件名 | 修改图文件名 | 差异说明\nclassroom-original.png | classroom-edited.png | 黑板上的字不同；桌上的书本颜色不同；窗边多了一盆植物\npark-original.png | park-edited.png | 树上少了一只鸟；长椅颜色不同；地上多了足球\n# 可在后台上传原图、修改图，并标示 3-5 个答案点。\n",
+  "keyword_beachhead": "# P007 关键词抢滩战｜题库范例\n# 用途：学生根据提示抢关键词，适合词汇、概念、重点复习。\n# 建议格式：提示 | 正确关键词 | 干扰词1,干扰词2,干扰词3\n保护账号的秘密文字 | 密码 | 用户名,头像,背景图\n让机器学习资料并做判断的技术 | 人工智能 | 计算器,投影机,白板笔\n网页的基本结构语言 | HTML | CSS,Excel,PowerPoint\n",
+  "timeline_sort_challenge": "# P008 时间线排序挑战｜题库范例\n# 用途：历史事件、科学流程、项目步骤排序。\n# 建议格式：顺序编号 | 事件 / 步骤\n1 | 收集资料\n2 | 整理资料\n3 | 分析资料\n4 | 呈现结论\n\n1 | 打开学习平台\n2 | 选择游戏模板\n3 | 输入题库\n4 | 开始白板上课\n",
+  "image_label_match": "# P009 图片标签配对赛｜题库范例\n# 用途：图片与标签配对，适合词汇、科学、地理、资讯科技。\n# 建议格式：图片文件名 | 正确标签\napple.png | 苹果\nbanana.png | 香蕉\nkeyboard.png | 键盘\nmonitor.png | 显示器\nforest.png | 森林\nmine.png | 金矿\n",
+  "team_relay_quiz": "# P010 团队答题接力赛｜题库范例\n# 用途：分组接力答题，答对前进，适合全班复习。\n# 建议格式：题目 | 正确答案 | 错误选项A,错误选项B,错误选项C\nAI 的英文全名是什么？ | Artificial Intelligence | Auto Internet,Advanced Image,Active Input\n哪一种密码较安全？ | 长且混合不同字符 | 123456,生日日期,名字拼音\n看到可疑链接时应该？ | 先检查来源 | 马上点开,输入密码,转发给朋友\n",
+  "platform_quiz": "# H001 平台闯关问答｜题库范例\n# 用途：角色闯关，每关答题后继续前进。\n# 建议格式：题目 | 正确答案 | 选项A,选项B,选项C,选项D\n哪一个是输出设备？ | 显示器 | 键盘,鼠标,显示器,扫描器\nAI 使用时要注意什么？ | 诚实与负责任 | 随便抄袭,不检查资料,诚实与负责任,公开别人资料\n数据可以帮助 AI 做什么？ | 学习和判断 | 睡觉,吃饭,学习和判断,变魔术\n",
+  "dungeon_dragon_raid": "# H003 地牢巨龙讨伐战｜题库范例\n# 用途：两队答题打怪、补血、找钥匙，最后讨伐巨龙。\n# 建议格式：题目 | 正确答案 | 选项A,选项B,选项C,选项D | 奖励类型\n哪一个行为能保护个人资料？ | 不公开密码 | 公开密码,不公开密码,随便上传证件,告诉陌生人 | key\nAI 回答错误时，我们应该？ | 查证资料 | 直接相信,查证资料,马上转发,删除电脑 | heal\n网络谣言应该如何处理？ | 查证后再分享 | 马上转发,查证后再分享,改成更夸张,发给所有人 | attack\n",
+  "picture_word_guess": "# H004 看图猜生字｜题库范例\n# 用途：图片逐步显示，学生猜词或生字。\n# 建议格式：图片文件名 | 答案 | 提示\napple.png | 苹果 | 一种红色或绿色的水果\nrobot.png | 机器人 | 可以执行任务的机器\nforest.png | 森林 | 很多树木聚集的地方\nkeyboard.png | 键盘 | 用来输入文字的设备\n",
+  "two_team_puzzle_duel": "# H006 双组拼图对战｜题库范例\n# 用途：两组同时拼图，完成后答题或说明。\n# 建议格式：图片文件名 | 主题 | 答案说明\nsolar-system.png | 太阳系 | 认识行星与太阳的位置\nplant-cycle.png | 植物生长 | 种子、发芽、成长、开花\nnetwork-safety.png | 网络安全 | 密码、链接、个人资料保护\n",
+  "island_conquest": "# H007 孤岛抢夺赛｜题库范例\n# 用途：两队抢占地图格子，答对占领土地。\n# 建议格式：题目 | 正确答案 | 选项A,选项B,选项C,选项D\n保护个人资料时，哪一项最重要？ | 不随便公开 | 公开地址,公开密码,不随便公开,上传证件\nAI 生成图片可以用来伤害别人吗？ | 不可以 | 可以,不可以,只要好玩就可以,没人发现就可以\n团队合作时应该？ | 轮流发言并尊重队友 | 抢着说话,轮流发言并尊重队友,不听别人,故意捣乱\n",
+  "kingdom_resource_battle": "# H008 王国资源争夺战｜题库范例\n# 用途：开发农田、森林、金矿，答题获得资源并触发事件卡。\n# 题库格式：题目 | 选项A | 选项B | 选项C | 选项D | 正确编号\nAI 从什么学习？ | 训练资料 | 魔法 | 只靠猜测 | 什么都不需要 | 1\n看到可疑链接时应该？ | 马上点开 | 先检查来源 | 输入密码 | 转发给朋友 | 2\n哪一种密码较安全？ | 123456 | 生日日期 | BlueSky!2026 | 名字拼音 | 3\n\n# 事件卡格式：区域 | 类型 | 标题 | 描述 | 分数变动\nfarm | good | 农作物大丰收 | 天气理想，粮食大增，额外 +2 分。 | 2\nforest | bad | 森林大火 | 大火烧毁林地，王国损失资源，扣 2 分。 | -2\nmine | good | 发现金矿新矿脉 | 金矿产量提升，额外 +3 分。 | 3\n",
+  "spot_diff_v2": "# H009 大家来找碴(自带后台)｜题库范例\n# 用途：老师上传原图、修改图、答案图，让学生找出不同处。\n# 建议格式：关卡名称 | 原图 | 修改图 | 答案图 | 差异说明\n教室找碴 | classroom_original.png | classroom_changed.png | classroom_answer.png | 黑板文字不同；桌上多了书；窗边少了植物\n公园找碴 | park_original.png | park_changed.png | park_answer.png | 长椅颜色不同；树上多了鸟；地上少了球\n# 自带后台可新增 / 编辑 / 删除关卡，并可上传图片。\n"
+};
+
+
 const PACKAGES = [
   {id:'single_beginner', price:20, type:'single', level:'beginner'},
   {id:'single_intermediate', price:30, type:'single', level:'intermediate'},
@@ -1226,6 +1254,19 @@ function saveState(){
 function resetDemo(){ state = defaultState(); saveState(); render(); }
 function getUser(){ return state.users.find(u=>u.id===state.currentUser) || null; }
 function findGame(id){ return GAME_DATA.find(g=>g.id===id); }
+
+function sampleTxtLabel(){ return ({zh:'题库范例 TXT', en:'Sample TXT', ms:'TXT Contoh'})[state.lang || 'zh'] || 'Sample TXT'; }
+function loadSampleLabel(){ return ({zh:'载入题库范例', en:'Load sample bank', ms:'Muat contoh soalan'})[state.lang || 'zh'] || 'Load sample bank'; }
+function sampleTextFor(gameId){ return SAMPLE_BANKS[gameId] || '# Sample question bank\n'; }
+function sampleFilenameFor(gameId){ const g=findGame(gameId); return `${g?.code || gameId}_${gameId}_sample.txt`; }
+function downloadSampleForGame(gameId){ downloadTextFile(sampleFilenameFor(gameId), sampleTextFor(gameId)); }
+function loadSampleIntoMaker(gameId){
+  const q = $('#makerQuestions');
+  if(!q || !gameId) return;
+  q.value = sampleTextFor(gameId);
+  q.dataset.sampleGame = gameId;
+}
+
 function userHasAccess(user, gameId){
   if(!user) return false;
   if(user.role==='admin') return true;
@@ -1848,7 +1889,7 @@ function renderTeacherBackendPanel(){
       ${t('questionFormatNotice')}
     </div>
     <div class="backend-actions">
-      <button id="downloadMakerTxtBtn" class="btn secondary">${t('downloadQuestionTxt')}</button>
+      <button id="loadSampleTxtBtn" class="btn secondary">${loadSampleLabel()}</button><button id="downloadMakerTxtBtn" class="btn secondary">${t('downloadQuestionTxt')}</button>
       <button id="generateTemplateZipBtn" class="btn download">${t('generateDownloadPack')}</button>
       ${currentUser?.role==='admin' ? `<button id="downloadAllOfflineBtn" class="btn maker">${t('downloadAll')}</button>` : ''}
     </div>
@@ -1893,7 +1934,7 @@ function gameCard(g, accessible, user){
       </div>
       <div class="spacer"></div>
       ${accessible
-        ? `<div class="card-actions"><button class="btn whiteboard open-game-btn" data-game="${g.id}">${t('whiteboardClass')}</button><button class="btn maker small make-game-btn" data-game="${g.id}">${t('applyTemplate')}</button><button class="btn download small generate-game-btn" data-game="${g.id}">${t('generateGamePack')}</button></div>`
+        ? `<div class="card-actions"><button class="btn whiteboard open-game-btn" data-game="${g.id}">${t('whiteboardClass')}</button><button class="btn maker small make-game-btn" data-game="${g.id}">${t('applyTemplate')}</button><button class="btn secondary small sample-txt-btn" data-game="${g.id}">${sampleTxtLabel()}</button><button class="btn download small generate-game-btn" data-game="${g.id}">${t('generateGamePack')}</button></div>`
         : `<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary small buy-single-btn" data-game="${g.id}">${t('singleBuy')}</button><button class="btn small buy-pick5-fast-btn" data-game="${g.id}">${t('addPick5')}</button></div>`}
     </div>`;
 }
@@ -2123,6 +2164,7 @@ function bindDashboard(){
   };
   $$('.open-game-btn').forEach(btn => btn.onclick = () => openGame(btn.dataset.game));
   $$('.make-game-btn').forEach(btn => btn.onclick = () => openMaker(btn.dataset.game));
+  $$('.sample-txt-btn').forEach(btn => btn.onclick = () => downloadSampleForGame(btn.dataset.game));
   $$('.generate-game-btn').forEach(btn => btn.onclick = () => generateGamePackage(btn.dataset.game));
   const openMakerBtn = $('#openMakerBtn');
   if(openMakerBtn) openMakerBtn.onclick = () => openMaker();
@@ -2130,6 +2172,8 @@ function bindDashboard(){
   if(closeMakerBtn) closeMakerBtn.onclick = () => $('#makerPanel').classList.toggle('hidden');
   const makerGameSelect = $('#makerGameSelect');
   if(makerGameSelect) makerGameSelect.onchange = () => openMaker(makerGameSelect.value);
+  const loadSampleTxtBtn = $('#loadSampleTxtBtn');
+  if(loadSampleTxtBtn) loadSampleTxtBtn.onclick = () => loadSampleIntoMaker($('#makerGameSelect')?.value || makerSelectedGameId);
   const downloadMakerTxtBtn = $('#downloadMakerTxtBtn');
   if(downloadMakerTxtBtn) downloadMakerTxtBtn.onclick = downloadMakerTxt;
   const downloadAllPackBtn = $('#downloadAllPackBtn');
@@ -2186,6 +2230,7 @@ function openMaker(gameId){
   if(makerSelectedGameId && title){
     title.value = `${gameCode(makerSelectedGameId)}｜${gameName(makerSelectedGameId)}｜${t('classQuestionBankSuffix')}`;
   }
+  loadSampleIntoMaker(makerSelectedGameId);
 }
 
 function generateGamePackage(gameId){

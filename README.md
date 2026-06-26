@@ -612,3 +612,15 @@ Built-in admin account is protected from old localStorage lockout: admin@lead.ai
 - `select option` 已做中文 / English / Melayu 对应翻译。
 - English 和 Melayu 界面不再显示“答错停留”等中文选项。
 - 离线包 `team_relay_quiz.zip` 与 `all_classroom_games_offline_pack.zip` 已同步更新。
+
+
+## 每个模板的题库范例 TXT
+
+本版已为系统内 24 个课堂游戏模板加入题库范例 TXT：
+
+- 每个 `games/<模板>/` 文件夹内都有 `question-bank-example.txt`。
+- 根目录 `examples/` 文件夹中也整理了所有模板的题库范例。
+- 每个单独离线 ZIP 已包含对应模板的题库范例。
+- `downloads/all_classroom_games_offline_pack.zip` 也已包含全部题库范例。
+- 老师在游戏库卡片可点击「题库范例 TXT / Sample TXT / TXT Contoh」下载范例。
+- 老师进入「老师后台｜题库与游戏包设定」时，会自动载入所选模板的范例题库，方便直接修改。
