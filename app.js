@@ -2233,7 +2233,162 @@ function openMaker(gameId){
   loadSampleIntoMaker(makerSelectedGameId);
 }
 
-function generateGamePackage(gameId){
+
+const GAME_PACKAGE_EXTRA_FILES = {"memory_match":["README_题库范例说明.txt","S001_题库范例.txt","question-bank-example.txt"],"true_false":["README_题库范例说明.txt","S002_题库范例.txt","question-bank-example.txt"],"sentence_order":["README_题库范例说明.txt","S003_题库范例.txt","question-bank-example.txt"],"treasure_box":["README_题库范例说明.txt","S004_题库范例.txt","question-bank-example.txt"],"lucky_wheel":["README_题库范例说明.txt","S005_题库范例.txt","question-bank-example.txt"],"classification_conveyor":["P001_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"platform_quiz":["H001_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"monster_defense":["P005_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"whack_mole":["README_题库范例说明.txt","S007_题库范例.txt","question-bank-example.txt"],"text_match":["README.txt","README_题库范例说明.txt","S006_题库范例.txt","question-bank-example.txt","sample-vocabulary.txt"],"bomb_quiz":["P003_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"knowledge_race":["P004_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"dungeon_dragon_raid":["H003_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"picture_word_guess":["H004_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"image_puzzle_speed_race":["P002_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"two_team_puzzle_duel":["H006_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"island_conquest":["H007_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"timeline_sort_challenge":["P008_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"image_label_match":["P009_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"team_relay_quiz":["P010_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"find_difference":["P006_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"keyword_beachhead":["P007_题库范例.txt","README_题库范例说明.txt","question-bank-example.txt"],"kingdom_resource_battle":["H008_题库范例.txt","README_题库范例说明.txt","assets/castle_azure_lv1.svg","assets/castle_azure_lv2.svg","assets/castle_azure_lv3.svg","assets/castle_azure_lv4.svg","assets/castle_crimson_lv1.svg","assets/castle_crimson_lv2.svg","assets/castle_crimson_lv3.svg","assets/castle_crimson_lv4.svg","assets/castle_emerald_lv1.svg","assets/castle_emerald_lv2.svg","assets/castle_emerald_lv3.svg","assets/castle_emerald_lv4.svg","assets/castle_violet_lv1.svg","assets/castle_violet_lv2.svg","assets/castle_violet_lv3.svg","assets/castle_violet_lv4.svg","assets/event_farm_harvest.svg","assets/event_farm_pest.svg","assets/event_forest_birth.svg","assets/event_forest_fire.svg","assets/event_merchant.svg","assets/event_mine_accident.svg","assets/event_mine_discovery.svg","assets/event_storm.svg","assets/farm_lv1.svg","assets/farm_lv2.svg","assets/farm_lv3.svg","assets/farm_lv4.svg","assets/forest_lv1.svg","assets/forest_lv2.svg","assets/forest_lv3.svg","assets/forest_lv4.svg","assets/map_background.svg","assets/mine_lv1.svg","assets/mine_lv2.svg","assets/mine_lv3.svg","assets/mine_lv4.svg","assets/theme_azure_banner.svg","assets/theme_azure_crest.svg","assets/theme_crimson_banner.svg","assets/theme_crimson_crest.svg","assets/theme_emerald_banner.svg","assets/theme_emerald_crest.svg","assets/theme_violet_banner.svg","assets/theme_violet_crest.svg","question-bank-example.txt"],"spot_diff_v2":["H009_题库范例.txt","README.txt","README_题库范例说明.txt","css/style.css","js/app.js","js/mask.js","js/utils.js","question-bank-example.txt"]};
+
+const ZIP_CRC_TABLE = (() => {
+  const table = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1);
+    table[n] = c >>> 0;
+  }
+  return table;
+})();
+function zipCrc32(bytes) {
+  let crc = 0xffffffff;
+  for (let i = 0; i < bytes.length; i++) crc = ZIP_CRC_TABLE[(crc ^ bytes[i]) & 0xff] ^ (crc >>> 8);
+  return (crc ^ 0xffffffff) >>> 0;
+}
+function zipUint16(n) { return [n & 255, (n >>> 8) & 255]; }
+function zipUint32(n) { return [n & 255, (n >>> 8) & 255, (n >>> 16) & 255, (n >>> 24) & 255]; }
+function zipDosTimeDate(date = new Date()) {
+  const time = ((date.getHours() & 31) << 11) | ((date.getMinutes() & 63) << 5) | ((Math.floor(date.getSeconds() / 2)) & 31);
+  const dosDate = (((date.getFullYear() - 1980) & 127) << 9) | (((date.getMonth() + 1) & 15) << 5) | (date.getDate() & 31);
+  return { time, dosDate };
+}
+function concatUint8Arrays(arrays) {
+  const total = arrays.reduce((sum, a) => sum + a.length, 0);
+  const out = new Uint8Array(total);
+  let offset = 0;
+  arrays.forEach(a => { out.set(a, offset); offset += a.length; });
+  return out;
+}
+function makeZipBlob(fileEntries) {
+  const encoder = new TextEncoder();
+  const chunks = [];
+  const central = [];
+  let offset = 0;
+  const { time, dosDate } = zipDosTimeDate();
+  fileEntries.forEach(entry => {
+    const nameBytes = encoder.encode(entry.name.replace(/^\/+/, ''));
+    const data = entry.bytes instanceof Uint8Array ? entry.bytes : encoder.encode(String(entry.bytes || ''));
+    const crc = zipCrc32(data);
+    const local = new Uint8Array([
+      ...zipUint32(0x04034b50), ...zipUint16(20), ...zipUint16(0x0800), ...zipUint16(0),
+      ...zipUint16(time), ...zipUint16(dosDate), ...zipUint32(crc), ...zipUint32(data.length), ...zipUint32(data.length),
+      ...zipUint16(nameBytes.length), ...zipUint16(0)
+    ]);
+    chunks.push(local, nameBytes, data);
+    const cent = new Uint8Array([
+      ...zipUint32(0x02014b50), ...zipUint16(20), ...zipUint16(20), ...zipUint16(0x0800), ...zipUint16(0),
+      ...zipUint16(time), ...zipUint16(dosDate), ...zipUint32(crc), ...zipUint32(data.length), ...zipUint32(data.length),
+      ...zipUint16(nameBytes.length), ...zipUint16(0), ...zipUint16(0), ...zipUint16(0), ...zipUint16(0),
+      ...zipUint32(0), ...zipUint32(offset)
+    ]);
+    central.push(cent, nameBytes);
+    offset += local.length + nameBytes.length + data.length;
+  });
+  const centralStart = offset;
+  const centralBytes = concatUint8Arrays(central);
+  const end = new Uint8Array([
+    ...zipUint32(0x06054b50), ...zipUint16(0), ...zipUint16(0), ...zipUint16(fileEntries.length), ...zipUint16(fileEntries.length),
+    ...zipUint32(centralBytes.length), ...zipUint32(centralStart), ...zipUint16(0)
+  ]);
+  return new Blob([concatUint8Arrays(chunks), centralBytes, end], { type: 'application/zip' });
+}
+function safePackageFileName(text) {
+  return String(text || 'classroom-game').replace(/[\/:*?"<>|]/g, '_').replace(/\s+/g, '_').slice(0, 80) || 'classroom-game';
+}
+function gameFolderFromPath(path) { return String(path || '').replace(/\/index\.html(?:\?.*)?$/, ''); }
+function injectGeneratedPackageConfig(html, config) {
+  const script = `
+<script>
+window.CLASSROOM_GAME_PACKAGE_CONFIG = ${JSON.stringify(config)};
+(function(){
+  function fillWhenReady(){
+    const cfg = window.CLASSROOM_GAME_PACKAGE_CONFIG || {};
+    document.title = cfg.title || document.title;
+    const possibleTitleFields = ['#gameTitle','#titleInput','#lessonTitle','#classTitle','#makerTitleInput'];
+    possibleTitleFields.forEach(sel=>{ const el=document.querySelector(sel); if(el && cfg.title){ el.value=cfg.title; el.dispatchEvent(new Event('input',{bubbles:true})); } });
+    const bank = cfg.questions || '';
+    if(bank){
+      const selectors = ['#bankInput','#questionBank','#questionsInput','#textItems','#makerQuestions','#itemsInput','#questionText','textarea'];
+      let field = null;
+      for(const sel of selectors){ field = document.querySelector(sel); if(field) break; }
+      if(field && 'value' in field){
+        field.value = bank;
+        field.dispatchEvent(new Event('input',{bubbles:true}));
+        field.dispatchEvent(new Event('change',{bubbles:true}));
+      }
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fillWhenReady); else fillWhenReady();
+})();
+<\/script>
+`;
+  if (html.includes('</body>')) return html.replace('</body>', script + '</body>');
+  return html + script;
+}
+async function fetchBytesForZip(url) {
+  const res = await fetch(url, { cache:'no-store' });
+  if(!res.ok) throw new Error('fetch failed: ' + url);
+  return new Uint8Array(await res.arrayBuffer());
+}
+async function fetchTextForZip(url) {
+  const res = await fetch(url, { cache:'no-store' });
+  if(!res.ok) throw new Error('fetch failed: ' + url);
+  return await res.text();
+}
+async function downloadCustomizedGameZip(game, title, subject, questions) {
+  const folder = gameFolderFromPath(game.path);
+  const config = {
+    gameId: game.id, code: game.code, gameName: gameName(game.id), title, subject, questions,
+    generatedAt: new Date().toISOString(), platform: 'Classroom Game Template Platform'
+  };
+  const files = [];
+  let html = await fetchTextForZip(game.path + '?v=custom-pack-' + Date.now());
+  html = injectGeneratedPackageConfig(html, config);
+  files.push({ name:'index.html', bytes: html });
+  files.push({ name:'game-config.json', bytes: JSON.stringify(config, null, 2) });
+  files.push({ name:'teacher-question-bank.txt', bytes: questions || sampleTextFor(game.id) });
+  files.push({ name:'README.txt', bytes: [
+    '课堂游戏离线包 / Classroom Game Offline Package',
+    '',
+    '游戏 / Game: ' + game.code + ' | ' + gameName(game.id),
+    '课堂标题 / Title: ' + title,
+    '科目年级 / Subject & grade: ' + subject,
+    '',
+    '使用方法：',
+    '1. 解压此 ZIP。',
+    '2. 双击打开 index.html。',
+    '3. 题库已同时写入 teacher-question-bank.txt 与 game-config.json。',
+    '4. 若浏览器限制本地文件读取，请使用 Chrome / Edge 直接打开，或放到 Vercel / GitHub Pages 测试。',
+    '',
+    'How to use:',
+    '1. Extract this ZIP file.',
+    '2. Open index.html in a browser.',
+    '3. The question bank is included in teacher-question-bank.txt and game-config.json.'
+  ].join('\n') });
+  const extras = GAME_PACKAGE_EXTRA_FILES[game.id] || [];
+  for (const rel of extras) {
+    try {
+      const bytes = await fetchBytesForZip(folder + '/' + rel + '?v=custom-pack-' + Date.now());
+      files.push({ name: rel, bytes });
+    } catch(e) { console.warn('Skipped optional package file', rel, e); }
+  }
+  const zipBlob = makeZipBlob(files);
+  const filename = safePackageFileName(`${game.code}_${title || gameName(game.id)}_游戏包.zip`);
+  const url = URL.createObjectURL(zipBlob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1200);
+}
+async function generateGamePackage(gameId){
   const id = gameId || $('#makerGameSelect')?.value || makerSelectedGameId;
   if(!id){
     alert(t('selectTemplateFirst'));
@@ -2246,25 +2401,17 @@ function generateGamePackage(gameId){
   const title = $('#makerTitleInput')?.value?.trim() || `${gameCode(id)}_${gameName(id)}`;
   const subject = $('#makerSubject')?.value?.trim() || '';
   const questions = $('#makerQuestions')?.value?.trim() || '';
-  const meta = [
-    `${t('gameCodeLabel')}：${gameCode(id)}`,
-    `${t('gameTemplateLabel')}：${gameName(id)}`,
-    `${t('classTitleLabel')}：${title}`,
-    `${t('subjectGrade')}：${subject}`,
-    '',
-    `${t('questionMaterialSettings')}：`,
-    questions || t('noQuestionBankYet')
-  ].join('\n');
-
-  downloadTextFile(`${gameCode(id)}_${title.replace(/[\\/:*?"<>|]/g,'_')}_${t('settingsFileSuffix')}.txt`, meta);
-
-  // Static demo limitation:
-  // The template ZIP is already prepared in downloads/. In the production version,
-  // this button should call the backend to merge teacher content into game-config.json
-  // and return a customized ZIP.
-  setTimeout(() => {
-    location.href = game.download;
-  }, 350);
+  const btn = $('#generateTemplateZipBtn');
+  const oldText = btn ? btn.textContent : '';
+  try{
+    if(btn){ btn.disabled = true; btn.textContent = ({zh:'正在生成游戏包...', en:'Generating package...', ms:'Sedang menjana pakej...'})[state.lang || 'zh'] || 'Generating package...'; }
+    await downloadCustomizedGameZip(game, title, subject, questions);
+  }catch(err){
+    console.error('Generate package failed:', err);
+    alert(({zh:'生成游戏包失败，请稍后再试，或先下载题库 TXT。', en:'Failed to generate the game package. Please try again or download the TXT first.', ms:'Gagal menjana pakej permainan. Sila cuba lagi atau muat turun TXT dahulu.'})[state.lang || 'zh']);
+  }finally{
+    if(btn){ btn.disabled = false; btn.textContent = oldText || t('generateDownloadPack'); }
+  }
 }
 
 function downloadTextFile(filename, content){
