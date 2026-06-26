@@ -828,14 +828,3 @@ textarea.input{
 .admin-game-name{font-size:13px;font-weight:800;line-height:1.25;color:#e5eefc}.admin-game-price{font-size:12px;color:#facc15;font-weight:950;white-space:nowrap}
 .account-table th:nth-child(4),.account-table td:nth-child(4){min-width:430px}
 @media(max-width:900px){.admin-auth-games{min-width:0}.admin-auth-game-list{grid-template-columns:1fr}.admin-game-check-card{grid-template-columns:auto 50px 1fr auto}.account-table th:nth-child(4),.account-table td:nth-child(4){min-width:320px}}
-
-.receipt-view-btn{display:grid;gap:6px;place-items:center;background:transparent;border:0;padding:0;cursor:pointer;color:#bfdbfe;font-weight:800}
-.receipt-view-btn:hover .admin-receipt{transform:scale(1.04);box-shadow:0 0 0 3px rgba(250,204,21,.35)}
-.receipt-view-btn span{font-size:12px}
-.receipt-viewer-layer{position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,.82);display:grid;place-items:center;padding:24px}
-.receipt-viewer-card{width:min(960px,96vw);max-height:94vh;background:#0f172a;border:1px solid rgba(255,255,255,.16);border-radius:20px;box-shadow:0 24px 80px rgba(0,0,0,.55);overflow:hidden;display:flex;flex-direction:column}
-.receipt-viewer-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.1)}
-.receipt-viewer-head h3{margin:0;color:#fff}.receipt-viewer-head p{margin:6px 0;color:#cbd5e1}.receipt-viewer-head small{color:#fde68a}
-.receipt-viewer-body{padding:16px;overflow:auto;display:grid;place-items:center;background:#020617}
-.receipt-viewer-body img{max-width:100%;height:auto;max-height:72vh;object-fit:contain;border-radius:12px;background:#fff}
-.receipt-viewer-actions{padding:12px 18px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:flex-end}

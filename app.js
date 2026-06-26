@@ -1772,55 +1772,10 @@ function renderPurchaseOrdersPanel(){
       <div><b>${pc('orderId')}: ${o.id}</b><br><span>${pc('orderTeacher')}: ${o.teacherName}｜${o.teacherEmail}｜${o.teacherPhone||''}</span><br><span>${pc('orderedAt')}: ${o.createdAt}</span></div>
       <div><b>${pc('orderPackage')}</b><p>${orderPackageLabel(o)}</p><b>${pc('orderGames')}</b><p>${orderGamesText(o)}</p></div>
       <div><b>${pc('orderAmount')}</b><p>RM${o.amount}</p><b>${pc('orderStatus')}</b><p>${orderStatusLabel(o.status)}</p></div>
-      <div>${o.receiptData?`<button type="button" class="receipt-view-btn" data-order="${o.id}" title="${state.lang==='en'?'View receipt':state.lang==='ms'?'Lihat resit':'查看收据'}"><img class="admin-receipt" src="${o.receiptData}" alt="${state.lang==='en'?'Payment receipt':state.lang==='ms'?'Resit bayaran':'付款收据'}"><span>${state.lang==='en'?'View receipt':state.lang==='ms'?'Lihat resit':'查看收据'}</span></button>`:`<span class="muted">${pc('receiptRequired')}</span>`}</div>
+      <div>${o.receiptData?`<a href="${o.receiptData}" target="_blank"><img class="admin-receipt" src="${o.receiptData}" alt="receipt"></a>`:`<span class="muted">${pc('receiptRequired')}</span>`}</div>
       <div class="account-actions">${o.status==='pending'?`<button class="btn good small approve-purchase-btn" data-order="${o.id}">${pc('confirmPayment')}</button><button class="btn danger small reject-purchase-btn" data-order="${o.id}">${pc('rejectOrder')}</button>`:''}</div>
     </div>`).join('')}</div>` : `<div class="muted">${pc('noPurchaseOrders')}</div>`}
   </div>`;
-}
-function receiptViewerText(key){
-  const dict = {
-    zh:{title:'付款收据查看', close:'关闭', open:'新视窗打开', hint:'管理员可放大查看老师上传的付款收据。'},
-    en:{title:'Payment Receipt Viewer', close:'Close', open:'Open in new window', hint:'Admins can enlarge and review the uploaded payment receipt.'},
-    ms:{title:'Paparan Resit Bayaran', close:'Tutup', open:'Buka dalam tetingkap baharu', hint:'Admin boleh membesarkan dan menyemak resit bayaran yang dimuat naik.'}
-  };
-  return (dict[state.lang] || dict.zh)[key] || key;
-}
-function openReceiptViewer(orderId){
-  const order = (state.purchaseOrders || []).find(o => o.id === orderId);
-  if(!order || !order.receiptData) return;
-  const existing = document.getElementById('receiptViewerLayer');
-  if(existing) existing.remove();
-  const layer = document.createElement('div');
-  layer.id = 'receiptViewerLayer';
-  layer.className = 'receipt-viewer-layer';
-  layer.innerHTML = `
-    <div class="receipt-viewer-card" role="dialog" aria-modal="true">
-      <div class="receipt-viewer-head">
-        <div>
-          <h3>${receiptViewerText('title')}</h3>
-          <p>${receiptViewerText('hint')}</p>
-          <small>${pc('orderId')}: ${order.id} ｜ ${order.teacherName || ''} ｜ RM${order.amount || ''}</small>
-        </div>
-        <button type="button" class="btn secondary small" id="closeReceiptViewerBtn">${receiptViewerText('close')}</button>
-      </div>
-      <div class="receipt-viewer-body"><img src="${order.receiptData}" alt="${pc('receipt')}"></div>
-      <div class="receipt-viewer-actions">
-        <button type="button" class="btn secondary" id="openReceiptNewTabBtn">${receiptViewerText('open')}</button>
-      </div>
-    </div>`;
-  document.body.appendChild(layer);
-  const close = () => layer.remove();
-  document.getElementById('closeReceiptViewerBtn').onclick = close;
-  layer.onclick = e => { if(e.target === layer) close(); };
-  document.getElementById('openReceiptNewTabBtn').onclick = () => {
-    const w = window.open();
-    if(w){
-      w.document.write(`<title>${receiptViewerText('title')}</title><body style="margin:0;background:#0f172a;display:grid;place-items:center;min-height:100vh"><img src="${order.receiptData}" style="max-width:100%;max-height:100vh;object-fit:contain"></body>`);
-      w.document.close();
-    } else {
-      window.open(order.receiptData, '_blank');
-    }
-  };
 }
 function grantOrderAccess(order){
   const user = state.users.find(u=>u.id===order.teacherId); if(!user) return;
@@ -2253,7 +2208,6 @@ function bindDashboard(){
   updatePurchaseAmountPreview();
   $$('.approve-purchase-btn').forEach(btn => btn.onclick = () => approvePurchaseOrder(btn.dataset.order));
   $$('.reject-purchase-btn').forEach(btn => btn.onclick = () => rejectPurchaseOrder(btn.dataset.order));
-  $$('.receipt-view-btn').forEach(btn => btn.onclick = () => openReceiptViewer(btn.dataset.order));
 
   const closePlayerBtn = $('#closePlayerBtn'); if(closePlayerBtn) closePlayerBtn.onclick = closePlayer;
   const fullscreenBtn = $('#fullscreenBtn'); if(fullscreenBtn) fullscreenBtn.onclick = toggleBrowserFullscreen;
