@@ -1,4 +1,4 @@
-// TEMPLATE_EXPLAINER_PAGE_20260626_4_DIRECT_AUTHORIZED_GAMES
+// TEMPLATE_EXPLAINER_PAGE_20260626_5_LOGIN_MAKER_FIX
 
 const GAME_DATA = [
   {id:'memory_match', code:'S001', preview:'previews/memory_match.svg', icon:'🃏', price:20, free:true, path:'games/memory_match_game/index.html', download:'downloads/memory_match.zip'},
@@ -1010,6 +1010,7 @@ const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
 let state = loadState();
 let currentAspectMode = 'auto';
 let currentPlayerGame = null;
+let makerSelectedGameId = null;
 
 function L(){ return I18N[state.lang || 'zh'] || I18N.zh; }
 function t(key){ const lang = state.lang || 'zh'; return UI_OVERRIDE[lang]?.[key] ?? L()[key] ?? I18N.zh[key] ?? key; }

@@ -555,3 +555,10 @@ index.html
 
 ## Admin login force-fix
 Built-in admin account is protected from old localStorage lockout: admin@lead.ai / admin123. If login still fails after deployment, press Ctrl+F5 and click Reset Demo once.
+
+
+## 2026-06-26 修正
+
+- 修复老师 / 管理员登入后报错：`makerSelectedGameId is not defined`。
+- 补回老师后台游戏模板选择的全局状态。
+- 更新 `app.js` 版本号，减少 Vercel 缓存旧文件。
