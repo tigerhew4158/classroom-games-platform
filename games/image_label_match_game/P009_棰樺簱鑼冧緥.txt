@@ -1,0 +1,9 @@
+# P009 图片标签配对赛｜题库范例
+# 用途：图片与标签配对，适合词汇、科学、地理、资讯科技。
+# 建议格式：图片文件名 | 正确标签
+apple.png | 苹果
+banana.png | 香蕉
+keyboard.png | 键盘
+monitor.png | 显示器
+forest.png | 森林
+mine.png | 金矿
