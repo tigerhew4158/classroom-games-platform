@@ -705,5 +705,205 @@ function playSound(type){
 
 init();
 </script>
+
+<!-- S005_RUNTIME_BUTTON_FIX_START -->
+<script>
+/*
+  S005 runtime repair:
+  Fixes cases where earlier event-selector patch stopped before binding buttons.
+  It ensures these controls always work:
+  - 推荐 6 个 / Recommended 6 / Cadangan 6
+  - 全选全部 / Select All / Pilih Semua
+  - 载入范例 / Load Sample / Muat Sampel
+  - 开始游戏 / Start Game / Mula Permainan
+*/
+(function(){
+  const FIX_EVENTS = [
+    {id:'quiz1',icon:'❓',score:1,quiz:true,color:'#8b5cf6'},
+    {id:'quiz2',icon:'⭐',score:2,quiz:true,color:'#2563eb'},
+    {id:'doubleQuiz',icon:'💎',score:4,quiz:true,color:'#06b6d4'},
+    {id:'bonus1',icon:'🎁',score:1,color:'#22c55e'},
+    {id:'bonus2',icon:'🏆',score:2,color:'#16a34a'},
+    {id:'trap1',icon:'⚠️',score:-1,color:'#ef4444'},
+    {id:'trap2',icon:'💣',score:-2,color:'#dc2626'},
+    {id:'steal',icon:'🕵️',score:1,color:'#f97316'},
+    {id:'swap',icon:'🔄',score:0,color:'#a855f7'},
+    {id:'pass',icon:'⏭️',score:0,color:'#64748b'}
+  ];
+  const FIX_RECOMMENDED = ['quiz1','quiz2','doubleQuiz','bonus1','trap1','steal'];
+  const FIX_TEXT = {
+    zh:{quiz1:'+1 题目',quiz2:'+2 题目',doubleQuiz:'双倍挑战',bonus1:'+1 奖励',bonus2:'+2 奖励',trap1:'-1 陷阱',trap2:'-2 陷阱',steal:'偷 1 分',swap:'交换分数',pass:'跳过',selected:'已勾选 {n} / {t} 个事件',loaded:'已载入中文题库范例。'},
+    en:{quiz1:'+1 Question',quiz2:'+2 Questions',doubleQuiz:'Double Challenge',bonus1:'+1 Bonus',bonus2:'+2 Bonus',trap1:'-1 Trap',trap2:'-2 Trap',steal:'Steal 1 Point',swap:'Swap Scores',pass:'Skip',selected:'Selected {n} / {t} events',loaded:'English sample bank loaded.'},
+    ms:{quiz1:'+1 Soalan',quiz2:'+2 Soalan',doubleQuiz:'Cabaran Berganda',bonus1:'+1 Ganjaran',bonus2:'+2 Ganjaran',trap1:'-1 Perangkap',trap2:'-2 Perangkap',steal:'Curi 1 Markah',swap:'Tukar Markah',pass:'Langkau',selected:'Dipilih {n} / {t} peristiwa',loaded:'Bank soalan contoh Bahasa Melayu dimuatkan.'}
+  };
+  const FIX_SAMPLES = {
+    zh:`马来西亚的首都是什么？,吉隆坡,槟城,新山,马六甲
+太阳从哪里升起？,东方,西方,南方,北方
+AI 的中文意思是什么？,人工智能,自动输入,高级网络,主动图像
+网络账号密码应该怎样设置？,复杂且不轻易告诉别人
+水在标准大气压下通常会在 100°C 沸腾。,正确,错误
+植物制造食物的过程叫什么？,光合作用,呼吸作用,蒸发作用,消化作用
+早安的马来文是什么？,selamat pagi,terima kasih,selamat malam,apa khabar
+ChatGPT 属于什么工具？,AI工具,交通工具,运动工具,音乐工具`,
+    en:`What is the capital of Malaysia?,Kuala Lumpur,Penang,Johor Bahru,Malacca
+Where does the sun rise?,East,West,South,North
+What does AI stand for?,Artificial Intelligence,Auto Internet,Advanced Image,Active Input
+How should a password be set?,Long and hard to guess
+Water normally boils at 100°C at standard atmospheric pressure.,True,False
+What process helps plants make food?,Photosynthesis,Respiration,Evaporation,Digestion
+How do you say good morning in Malay?,selamat pagi,terima kasih,selamat malam,apa khabar
+ChatGPT belongs to which type of tool?,AI tool,Transport tool,Sports tool,Music tool`,
+    ms:`Apakah ibu negara Malaysia?,Kuala Lumpur,Penang,Johor Bahru,Melaka
+Di manakah matahari terbit?,Timur,Barat,Selatan,Utara
+Apakah maksud AI?,Kecerdasan Buatan,Internet Automatik,Imej Lanjutan,Input Aktif
+Bagaimanakah kata laluan patut ditetapkan?,Panjang dan sukar diteka
+Air biasanya mendidih pada 100°C pada tekanan atmosfera standard.,Betul,Salah
+Apakah proses tumbuhan menghasilkan makanan?,Fotosintesis,Respirasi,Penyejatan,Pencernaan
+Bagaimanakah sebutan selamat pagi dalam Bahasa Melayu?,selamat pagi,terima kasih,selamat malam,apa khabar
+ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Alat muzik`
+  };
+  const $ = (id) => document.getElementById(id);
+  function lang(){
+    const v = ($('langSelect') && $('langSelect').value) || document.documentElement.lang || 'zh';
+    if(String(v).toLowerCase().startsWith('en')) return 'en';
+    if(String(v).toLowerCase().startsWith('ms')) return 'ms';
+    return 'zh';
+  }
+  function label(id){ return (FIX_TEXT[lang()] && FIX_TEXT[lang()][id]) || FIX_TEXT.zh[id] || id; }
+  function selectedIds(){
+    const checks = Array.from(document.querySelectorAll('#eventSelector .eventCheck'));
+    return checks.filter(c=>c.checked).map(c=>c.value);
+  }
+  function activeEvents(){
+    const ids = selectedIds();
+    const use = ids.length ? ids : FIX_RECOMMENDED;
+    return FIX_EVENTS.filter(e=>use.includes(e.id));
+  }
+  function updateSummary(){
+    const el = $('eventSummary');
+    if(!el) return;
+    const txt = label('selected').replace('{n}', selectedIds().length || FIX_RECOMMENDED.length).replace('{t}', FIX_EVENTS.length);
+    el.textContent = txt;
+  }
+  function renderEventSelector(ids){
+    const box = $('eventSelector');
+    if(!box) return;
+    const set = new Set(ids && ids.length ? ids : FIX_RECOMMENDED);
+    box.innerHTML = FIX_EVENTS.map(ev => (
+      `<label class="eventChoice ${set.has(ev.id)?'active':''}">
+        <input class="eventCheck" type="checkbox" value="${ev.id}" ${set.has(ev.id)?'checked':''}>
+        <span class="icon">${ev.icon}</span><span>${label(ev.id)}</span>
+      </label>`
+    )).join('');
+    Array.from(box.querySelectorAll('.eventCheck')).forEach(cb=>{
+      cb.addEventListener('change', function(){
+        cb.closest('.eventChoice')?.classList.toggle('active', cb.checked);
+        renderWheelFallback();
+        renderEventListFallback();
+        updateSummary();
+        try{ if(typeof saveSettings === 'function') saveSettings(); }catch(e){}
+      });
+    });
+    updateSummary();
+  }
+  function setEvents(ids){
+    if(!$('eventSelector')) return;
+    if(!document.querySelector('#eventSelector .eventCheck')) renderEventSelector(ids);
+    const set = new Set(ids && ids.length ? ids : FIX_RECOMMENDED);
+    Array.from(document.querySelectorAll('#eventSelector .eventCheck')).forEach(cb=>{
+      cb.checked = set.has(cb.value);
+      cb.closest('.eventChoice')?.classList.toggle('active', cb.checked);
+    });
+    renderWheelFallback();
+    renderEventListFallback();
+    updateSummary();
+    try{ if(typeof saveSettings === 'function') saveSettings(); }catch(e){}
+  }
+  function renderWheelFallback(){
+    const wheel = $('wheel');
+    if(!wheel) return;
+    const defs = activeEvents();
+    if(!defs.length){ wheel.innerHTML=''; return; }
+    const seg = 360 / defs.length;
+    wheel.style.background = `conic-gradient(${defs.map((ev,i)=>`${ev.color} ${i*seg}deg ${(i+1)*seg}deg`).join(',')})`;
+    if(!wheel.style.transform) wheel.style.transform = 'rotate(0deg)';
+    wheel.innerHTML = defs.map((ev,i)=>{
+      const angle = i*seg + seg/2;
+      return `<div class="wheelLabel" style="transform:rotate(${angle}deg) translateY(-158px) rotate(90deg)">${ev.icon}<br>${label(ev.id)}</div>`;
+    }).join('');
+  }
+  function renderEventListFallback(){
+    const list = $('eventList');
+    if(!list) return;
+    list.innerHTML = activeEvents().map((ev,i)=>`<div class="eventItem"><span><b>${i+1}.</b> <b>${ev.icon}</b>${label(ev.id)}</span><span>${ev.quiz ? (lang()==='en'?'Question':lang()==='ms'?'Soalan':'题目') : (lang()==='en'?'Wheel Event':lang()==='ms'?'Peristiwa':'转盘事件')}</span></div>`).join('');
+  }
+  function loadSample(){
+    const bank = $('questionBank');
+    if(!bank) return;
+    bank.value = FIX_SAMPLES[lang()] || FIX_SAMPLES.zh;
+    bank.dispatchEvent(new Event('input',{bubbles:true}));
+    bank.dispatchEvent(new Event('change',{bubbles:true}));
+    try{ if(typeof parseQuestions === 'function') parseQuestions(); }catch(e){}
+    try{ if(typeof saveSettings === 'function') saveSettings(); }catch(e){}
+    const log = $('eventLog');
+    if(log) log.textContent = '✅ ' + label('loaded');
+  }
+  function safeStart(ev){
+    // Capture-phase fallback. If the original listener is broken or absent, this still starts.
+    if(ev){ ev.stopPropagation(); }
+    try{
+      if(typeof startGame === 'function'){
+        startGame();
+      }else{
+        const layout = $('layout');
+        if(layout) layout.classList.add('playing');
+        const spin = $('spinBtn');
+        if(spin) spin.disabled = false;
+      }
+    }catch(err){
+      console.error('[S005 start fallback]', err);
+      alert((lang()==='en'?'Cannot start game. Please check the question bank.':lang()==='ms'?'Tidak dapat mula. Sila semak bank soalan.':'无法开始游戏，请检查题库格式。') + '\n' + err.message);
+    }
+  }
+  function bindButton(id, fn, capture=false){
+    const el = $(id);
+    if(!el || el.dataset.s005RuntimeFixed) return;
+    el.dataset.s005RuntimeFixed = '1';
+    el.addEventListener('click', fn, capture);
+  }
+  function init(){
+    // Always render selector; this fixes blank event selector and blank wheel.
+    renderEventSelector(selectedIds().length ? selectedIds() : FIX_RECOMMENDED);
+    renderWheelFallback();
+    renderEventListFallback();
+
+    // Expose fallback functions for older scripts that reference these names.
+    window.getActiveEventDefs = window.getActiveEventDefs || activeEvents;
+    window.renderEventSelector = window.renderEventSelector || renderEventSelector;
+    window.setSelectedEventIds = window.setSelectedEventIds || setEvents;
+    window.renderWheel = window.renderWheel || renderWheelFallback;
+    window.renderEventList = window.renderEventList || renderEventListFallback;
+
+    bindButton('eventSuggest6Btn', function(e){ e.preventDefault(); setEvents(FIX_RECOMMENDED); });
+    bindButton('eventSelectAllBtn', function(e){ e.preventDefault(); setEvents(FIX_EVENTS.map(x=>x.id)); });
+    bindButton('sampleBtn', function(e){ e.preventDefault(); loadSample(); }, true);
+    bindButton('startBtn', safeStart, true);
+
+    const langSelect = $('langSelect');
+    if(langSelect && !langSelect.dataset.s005LangFixed){
+      langSelect.dataset.s005LangFixed='1';
+      langSelect.addEventListener('change', function(){
+        renderEventSelector(selectedIds().length ? selectedIds() : FIX_RECOMMENDED);
+        renderWheelFallback();
+        renderEventListFallback();
+      });
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- S005_RUNTIME_BUTTON_FIX_END -->
+
 </body>
 </html>
