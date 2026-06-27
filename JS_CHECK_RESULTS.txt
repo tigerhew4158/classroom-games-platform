@@ -1,0 +1,7 @@
+memory_match_game: 0
+true_false_flash_game: 0
+sentence_order_game: 0
+treasure_box_game: 0
+lucky_wheel_quiz_game: 0
+tug_spell_game: 0
+whack_a_mole_quiz_game: 0
