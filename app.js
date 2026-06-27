@@ -1124,15 +1124,45 @@ function updateTeacherPackageByOwnedGames(user){
 function langSelect(id='langSelect'){
   return `<label class="lang-wrap">${t('language')} <select id="${id}" class="select lang-select">${LANGS.map(l=>`<option value="${l.id}" ${state.lang===l.id?'selected':''}>${l.label}</option>`).join('')}</select></label>`;
 }
+function themeLabel(){
+  const mode = state.theme === 'dark' ? 'dark' : 'light';
+  const labels = {
+    zh: {light:'☀️ 浅色', dark:'🌙 暗色'},
+    en: {light:'☀️ Light', dark:'🌙 Dark'},
+    ms: {light:'☀️ Cerah', dark:'🌙 Gelap'}
+  };
+  return (labels[state.lang || 'zh'] || labels.zh)[mode];
+}
+function themeToggle(id='themeToggle'){
+  const mode = state.theme === 'dark' ? 'dark' : 'light';
+  return `<button id="${id}" type="button" class="btn secondary small theme-toggle" data-theme-mode="${mode}" title="${themeLabel()}">${themeLabel()}</button>`;
+}
+function applyThemeClasses(){
+  const mode = state.theme === 'dark' ? 'dark' : 'light';
+  document.documentElement.dataset.theme = mode;
+  document.body.classList.remove('theme-light','theme-dark');
+  document.body.classList.add(mode === 'dark' ? 'theme-dark' : 'theme-light');
+}
 function bindLangSelects(){
   $$('.lang-select').forEach(sel => {
     sel.onchange = () => { state.lang = sel.value; saveState(); render(); };
+  });
+}
+function bindThemeToggles(){
+  $$('.theme-toggle').forEach(btn => {
+    btn.onclick = () => {
+      state.theme = state.theme === 'dark' ? 'light' : 'dark';
+      saveState();
+      applyThemeClasses();
+      render();
+    };
   });
 }
 
 function defaultState(){
   return {
     lang:'zh',
+    theme:'light',
     feedback:[],
     purchaseOrders:[],
     users:[
@@ -1212,6 +1242,7 @@ function loadState(){
       const parsed = JSON.parse(raw);
       if(!parsed.users || !Array.isArray(parsed.users)) return defaultState();
       if(!parsed.lang) parsed.lang='zh';
+      if(!parsed.theme) parsed.theme='light';
       if(!Array.isArray(parsed.feedback)) parsed.feedback=[];
       if(!Array.isArray(parsed.purchaseOrders)) parsed.purchaseOrders=[];
       parsed.users.forEach(u=>{
@@ -1420,6 +1451,7 @@ function submitFeedback(gameCode, message){
 function logout(){ state.currentUser = null; saveState(); closePlayer(); render(); }
 
 function render(){
+  applyThemeClasses();
   updatePlayerLabels();
   const app = $('#app');
   const user = getUser();
@@ -1427,11 +1459,13 @@ function render(){
     app.innerHTML = renderAuth();
     bindAuth();
     bindLangSelects();
+    bindThemeToggles();
     return;
   }
   app.innerHTML = renderDashboard(user);
   bindDashboard();
   bindLangSelects();
+  bindThemeToggles();
 }
 
 
@@ -1511,7 +1545,7 @@ function renderAuth(){
   <div class="template-landing-wrap">
     <header class="template-nav">
       <div class="template-brand"><div class="logo formal-logo">🎮</div><div><b>${c.title}</b><span>${c.subtitle}</span></div></div>
-      <div class="template-nav-actions">${langSelect('authLangSelect')}<a class="btn secondary small" href="#templateCatalog">${c.primary}</a><a class="btn small" href="#loginPurchase">${c.secondary}</a></div>
+      <div class="template-nav-actions">${themeToggle('authThemeToggle')}${langSelect('authLangSelect')}<a class="btn secondary small" href="#templateCatalog">${c.primary}</a><a class="btn small" href="#loginPurchase">${c.secondary}</a></div>
     </header>
     <main class="template-landing-main">
       <section class="template-hero">
@@ -1815,6 +1849,7 @@ function renderDashboard(user){
         </div>
       </div>
       <div class="top-actions">
+        ${themeToggle('dashThemeToggle')}
         ${langSelect('dashLangSelect')}
         <div class="pill teacher-mode-pill">${user.name}（${roleText}）</div>
         <button id="logoutBtn" class="btn secondary">${t('logout')}</button>
