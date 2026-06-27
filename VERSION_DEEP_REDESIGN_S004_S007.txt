@@ -1,0 +1,11 @@
+Deep redesign completed for:
+- S004 Treasure Box
+- S005 Lucky Wheel Quiz
+- S006 Classroom Text Match Battle
+- S007 Whack-a-Mole Quiz
+
+Integrated with previous package:
+- S001 redesigned
+- S002 redesigned
+- S003 redesigned
+- Unified cute UI layer applied to all 24 games

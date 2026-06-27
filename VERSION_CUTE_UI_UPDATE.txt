@@ -1,0 +1,13 @@
+Classroom Games Platform - Cute UI Unified Version
+
+Included in this package:
+1. S001 redesigned trilingual version retained.
+2. S002 redesigned trilingual version retained.
+3. S003 upgraded to the same cute visual series style.
+4. All 24 games receive a unified cute UI polish layer:
+   - brighter classroom-friendly color system
+   - rounded buttons and panels
+   - larger button feel
+   - cleaner inputs and textareas
+   - softer shadows and hover animation
+   - more consistent visual language across templates

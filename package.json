@@ -1,9 +1,9 @@
 {
-  "name": "classroom-games-platform-whiteboard",
-  "version": "1.0.0",
+  "name": "classroom-games-platform-vercel-final",
+  "version": "2.0.0",
   "private": true,
-  "description": "No-login classroom games platform for Vercel static deployment",
+  "description": "Vercel static release for 24 classroom games platform with cute UI and S001-S007 redesigned games",
   "scripts": {
-    "build": "echo Static site ready"
+    "build": "echo Static site ready for Vercel"
   }
 }

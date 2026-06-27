@@ -1,0 +1,34 @@
+Vercel Final Release Manifest
+Generated: 2026-06-27
+Games parsed from app.js: 24
+Individual downloads regenerated:
+- memory_match: downloads/memory_match.zip
+- true_false: downloads/true_false.zip
+- sentence_order: downloads/sentence_order.zip
+- treasure_box: downloads/treasure_box.zip
+- lucky_wheel: downloads/lucky_wheel.zip
+- classification_conveyor: downloads/classification_conveyor.zip
+- platform_quiz: downloads/platform_quiz.zip
+- monster_defense: downloads/monster_defense.zip
+- whack_mole: downloads/whack_mole.zip
+- text_match: downloads/text_match.zip
+- bomb_quiz: downloads/bomb_quiz.zip
+- knowledge_race: downloads/knowledge_race.zip
+- dungeon_dragon_raid: downloads/dungeon_dragon_raid.zip
+- picture_word_guess: downloads/picture_word_guess.zip
+- image_puzzle_speed_race: downloads/image_puzzle_speed_race.zip
+- two_team_puzzle_duel: downloads/two_team_puzzle_duel.zip
+- island_conquest: downloads/island_conquest.zip
+- timeline_sort_challenge: downloads/timeline_sort_challenge.zip
+- image_label_match: downloads/image_label_match.zip
+- team_relay_quiz: downloads/team_relay_quiz.zip
+- find_difference: downloads/find_difference.zip
+- keyword_beachhead: downloads/keyword_beachhead.zip
+- kingdom_resource_battle: downloads/kingdom_resource_battle.zip
+- spot_diff_v2: downloads/spot_diff_v2.zip
+- downloads/all_classroom_games_offline_pack.zip
+
+Notes:
+- Upload extracted contents to GitHub root.
+- Do not upload the ZIP itself as the repo root content.
+- Vercel Output Directory: .

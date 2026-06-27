@@ -828,3 +828,115 @@ textarea.input{
 .admin-game-name{font-size:13px;font-weight:800;line-height:1.25;color:#e5eefc}.admin-game-price{font-size:12px;color:#facc15;font-weight:950;white-space:nowrap}
 .account-table th:nth-child(4),.account-table td:nth-child(4){min-width:430px}
 @media(max-width:900px){.admin-auth-games{min-width:0}.admin-auth-game-list{grid-template-columns:1fr}.admin-game-check-card{grid-template-columns:auto 50px 1fr auto}.account-table th:nth-child(4),.account-table td:nth-child(4){min-width:320px}}
+
+
+/* ===== Cute homepage override for 24-game platform ===== */
+:root{
+  --home-cute-blue:#2f86ff;
+  --home-cute-blue2:#6dc5ff;
+  --home-cute-sky:#dff4ff;
+  --home-cute-panel:#ffffffea;
+  --home-cute-stroke:#b8ddff;
+  --home-cute-text:#16375f;
+  --home-cute-muted:#5f7ea8;
+  --home-cute-yellow:#ffd14d;
+  --home-cute-green:#45ca7c;
+  --home-cute-pink:#ff77af;
+  --home-cute-purple:#8e73ff;
+  --home-cute-shadow:0 16px 36px rgba(34,94,184,.16);
+  --home-cute-shadow2:0 24px 56px rgba(34,94,184,.20);
+}
+body{
+  background:
+    radial-gradient(circle at 12% 12%, rgba(255,255,255,.42), transparent 18%),
+    radial-gradient(circle at 88% 10%, rgba(255,255,255,.28), transparent 14%),
+    linear-gradient(180deg,#1e74e9 0%, #3596ff 18%, #79cdfd 58%, #c8efff 100%) !important;
+  color:var(--home-cute-text) !important;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.55;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='120' viewBox='0 0 180 120'%3E%3Cg fill='rgba(255,255,255,0.16)'%3E%3Cpath d='M20 40c0-10 8-18 18-18 6 0 11 2 15 7 3-6 10-10 17-10 11 0 20 9 20 20 0 1 0 1 0 2h4c9 0 16 7 16 16s-7 16-16 16H25C11 73 0 62 0 48c0-11 9-20 20-20z'/%3E%3Ccircle cx='145' cy='27' r='3'/%3E%3Ccircle cx='155' cy='34' r='2'/%3E%3Cpath d='M146 55 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z'/%3E%3C/g%3E%3C/svg%3E") repeat;
+}
+#app,.page,.template-landing-wrap,.template-landing-main,.formal-auth-wrap,.simplified-page{position:relative;z-index:1;}
+.btn,.formal-primary-btn,.formal-secondary-btn,.template-hero-actions a,.open-game-btn,.buy-single-btn,.buy-pick5-fast-btn,.generate-game-btn,.make-game-btn,.approve-teacher-btn,.approve-purchase-btn,.reject-purchase-btn,.delete-teacher-btn,.save-user-btn,.reset-password-btn{
+  border-radius:18px !important;
+  border:2px solid rgba(255,255,255,.58) !important;
+  box-shadow:var(--home-cute-shadow) !important;
+  font-weight:900 !important;
+  transition:transform .16s ease,box-shadow .16s ease,filter .16s ease !important;
+}
+.btn:hover,.formal-primary-btn:hover,.formal-secondary-btn:hover,.template-hero-actions a:hover,.open-game-btn:hover,.buy-single-btn:hover,.buy-pick5-fast-btn:hover,.generate-game-btn:hover,.make-game-btn:hover{transform:translateY(-2px) scale(1.01);box-shadow:var(--home-cute-shadow2)!important;filter:brightness(1.03)}
+.btn:active,.formal-primary-btn:active,.formal-secondary-btn:active{transform:translateY(1px) scale(.99)}
+.btn,.formal-primary-btn,.buy-single-btn,.approve-teacher-btn,.approve-purchase-btn,.save-user-btn{background:linear-gradient(180deg,#ffd85b,#ffb223) !important;color:#714600 !important;}
+.btn.secondary,.formal-secondary-btn,.reset-password-btn,.reject-purchase-btn{background:linear-gradient(180deg,#ffffff,#ebf5ff) !important;color:var(--home-cute-text)!important;border-color:var(--home-cute-stroke)!important}
+.btn.danger,.delete-teacher-btn{background:linear-gradient(180deg,#ff9cb0,#ff6982)!important;color:white!important}
+.btn.success,.generate-game-btn,.make-game-btn,.buy-pick5-fast-btn{background:linear-gradient(180deg,#5de08b,#35bf6c)!important;color:white!important}
+.input,.select,input,textarea,select{
+  border-radius:16px !important;
+  border:2px solid var(--home-cute-stroke) !important;
+  background:#ffffffef !important;
+  color:var(--home-cute-text) !important;
+  box-shadow:inset 0 3px 12px rgba(59,130,246,.05), 0 8px 18px rgba(59,130,246,.08) !important;
+}
+input::placeholder,textarea::placeholder{color:#7a97bc !important}
+.hero,.template-hero,.formal-auth-card,.template-section,.landing-login-panel,.plan-card,.template-hero-card,.template-level-block,.template-detail-card,.template-step,.template-stat,.game-card,.tool-card,.profile-panel,.teacher-backend-panel,.purchase-panel,.purchase-order,.feedback-panel,.teacher-tools,.admin-account-panel,.purchase-admin-box,.profile-form,.authorized-summary,.my-orders-box,.teacher-simple-layout,.hero > div,.card{
+  background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(242,249,255,.92)) !important;
+  color:var(--home-cute-text) !important;
+  border:2px solid rgba(255,255,255,.62) !important;
+  box-shadow:var(--home-cute-shadow) !important;
+}
+.template-nav,.formal-auth-top,.top-actions,.player-topbar{
+  background:linear-gradient(90deg,#0f68e8,#58b7ff) !important;
+  border:2px solid rgba(255,255,255,.45) !important;
+  border-radius:26px !important;
+  box-shadow:var(--home-cute-shadow2) !important;
+}
+.template-nav *,.formal-auth-top *,.player-topbar *{text-shadow:none !important}
+.template-nav a,.formal-auth-top a,.template-hero-copy h1,.formal-kicker,.formal-section-title,.brand h1,.brand p,.template-nav .template-brand,.template-nav .template-brand *{color:white !important}
+.template-brand,.brand{align-items:center}
+.logo,.formal-logo{
+  background:linear-gradient(180deg,#ffd85b,#ffb223) !important;
+  color:#7a4b00 !important;
+  border:3px solid rgba(255,255,255,.65) !important;
+  box-shadow:0 10px 24px rgba(0,0,0,.12) !important;
+}
+.template-hero-copy p,.template-section-head p,.template-step p,.template-detail-body p,.plan-card p,.landing-login-panel p,.formal-msg,.template-level-title span,.game-card p,.muted,.sub,.notice,.template-detail-card small{color:var(--home-cute-muted) !important}
+.template-hero-copy h1,.template-section-head h2,.template-cta-band h2,.template-level-title b,.plan-card h3,.game-card h4,.formal-section-title{color:#144079 !important}
+.template-preview-window{
+  background:#e8f5ff !important;
+  border:2px solid rgba(255,255,255,.68) !important;
+  box-shadow:var(--home-cute-shadow2) !important;
+}
+.preview-toolbar{background:linear-gradient(90deg,#7acbff,#dff4ff) !important}
+.preview-board{background:linear-gradient(180deg,#74c7ff,#d8f3ff) !important}
+.preview-board span{background:rgba(255,255,255,.76) !important;color:#15407b !important;border:2px solid rgba(255,255,255,.7) !important;box-shadow:0 10px 22px rgba(33,94,184,.12) !important}
+.template-stat b,.plan-card b,.purchase-amount,.purchase-amount-preview{color:#ff9d00 !important}
+.template-code,.code,.game-code-badge{background:linear-gradient(180deg,#4a97ff,#2674f7) !important;color:white !important;border:none !important}
+.template-code.intermediate,.tag.level.intermediate,.level.intermediate,.admin-auth-level.intermediate{background:linear-gradient(180deg,#ffcc59,#f7aa15)!important;color:#7a4600!important}
+.template-code.advanced,.tag.level.advanced,.level.advanced,.admin-auth-level.advanced{background:linear-gradient(180deg,#9a7bff,#7858ff)!important;color:white!important}
+.tag.level.beginner,.level.beginner,.admin-auth-level.beginner{background:linear-gradient(180deg,#65df94,#35c26d)!important;color:white!important}
+.template-level-title{background:linear-gradient(90deg,#dff3ff,#f7fbff) !important}
+.template-level-block.intermediate .template-level-title{background:linear-gradient(90deg,#fff4d4,#fffaf0) !important}
+.template-level-block.advanced .template-level-title{background:linear-gradient(90deg,#efe8ff,#fbf9ff) !important}
+.template-step em,.template-level-title em,.pill,.status-badge,.teacher-mode-pill,.mode-badge,.user-category-current,.tag,.level-chip,.template-icon{box-shadow:0 8px 18px rgba(52,113,193,.12)}
+.template-step em{background:linear-gradient(180deg,#ffd85b,#ffb223)!important;color:#6f4600!important;border-radius:14px!important}
+.template-detail-card summary,.admin-game-check-card,.game-preview-wrap,.qr-card,.receipt-preview,.admin-auth-games,.template-detail-body div,.backend-notice,.trial-notice,.promo-register-note,.purchase-msg,.feedback-item,.summary-game,.order-mini{background:linear-gradient(180deg,#ffffff,#eef7ff)!important;border:2px solid var(--home-cute-stroke)!important;color:var(--home-cute-text)!important}
+.game-card{border-radius:24px !important;overflow:hidden}
+.game-preview,.game-preview-wrap{border-radius:18px !important}
+.game-preview-wrap{padding:10px !important}
+.purchase-layout,.purchase-login-grid,.simplified-grid,.game-grid,.plan-grid,.template-step-grid,.template-detail-list,.template-stat-grid{gap:18px !important}
+.landing-login-panel,.formal-auth-right{border-radius:26px !important}
+.formal-auth-right{background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(240,248,255,.93)) !important;color:var(--home-cute-text)!important}
+.formal-auth-right h2,.landing-login-panel h2{color:#144079 !important}
+.status-badge.approved,.approved{background:linear-gradient(180deg,#68e396,#38be6e)!important;color:white!important}
+.status-badge.pending,.pending{background:linear-gradient(180deg,#ffd762,#ffb62f)!important;color:#6e4500!important}
+.status-badge.rejected,.disabled,.status-badge.disabled{background:linear-gradient(180deg,#ffc0cb,#ff8aa0)!important;color:#7b1e32!important}
+.player-overlay{backdrop-filter:blur(6px)}
+.player-stage{background:linear-gradient(180deg,#dff3ff,#bce8ff) !important}
+.stage-safe-area{border:3px dashed rgba(45,132,255,.35)!important}
+.frame-shell{border-radius:24px !important;box-shadow:0 24px 60px rgba(37,99,235,.18)!important;border:4px solid rgba(255,255,255,.65)!important}
+@media(max-width:900px){
+  .template-nav,.formal-auth-top{border-radius:22px!important}
+  .template-hero-copy h1{font-size:38px !important}
+  .template-landing-main{padding-top:24px !important}
+}

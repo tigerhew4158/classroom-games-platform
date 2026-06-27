@@ -1,0 +1,11 @@
+
+Classroom Games Platform - 24 Games Final Test Package
+This package includes:
+1. S001 redesigned trilingual memory match game already integrated.
+2. S002 redesigned trilingual true/false flash game integrated.
+3. Shared UI polish applied across the remaining games:
+   - larger button feel
+   - cleaner font rendering
+   - softer shadows
+   - hover / click animation
+   - refined form controls
