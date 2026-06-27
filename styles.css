@@ -1137,3 +1137,156 @@ body.theme-light .player-topbar *{color:#ffffff!important;}
 body.theme-light .template-nav .theme-toggle,
 body.theme-light .formal-auth-top .theme-toggle,
 body.theme-light .player-topbar .theme-toggle{color:#173055!important;}
+
+/* ===== Dark mode hard fix: remove remaining light cards in catalog/dashboard ===== */
+html[data-theme="dark"] body.theme-dark,
+body.theme-dark{
+  --home-cute-panel:#0e1c35;
+  --home-cute-panel2:#142744;
+  --home-cute-text:#f4f9ff;
+  --home-cute-muted:#c5d7f2;
+  --home-cute-stroke:#385b8f;
+}
+html[data-theme="dark"] body.theme-dark *,
+body.theme-dark *{
+  scrollbar-color:#4c74af #08172f;
+}
+body.theme-dark .template-catalog-section,
+body.theme-dark .template-level-block,
+body.theme-dark .template-level-list,
+body.theme-dark .template-detail-list,
+body.theme-dark .level-accordion,
+body.theme-dark .game-grid,
+body.theme-dark .simplified-grid{
+  color:var(--theme-dark-text)!important;
+}
+body.theme-dark .template-level-title,
+body.theme-dark .level-accordion > summary,
+body.theme-dark details > summary,
+body.theme-dark .template-detail-card,
+body.theme-dark .template-detail-card summary,
+body.theme-dark .game-card,
+body.theme-dark .game-card-inner,
+body.theme-dark .game-card-body,
+body.theme-dark .game-card .game-preview,
+body.theme-dark .game-card .game-info,
+body.theme-dark .summary-game,
+body.theme-dark .level-chip,
+body.theme-dark .template-icon,
+body.theme-dark .locked-title,
+body.theme-dark .purchase-check,
+body.theme-dark .package-box,
+body.theme-dark .package-tabs label,
+body.theme-dark .order-mini,
+body.theme-dark .feedback-item,
+body.theme-dark .admin-game-check-card,
+body.theme-dark .template-detail-body div{
+  background:linear-gradient(180deg,#142744,#0d1f3a)!important;
+  color:var(--theme-dark-text)!important;
+  border-color:rgba(108,147,205,.58)!important;
+  box-shadow:0 14px 32px rgba(0,0,0,.30)!important;
+}
+body.theme-dark .template-level-title{
+  background:linear-gradient(90deg,#173766,#102847)!important;
+}
+body.theme-dark .template-level-block.intermediate .template-level-title{
+  background:linear-gradient(90deg,#4a3212,#1a2b48)!important;
+}
+body.theme-dark .template-level-block.advanced .template-level-title{
+  background:linear-gradient(90deg,#332265,#152642)!important;
+}
+body.theme-dark .template-detail-card summary strong,
+body.theme-dark .template-detail-card summary b,
+body.theme-dark .template-detail-card summary span,
+body.theme-dark .template-detail-card summary small,
+body.theme-dark .template-level-title b,
+body.theme-dark .template-level-title span,
+body.theme-dark .template-level-title em,
+body.theme-dark .level-accordion > summary b,
+body.theme-dark .level-accordion > summary span,
+body.theme-dark .level-accordion > summary em,
+body.theme-dark .game-card h3,
+body.theme-dark .game-card h4,
+body.theme-dark .game-card p,
+body.theme-dark .game-card small,
+body.theme-dark .game-card span,
+body.theme-dark .summary-game,
+body.theme-dark .level-chip b,
+body.theme-dark .level-chip span{
+  color:var(--theme-dark-text)!important;
+}
+body.theme-dark .template-detail-card summary small,
+body.theme-dark .template-level-title span,
+body.theme-dark .game-card p,
+body.theme-dark .game-card small,
+body.theme-dark .level-chip span{
+  color:var(--theme-dark-muted)!important;
+}
+body.theme-dark .template-code,
+body.theme-dark .game-code-badge,
+body.theme-dark .code{
+  background:linear-gradient(180deg,#4d91ff,#2f66d4)!important;
+  color:#ffffff!important;
+}
+body.theme-dark .template-icon{
+  background:rgba(255,255,255,.10)!important;
+  color:#ffffff!important;
+}
+body.theme-dark .template-detail-body p,
+body.theme-dark .template-detail-body b{
+  color:var(--theme-dark-text)!important;
+}
+body.theme-dark .template-detail-body p{
+  color:var(--theme-dark-muted)!important;
+}
+body.theme-dark .template-section,
+body.theme-dark .template-cta-band,
+body.theme-dark .template-hero,
+body.theme-dark .template-hero-card,
+body.theme-dark .template-stat,
+body.theme-dark .template-step,
+body.theme-dark .plan-card,
+body.theme-dark .landing-login-panel,
+body.theme-dark .formal-auth-right,
+body.theme-dark .teacher-backend-panel,
+body.theme-dark .profile-panel,
+body.theme-dark .purchase-panel,
+body.theme-dark .feedback-panel,
+body.theme-dark .authorized-summary,
+body.theme-dark .my-orders-box{
+  background:linear-gradient(180deg,rgba(17,34,64,.98),rgba(9,20,40,.96))!important;
+  color:var(--theme-dark-text)!important;
+  border-color:rgba(108,147,205,.55)!important;
+}
+body.theme-dark a:not(.btn),
+body.theme-dark .template-nav a:not(.btn){
+  color:#dbeafe!important;
+}
+body.theme-dark .btn.secondary.small,
+body.theme-dark .theme-toggle,
+body.theme-dark select,
+body.theme-dark .lang-select{
+  background:linear-gradient(180deg,#25487d,#152c58)!important;
+  color:#f4f9ff!important;
+  border-color:#4e78b9!important;
+}
+body.theme-light .template-detail-card summary,
+body.theme-light .template-level-title,
+body.theme-light .game-card,
+body.theme-light .summary-game,
+body.theme-light .level-chip{
+  color:#15365f!important;
+}
+body.theme-light .template-detail-card summary strong,
+body.theme-light .template-detail-card summary b,
+body.theme-light .template-level-title b,
+body.theme-light .game-card h3,
+body.theme-light .game-card h4{
+  color:#15365f!important;
+}
+body.theme-light .template-detail-card summary small,
+body.theme-light .template-level-title span,
+body.theme-light .game-card p,
+body.theme-light .game-card small{
+  color:#5f7ea8!important;
+}
