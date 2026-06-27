@@ -414,9 +414,163 @@
     body.ratio-43 .stage-dot{width:24px; height:24px;}
     body.ratio-43 .tip-box{font-size:11px; padding:7px;}
 
+
+  /* =========================================================
+     S001 DARK-ONLY CLASSROOM BUILD
+     Default theme is dark. No light-mode override is included.
+     All Chinese / English / Malay text remains bright and readable.
+     ========================================================= */
+  :root{
+    --bg1:#061a3d;
+    --bg2:#04112a;
+    --bg3:#010713;
+    --panel:#0d1b34;
+    --text:#f4f8ff;
+    --deep:#dbeaff;
+    --outline:rgba(120,174,255,.55);
+    --shadow:0 18px 44px rgba(0,0,0,.48);
+    --soft-shadow:0 10px 24px rgba(0,0,0,.34);
+  }
+  html,body{background:#020817;color:#f4f8ff;}
+  body{
+    color:#f4f8ff !important;
+    background:
+      radial-gradient(circle at 8% 10%, rgba(46,111,255,.22), transparent 22%),
+      radial-gradient(circle at 86% 12%, rgba(0,225,255,.12), transparent 20%),
+      radial-gradient(circle at 52% 92%, rgba(103,232,249,.08), transparent 28%),
+      linear-gradient(180deg,#071f4a 0%, #04132d 40%, #020817 100%) !important;
+  }
+  .app{color:#f4f8ff;}
+  .hero,.pill,.action-chip,.side-card,.center-card,.board-shell{
+    background:linear-gradient(180deg,rgba(16,36,72,.96),rgba(7,18,42,.96)) !important;
+    border-color:rgba(96,165,250,.42) !important;
+    color:#f4f8ff !important;
+    box-shadow:var(--shadow) !important;
+  }
+  .title-main,.title-sub,.pill,.pill .small,.pill .value,.top-controls,.sparkles{color:#f8fbff !important;}
+  .title-sub{
+    background:linear-gradient(180deg,#2563eb,#1d4ed8) !important;
+    border-color:rgba(147,197,253,.75) !important;
+  }
+  .code-badge{color:#fde047 !important;text-shadow:0 4px 0 rgba(113,63,18,.75),0 10px 24px rgba(0,0,0,.36) !important;}
+  .btn-deep,.btn-top{
+    background:linear-gradient(180deg,#1e40af,#172554) !important;
+    color:#f8fbff !important;
+    border:2px solid rgba(147,197,253,.42) !important;
+  }
+  .btn-yellow{
+    background:linear-gradient(180deg,#facc15,#f59e0b) !important;
+    color:#2b1700 !important;
+    border:2px solid rgba(255,255,255,.36) !important;
+  }
+  .lang-wrap select,.settings-grid select,.settings-grid input,.settings-grid textarea,select,input,textarea{
+    background:#0f1e35 !important;
+    color:#f8fbff !important;
+    border:2px solid #315c98 !important;
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.28) !important;
+    caret-color:#ffffff;
+  }
+  option{background:#0f1e35;color:#f8fbff;}
+  input::placeholder,textarea::placeholder{color:#a9c3e8 !important;}
+
+  .panel-white,.settings-modal,.modal{
+    background:linear-gradient(180deg,#111f3a,#0a1328) !important;
+    color:#f4f8ff !important;
+    border-color:#2a4f83 !important;
+    box-shadow:var(--soft-shadow) !important;
+  }
+  .ribbon{
+    background:linear-gradient(180deg,#2563eb,#1d4ed8) !important;
+    color:#ffffff !important;
+    text-shadow:0 2px 8px rgba(0,0,0,.36) !important;
+  }
+  .ribbon.orange{background:linear-gradient(180deg,#d97706,#92400e) !important;}
+  .ribbon.purple{background:linear-gradient(180deg,#7c3aed,#4c1d95) !important;}
+  .info-name,.info-value,.rule-list li,.helper-box,.tip-box,.progress-panel,.ranking-list,#currentStageText,#tipTitle,#tipText,
+  .settings-grid label,.settings-head h2,#settingsSub,.modal-title,.modal-sub,.modal-body{
+    color:#f4f8ff !important;
+  }
+  .helper-box,.tip-box,.rank-row,.winner-item{
+    background:linear-gradient(180deg,#132849,#0d1a32) !important;
+    border-color:#315c98 !important;
+    color:#f4f8ff !important;
+  }
+  .rank-row div,.winner-item div{color:#f4f8ff !important;}
+  .rank-row div[style*="color:#5f79a7"],.winner-item div[style*="color:#5f79a7"]{color:#b8d4ff !important;}
+  .stage-dot{
+    background:#132849 !important;
+    color:#dbeafe !important;
+    border-color:#315c98 !important;
+  }
+  .stage-dot.active{
+    background:linear-gradient(180deg,#38bdf8,#2563eb) !important;
+    color:#ffffff !important;
+    border-color:#93c5fd !important;
+  }
+
+  .board{
+    background:linear-gradient(180deg,rgba(15,58,74,.58),rgba(8,25,52,.78)) !important;
+    border-color:rgba(96,165,250,.32) !important;
+  }
+  .card-front{
+    background:linear-gradient(180deg,#1d4ed8,#0f2d68) !important;
+    border-color:#60a5fa !important;
+    box-shadow:inset 0 -8px 0 rgba(0,0,0,.18),0 12px 22px rgba(0,0,0,.34) !important;
+  }
+  .card-front .star-mark,.card-front .star-mini{color:#bfdbfe !important;opacity:.5 !important;}
+  .card-back{
+    background:linear-gradient(180deg,#182d52,#0d1b34) !important;
+    border-color:#60a5fa !important;
+    color:#ffffff !important;
+    box-shadow:inset 0 -8px 0 rgba(0,0,0,.20),0 12px 22px rgba(0,0,0,.34) !important;
+  }
+  .card.matched .card-back{
+    background:linear-gradient(180deg,#14532d,#0f3322) !important;
+    border-color:#4ade80 !important;
+    color:#ffffff !important;
+  }
+  .card-icon,.card-text{color:#ffffff !important;}
+  .card-kind{
+    background:#1e3a5f !important;
+    color:#dbeafe !important;
+    border:1px solid rgba(147,197,253,.25);
+  }
+
+  .green-grad{background:linear-gradient(180deg,#16a34a,#166534) !important;color:#ffffff !important;}
+  .yellow-grad{background:linear-gradient(180deg,#facc15,#d97706) !important;color:#241300 !important;}
+  .purple-grad{background:linear-gradient(180deg,#7c3aed,#4c1d95) !important;color:#ffffff !important;}
+  .blue-grad{background:linear-gradient(180deg,#2563eb,#1e3a8a) !important;color:#ffffff !important;}
+  .action-btn{border:2px solid rgba(147,197,253,.38) !important;box-shadow:var(--soft-shadow) !important;}
+
+  .toast{
+    background:linear-gradient(180deg,#132849,#0d1a32) !important;
+    color:#ffffff !important;
+    border-color:#60a5fa !important;
+  }
+  .overlay,.settings-overlay{background:rgba(0,0,0,.72) !important;}
+  .modal-header,.settings-head{
+    background:linear-gradient(180deg,#1e40af,#172554) !important;
+    color:#ffffff !important;
+  }
+  .modal-btn.light,.ghost-btn{
+    background:#132849 !important;
+    color:#f4f8ff !important;
+    border:2px solid #315c98 !important;
+  }
+  .solid-btn,.modal-btn.primary{background:linear-gradient(180deg,#16a34a,#166534) !important;color:#ffffff !important;}
+  .modal-btn.secondary{background:linear-gradient(180deg,#2563eb,#1e3a8a) !important;color:#ffffff !important;}
+  .danger-btn{background:linear-gradient(180deg,#ef4444,#991b1b) !important;color:#ffffff !important;}
+
+  /* Keep browser autofill readable in dark mode */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus{
+    -webkit-text-fill-color:#f8fbff !important;
+    box-shadow:0 0 0px 1000px #0f1e35 inset !important;
+    transition:background-color 9999s ease-in-out 0s;
+  }
+
   </style>
-  <link rel="stylesheet" href="../_shared/cute-unify.css" />
-  <script defer src="../_shared/cute-unify.js"></script>
 </head>
 <body>
   <div class="app">

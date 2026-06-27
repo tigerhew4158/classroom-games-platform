@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>S006 课堂对应文字对战｜2组/3组可选｜三语介面</title>
+  <title>S006 文字对应对战｜暗色测试版</title>
   <style>
     :root{
       --bg:#f3f4f6;
@@ -40,13 +40,18 @@
       box-shadow:var(--shadow);
       padding:22px;
     }
-    .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:10px}
-    h1{margin:0;font-size:clamp(27px,4vw,42px);letter-spacing:.04em;text-align:center;flex:1}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px;flex-wrap:wrap}
+    h1{margin:0;font-size:clamp(30px,4.4vw,46px);letter-spacing:.04em;text-align:center;flex:1;min-width:280px}
     .smallBtn{
       border:1px solid var(--border);background:#fff;color:var(--dark);
-      padding:9px 13px;border-radius:999px;cursor:pointer;font-weight:800;
-      box-shadow:0 2px 6px rgba(15,23,42,.06);
+      padding:11px 16px;border-radius:999px;cursor:pointer;font-weight:900;
+      box-shadow:0 2px 6px rgba(15,23,42,.06);font-size:18px;
     }
+    .topActions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+    .actionBtn{min-width:118px;text-align:center}
+    .startTop{background:linear-gradient(180deg,#8b5cf6,#6d28d9)!important;color:#fff!important}
+    .pauseTop{background:linear-gradient(180deg,#334155,#1e293b)!important;color:#fff!important}
+    .resetTop{background:linear-gradient(180deg,#f43f5e,#be123c)!important;color:#fff!important}
     .smallBtn:hover{transform:translateY(-1px)}
     .langSelect{min-width:160px;text-align:center;font-weight:950;}
     .setup{
@@ -121,23 +126,25 @@
     .score{font-weight:950;background:#fff;border:1px solid var(--border);border-radius:999px;padding:7px 10px;color:#0f172a;white-space:nowrap}
     .promptBox{text-align:center;margin:12px 0 12px}
     .promptLabel{font-size:13px;color:var(--muted);font-weight:850}
-    .promptWord{font-size:clamp(26px,3.4vw,40px);font-weight:950;margin-top:4px;line-height:1.2;color:#3730a3;word-break:break-word}
+    .promptWord{font-size:clamp(32px,4vw,48px);font-weight:950;margin-top:6px;line-height:1.25;color:#3730a3;word-break:break-word}
     .speak{border:0;background:transparent;cursor:pointer;font-size:22px;vertical-align:middle;margin-left:4px}
     .answerRow{display:flex;gap:8px;margin:8px 0 12px}
     .answer{
-      width:100%;padding:13px 10px;background:#fff;border:2px solid #e5e7eb;border-radius:8px;font-size:19px;font-weight:850;text-align:center;
+      width:100%;padding:14px 12px;background:#fff;border:2px solid #e5e7eb;border-radius:12px;font-size:24px;font-weight:900;text-align:center;
       outline:none;
     }
     .answer:focus{border-color:#111827;box-shadow:0 0 0 3px rgba(15,23,42,.12)}
-    .submitMini{border:0;border-radius:8px;background:#0f766e;color:#fff;font-weight:950;padding:0 12px;cursor:pointer;min-width:76px}
-    .keyboard{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-    .keyboard.dynamic{grid-template-columns:repeat(5,1fr)}
+    .submitMini{border:0;border-radius:10px;background:#0f766e;color:#fff;font-weight:950;padding:0 16px;cursor:pointer;min-width:96px;font-size:20px}
+    .keyboardMain{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+    .keyboardMain.dynamic{grid-template-columns:repeat(5,1fr)}
+    .keyboardSpecial{display:grid;grid-template-columns:1.15fr 1.5fr 1fr 1fr 1fr;gap:8px;margin-top:10px}
     .key{
-      border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:8px 4px;font-weight:950;cursor:pointer;min-height:36px;
+      border:1px solid #cbd5e1;background:#fff;border-radius:10px;padding:10px 6px;font-weight:950;cursor:pointer;min-height:48px;font-size:22px;
       box-shadow:0 1px 0 rgba(15,23,42,.10);word-break:break-word;
     }
     .key:hover{background:#f8fafc}.key:active{transform:translateY(1px)}
-    .key.shift{grid-column:span 2;background:#ffeb8a}.key.back{grid-column:span 2;background:#d7dce3}.key.enter{grid-column:span 2;background:#bbf7d0}.key.space{grid-column:span 2;background:#e0e7ff}.key.clear{grid-column:span 2;background:#fee2e2}
+    .keyboardSpecial .key{min-height:54px;font-size:21px}
+    .key.shift{background:#ffeb8a}.key.back{background:#d7dce3}.key.enter{background:#bbf7d0}.key.space{background:#e0e7ff}.key.clear{background:#fee2e2}
     .feedback{height:28px;text-align:center;font-size:16px;font-weight:950;margin-top:9px}.feedback.ok{color:#16a34a}.feedback.bad{color:#e11d48}
     .controls{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin:22px 0 8px}
     .bigBtn{border:0;border-radius:999px;color:#fff;font-weight:950;padding:15px 30px;cursor:pointer;min-width:150px;box-shadow:0 12px 20px rgba(15,23,42,.13)}
@@ -153,37 +160,55 @@
     .footerNote{text-align:center;color:var(--muted);font-size:13px;margin-top:14px;line-height:1.6}
     @media (max-width: 1020px){.teams.three{grid-template-columns:1fr}.teams{grid-template-columns:1fr}.setupGrid{grid-template-columns:1fr}.inlineGrid{grid-template-columns:1fr}.raceLane{grid-template-columns:70px 1fr 50px}}
     @media (max-width: 820px){
-      .app{padding:10px}.shell{padding:15px;border-radius:18px}.topbar{flex-wrap:wrap}h1{order:-1;width:100%;font-size:30px}.bigBtn{min-width:130px;padding:13px 20px}.keyboard{gap:6px}.promptWord{font-size:34px}.answerRow{flex-direction:column}.submitMini{padding:11px}.ropeWrap{padding:0 20px}
+      .app{padding:10px}.shell{padding:15px;border-radius:18px}.topbar{flex-wrap:wrap}h1{order:-1;width:100%;font-size:30px}.topActions{width:100%;justify-content:center}.actionBtn{min-width:102px}.keyboardMain{gap:6px}.keyboardSpecial{grid-template-columns:repeat(2,1fr)} .keyboardSpecial .space{grid-column:span 2}.promptWord{font-size:34px}.answerRow{flex-direction:column}.submitMini{padding:11px}.ropeWrap{padding:0 20px}
     }
     @media (prefers-color-scheme: dark){
       body{background:#0f172a}.shell{background:#111827;border-color:#334155}.setup{background:#0f172a;border-color:#334155}.team{border-color:#475569}.team.red{background:#2a1019}.team.blue{background:#0f203d}.team.green{background:#09261c}.answer,textarea,.duration,.select,.target,.smallBtn,.score,.pill,.key,.modal,.modeNote,.raceWrap{background:#fff;color:#0f172a}h1,.setupTitle{color:#fff}.hint,.footerNote,.promptLabel{color:#cbd5e1}.timer{color:#fb7185}
     }
-  </style>
   
-  <style id="s006-cute-override">
-
-    body{background:linear-gradient(180deg,#1c72e8 0%, #6cbefb 55%, #caeeff 100%)!important}
-    .shell{background:rgba(255,255,255,.92)!important;border:2px solid rgba(255,255,255,.6)!important;border-radius:28px!important}
-    .topbar{background:linear-gradient(90deg,#0f67e8,#58b8ff);padding:14px 16px;border-radius:24px;box-shadow:0 16px 30px rgba(20,74,160,.18)}
-    h1,.topbar h1{color:#fff!important;text-shadow:none!important}
-    .smallBtn{border:2px solid rgba(255,255,255,.6)!important;background:linear-gradient(180deg,#ffffff,#edf6ff)!important;color:#173055!important}
-    .setup{background:linear-gradient(180deg,#ffffff,#edf7ff)!important;border:2px solid #b7dbff!important;border-radius:20px!important}
-    .setupTitle{color:#14407a!important}
-    .pill,.score{background:linear-gradient(180deg,#ffffff,#edf6ff)!important;border:2px solid #b7dbff!important;color:#173055!important}
-    .ropeWrap,.raceWrap{background:linear-gradient(180deg,#ffffff,#edf7ff)!important;border:2px solid #b7dbff!important;border-radius:22px!important;padding:14px!important;box-shadow:var(--cute-shadow)!important}
-    .rope{background:linear-gradient(180deg,#f3ead0,#ddc89a)!important;height:36px!important}
-    .team{border:2px solid #b7dbff!important;border-radius:22px!important;box-shadow:0 14px 28px rgba(33,94,180,.12)!important}
-    .team.red{background:linear-gradient(180deg,#fff4f6,#fffafb)!important}.team.blue{background:linear-gradient(180deg,#eff7ff,#fbfdff)!important}.team.green{background:linear-gradient(180deg,#eefdf7,#fbfffd)!important}
-    .promptWord{color:#14407a!important}
-    .answer{border:2px solid #b7dbff!important;border-radius:16px!important;background:#fff!important}
-    .keyboard .key{border:2px solid #b7dbff!important;border-radius:14px!important;background:linear-gradient(180deg,#ffffff,#edf6ff)!important;min-height:44px!important}
-    .btn.green,.btn.gold,.btn.blue,.btn.purple,.btn.dark,.btn.red,.btn.gray{border-radius:18px!important}
+    /* ===== S006 DARK THEME v1 ===== */
+    :root{
+      --bg:#071226; --bg2:#0b1a35; --card:#101f3a; --card2:#0c1830; --text:#eef5ff; --muted:#b9c9e8; --border:#31496f;
+      --red:#fb5c79; --red-soft:#211321; --blue:#60a5fa; --blue-soft:#101d38; --green:#34d399; --green-soft:#0d241c;
+      --yellow:#facc15; --dark:#cfe0ff; --purple:#8b5cf6; --orange:#f59e0b; --shadow:0 20px 48px rgba(0,0,0,.38);
+    }
+    body{
+      background:
+        radial-gradient(circle at 9% 11%,rgba(96,165,250,.12),transparent 24%),
+        radial-gradient(circle at 92% 8%,rgba(139,92,246,.12),transparent 18%),
+        linear-gradient(180deg,#071226 0%,#0b1a35 58%,#050b16 100%) !important;
+      color:var(--text) !important;
+    }
+    .app{max-width:1360px;}
+    .shell{background:linear-gradient(180deg,rgba(15,31,58,.96),rgba(8,18,37,.98)) !important;border:1px solid rgba(147,197,253,.22) !important;box-shadow:var(--shadow)!important;}
+    .topbar{background:linear-gradient(90deg,#0f2a54,#193b74);border:1px solid rgba(147,197,253,.2);padding:14px 16px;border-radius:22px;}
+    h1{color:#f5f9ff!important;text-shadow:0 2px 14px rgba(0,0,0,.35);}
+    .smallBtn{background:#0b1b37!important;color:#f4f8ff!important;border:1px solid #33527d!important;box-shadow:0 10px 24px rgba(0,0,0,.2)!important;}
+    .smallBtn:hover{background:#12264a!important;}
+    .setup{background:linear-gradient(180deg,#102143,#0b1830)!important;border:1px solid rgba(147,197,253,.22)!important;color:#eef5ff!important;}
+    .setupTitle{color:#ffffff!important;}
+    .setupGrid{grid-template-columns:320px 1fr;}
+    .field label,.raceTitle,.promptLabel,.footerNote,.hint,.modeNote{color:#d8e6ff!important;}
+    .hint{font-size:14px;}
+    .modeNote{background:#0b1b37!important;border:1px dashed #3c5c8c!important;color:#dbeafe!important;}
+    .duration,.select,.target,textarea,input.answer,select{background:#06142b!important;color:#f8fbff!important;border:1px solid #395984!important;}
+    textarea{height:300px;font-family:Consolas,"Microsoft YaHei",monospace;line-height:1.55;}
+    textarea::placeholder,input::placeholder{color:#90a9cc!important;}
+    .btn{box-shadow:0 14px 28px rgba(0,0,0,.28)!important;border:1px solid rgba(255,255,255,.12)!important;}
+    .btn.green{background:linear-gradient(180deg,#2fca73,#15824a)!important}.btn.gold{background:linear-gradient(180deg,#f9c74f,#c98700)!important;color:#1d1400!important}.btn.blue{background:linear-gradient(180deg,#3b82f6,#1d4ed8)!important}.btn.purple{background:linear-gradient(180deg,#8b5cf6,#6d28d9)!important}.btn.dark{background:linear-gradient(180deg,#334155,#1e293b)!important}.btn.red{background:linear-gradient(180deg,#f43f5e,#be123c)!important}.btn.gray{background:linear-gradient(180deg,#64748b,#334155)!important}
+    .statusRow{margin:16px 0 18px}.timer{color:#fff!important;text-shadow:0 0 16px rgba(96,165,250,.35);}.pill{background:#0b1b37!important;color:#f4f8ff!important;border:1px solid #33527d!important;}
+    .ropeWrap,.raceWrap{background:linear-gradient(180deg,#122542,#0d1b32)!important;border:1px solid rgba(147,197,253,.18)!important;border-radius:20px;box-shadow:0 14px 30px rgba(0,0,0,.22)!important;}
+    .rope{background:linear-gradient(180deg,#273854,#182a46)!important;box-shadow:inset 0 3px 9px rgba(0,0,0,.35)!important}.winLine{background:rgba(255,255,255,.28)!important}.centerLine{background:#fbbf24!important}.track{background:#122342!important}.finish{background:rgba(255,255,255,.35)!important}.laneScore{color:#eaf2ff!important}
+    .teams{gap:18px}.team{background:linear-gradient(180deg,#122542,#0d1b32)!important;border:1px solid rgba(147,197,253,.18)!important;color:#eef5ff!important;box-shadow:0 14px 30px rgba(0,0,0,.2)}
+    .team.red{background:linear-gradient(180deg,#251422,#15101b)!important;border-color:rgba(251,92,121,.35)!important}.team.blue{background:linear-gradient(180deg,#10213f,#0b1830)!important;border-color:rgba(96,165,250,.35)!important}.team.green{background:linear-gradient(180deg,#0d2a20,#0b1d17)!important;border-color:rgba(52,211,153,.35)!important}
+    .teamName,.score,.promptWord{color:#f8fbff!important}.team.red .teamName{color:#ff8aa0!important}.team.blue .teamName{color:#8ec5ff!important}.team.green .teamName{color:#7df0b7!important}
+    .score{background:#0b1b37!important;border:1px solid #365783!important;color:#f8fbff!important}.promptWord{font-size:clamp(30px,3.7vw,46px)!important;text-shadow:0 2px 12px rgba(0,0,0,.28)}
+    .answer{background:#07162f!important;color:#f8fbff!important;border:2px solid #42608d!important;border-radius:14px!important}.answer:focus{border-color:#93c5fd!important;box-shadow:0 0 0 3px rgba(96,165,250,.18)!important}.submitMini{background:linear-gradient(180deg,#14b8a6,#0f766e)!important;border-radius:12px!important;}
+    .key{background:#0f2243!important;color:#f8fbff!important;border:1px solid #365783!important;border-radius:14px!important;min-height:48px!important}.key:hover{background:#17315f!important}.key.shift,.key.back,.key.enter,.key.space,.key.clear{color:#061226!important;font-weight:950!important}.key.shift{background:#fde68a!important}.key.back{background:#cbd5e1!important}.key.enter{background:#86efac!important}.key.space{background:#bfdbfe!important}.key.clear{background:#fecaca!important}
+    .feedback.ok{color:#86efac!important}.feedback.bad{color:#ff8aa0!important}.modal{background:linear-gradient(180deg,#132542,#0b1830)!important;color:#eef5ff!important;border:1px solid #365783}.modal p{color:#dbeafe!important}.announcement{background:rgba(0,0,0,.64)!important}.footerNote{display:none!important}
+    @media(max-width:1020px){.setupGrid{grid-template-columns:1fr}.teams.three,.teams{grid-template-columns:1fr}}
 
   </style>
-<link rel="stylesheet" href="../_shared/shared-polish.css" />
-  <script defer src="../_shared/shared-polish.js"></script>
-  <link rel="stylesheet" href="../_shared/cute-unify.css" />
-  <script defer src="../_shared/cute-unify.js"></script>
 </head>
 <body>
   <div class="app">
@@ -191,12 +216,17 @@
       <div class="topbar">
         <button class="smallBtn" id="toggleSetup"></button>
         <h1 id="mainTitle"></h1>
-        <select class="smallBtn langSelect" id="languageSelect" title="Language">
-          <option value="zh-Hans">简体中文</option>
-          <option value="en">English UI</option>
-          <option value="ms">Bahasa Melayu</option>
-        </select>
-        <button class="smallBtn" id="fullScreenBtn"></button>
+        <div class="topActions">
+          <select class="smallBtn langSelect" id="languageSelect" title="Language">
+            <option value="zh-Hans">简体中文</option>
+            <option value="en">English UI</option>
+            <option value="ms">Bahasa Melayu</option>
+          </select>
+          <button class="smallBtn actionBtn startTop" id="startBtn"></button>
+          <button class="smallBtn actionBtn pauseTop" id="pauseBtn"></button>
+          <button class="smallBtn actionBtn resetTop" id="resetBtn"></button>
+          <button class="smallBtn" id="fullScreenBtn"></button>
+        </div>
       </div>
 
       <section class="setup" id="setupPanel">
@@ -263,11 +293,7 @@
 
       <main class="teams" id="teams"></main>
 
-      <div class="controls">
-        <button class="bigBtn btn purple" id="startBtn"></button>
-        <button class="bigBtn btn dark" id="pauseBtn"></button>
-        <button class="bigBtn btn red" id="resetBtn"></button>
-      </div>
+
       <div class="footerNote" id="footerNote"></div>
     </div>
   </div>
@@ -286,26 +312,66 @@
 
 <script>
 (() => {
-  const defaultBank = `香蕉,banana
+  const SAMPLE_BANKS = {
+    'zh-Hans': `香蕉,banana
 苹果,apple
 橙,orange
 马来西亚首都,吉隆坡
-Malaysia capital,Kuala Lumpur
 国旗,Jalur Gemilang
-早安,selamat pagi
+老师,teacher
+学生,student
+电脑,computer
+红色,red
+蓝色,blue
+猫,cat
+狗,dog
+水,water
+书,book
+学校,school
+桌子,table
+椅子,chair
+家庭,family`,
+    en: `banana,香蕉
+apple,苹果
+orange,橙
+capital of Malaysia,Kuala Lumpur
+Malaysia flag,Jalur Gemilang
 teacher,老师
 student,学生
 computer,电脑
-red,红色
-blue,蓝色
+red color,红色
+blue color,蓝色
 cat,猫
 dog,狗
 water,水
 book,书
 school,学校
-桌子,table
-椅子,chair
-家庭,family`;
+table,桌子
+chair,椅子
+family,家庭`,
+    ms: `pisang,banana
+epal,apple
+oren,orange
+ibu negara Malaysia,Kuala Lumpur
+bendera Malaysia,Jalur Gemilang
+guru,teacher
+murid,student
+komputer,computer
+warna merah,red
+warna biru,blue
+kucing,cat
+anjing,dog
+air,water
+buku,book
+sekolah,school
+meja,table
+kerusi,chair
+keluarga,family`
+  };
+  function defaultBank(){ return SAMPLE_BANKS[lang] || SAMPLE_BANKS['zh-Hans']; }
+  function normalizeBankText(s){ return String(s||'').trim().replace(/\r\n/g,'\n'); }
+  function isBuiltInSample(s){ const v=normalizeBankText(s); return Object.values(SAMPLE_BANKS).some(x => normalizeBankText(x) === v); }
+
 
   const I18N = {
     'zh-Hans': {
@@ -456,7 +522,8 @@ school,学校
     lang = localStorage.getItem('lead_text_match_lang') || 'zh-Hans';
     if(!I18N[lang]) lang = 'zh-Hans';
     els.languageSelect.value = lang;
-    els.wordBank.value = localStorage.getItem('lead_text_match_bank') || defaultBank;
+    els.wordBank.value = localStorage.getItem('lead_text_match_bank') || defaultBank();
+    if(!els.wordBank.value.trim() || isBuiltInSample(els.wordBank.value)) els.wordBank.value = defaultBank();
     els.minutes.value = localStorage.getItem('lead_text_match_minutes') || 3;
     els.teamCount.value = localStorage.getItem('lead_text_match_team_count') || 2;
     els.targetScore.value = localStorage.getItem('lead_text_match_target_score') || 8;
@@ -532,7 +599,8 @@ school,学校
           <input class="answer" id="${team.id}Input" autocomplete="off" placeholder="${t('placeholder')}" />
           <button class="submitMini" data-submit="${team.id}">${t('submit')}</button>
         </div>
-        <div class="keyboard" id="${team.id}Keyboard"></div>
+        <div class="keyboardMain" id="${team.id}KeyboardMain"></div>
+        <div class="keyboardSpecial" id="${team.id}KeyboardSpecial"></div>
         <div class="feedback" id="${team.id}Feedback"></div>
       </section>
     `).join('');
@@ -646,6 +714,8 @@ school,学校
     renderRaceBoard();
     resetRound(true);
     running = true; paused = false;
+    els.setupPanel.classList.add('hidden');
+    els.toggleSetup.textContent = t('showSetup');
     timerId = setInterval(tick, 1000);
     const firstInput = $(activeTeams[0]?.id + 'Input');
     if(firstInput) firstInput.focus();
@@ -797,11 +867,13 @@ school,学校
   }
 
   function buildKeyboard(teamId){
-    const container = $(teamId + 'Keyboard');
-    if(!container) return;
+    const main = $(teamId + 'KeyboardMain');
+    const special = $(teamId + 'KeyboardSpecial');
+    if(!main || !special) return;
     const answer = current[teamId]?.answer || '';
-    container.innerHTML = '';
-    container.className = 'keyboard';
+    main.innerHTML = '';
+    special.innerHTML = '';
+    main.className = 'keyboardMain';
 
     if(!answer || isLatinAnswer(answer)){
       const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
@@ -809,49 +881,58 @@ school,学校
         const b = document.createElement('button');
         b.className = 'key'; b.type = 'button'; b.textContent = shift[teamId] ? ch.toUpperCase() : ch;
         b.addEventListener('click', () => appendChar(teamId, shift[teamId] ? ch.toUpperCase() : ch));
-        container.appendChild(b);
+        main.appendChild(b);
       });
-      const shiftBtn = document.createElement('button');
-      shiftBtn.className = 'key shift'; shiftBtn.type='button'; shiftBtn.textContent = 'Shift';
-      shiftBtn.addEventListener('click', () => { shift[teamId] = !shift[teamId]; buildKeyboard(teamId); });
-      container.appendChild(shiftBtn);
       const apostrophe = document.createElement('button');
       apostrophe.className = 'key'; apostrophe.type='button'; apostrophe.textContent = "'";
       apostrophe.addEventListener('click', () => appendChar(teamId, "'"));
-      container.appendChild(apostrophe);
+      main.appendChild(apostrophe);
       const hyphen = document.createElement('button');
       hyphen.className = 'key'; hyphen.type='button'; hyphen.textContent = '-';
       hyphen.addEventListener('click', () => appendChar(teamId, '-'));
-      container.appendChild(hyphen);
+      main.appendChild(hyphen);
+      const dot = document.createElement('button');
+      dot.className = 'key'; dot.type='button'; dot.textContent = '.';
+      dot.addEventListener('click', () => appendChar(teamId, '.'));
+      main.appendChild(dot);
+      const comma = document.createElement('button');
+      comma.className = 'key'; comma.type='button'; comma.textContent = ',';
+      comma.addEventListener('click', () => appendChar(teamId, ','));
+      main.appendChild(comma);
     } else {
-      container.className = 'keyboard dynamic';
+      main.className = 'keyboardMain dynamic';
       dynamicKeysForAnswer(answer).forEach(ch => {
         const b = document.createElement('button');
         b.className = 'key'; b.type = 'button'; b.textContent = ch;
         b.addEventListener('click', () => appendChar(teamId, ch));
-        container.appendChild(b);
+        main.appendChild(b);
       });
     }
+
+    const shiftBtn = document.createElement('button');
+    shiftBtn.className = 'key shift'; shiftBtn.type='button'; shiftBtn.textContent = 'Shift';
+    shiftBtn.addEventListener('click', () => { shift[teamId] = !shift[teamId]; buildKeyboard(teamId); });
+    special.appendChild(shiftBtn);
 
     const space = document.createElement('button');
     space.className = 'key space'; space.type='button'; space.textContent = t('space');
     space.addEventListener('click', () => appendChar(teamId, ' '));
-    container.appendChild(space);
+    special.appendChild(space);
 
     const clear = document.createElement('button');
     clear.className = 'key clear'; clear.type='button'; clear.textContent = t('clear');
     clear.addEventListener('click', () => { const input = $(teamId + 'Input'); if(input){ input.value=''; input.focus(); } });
-    container.appendChild(clear);
+    special.appendChild(clear);
 
     const back = document.createElement('button');
     back.className = 'key back'; back.type='button'; back.textContent = '⌫';
     back.addEventListener('click', () => backspace(teamId));
-    container.appendChild(back);
+    special.appendChild(back);
 
     const enter = document.createElement('button');
     enter.className = 'key enter'; enter.type='button'; enter.textContent = 'Enter';
     enter.addEventListener('click', () => submitAnswer(teamId));
-    container.appendChild(enter);
+    special.appendChild(enter);
   }
 
   function appendChar(teamId, ch){
@@ -919,9 +1000,12 @@ school,学校
       els.toggleSetup.textContent = els.setupPanel.classList.contains('hidden') ? t('showSetup') : t('hideSetup');
     });
     els.languageSelect.addEventListener('change', () => {
+      const useSample = !els.wordBank.value.trim() || isBuiltInSample(els.wordBank.value);
       lang = els.languageSelect.value;
+      if(useSample) els.wordBank.value = defaultBank();
       saveSettings();
       applyLanguage();
+      applyBank(false);
       renderTeams();
       activeTeams.forEach(ti => pickQuestion(ti.id));
     });
@@ -933,7 +1017,7 @@ school,学校
     els.targetScore.addEventListener('change', () => { saveSettings(); renderRaceBoard(); updateRaceBoard(); });
     els.minutes.addEventListener('change', () => { saveSettings(); resetRound(true); });
     els.applyBank.addEventListener('click', () => applyBank(true));
-    els.sampleBtn.addEventListener('click', () => { els.wordBank.value = defaultBank; applyBank(true); });
+    els.sampleBtn.addEventListener('click', () => { els.wordBank.value = defaultBank(); applyBank(true); });
     els.importBtn.addEventListener('click', () => els.fileInput.click());
     els.fileInput.addEventListener('change', async (e) => {
       const file = e.target.files?.[0]; if(!file) return;
@@ -955,91 +1039,5 @@ school,学校
 })();
 </script>
 
-<!-- built-in-sample-loader-fix -->
-<script>
-(function(){
-  const SAMPLE_TEXT = "# S006 文字对应｜题库范例\n# 用途：词语配对、拼字、概念对应。\n# 建议格式：词语 | 对应解释\n资料 | 用来分析和学习的信息\n算法 | 解决问题的步骤\n密码 | 保护账号的秘密文字\n网络安全 | 保护设备与个人资料的方法\n人工智能 | 让机器模拟人类思考的技术\n";
-  const TARGET_TEXTAREA_IDS = ["wordBank"];
-  const SAMPLE_BUTTON_IDS = ["sampleBtn"];
-  const SAMPLE_URL = 'question-bank-example.txt?v=sample-loader-fixed-20260627';
-  function $(id){ return document.getElementById(id); }
-  function cleanSampleText(text){
-    return String(text || '')
-      .replace(/
-/g,'
-')
-      .split('
-')
-      .map(line => line.trim())
-      .filter(line => line && !line.startsWith('#'))
-      .join('
-');
-  }
-  function findBankField(){
-    for (const id of TARGET_TEXTAREA_IDS){
-      const el = $(id);
-      if (el && ('value' in el)) return el;
-    }
-    return document.querySelector('textarea');
-  }
-  async function getBuiltInSampleText(){
-    try {
-      const res = await fetch(SAMPLE_URL, { cache:'no-store' });
-      if (res && res.ok) {
-        const text = await res.text();
-        if (cleanSampleText(text)) return text;
-      }
-    } catch(e) {}
-    return SAMPLE_TEXT;
-  }
-  function afterFill(field){
-    try { field.dispatchEvent(new Event('input', { bubbles:true })); } catch(e) {}
-    try { field.dispatchEvent(new Event('change', { bubbles:true })); } catch(e) {}
-    try {
-      if (field.id === 'textItems') {
-        const mode = $('mode'); if (mode) mode.value = 'text';
-        const lines = cleanSampleText(field.value).split('
-');
-        const categories = [];
-        lines.forEach(line => {
-          const parts = line.split('|').map(x => x.trim()).filter(Boolean);
-          if (parts[1] && !categories.includes(parts[1])) categories.push(parts[1]);
-        });
-        if (categories.length) {
-          try { cats = categories; } catch(e) {}
-          const catCount = $('catCount'); if (catCount) catCount.value = String(Math.min(Math.max(categories.length,2),5));
-          try { if (typeof renderCats === 'function') renderCats(); } catch(e) {}
-        }
-        try { if (typeof buildItems === 'function') buildItems(false); } catch(e) {}
-        try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
-      }
-      if (field.id === 'wordBank') { try { if (typeof applyBank === 'function') applyBank(true); } catch(e) {} }
-      try { if (typeof saveSettings === 'function') saveSettings(); } catch(e) {}
-      try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
-      try { if (typeof renderItems === 'function') renderItems(); } catch(e) {}
-      try { if (typeof setMessage === 'function') setMessage('已载入内置题库范例 / Built-in sample loaded / Contoh terbina telah dimuat'); } catch(e) {}
-      try { if (typeof toast === 'function') toast('已载入内置题库范例'); } catch(e) {}
-    } catch(e) { console.warn('Sample after-fill warning:', e); }
-  }
-  async function loadBuiltInSampleQuestionBank(event){
-    if (event) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); }
-    const field = findBankField();
-    if (!field) return;
-    const sampleText = cleanSampleText(await getBuiltInSampleText());
-    if (!sampleText) return;
-    field.value = sampleText;
-    afterFill(field);
-  }
-  window.loadBuiltInSampleQuestionBank = loadBuiltInSampleQuestionBank;
-  SAMPLE_BUTTON_IDS.forEach(id => {
-    const btn = $(id);
-    if (btn && !btn.dataset.sampleLoaderFixed) {
-      btn.dataset.sampleLoaderFixed = '1';
-      btn.addEventListener('click', loadBuiltInSampleQuestionBank, true);
-    }
-  });
-})();
-</script>
-<!-- /built-in-sample-loader-fix -->
 </body>
 </html>

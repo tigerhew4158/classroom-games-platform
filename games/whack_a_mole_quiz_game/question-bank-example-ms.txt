@@ -1,0 +1,10 @@
+Apakah ibu negara Malaysia?,Kuala Lumpur,Johor Bahru,Penang,Melaka,Ipoh
+Apakah maksud AI?,Artificial Intelligence,Automatic Internet,Advanced Image,Artificial Internet,Auto Intelligence
+Patutkah anda berkongsi kata laluan dengan kawan?,Tidak,Ya,Hanya dengan kawan rapat,Tulis di papan putih,Hantar dalam kumpulan
+Apakah formula kimia air?,H2O,CO2,O2,NaCl,H2
+Di manakah matahari terbit?,Timur,Barat,Selatan,Utara,Tengah
+Bagaimanakah sebutan good morning dalam Bahasa Melayu?,selamat pagi,terima kasih,selamat malam,apa khabar,sama-sama
+Apakah maksud CPU?,Unit Pemprosesan Pusat,Monitor,Papan kekunci,Tetikus,Cakera keras
+Apakah proses tumbuhan menghasilkan makanan?,Fotosintesis,Penyejatan,Respirasi,Pencernaan,Geseran
+Bolehkah AI digunakan untuk membuat gambar lucu rakan tanpa izin?,Tidak,Ya,Jika ia lucu,Jika guru tidak nampak,Jika dihantar ke kumpulan
+Apakah yang patut dibuat apabila melihat pautan tidak dikenali?,Jangan klik sembarangan,Klik segera,Majukan kepada kawan,Cuba masukkan kata laluan,Muat turun fail

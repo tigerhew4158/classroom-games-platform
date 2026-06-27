@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>S003 句子排序挑战｜Sentence Order Challenge</title>
+  <title>S003 句子排序挑战｜暗色测试版</title>
   <style>
     :root{
       --bg:#101827; --panel:#172236; --panel2:#1f2d44; --text:#f8fafc; --muted:#b8c1d1;
@@ -45,30 +45,8 @@
     @media(max-width:980px){.app{grid-template-columns:1fr}.settings{max-height:none}.questionPanel{grid-template-columns:1fr}.scoreboard{grid-template-columns:repeat(2,1fr)}.questionText{font-size:24px}.turnName{font-size:28px}}
     @media(max-width:560px){.app{padding:10px}.game,.settings{border-radius:18px;padding:12px}.row,.row3{grid-template-columns:1fr}.scoreboard{grid-template-columns:1fr}.token{font-size:18px}.slots{grid-template-columns:1fr}.topbar{align-items:flex-start}}
   </style>
-  
-  <style id="s003-cute-override">
-    .app{padding:14px;gap:16px;}
-    .settings,.game{border-radius:28px !important;}
-    .brand{background:linear-gradient(90deg,#0c66ea,#56b3ff);padding:14px 16px;border-radius:24px;box-shadow:0 12px 24px rgba(20,74,160,.18);margin-bottom:16px;}
-    .brand h1,.brand .sub{color:#fff !important;text-shadow:none;}
-    .logo{background:linear-gradient(180deg,#ffd44c,#ffb01d) !important; color:#7a4600; border:3px solid rgba(255,255,255,.65); width:58px; height:58px; font-size:28px;}
-    .section{border-top:1px dashed #b6d8ff !important;}
-    .questionBox{background:linear-gradient(180deg,#e9f5ff,#f9fdff) !important;border:2px solid #add7ff !important;}
-    .questionText{color:#11417f !important;font-size:30px;}
-    .sideBox{background:linear-gradient(180deg,#fff8e8,#fffdf7) !important;border:2px solid #ffd97c !important;}
-    .teamCard{background:linear-gradient(180deg,#ffffff,#eef7ff) !important;border:2px solid #b6d8ff !important;}
-    .teamCard.active{outline:0 !important;border-color:#4f9cff !important;box-shadow:0 0 0 5px rgba(79,156,255,.14),0 14px 30px rgba(37,99,235,.16)!important;}
-    .bank,.answerArea{background:linear-gradient(180deg,#f7fbff,#edf7ff) !important;border:2px solid #c0e0ff !important;}
-    .token{background:linear-gradient(180deg,#ffffff,#e6f2ff) !important;border:2px solid #9ed0ff !important;color:#17406f !important;font-size:22px;border-radius:18px !important;}
-    .slot{background:linear-gradient(180deg,#fefefe,#f5fbff) !important;border:2px dashed #7dbfff !important;}
-    .controls .bigbtn{font-size:20px !important;padding:14px 22px !important;border-radius:22px !important;}
-    .rankCard h2{color:#14407a !important;}
-    @media (max-width: 980px){ .questionText{font-size:26px;} }
-  </style>
   <link rel="stylesheet" href="../_shared/shared-polish.css" />
   <script defer src="../_shared/shared-polish.js"></script>
-  <link rel="stylesheet" href="../_shared/cute-unify.css" />
-  <script defer src="../_shared/cute-unify.js"></script>
 </head>
 <body>
   <div class="app">
@@ -177,19 +155,41 @@ const I18N={
  en:{title:'S003 Sentence Order Challenge',subtitle:'Put words, sentences, or steps back in the correct order',uiLang:'UI Language',teamCount:'Number of Teams',gameTime:'Game Time',targetScore:'Target Score',questionMode:'Question Mode',wrongPenalty:'Wrong Answer Penalty',rightTurn:'After Correct',wrongTurn:'After Wrong',showAnswer:'Show Answer After Wrong',sound:'Sound',questionBank:'Question Bank',formatHint:'Format: Prompt | Correct order. Use / to separate items. Example: AI Process | Collect data / Label images / Train model / Test model.',importTxt:'Import TXT',exportTxt:'Export TXT',loadSample:'Load Sample',startGame:'Start Game',round:'Round',showSettings:'Show Teacher Settings',fullscreen:'Fullscreen',nextQuestion:'Next Question',reset:'Reset',currentQuestion:'Current Question',currentTeam:'Current Team',readyMsg:'Ready. After the teacher clicks Start Game, the settings panel will be hidden.',answerArea:'Answer Order Area',wordBank:'Word Card Area',clickTip:'Click or drag cards to arrange',clearAnswer:'Clear Answer',submitAnswer:'Submit Answer',close:'Close',playAgain:'Play Again',teamRed:'Red Team',teamBlue:'Blue Team',teamGreen:'Green Team',teamPurple:'Purple Team',unlimited:'Unlimited',min3:'3 minutes',min5:'5 minutes',min8:'8 minutes',min10:'10 minutes',random:'Random',order:'In order',yes:'Yes',no:'No',show:'Show',hide:'Hide',on:'On',off:'Off',next:'Next team',same:'Same team continues',needStart:'Please start the game first.',bankError:'The bank needs at least 1 question, and each question needs at least 2 items.',notFull:'The answer is not complete yet.',correct:'Correct! The order is right.',wrong:'Wrong order!',correctAnswer:'Correct order: ',gameOver:'Game Over',winner:'Winner',timeUp:'Time is up!',targetReached:'Target score reached!',question:'Question',score:'Score',rank:'Rank',loaded:'Question bank loaded.',settingsShown:'Teacher settings are shown.',settingsHidden:'Teacher settings are hidden.',noQuestion:'No available question.'},
  ms:{title:'S003 Cabaran Susun Ayat',subtitle:'Susun perkataan, ayat atau langkah mengikut urutan yang betul',uiLang:'Bahasa Antara Muka',teamCount:'Bilangan Kumpulan',gameTime:'Masa Permainan',targetScore:'Markah Sasaran',questionMode:'Mod Soalan',wrongPenalty:'Denda Jawapan Salah',rightTurn:'Selepas Betul',wrongTurn:'Selepas Salah',showAnswer:'Tunjuk Jawapan Selepas Salah',sound:'Bunyi',questionBank:'Bank Soalan',formatHint:'Format: Arahan | Urutan betul. Guna / untuk pisahkan item. Contoh: Proses AI | Kumpul data / Label imej / Latih model / Uji model.',importTxt:'Import TXT',exportTxt:'Eksport TXT',loadSample:'Muat Sampel',startGame:'Mula Permainan',round:'Pusingan',showSettings:'Tunjuk Tetapan Guru',fullscreen:'Skrin Penuh',nextQuestion:'Soalan Seterusnya',reset:'Tetap Semula',currentQuestion:'Soalan Semasa',currentTeam:'Kumpulan Semasa',readyMsg:'Sedia. Selepas guru klik Mula Permainan, panel tetapan akan disembunyikan.',answerArea:'Ruang Susunan Jawapan',wordBank:'Ruang Kad Perkataan',clickTip:'Klik atau seret kad untuk susun',clearAnswer:'Kosongkan Jawapan',submitAnswer:'Hantar Jawapan',close:'Tutup',playAgain:'Main Lagi',teamRed:'Kumpulan Merah',teamBlue:'Kumpulan Biru',teamGreen:'Kumpulan Hijau',teamPurple:'Kumpulan Ungu',unlimited:'Tiada had',min3:'3 minit',min5:'5 minit',min8:'8 minit',min10:'10 minit',random:'Rawak',order:'Mengikut turutan',yes:'Ya',no:'Tidak',show:'Tunjuk',hide:'Tidak tunjuk',on:'Buka',off:'Tutup',next:'Tukar kumpulan',same:'Kumpulan sama teruskan',needStart:'Sila mulakan permainan dahulu.',bankError:'Bank soalan perlu sekurang-kurangnya 1 soalan, dan setiap soalan perlu sekurang-kurangnya 2 item.',notFull:'Jawapan belum lengkap.',correct:'Betul! Susunan tepat.',wrong:'Salah susunan!',correctAnswer:'Susunan betul: ',gameOver:'Permainan Tamat',winner:'Pemenang',timeUp:'Masa tamat!',targetReached:'Markah sasaran dicapai!',question:'Soalan',score:'Markah',rank:'Kedudukan',loaded:'Bank soalan dimuatkan.',settingsShown:'Tetapan guru dipaparkan.',settingsHidden:'Tetapan guru disembunyikan.',noQuestion:'Tiada soalan tersedia.'}
 };
-const SAMPLE=`英文句子 | I / like / to / eat / apples
-华文句子 | 我 / 今天 / 去 / 学校
-马来文句子 | Saya / suka / membaca / buku
+const SAMPLE_BANKS={
+ zh:`中文句子 | 我 / 喜欢 / 学习 / 人工智能
+学习步骤 | 先观察 / 再思考 / 最后回答
+电脑操作 | 打开电脑 / 输入密码 / 开始学习
+资料处理 | 收集资料 / 分析资料 / 做出结论
 AI项目流程 | 收集资料 / 标注图片 / 训练模型 / 测试模型 / 展示成果
-历史顺序 | 马六甲王朝建立 / 葡萄牙占领马六甲 / 英国殖民马来亚 / 马来西亚独立
 网络安全步骤 | 发现可疑链接 / 不要点击 / 告诉老师或家长 / 删除信息
 科学实验步骤 | 提出问题 / 作出假设 / 进行实验 / 记录结果 / 得出结论
-作文结构 | 开头 / 发展 / 高潮 / 结尾`;
+作文结构 | 开头 / 发展 / 高潮 / 结尾`,
+ en:`English Sentence | I / like / to / learn / AI
+Learning Steps | Observe first / Think carefully / Answer clearly
+Computer Steps | Turn on the computer / Enter the password / Start learning
+Data Process | Collect data / Analyse data / Make a conclusion
+AI Project Flow | Collect data / Label images / Train the model / Test the model / Present the result
+Cyber Safety Steps | Find a suspicious link / Do not click it / Tell a teacher or parent / Delete the message
+Science Experiment | Ask a question / Make a hypothesis / Do the experiment / Record results / Draw a conclusion
+Story Structure | Beginning / Development / Climax / Ending`,
+ ms:`Ayat Bahasa Melayu | Saya / suka / belajar / AI
+Langkah Pembelajaran | Perhatikan dahulu / Fikir dengan teliti / Jawab dengan jelas
+Langkah Komputer | Hidupkan komputer / Masukkan kata laluan / Mula belajar
+Proses Data | Kumpul data / Analisis data / Buat kesimpulan
+Aliran Projek AI | Kumpul data / Label imej / Latih model / Uji model / Bentangkan hasil
+Langkah Keselamatan Siber | Jumpa pautan mencurigakan / Jangan klik / Beritahu guru atau ibu bapa / Padam mesej
+Eksperimen Sains | Tanya soalan / Buat hipotesis / Jalankan eksperimen / Catat keputusan / Buat kesimpulan
+Struktur Karangan | Permulaan / Perkembangan / Klimaks / Penutup`
+};
+const getSampleBank=()=>SAMPLE_BANKS[state.lang]||SAMPLE_BANKS.zh;
+function normalizeBankText(s){return String(s||'').trim().replaceAll(String.fromCharCode(13)+String.fromCharCode(10),String.fromCharCode(10));}
+function isBuiltInSample(s){const v=normalizeBankText(s); return Object.values(SAMPLE_BANKS).some(x=>normalizeBankText(x)===v);}
+function loadSampleForCurrentLanguage(){$('bankInput').value=getSampleBank(); save(); toast(t('loaded'),'good');};
 let state={lang:'zh',started:false,teams:[],teamCount:2,currentTeam:0,questions:[],qIndex:0,round:0,active:null,tokens:[],answer:[],timer:null,timeLeft:300,targetScore:8,settings:{}};
 const $=id=>document.getElementById(id); const t=k=>I18N[state.lang][k]||I18N.zh[k]||k;
 const els=['langSelect','teamCount','gameMinutes','targetScore','questionMode','wrongPenalty','rightTurn','wrongTurn','showAnswer','soundOn','bankInput'];
-function save(){const data={}; els.forEach(id=>data[id]=$(id).value); localStorage.setItem('sentenceOrderGameSettings',JSON.stringify(data));}
-function load(){try{const d=JSON.parse(localStorage.getItem('sentenceOrderGameSettings')||'{}'); els.forEach(id=>{if(d[id]!=null)$(id).value=d[id]});}catch(e){} if(!$('bankInput').value.trim())$('bankInput').value=SAMPLE; state.lang=$('langSelect').value||'zh';}
+function save(){const data={}; els.forEach(id=>data[id]=$(id).value); localStorage.setItem('sentenceOrderGameSettings_v2',JSON.stringify(data));}
+function load(){try{const d=JSON.parse(localStorage.getItem('sentenceOrderGameSettings_v2')||'{}'); els.forEach(id=>{if(d[id]!=null)$(id).value=d[id]});}catch(e){} state.lang=$('langSelect').value||'zh'; if(!$('bankInput').value.trim() || isBuiltInSample($('bankInput').value))$('bankInput').value=getSampleBank();}
 function applyLang(){state.lang=$('langSelect').value; document.documentElement.lang=state.lang==='zh'?'zh-CN':state.lang; document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)}); const gm=$('gameMinutes'); [...gm.options].forEach(o=>{const map={'0':'unlimited','3':'min3','5':'min5','8':'min8','10':'min10'}; o.textContent=t(map[o.value])}); const qm=$('questionMode'); qm.options[0].textContent=t('random'); qm.options[1].textContent=t('order'); $('wrongPenalty').options[0].textContent=t('no'); $('wrongPenalty').options[1].textContent=t('yes'); $('showAnswer').options[0].textContent=t('show'); $('showAnswer').options[1].textContent=t('hide'); $('soundOn').options[0].textContent=t('on'); $('soundOn').options[1].textContent=t('off'); ['rightTurn','wrongTurn'].forEach(id=>{const s=$(id); s.options[0].textContent=t('next'); s.options[1].textContent=t('same')}); renderScoreboard(); updateHeader(); save();}
 function parseBank(text){const qs=[]; text.split(/\r?\n/).forEach((line,idx)=>{line=line.trim(); if(!line||line.startsWith('#'))return; let prompt='', order=line; if(line.includes('|')){const parts=line.split('|'); prompt=parts.shift().trim(); order=parts.join('|').trim();}else if(line.includes('=>')){const parts=line.split('=>'); prompt=parts.shift().trim(); order=parts.join('=>').trim();}else if(line.includes('\t')){const parts=line.split('\t'); prompt=parts.shift().trim(); order=parts.join('\t').trim();}else{prompt=t('question')+' '+(idx+1);} let segs=splitSegments(order); if(segs.length>=2)qs.push({prompt,segments:segs,raw:line});}); return qs;}
 function splitSegments(s){s=s.trim(); let arr=[]; if(s.includes('/')) arr=s.split('/'); else if(s.includes('→')) arr=s.split('→'); else if(/\s/.test(s)) arr=s.split(/\s+/); else {try{arr=[...s.matchAll(/[\p{Script=Han}]|[A-Za-z0-9]+|[^\s]/gu)].map(m=>m[0]);}catch(e){arr=s.split('')}} return arr.map(x=>x.trim()).filter(Boolean);}
@@ -227,22 +227,49 @@ load(); applyLang(); resetGame();
 <!-- built-in-sample-loader-fix -->
 <script>
 (function(){
-  const SAMPLE_TEXT = "# S003 句子排序挑战｜题库范例\n# 用途：句子排序、步骤排序、流程排序。\n# 建议格式：正确顺序用 | 分隔\n我 | 喜欢 | 学习 | 人工智能\n先观察 | 再思考 | 最后回答\n打开电脑 | 输入密码 | 开始学习\n收集资料 | 分析资料 | 做出结论\n";
+  const SAMPLE_TEXTS = {
+    zh:`中文句子 | 我 / 喜欢 / 学习 / 人工智能
+学习步骤 | 先观察 / 再思考 / 最后回答
+电脑操作 | 打开电脑 / 输入密码 / 开始学习
+资料处理 | 收集资料 / 分析资料 / 做出结论
+AI项目流程 | 收集资料 / 标注图片 / 训练模型 / 测试模型 / 展示成果
+网络安全步骤 | 发现可疑链接 / 不要点击 / 告诉老师或家长 / 删除信息
+科学实验步骤 | 提出问题 / 作出假设 / 进行实验 / 记录结果 / 得出结论
+作文结构 | 开头 / 发展 / 高潮 / 结尾`,
+    en:`English Sentence | I / like / to / learn / AI
+Learning Steps | Observe first / Think carefully / Answer clearly
+Computer Steps | Turn on the computer / Enter the password / Start learning
+Data Process | Collect data / Analyse data / Make a conclusion
+AI Project Flow | Collect data / Label images / Train the model / Test the model / Present the result
+Cyber Safety Steps | Find a suspicious link / Do not click it / Tell a teacher or parent / Delete the message
+Science Experiment | Ask a question / Make a hypothesis / Do the experiment / Record results / Draw a conclusion
+Story Structure | Beginning / Development / Climax / Ending`,
+    ms:`Ayat Bahasa Melayu | Saya / suka / belajar / AI
+Langkah Pembelajaran | Perhatikan dahulu / Fikir dengan teliti / Jawab dengan jelas
+Langkah Komputer | Hidupkan komputer / Masukkan kata laluan / Mula belajar
+Proses Data | Kumpul data / Analisis data / Buat kesimpulan
+Aliran Projek AI | Kumpul data / Label imej / Latih model / Uji model / Bentangkan hasil
+Langkah Keselamatan Siber | Jumpa pautan mencurigakan / Jangan klik / Beritahu guru atau ibu bapa / Padam mesej
+Eksperimen Sains | Tanya soalan / Buat hipotesis / Jalankan eksperimen / Catat keputusan / Buat kesimpulan
+Struktur Karangan | Permulaan / Perkembangan / Klimaks / Penutup`
+  };
   const TARGET_TEXTAREA_IDS = ["bankInput"];
   const SAMPLE_BUTTON_IDS = ["sampleBtn"];
-  const SAMPLE_URL = 'question-bank-example.txt?v=sample-loader-fixed-20260627';
   function $(id){ return document.getElementById(id); }
   function cleanSampleText(text){
     return String(text || '')
-      .replace(/
-/g,'
-')
-      .split('
-')
+      .replace(/\r\n/g,'\n')
+      .split('\n')
       .map(line => line.trim())
       .filter(line => line && !line.startsWith('#'))
-      .join('
-');
+      .join('\n');
+  }
+  function currentLang(){
+    const sel = $('langSelect');
+    return sel && SAMPLE_TEXTS[sel.value] ? sel.value : 'zh';
+  }
+  function currentSampleText(){
+    return SAMPLE_TEXTS[currentLang()] || SAMPLE_TEXTS.zh;
   }
   function findBankField(){
     for (const id of TARGET_TEXTAREA_IDS){
@@ -251,52 +278,17 @@ load(); applyLang(); resetGame();
     }
     return document.querySelector('textarea');
   }
-  async function getBuiltInSampleText(){
-    try {
-      const res = await fetch(SAMPLE_URL, { cache:'no-store' });
-      if (res && res.ok) {
-        const text = await res.text();
-        if (cleanSampleText(text)) return text;
-      }
-    } catch(e) {}
-    return SAMPLE_TEXT;
-  }
   function afterFill(field){
     try { field.dispatchEvent(new Event('input', { bubbles:true })); } catch(e) {}
     try { field.dispatchEvent(new Event('change', { bubbles:true })); } catch(e) {}
-    try {
-      if (field.id === 'textItems') {
-        const mode = $('mode'); if (mode) mode.value = 'text';
-        const lines = cleanSampleText(field.value).split('
-');
-        const categories = [];
-        lines.forEach(line => {
-          const parts = line.split('|').map(x => x.trim()).filter(Boolean);
-          if (parts[1] && !categories.includes(parts[1])) categories.push(parts[1]);
-        });
-        if (categories.length) {
-          try { cats = categories; } catch(e) {}
-          const catCount = $('catCount'); if (catCount) catCount.value = String(Math.min(Math.max(categories.length,2),5));
-          try { if (typeof renderCats === 'function') renderCats(); } catch(e) {}
-        }
-        try { if (typeof buildItems === 'function') buildItems(false); } catch(e) {}
-        try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
-      }
-      if (field.id === 'wordBank') { try { if (typeof applyBank === 'function') applyBank(true); } catch(e) {} }
-      try { if (typeof saveSettings === 'function') saveSettings(); } catch(e) {}
-      try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
-      try { if (typeof renderItems === 'function') renderItems(); } catch(e) {}
-      try { if (typeof setMessage === 'function') setMessage('已载入内置题库范例 / Built-in sample loaded / Contoh terbina telah dimuat'); } catch(e) {}
-      try { if (typeof toast === 'function') toast('已载入内置题库范例'); } catch(e) {}
-    } catch(e) { console.warn('Sample after-fill warning:', e); }
+    try { if (typeof save === 'function') save(); } catch(e) {}
+    try { if (typeof toast === 'function') toast('已载入对应语言题库 / Sample loaded / Contoh dimuat', 'good'); } catch(e) {}
   }
-  async function loadBuiltInSampleQuestionBank(event){
+  function loadBuiltInSampleQuestionBank(event){
     if (event) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); }
     const field = findBankField();
     if (!field) return;
-    const sampleText = cleanSampleText(await getBuiltInSampleText());
-    if (!sampleText) return;
-    field.value = sampleText;
+    field.value = cleanSampleText(currentSampleText());
     afterFill(field);
   }
   window.loadBuiltInSampleQuestionBank = loadBuiltInSampleQuestionBank;

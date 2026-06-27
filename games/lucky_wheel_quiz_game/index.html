@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>S005 幸运转盘问答 Classroom Game</title>
+  <title>幸运转盘问答 Classroom Game</title>
   <style>
     :root{
       --bg1:#061421; --bg2:#143b62; --card:#ffffff; --text:#172033; --muted:#65758b;
@@ -55,30 +55,55 @@
     .modalBackdrop{position:fixed;inset:0;background:rgba(2,6,23,.72);display:none;align-items:center;justify-content:center;z-index:50;padding:18px}.modalBackdrop.show{display:flex}.modal{max-width:900px;width:100%;background:white;color:#111827;border-radius:28px;box-shadow:0 30px 80px rgba(0,0,0,.45);overflow:hidden}.modalHead{padding:18px 22px;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:white;display:flex;align-items:center;justify-content:space-between;gap:10px}.modalTitle{font-weight:1000;font-size:24px}.modalBody{padding:22px}.bigEvent{font-size:clamp(36px,7vw,86px);text-align:center;margin:8px 0}.eventText{text-align:center;font-weight:1000;font-size:clamp(22px,3vw,36px);line-height:1.2}.question{font-size:clamp(22px,3vw,34px);font-weight:1000;line-height:1.25;margin-bottom:14px}.answerBox{padding:12px 14px;border-radius:16px;background:#f3f4f6;color:#111827;font-weight:900;margin:12px 0;display:none}.options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.option{padding:14px;border-radius:16px;border:2px solid #e5e7eb;background:#f9fafb;font-weight:900;text-align:left}.option.correct{background:#dcfce7;border-color:#22c55e}.option.wrong{background:#fee2e2;border-color:#ef4444}.modalActions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}.rankList{display:grid;gap:10px;margin-top:12px}.rankItem{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #e5e7eb;border-radius:16px;padding:12px 14px;background:#f9fafb;font-weight:900}.rankMedal{font-size:28px}.hidden{display:none!important}.footerNote{text-align:center;color:#94a3b8;font-size:12px;margin-top:12px}
     @media (max-width:1150px){.layout{grid-template-columns:1fr}.settings{position:static}.hud{grid-template-columns:1fr}.goalInfo{text-align:left}.teams{grid-template-columns:repeat(2,1fr)}.stage{grid-template-columns:1fr}.wheelPanel{min-height:500px}}
     @media (max-width:640px){.app{padding:12px}.topbar{align-items:flex-start;flex-direction:column}.quickBtns{justify-content:flex-start}.grid2,.grid3{grid-template-columns:1fr}.teams{grid-template-columns:1fr}.options{grid-template-columns:1fr}.modalBody{padding:16px}.wheelBox{width:min(92vw,360px);height:min(92vw,360px)}.wheelLabel{font-size:11px;width:92px;margin-left:-46px}.spinBtn{width:96px;height:96px;font-size:18px}.pointer{top:10px}}
-  </style>
   
-  <style id="s005-cute-override">
+  /* dark-ui override */
+  :root{
+    --panelDark:#0f2243;
+    --panelDark2:#0a1730;
+    --lineDark:rgba(147,197,253,.18);
+    --textLight:#eef4ff;
+    --mutedLight:#b9c8e6;
+  }
+  body{color:var(--textLight);}
+  .panel{background:linear-gradient(180deg,rgba(12,29,56,.96),rgba(9,20,40,.96));color:var(--textLight);border:1px solid var(--lineDark);}
+  .panelHeader{background:linear-gradient(135deg,#1d4ed8,#7c3aed);}
+  .sectionTitle,label{color:#f8fbff;}
+  .hint,.subtitle,.roundInfo,.sideText,.footerNote,.teamMeta,.goalInfo small{color:var(--mutedLight)!important;}
+  select,input,textarea{background:#07162f;color:#f8fbff;border:1px solid rgba(125,211,252,.24);}
+  select:focus,input:focus,textarea:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(59,130,246,.18);}
+  textarea{min-height:220px;}
+  button,.btn{background:linear-gradient(180deg,#e8eefc,#c8d7fb);color:#0f172a;}
+  button.ghost{background:#102347;color:#e9f2ff;border:1px solid rgba(147,197,253,.28);}
+  .game{background:linear-gradient(180deg,rgba(8,21,44,.94),rgba(5,15,32,.96));}
+  .statusCard,.wheelPanel,.sidePanel{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#eef4ff;}
+  .teamCard{background:linear-gradient(180deg,#132a52,#0b1d3a);color:#f8fbff;border-color:rgba(255,255,255,.06);}
+  .bar{background:rgba(255,255,255,.1);} 
+  .modal{background:linear-gradient(180deg,#0f2243,#09172d);color:#f8fbff;border:1px solid rgba(255,255,255,.12);} 
+  .answerBox,.option,.rankItem{background:rgba(255,255,255,.08);color:#f8fbff;border-color:rgba(255,255,255,.12);} 
+  .option.correct{background:rgba(34,197,94,.18);border-color:#22c55e;} 
+  .option.wrong{background:rgba(239,68,68,.18);border-color:#ef4444;} 
+  .rankItem{display:flex;align-items:center;justify-content:space-between;} 
+  .modalHead button{background:rgba(255,255,255,.15);color:#fff;} 
+  .eventItem{background:rgba(255,255,255,.09);color:#f8fbff;} 
+  .answerBox{display:none;} 
 
-    .topbar{background:linear-gradient(90deg,#0f67e8,#58b8ff);padding:16px 18px;border-radius:28px;box-shadow:0 16px 30px rgba(20,74,160,.18)}
-    .brand h1,.brand .subtitle{color:#fff!important;text-shadow:none}
-    .logo{background:linear-gradient(180deg,#ffd84f,#ff6ab1,#8f6bff)!important;border:3px solid rgba(255,255,255,.6)}
-    .game{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(214,239,255,.16))!important;border:2px solid rgba(255,255,255,.35)!important}
-    .panelHeader{background:linear-gradient(135deg,#4c7dff,#9f7dff)!important}
-    .statusCard,.wheelPanel,.sidePanel,.eventLog{background:linear-gradient(180deg,rgba(255,255,255,.25),rgba(238,247,255,.18))!important;border:2px solid rgba(255,255,255,.3)!important}
-    .teamCard{background:linear-gradient(180deg,#fffdf8,#eef7ff)!important;border:2px solid #b7dbff!important}
-    .teamCard.active{outline:0!important;border-color:#ffbf28!important;box-shadow:0 0 0 5px rgba(255,191,40,.18),0 16px 30px rgba(37,99,235,.16)!important}
-    .pointer{border-top-color:#ffe082!important}
-    .wheel{border:14px solid rgba(255,255,255,.95)!important;box-shadow:inset 0 0 0 6px rgba(255,255,255,.35),0 22px 44px rgba(35,93,181,.28)!important}
-    .spinBtn{background:linear-gradient(180deg,#ffffff,#fff0a7)!important;color:#6d28d9!important;font-size:24px!important;font-weight:1000!important;border:8px solid rgba(255,255,255,.75)!important}
-    .resultBadge{background:linear-gradient(180deg,#ffffff,#edf6ff)!important;color:#17406f!important;border:2px solid #b7dbff!important}
-    .eventItem{background:linear-gradient(180deg,#ffffff,#edf6ff)!important;color:#173055!important;border:2px solid #b7dbff!important}
-    .modalHead{background:linear-gradient(135deg,#7d6bff,#ff79b0)!important}
 
-  </style>
-<link rel="stylesheet" href="../_shared/shared-polish.css" />
-  <script defer src="../_shared/shared-polish.js"></script>
-  <link rel="stylesheet" href="../_shared/cute-unify.css" />
-  <script defer src="../_shared/cute-unify.js"></script>
+  .eventSelector{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+  .eventChoice{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border:1px solid rgba(147,197,253,.18);border-radius:16px;padding:12px 14px;cursor:pointer;transition:.2s ease;user-select:none;color:#eef4ff;font-weight:800}
+  .eventChoice:hover{transform:translateY(-1px);border-color:#60a5fa;background:rgba(96,165,250,.12)}
+  .eventChoice input{accent-color:#60a5fa;width:18px;height:18px;flex:0 0 auto}
+  .eventChoice.active{background:linear-gradient(180deg,rgba(59,130,246,.18),rgba(124,58,237,.16));border-color:#93c5fd;box-shadow:0 0 0 2px rgba(96,165,250,.12) inset}
+  .eventChoice .icon{font-size:20px; width:24px; text-align:center}
+  .eventSummary{margin-top:8px;color:#fef3c7;font-weight:800}
+  .toolbarMini{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 4px}
+  .toolbarMini button{padding:9px 12px;border-radius:12px}
+
+
+  .layout.playing .settings{display:none!important}
+  .layout.playing.showSettings{grid-template-columns:380px 1fr!important}
+  .layout.playing.showSettings .settings{display:block!important}
+
+</style>
 </head>
 <body>
   <div class="app">
@@ -86,7 +111,7 @@
       <div class="brand">
         <div class="logo">🎡</div>
         <div>
-          <h1 data-i18n="appTitle">S005 幸运转盘问答</h1>
+          <h1 data-i18n="appTitle">幸运转盘问答</h1>
           <div class="subtitle" data-i18n="appSub">适合老师投影使用的分组课堂复习小游戏</div>
         </div>
       </div>
@@ -152,10 +177,20 @@
             </div>
           </div>
 
+          <div class="sectionTitle" data-i18n="eventSelectTitle">转盘事件设定</div>
+          <div class="hint" data-i18n="eventSelectHint">请勾选要放进转盘的事件。你可以勾选推荐 6 个，或直接全选全部事件。</div>
+          <div class="toolbarMini">
+            <button type="button" id="eventSuggest6Btn" class="ghost" data-i18n="suggest6">推荐 6 个</button>
+            <button type="button" id="eventSelectAllBtn" class="ghost" data-i18n="selectAllEvents">全选全部</button>
+          </div>
+          <div class="eventSummary" id="eventSummary"></div>
+          <div class="eventSelector" id="eventSelector"></div>
+
           <div class="sectionTitle" data-i18n="questionBank">题库</div>
           <textarea id="questionBank" spellcheck="false"></textarea>
           <div class="hint" data-i18n="bankHint">格式：题目,正确答案,错误选项1,错误选项2,错误选项3。只有两栏时为开放题。</div>
           <div class="rowBtns">
+            <button id="sampleBtn" class="ghost" data-i18n="loadSample">载入范例</button>
             <button id="importBtn" data-i18n="importTxt">汇入 TXT</button>
             <button id="exportBtn" data-i18n="exportTxt">导出 TXT</button>
             <input id="fileInput" type="file" accept=".txt,text/plain" class="hidden" />
@@ -192,7 +227,6 @@
             <div class="sideText" data-i18n="eventDesc">老师可以把题库换成任何科目的复习题。选择题会自动判断，开放题由老师点击答对或答错。</div>
             <div class="eventList" id="eventList"></div>
             <div class="eventLog" id="eventLog">💡 <span data-i18n="logReady">设定完成后点击开始游戏。</span></div>
-            <div class="footerNote">LEAD AI Classroom Game Box · Offline HTML Game</div>
           </section>
         </div>
       </main>
@@ -211,36 +245,56 @@
 
 <script>
 const I18N = {
-  zh:{appTitle:'S005 幸运转盘问答',appSub:'适合老师投影使用的分组课堂复习小游戏',showSettings:'显示老师设定',fullscreen:'全屏',reset:'重置',teacherSettings:'老师设定',uiLang:'介面语言',teamCount:'组数',gameTime:'游戏时间',noLimit:'不限时',targetScore:'目标分',noTarget:'不设目标',questionMode:'题目顺序',random:'随机',order:'顺序',turnAfter:'回合结束后',nextTeam:'换下一组',sameTeam:'本组继续',wrongPenalty:'答错扣分',noDeduct:'不扣分',sound:'音效',on:'开启',off:'关闭',questionBank:'题库',bankHint:'格式：题目,正确答案,错误选项1,错误选项2,错误选项3。只有两栏时为开放题。',importTxt:'汇入 TXT',exportTxt:'导出 TXT',startGame:'开始游戏',startHint:'开始后老师设定区会隐藏，只保留游戏介面，适合投影使用。',spin:'转动',wheelHint:'轮到的队伍点击转盘，按照抽到的事件完成挑战。',ready:'准备开始',eventTitle:'转盘事件',eventDesc:'老师可以把题库换成任何科目的复习题。选择题会自动判断，开放题由老师点击答对或答错。',logReady:'设定完成后点击开始游戏。',turn:'轮到',spinNow:'请点击转盘按钮。',goal:'目标分',noGoal:'无目标分',goalSmall:'转到题目、加分、扣分、偷分、交换分数或跳过。',teamRed:'红队',teamBlue:'蓝队',teamGreen:'绿队',teamPurple:'紫队',score:'分数',rounds:'回合',wheelEvent:'转盘事件',quiz1:'+1 题目',quiz2:'+2 题目',doubleQuiz:'双倍挑战',bonus1:'+1 奖励',bonus2:'+2 奖励',trap1:'-1 陷阱',trap2:'-2 陷阱',steal:'偷 1 分',swap:'交换分数',pass:'跳过',question:'题目',correctAnswer:'正确答案',showAnswer:'显示答案',correct:'答对',wrong:'答错',continue:'继续',close:'关闭',gameOver:'游戏结束',ranking:'排名',chooseOption:'请选择一个答案。',answerRight:'回答正确，获得 {n} 分。',answerWrong:'回答错误。',answerWrongPenalty:'回答错误，扣除 {n} 分。',gotPoints:'获得 {n} 分。',lostPoints:'扣除 {n} 分。',stole:'从 {team} 偷到 {n} 分。',noSteal:'没有可偷的分数。',swapped:'与 {team} 交换分数。',passTurn:'跳过本回合。',timeUp:'时间到！',targetReached:'达到目标分！',pleaseStart:'请先点击开始游戏。',confirmReset:'确定要重置游戏吗？',bankEmpty:'题库为空，请先输入题目。'},
-  en:{appTitle:'S005 Lucky Wheel Quiz',appSub:'A team classroom revision game for projection',showSettings:'Show Teacher Settings',fullscreen:'Fullscreen',reset:'Reset',teacherSettings:'Teacher Settings',uiLang:'UI Language',teamCount:'Teams',gameTime:'Game Time',noLimit:'No limit',targetScore:'Target Score',noTarget:'No target',questionMode:'Question Order',random:'Random',order:'In order',turnAfter:'After Each Turn',nextTeam:'Next team',sameTeam:'Same team continues',wrongPenalty:'Wrong Penalty',noDeduct:'No penalty',sound:'Sound',on:'On',off:'Off',questionBank:'Question Bank',bankHint:'Format: Question,Correct Answer,Wrong Option 1,Wrong Option 2,Wrong Option 3. Two columns = open question.',importTxt:'Import TXT',exportTxt:'Export TXT',startGame:'Start Game',startHint:'After starting, teacher settings will be hidden for projection.',spin:'SPIN',wheelHint:'The current team spins the wheel and completes the event.',ready:'Ready',eventTitle:'Wheel Events',eventDesc:'Replace the question bank with any subject. Multiple-choice questions are checked automatically; open questions are judged by the teacher.',logReady:'Set up the game and click Start Game.',turn:'Turn',spinNow:'Click the spin button.',goal:'Target',noGoal:'No target',goalSmall:'Spin for quizzes, bonuses, penalties, steal, swap, or pass.',teamRed:'Red Team',teamBlue:'Blue Team',teamGreen:'Green Team',teamPurple:'Purple Team',score:'Score',rounds:'Turns',wheelEvent:'Wheel Event',quiz1:'+1 Quiz',quiz2:'+2 Quiz',doubleQuiz:'Double Quiz',bonus1:'+1 Bonus',bonus2:'+2 Bonus',trap1:'-1 Trap',trap2:'-2 Trap',steal:'Steal 1',swap:'Swap Scores',pass:'Pass',question:'Question',correctAnswer:'Correct Answer',showAnswer:'Show Answer',correct:'Correct',wrong:'Wrong',continue:'Continue',close:'Close',gameOver:'Game Over',ranking:'Ranking',chooseOption:'Choose an answer.',answerRight:'Correct. Gained {n} point(s).',answerWrong:'Wrong answer.',answerWrongPenalty:'Wrong answer. Lost {n} point(s).',gotPoints:'Gained {n} point(s).',lostPoints:'Lost {n} point(s).',stole:'Stole {n} point(s) from {team}.',noSteal:'No points available to steal.',swapped:'Swapped scores with {team}.',passTurn:'Turn skipped.',timeUp:'Time is up!',targetReached:'Target score reached!',pleaseStart:'Please start the game first.',confirmReset:'Reset the game?',bankEmpty:'Question bank is empty. Please enter questions first.'},
-  ms:{appTitle:'S005 Kuiz Roda Bertuah',appSub:'Permainan ulang kaji kelas berkumpulan untuk projektor',showSettings:'Tunjuk Tetapan Guru',fullscreen:'Skrin Penuh',reset:'Set Semula',teacherSettings:'Tetapan Guru',uiLang:'Bahasa Antara Muka',teamCount:'Bilangan Kumpulan',gameTime:'Masa Permainan',noLimit:'Tiada had',targetScore:'Markah Sasaran',noTarget:'Tiada sasaran',questionMode:'Susunan Soalan',random:'Rawak',order:'Ikut urutan',turnAfter:'Selepas Giliran',nextTeam:'Kumpulan seterusnya',sameTeam:'Kumpulan sama teruskan',wrongPenalty:'Denda Salah',noDeduct:'Tiada denda',sound:'Bunyi',on:'Buka',off:'Tutup',questionBank:'Bank Soalan',bankHint:'Format: Soalan,Jawapan Betul,Pilihan Salah 1,Pilihan Salah 2,Pilihan Salah 3. Dua ruangan = soalan terbuka.',importTxt:'Import TXT',exportTxt:'Eksport TXT',startGame:'Mula Permainan',startHint:'Selepas mula, tetapan guru akan disembunyikan untuk projektor.',spin:'PUTAR',wheelHint:'Kumpulan semasa memutar roda dan menyelesaikan cabaran.',ready:'Sedia',eventTitle:'Peristiwa Roda',eventDesc:'Guru boleh menggantikan bank soalan dengan ulang kaji mana-mana subjek. Soalan objektif disemak automatik; soalan terbuka dinilai oleh guru.',logReady:'Sediakan permainan dan klik Mula Permainan.',turn:'Giliran',spinNow:'Klik butang putar.',goal:'Sasaran',noGoal:'Tiada sasaran',goalSmall:'Putar untuk soalan, bonus, denda, curi markah, tukar markah atau langkau.',teamRed:'Kumpulan Merah',teamBlue:'Kumpulan Biru',teamGreen:'Kumpulan Hijau',teamPurple:'Kumpulan Ungu',score:'Markah',rounds:'Giliran',wheelEvent:'Peristiwa Roda',quiz1:'+1 Soalan',quiz2:'+2 Soalan',doubleQuiz:'Cabaran Berganda',bonus1:'+1 Bonus',bonus2:'+2 Bonus',trap1:'-1 Perangkap',trap2:'-2 Perangkap',steal:'Curi 1',swap:'Tukar Markah',pass:'Langkau',question:'Soalan',correctAnswer:'Jawapan Betul',showAnswer:'Tunjuk Jawapan',correct:'Betul',wrong:'Salah',continue:'Teruskan',close:'Tutup',gameOver:'Permainan Tamat',ranking:'Kedudukan',chooseOption:'Pilih satu jawapan.',answerRight:'Betul. Dapat {n} markah.',answerWrong:'Jawapan salah.',answerWrongPenalty:'Jawapan salah. Hilang {n} markah.',gotPoints:'Dapat {n} markah.',lostPoints:'Hilang {n} markah.',stole:'Curi {n} markah daripada {team}.',noSteal:'Tiada markah untuk dicuri.',swapped:'Tukar markah dengan {team}.',passTurn:'Giliran dilangkau.',timeUp:'Masa tamat!',targetReached:'Markah sasaran dicapai!',pleaseStart:'Sila mula permainan dahulu.',confirmReset:'Set semula permainan?',bankEmpty:'Bank soalan kosong. Sila masukkan soalan dahulu.'}
+  zh:{appTitle:'幸运转盘问答',appSub:'适合老师投影使用的分组课堂复习小游戏',showSettings:'显示老师设定',fullscreen:'全屏',reset:'重置',teacherSettings:'老师设定',uiLang:'介面语言',teamCount:'组数',gameTime:'游戏时间',noLimit:'不限时',targetScore:'目标分',noTarget:'不设目标',questionMode:'题目顺序',random:'随机',order:'顺序',turnAfter:'回合结束后',nextTeam:'换下一组',sameTeam:'本组继续',wrongPenalty:'答错扣分',noDeduct:'不扣分',sound:'音效',on:'开启',off:'关闭',questionBank:'题库',bankHint:'格式：题目,正确答案,错误选项1,错误选项2,错误选项3。只有两栏时为开放题。',loadSample:'载入范例',loaded:'已载入对应语言题库',importTxt:'汇入 TXT',exportTxt:'导出 TXT',startGame:'开始游戏',startHint:'开始后老师设定区会隐藏，只保留游戏介面，适合投影使用。',spin:'转动',wheelHint:'轮到的队伍点击转盘，按照抽到的事件完成挑战。',ready:'准备开始',eventTitle:'转盘事件',eventDesc:'老师可以把题库换成任何科目的复习题。选择题会自动判断，开放题由老师点击答对或答错。',logReady:'设定完成后点击开始游戏。',turn:'轮到',spinNow:'请点击转盘按钮。',goal:'目标分',noGoal:'无目标分',goalSmall:'转到题目、加分、扣分、偷分、交换分数或跳过。',teamRed:'红队',teamBlue:'蓝队',teamGreen:'绿队',teamPurple:'紫队',score:'分数',rounds:'回合',wheelEvent:'转盘事件',quiz1:'+1 题目',quiz2:'+2 题目',doubleQuiz:'双倍挑战',bonus1:'+1 奖励',bonus2:'+2 奖励',trap1:'-1 陷阱',trap2:'-2 陷阱',steal:'偷 1 分',swap:'交换分数',pass:'跳过',question:'题目',correctAnswer:'正确答案',showAnswer:'显示答案',correct:'答对',wrong:'答错',continue:'继续',close:'关闭',gameOver:'游戏结束',ranking:'排名',chooseOption:'请选择一个答案。',answerRight:'回答正确，获得 {n} 分。',answerWrong:'回答错误。',answerWrongPenalty:'回答错误，扣除 {n} 分。',gotPoints:'获得 {n} 分。',lostPoints:'扣除 {n} 分。',stole:'从 {team} 偷到 {n} 分。',noSteal:'没有可偷的分数。',swapped:'与 {team} 交换分数。',passTurn:'跳过本回合。',timeUp:'时间到！',targetReached:'达到目标分！',pleaseStart:'请先点击开始游戏。',confirmReset:'确定要重置游戏吗？',bankEmpty:'题库为空，请先输入题目。',eventSelectTitle:'转盘事件设定',eventSelectHint:'请勾选要放进转盘的事件。你可以勾选推荐 6 个，或直接全选全部事件。',suggest6:'推荐 6 个',selectAllEvents:'全选全部',selectedCount:'已勾选 {n} / {total} 个事件'},
+  en:{appTitle:'Lucky Wheel Quiz',appSub:'A team classroom revision game for projection',showSettings:'Show Teacher Settings',fullscreen:'Fullscreen',reset:'Reset',teacherSettings:'Teacher Settings',uiLang:'UI Language',teamCount:'Teams',gameTime:'Game Time',noLimit:'No limit',targetScore:'Target Score',noTarget:'No target',questionMode:'Question Order',random:'Random',order:'In order',turnAfter:'After Each Turn',nextTeam:'Next team',sameTeam:'Same team continues',wrongPenalty:'Wrong Penalty',noDeduct:'No penalty',sound:'Sound',on:'On',off:'Off',questionBank:'Question Bank',bankHint:'Format: Question,Correct Answer,Wrong Option 1,Wrong Option 2,Wrong Option 3. Two columns = open question.',loadSample:'Load Sample',loaded:'Sample bank loaded for current language',importTxt:'Import TXT',exportTxt:'Export TXT',startGame:'Start Game',startHint:'After starting, teacher settings will be hidden for projection.',spin:'SPIN',wheelHint:'The current team spins the wheel and completes the event.',ready:'Ready',eventTitle:'Wheel Events',eventDesc:'Replace the question bank with any subject. Multiple-choice questions are checked automatically; open questions are judged by the teacher.',logReady:'Set up the game and click Start Game.',turn:'Turn',spinNow:'Click the spin button.',goal:'Target',noGoal:'No target',goalSmall:'Spin for quizzes, bonuses, penalties, steal, swap, or pass.',teamRed:'Red Team',teamBlue:'Blue Team',teamGreen:'Green Team',teamPurple:'Purple Team',score:'Score',rounds:'Turns',wheelEvent:'Wheel Event',quiz1:'+1 Quiz',quiz2:'+2 Quiz',doubleQuiz:'Double Quiz',bonus1:'+1 Bonus',bonus2:'+2 Bonus',trap1:'-1 Trap',trap2:'-2 Trap',steal:'Steal 1',swap:'Swap Scores',pass:'Pass',question:'Question',correctAnswer:'Correct Answer',showAnswer:'Show Answer',correct:'Correct',wrong:'Wrong',continue:'Continue',close:'Close',gameOver:'Game Over',ranking:'Ranking',chooseOption:'Choose an answer.',answerRight:'Correct. Gained {n} point(s).',answerWrong:'Wrong answer.',answerWrongPenalty:'Wrong answer. Lost {n} point(s).',gotPoints:'Gained {n} point(s).',lostPoints:'Lost {n} point(s).',stole:'Stole {n} point(s) from {team}.',noSteal:'No points available to steal.',swapped:'Swapped scores with {team}.',passTurn:'Turn skipped.',timeUp:'Time is up!',targetReached:'Target score reached!',pleaseStart:'Please start the game first.',confirmReset:'Reset the game?',bankEmpty:'Question bank is empty. Please enter questions first.',eventSelectTitle:'Wheel Event Settings',eventSelectHint:'Tick the events you want on the wheel. You can choose the recommended 6 events or select all events.',suggest6:'Recommended 6',selectAllEvents:'Select All',selectedCount:'Selected {n} / {total} events'},
+  ms:{appTitle:'Kuiz Roda Bertuah',appSub:'Permainan ulang kaji kelas berkumpulan untuk projektor',showSettings:'Tunjuk Tetapan Guru',fullscreen:'Skrin Penuh',reset:'Set Semula',teacherSettings:'Tetapan Guru',uiLang:'Bahasa Antara Muka',teamCount:'Bilangan Kumpulan',gameTime:'Masa Permainan',noLimit:'Tiada had',targetScore:'Markah Sasaran',noTarget:'Tiada sasaran',questionMode:'Susunan Soalan',random:'Rawak',order:'Ikut urutan',turnAfter:'Selepas Giliran',nextTeam:'Kumpulan seterusnya',sameTeam:'Kumpulan sama teruskan',wrongPenalty:'Denda Salah',noDeduct:'Tiada denda',sound:'Bunyi',on:'Buka',off:'Tutup',questionBank:'Bank Soalan',bankHint:'Format: Soalan,Jawapan Betul,Pilihan Salah 1,Pilihan Salah 2,Pilihan Salah 3. Dua ruangan = soalan terbuka.',loadSample:'Muat Sampel',loaded:'Bank soalan contoh telah dimuatkan',importTxt:'Import TXT',exportTxt:'Eksport TXT',startGame:'Mula Permainan',startHint:'Selepas mula, tetapan guru akan disembunyikan untuk projektor.',spin:'PUTAR',wheelHint:'Kumpulan semasa memutar roda dan menyelesaikan cabaran.',ready:'Sedia',eventTitle:'Peristiwa Roda',eventDesc:'Guru boleh menggantikan bank soalan dengan ulang kaji mana-mana subjek. Soalan objektif disemak automatik; soalan terbuka dinilai oleh guru.',logReady:'Sediakan permainan dan klik Mula Permainan.',turn:'Giliran',spinNow:'Klik butang putar.',goal:'Sasaran',noGoal:'Tiada sasaran',goalSmall:'Putar untuk soalan, bonus, denda, curi markah, tukar markah atau langkau.',teamRed:'Kumpulan Merah',teamBlue:'Kumpulan Biru',teamGreen:'Kumpulan Hijau',teamPurple:'Kumpulan Ungu',score:'Markah',rounds:'Giliran',wheelEvent:'Peristiwa Roda',quiz1:'+1 Soalan',quiz2:'+2 Soalan',doubleQuiz:'Cabaran Berganda',bonus1:'+1 Bonus',bonus2:'+2 Bonus',trap1:'-1 Perangkap',trap2:'-2 Perangkap',steal:'Curi 1',swap:'Tukar Markah',pass:'Langkau',question:'Soalan',correctAnswer:'Jawapan Betul',showAnswer:'Tunjuk Jawapan',correct:'Betul',wrong:'Salah',continue:'Teruskan',close:'Tutup',gameOver:'Permainan Tamat',ranking:'Kedudukan',chooseOption:'Pilih satu jawapan.',answerRight:'Betul. Dapat {n} markah.',answerWrong:'Jawapan salah.',answerWrongPenalty:'Jawapan salah. Hilang {n} markah.',gotPoints:'Dapat {n} markah.',lostPoints:'Hilang {n} markah.',stole:'Curi {n} markah daripada {team}.',noSteal:'Tiada markah untuk dicuri.',swapped:'Tukar markah dengan {team}.',passTurn:'Giliran dilangkau.',timeUp:'Masa tamat!',targetReached:'Markah sasaran dicapai!',pleaseStart:'Sila mula permainan dahulu.',confirmReset:'Set semula permainan?',bankEmpty:'Bank soalan kosong. Sila masukkan soalan dahulu.',eventSelectTitle:'Tetapan Peristiwa Roda',eventSelectHint:'Tandakan peristiwa yang mahu dimasukkan ke dalam roda. Anda boleh pilih 6 cadangan atau pilih semua.',suggest6:'Cadangan 6',selectAllEvents:'Pilih Semua',selectedCount:'Dipilih {n} / {total} peristiwa'}
 };
 
-const DEFAULT_BANK = `马来西亚首都是哪里？,吉隆坡,新山,槟城,马六甲
-AI 可以随便用同学照片做搞笑图吗？,不可以,可以,只要好笑就可以,老师没看到就可以
-password 的中文意思是什么？,密码
+const SAMPLE_BANKS = {
+  zh:`马来西亚的首都是什么？,吉隆坡,槟城,新山,马六甲
 太阳从哪里升起？,东方,西方,南方,北方
-ChatGPT 属于什么工具？,AI工具,游戏工具,交通工具,运动工具
-水的化学式是什么？,H2O
+AI 的中文意思是什么？,人工智能,自动输入,高级网络,主动图像
+网络账号密码应该怎样设置？,复杂且不轻易告诉别人
+水在标准大气压下通常会在 100°C 沸腾。,正确,错误
 植物制造食物的过程叫什么？,光合作用,呼吸作用,蒸发作用,消化作用
-早安 的马来文是什么？,selamat pagi
-网络账号的密码应该怎样设置？,复杂且不轻易告诉别人
-Malaysia flag is called what?,Jalur Gemilang,Union Jack,Stars and Stripes,Merlion Flag`;
+早安的马来文是什么？,selamat pagi,terima kasih,selamat malam,apa khabar
+ChatGPT 属于什么工具？,AI工具,交通工具,运动工具,音乐工具`,
+  en:`What is the capital of Malaysia?,Kuala Lumpur,Penang,Johor Bahru,Malacca
+Where does the sun rise?,East,West,South,North
+What does AI stand for?,Artificial Intelligence,Auto Internet,Advanced Image,Active Input
+How should a password be set?,Long and hard to guess
+Water normally boils at 100°C at standard atmospheric pressure.,True,False
+What process helps plants make food?,Photosynthesis,Respiration,Evaporation,Digestion
+How do you say good morning in Malay?,selamat pagi,terima kasih,selamat malam,apa khabar
+ChatGPT belongs to which type of tool?,AI tool,Transport tool,Sports tool,Music tool`,
+  ms:`Apakah ibu negara Malaysia?,Kuala Lumpur,Penang,Johor Bahru,Melaka
+Di manakah matahari terbit?,Timur,Barat,Selatan,Utara
+Apakah maksud AI?,Kecerdasan Buatan,Internet Automatik,Imej Lanjutan,Input Aktif
+Bagaimanakah kata laluan patut ditetapkan?,Panjang dan sukar diteka
+Air biasanya mendidih pada 100°C pada tekanan atmosfera standard.,Betul,Salah
+Apakah proses tumbuhan menghasilkan makanan?,Fotosintesis,Respirasi,Penyejatan,Pencernaan
+Bagaimanakah sebutan selamat pagi dalam Bahasa Melayu?,selamat pagi,terima kasih,selamat malam,apa khabar
+ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Alat muzik`
+};
+const getSampleBank = () => SAMPLE_BANKS[lang] || SAMPLE_BANKS.zh;
+function normalizeBankText(s){return String(s||'').trim().replace(/\r\n/g,'\n');}
+function isBuiltInSample(s){const v = normalizeBankText(s); return Object.values(SAMPLE_BANKS).some(x => normalizeBankText(x) === v);}
+function loadSampleForCurrentLanguage(){ $('questionBank').value = getSampleBank(); saveSettings(); parseQuestions(); if(typeof announceLoaded==='function') announceLoaded(); }
+
 
 const EVENT_DEFS = [
   {id:'quiz1',icon:'❓',score:1,quiz:true,color:'#8b5cf6'},
-  {id:'bonus1',icon:'🎁',score:1,color:'#22c55e'},
   {id:'quiz2',icon:'⭐',score:2,quiz:true,color:'#2563eb'},
-  {id:'trap1',icon:'⚠️',score:-1,color:'#ef4444'},
-  {id:'steal',icon:'🕵️',score:1,color:'#f97316'},
   {id:'doubleQuiz',icon:'💎',score:4,quiz:true,color:'#06b6d4'},
+  {id:'bonus1',icon:'🎁',score:1,color:'#22c55e'},
   {id:'bonus2',icon:'🏆',score:2,color:'#16a34a'},
-  {id:'swap',icon:'🔄',score:0,color:'#a855f7'},
-  {id:'quiz1',icon:'❓',score:1,quiz:true,color:'#ec4899'},
+  {id:'trap1',icon:'⚠️',score:-1,color:'#ef4444'},
   {id:'trap2',icon:'💣',score:-2,color:'#dc2626'},
-  {id:'quiz2',icon:'⭐',score:2,quiz:true,color:'#3b82f6'},
+  {id:'steal',icon:'🕵️',score:1,color:'#f97316'},
+  {id:'swap',icon:'🔄',score:0,color:'#a855f7'},
   {id:'pass',icon:'⏭️',score:0,color:'#64748b'}
 ];
+const RECOMMENDED_EVENT_IDS = ['quiz1','quiz2','doubleQuiz','bonus1','trap1','steal'];
 const TEAM_COLORS = ['var(--red)','var(--blue)','var(--green)','var(--purple)'];
 const LS_KEY = 'lead_ai_lucky_wheel_quiz_v1';
 let lang = 'zh';
@@ -261,6 +315,61 @@ const $ = id => document.getElementById(id);
 const t = key => (I18N[lang] && I18N[lang][key]) || I18N.zh[key] || key;
 const fmt = (key, data={}) => t(key).replace(/\{(\w+)\}/g, (_,k)=> data[k] ?? '');
 
+function getSelectedEventIds(){ return [...document.querySelectorAll('.eventCheck:checked')].map(el=>el.value); }
+function syncEventChoiceStates(){
+  document.querySelectorAll('.eventChoice').forEach(label=>{
+    const cb=label.querySelector('.eventCheck');
+    label.classList.toggle('active', !!cb && cb.checked);
+  });
+}
+function updateEventSummary(){
+  const el=$('eventSummary');
+  if(!el) return;
+  const n=getSelectedEventIds().length;
+  el.textContent = fmt('selectedCount',{n,total:EVENT_DEFS.length});
+}
+function getActiveEventDefs(){
+  const ids=getSelectedEventIds();
+  const selected = ids.length ? ids : RECOMMENDED_EVENT_IDS;
+  return EVENT_DEFS.filter(ev=>selected.includes(ev.id));
+}
+function renderEventSelector(selectedIds){
+  const wrap=$('eventSelector');
+  if(!wrap) return;
+  const set = new Set(selectedIds && selectedIds.length ? selectedIds : RECOMMENDED_EVENT_IDS);
+  wrap.innerHTML = EVENT_DEFS.map(ev=>`<label class="eventChoice ${set.has(ev.id)?'active':''}"><input class="eventCheck" type="checkbox" value="${ev.id}" ${set.has(ev.id)?'checked':''}><span class="icon">${ev.icon}</span><span>${t(ev.id)}</span></label>`).join('');
+  document.querySelectorAll('.eventCheck').forEach(el=>{
+    el.addEventListener('change',()=>{
+      syncEventChoiceStates();
+      updateEventSummary();
+      renderEventList();
+      renderWheel();
+      saveSettings();
+    });
+  });
+  updateEventSummary();
+}
+function setSelectedEventIds(ids){
+  const set = new Set(ids && ids.length ? ids : RECOMMENDED_EVENT_IDS);
+  document.querySelectorAll('.eventCheck').forEach(el=>{ el.checked = set.has(el.value); });
+  syncEventChoiceStates();
+  updateEventSummary();
+  renderEventList();
+  renderWheel();
+}
+function renderEventList(){
+  const defs = getActiveEventDefs();
+  const list=$('eventList');
+  if(!list) return;
+  list.innerHTML = defs.map((ev,idx)=>`<div class="eventItem"><span><b>${idx+1}.</b> <b>${ev.icon}</b>${t(ev.id)}</span><span>${ev.quiz ? t('question') : t('wheelEvent')}</span></div>`).join('');
+}
+function setSettingsVisible(visible){
+  const layout=$('layout');
+  layout.classList.toggle('showSettings', !!visible);
+  if(started) layout.classList.add('playing');
+}
+
+
 function init(){
   loadSettings();
   bindEvents();
@@ -274,20 +383,25 @@ function init(){
 }
 
 function bindEvents(){
-  $('langSelect').addEventListener('change',()=>{lang=$('langSelect').value; saveSettings(); applyI18n(); renderTeams(); renderWheel(); renderEventList(); updateHud();});
+  $('langSelect').addEventListener('change',()=>{const useSample = !$('questionBank').value.trim() || isBuiltInSample($('questionBank').value); const selected = (typeof getSelectedEventIds==='function') ? getSelectedEventIds() : RECOMMENDED_EVENT_IDS; lang=$('langSelect').value; if(useSample) $('questionBank').value = getSampleBank(); saveSettings(); applyI18n(); setSelectedEventIds(selected); parseQuestions(); renderTeams(); renderWheel(); renderEventList(); updateHud();});
   ['teamCount','gameTime','targetScore','questionMode','turnAfter','wrongPenalty','soundSelect'].forEach(id=>$(id).addEventListener('change',()=>{saveSettings(); if(!started){setupTeams(false);renderTeams();updateHud();}}));
   $('questionBank').addEventListener('input',()=>{saveSettings(); parseQuestions();});
   $('startBtn').addEventListener('click',startGame);
-  $('showSettingsBtn').addEventListener('click',()=>{$('layout').classList.remove('playing');});
+  $('showSettingsBtn').addEventListener('click',()=>{ if(started){ $('layout').classList.toggle('showSettings'); $('layout').classList.add('playing'); } else { $('layout').classList.remove('playing'); } });
   $('resetBtn').addEventListener('click',()=>{ if(confirm(t('confirmReset'))) resetGame(); });
   $('fsBtn').addEventListener('click',toggleFullscreen);
   $('spinBtn').addEventListener('click',spinWheel);
   $('importBtn').addEventListener('click',()=>$('fileInput').click());
   $('fileInput').addEventListener('change',importTxt);
   $('exportBtn').addEventListener('click',exportTxt);
+  $('sampleBtn').addEventListener('click',loadSampleForCurrentLanguage);
+  $('eventSuggest6Btn').addEventListener('click',()=>{ setSelectedEventIds(RECOMMENDED_EVENT_IDS); saveSettings(); });
+  $('eventSelectAllBtn').addEventListener('click',()=>{ setSelectedEventIds(EVENT_DEFS.map(ev=>ev.id)); saveSettings(); });
   $('modalClose').addEventListener('click',closeModal);
   $('modalBackdrop').addEventListener('click',e=>{ if(e.target === $('modalBackdrop')) closeModal(); });
 }
+
+function announceLoaded(){ const el = $('eventLog'); if(el) el.innerHTML = '✅ ' + t('loaded'); }
 
 function loadSettings(){
   let saved = {};
@@ -301,15 +415,23 @@ function loadSettings(){
   $('turnAfter').value = saved.turnAfter || 'next';
   $('wrongPenalty').value = saved.wrongPenalty || '1';
   $('soundSelect').value = saved.soundSelect || 'on';
-  $('questionBank').value = saved.questionBank || DEFAULT_BANK;
+  $('questionBank').value = saved.questionBank || getSampleBank();
+  if(!$('questionBank').value.trim() || isBuiltInSample($('questionBank').value)) $('questionBank').value = getSampleBank();
+  renderEventSelector(Array.isArray(saved.selectedEvents) && saved.selectedEvents.length ? saved.selectedEvents : RECOMMENDED_EVENT_IDS);
 }
+
 function saveSettings(){
-  const data = {lang:$('langSelect').value, teamCount:$('teamCount').value, gameTime:$('gameTime').value, targetScore:$('targetScore').value, questionMode:$('questionMode').value, turnAfter:$('turnAfter').value, wrongPenalty:$('wrongPenalty').value, soundSelect:$('soundSelect').value, questionBank:$('questionBank').value};
+  const data = {lang:$('langSelect').value, teamCount:$('teamCount').value, gameTime:$('gameTime').value, targetScore:$('targetScore').value, questionMode:$('questionMode').value, turnAfter:$('turnAfter').value, wrongPenalty:$('wrongPenalty').value, soundSelect:$('soundSelect').value, questionBank:$('questionBank').value, selectedEvents:getSelectedEventIds()};
   localStorage.setItem(LS_KEY, JSON.stringify(data));
 }
 function applyI18n(){
   document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+  document.title = t('appTitle') + ' Classroom Game';
   document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = t(el.dataset.i18n); });
+  const currentSelected = getSelectedEventIds ? getSelectedEventIds() : RECOMMENDED_EVENT_IDS;
+  if($('eventSelector')) renderEventSelector(currentSelected.length ? currentSelected : RECOMMENDED_EVENT_IDS);
+  const log = $('eventLog');
+  if(log && !started){ log.innerHTML = '💡 <span>' + t('logReady') + '</span>'; }
 }
 
 function parseCSVLine(line){
@@ -372,20 +494,17 @@ function formatTime(sec){
   return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
 function renderWheel(){
+  const defs = getActiveEventDefs();
   const wheel = $('wheel');
-  const seg = 360 / EVENT_DEFS.length;
-  const gradient = EVENT_DEFS.map((ev,i)=>`${ev.color} ${i*seg}deg ${(i+1)*seg}deg`).join(',');
+  if(!defs.length){ wheel.innerHTML=''; return; }
+  const seg = 360 / defs.length;
+  const gradient = defs.map((ev,i)=>`${ev.color} ${i*seg}deg ${(i+1)*seg}deg`).join(',');
   wheel.style.background = `conic-gradient(${gradient})`;
   wheel.style.transform = `rotate(${rotation}deg)`;
-  wheel.innerHTML = EVENT_DEFS.map((ev,i)=>{
+  wheel.innerHTML = defs.map((ev,i)=>{
     const angle = i*seg + seg/2;
     return `<div class="wheelLabel" style="transform:rotate(${angle}deg) translateY(-158px) rotate(90deg)">${ev.icon}<br>${t(ev.id)}</div>`;
   }).join('');
-}
-function renderEventList(){
-  const unique = [];
-  EVENT_DEFS.forEach(ev=>{ if(!unique.find(x=>x.id===ev.id)) unique.push(ev); });
-  $('eventList').innerHTML = unique.map(ev=>`<div class="eventItem"><span><b>${ev.icon}</b>${t(ev.id)}</span><span>${ev.quiz ? t('question') : t('wheelEvent')}</span></div>`).join('');
 }
 
 function startGame(){
@@ -395,6 +514,7 @@ function startGame(){
   started = true; spinning = false; currentTeam = 0; questionIndex = 0; rotation = 0;
   setupTeams(true);
   timeLeft = parseInt($('gameTime').value,10) || 0;
+  $('layout').classList.remove('showSettings');
   $('layout').classList.add('playing');
   $('resultBadge').innerHTML = `🎯 ${t('ready')}`;
   $('eventLog').innerHTML = `🎡 ${t('spinNow')}`;
@@ -405,17 +525,19 @@ function startGame(){
 }
 function resetGame(){
   started=false; spinning=false; currentTeam=0; clearInterval(timerId); timeLeft=parseInt($('gameTime').value,10)||0; setupTeams(true); rotation=0;
-  $('layout').classList.remove('playing'); $('spinBtn').disabled=false; $('resultBadge').innerHTML=`🎯 ${t('ready')}`; $('eventLog').innerHTML=`💡 ${t('logReady')}`;
+  $('layout').classList.remove('playing','showSettings'); $('spinBtn').disabled=false; $('resultBadge').innerHTML=`🎯 ${t('ready')}`; $('eventLog').innerHTML=`💡 ${t('logReady')}`;
   closeModal(); renderTeams(); renderWheel(); updateHud();
 }
 function spinWheel(){
   if(!started){ alert(t('pleaseStart')); return; }
   if(spinning) return;
+  const defs = getActiveEventDefs();
+  if(!defs.length){ alert(t('eventSelectHint')); return; }
   spinning = true; $('spinBtn').disabled = true;
   playSound('spin');
-  const idx = Math.floor(Math.random()*EVENT_DEFS.length);
-  selectedEvent = EVENT_DEFS[idx];
-  const seg = 360 / EVENT_DEFS.length;
+  const idx = Math.floor(Math.random()*defs.length);
+  selectedEvent = defs[idx];
+  const seg = 360 / defs.length;
   const center = idx*seg + seg/2;
   const base = 360 - center;
   rotation += 360*5 + ((base - rotation) % 360 + 360) % 360;
@@ -563,7 +685,7 @@ function importTxt(e){
 }
 function exportTxt(){
   const blob = new Blob([$('questionBank').value],{type:'text/plain;charset=utf-8'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='lucky_wheel_quiz_questions.txt'; a.click(); URL.revokeObjectURL(a.href);
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='S005_lucky_wheel_quiz_questions.txt'; a.click(); URL.revokeObjectURL(a.href);
 }
 function toggleFullscreen(){
   if(!document.fullscreenElement) document.documentElement.requestFullscreen?.();

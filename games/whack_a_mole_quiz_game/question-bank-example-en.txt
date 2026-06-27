@@ -1,0 +1,10 @@
+What is the capital of Malaysia?,Kuala Lumpur,Johor Bahru,Penang,Malacca,Ipoh
+What does AI stand for?,Artificial Intelligence,Automatic Internet,Advanced Image,Artificial Internet,Auto Intelligence
+Should you share your password with friends?,No,Yes,Only with close friends,Write it on the whiteboard,Post it in a group chat
+What is the chemical formula of water?,H2O,CO2,O2,NaCl,H2
+Where does the sun rise?,East,West,South,North,Middle
+How do you say good morning in Malay?,selamat pagi,terima kasih,selamat malam,apa khabar,sama-sama
+What does CPU mean?,Central Processing Unit,Monitor,Keyboard,Mouse,Hard disk
+What process helps plants make food?,Photosynthesis,Evaporation,Respiration,Digestion,Friction
+Can AI be used to make funny pictures of classmates without permission?,No,Yes,If it is funny,If the teacher does not see it,If it is posted in a group
+What should you do when you see an unknown link online?,Do not click it carelessly,Click it immediately,Forward it to friends,Try entering your password,Download the file

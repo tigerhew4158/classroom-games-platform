@@ -1,0 +1,8 @@
+English Sentence | I / like / to / learn / AI
+Learning Steps | Observe first / Think carefully / Answer clearly
+Computer Steps | Turn on the computer / Enter the password / Start learning
+Data Process | Collect data / Analyse data / Make a conclusion
+AI Project Flow | Collect data / Label images / Train the model / Test the model / Present the result
+Cyber Safety Steps | Find a suspicious link / Do not click it / Tell a teacher or parent / Delete the message
+Science Experiment | Ask a question / Make a hypothesis / Do the experiment / Record results / Draw a conclusion
+Story Structure | Beginning / Development / Climax / Ending

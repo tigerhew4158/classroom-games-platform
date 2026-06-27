@@ -1,0 +1,18 @@
+pisang,banana
+epal,apple
+oren,orange
+ibu negara Malaysia,Kuala Lumpur
+bendera Malaysia,Jalur Gemilang
+guru,teacher
+murid,student
+komputer,computer
+warna merah,red
+warna biru,blue
+kucing,cat
+anjing,dog
+air,water
+buku,book
+sekolah,school
+meja,table
+kerusi,chair
+keluarga,family

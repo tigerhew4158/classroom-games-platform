@@ -1,8 +1,10 @@
-Earth is the third planet from the Sun.,True,Earth is the third planet in the solar system.
-Passwords should be shared with close friends.,False,Passwords should remain private.
-Plants can make food through photosynthesis.,True,Plants use sunlight, water and carbon dioxide.
-All AI-generated images are always real.,False,Some AI-generated images are synthetic or misleading.
-The capital of Malaysia is Kuala Lumpur.,True,Kuala Lumpur is the national capital.
-Any unknown website link is safe to click.,False,Unknown links may contain scams or malware.
-Water boils at 100°C at normal pressure.,True,That is the standard boiling point of water at sea level.
-If cyberbullying happens, you should save evidence and tell a trusted adult.,True,This is a safe and responsible action.
+太阳系中离太阳最近的行星是水星。,正确,水星是最靠近太阳的行星。
+地球是太阳系中的第三颗行星。,正确,地球排在水星和金星之后。
+学生可以把自己的密码告诉好朋友。,错误,密码属于个人资料，不应该随意分享。
+看到陌生网站链接时，应该先确认是否安全再点击。,正确,不明链接可能含有诈骗或恶意软件。
+所有 AI 生成的图片都一定是真实照片。,错误,AI 可以生成看起来很真实但并不存在的图片。
+网络霸凌发生时，可以保存证据并告诉可信任的大人。,正确,这是安全且负责任的做法。
+植物可以通过光合作用制造养分。,正确,植物会利用阳光、水和二氧化碳进行光合作用。
+水在标准大气压下通常会在 100°C 沸腾。,正确,这是常见的科学知识。
+吉隆坡是马来西亚的首都。,正确,吉隆坡是马来西亚的首都。
+在网上看到中奖信息时，马上提供身份证号码最安全。,错误,这可能是诈骗，应先查证。

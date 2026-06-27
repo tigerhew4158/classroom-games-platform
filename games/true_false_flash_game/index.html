@@ -133,14 +133,14 @@
 
   .settingsOverlay,.modalOverlay{position:fixed; inset:0; background:rgba(2,6,23,.76); display:none; align-items:center; justify-content:center; z-index:50; padding:20px}
   .settingsOverlay.show,.modalOverlay.show{display:flex}
-  .settings,.modalCard{width:min(960px,96vw); max-height:92vh; overflow:auto; background:#fff; color:#111827; border-radius:30px; box-shadow:0 30px 80px rgba(0,0,0,.45); overflow:auto}
+  .settings,.modalCard{width:min(1120px,97vw); max-height:94vh; overflow:auto; background:#fff; color:#111827; border-radius:30px; box-shadow:0 30px 80px rgba(0,0,0,.45); overflow:auto}
   .settingsHead,.modalHead{padding:18px 24px; background:linear-gradient(135deg,#3974ff,#6e65ff); color:#fff; display:flex; justify-content:space-between; align-items:center}
   .settingsHead h2,.modalHead h2{margin:0; font-size:28px}
   .settingsBody,.modalBody{padding:20px 24px}
   .settingsGrid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px}
   .settingsTri{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
   .settings label{display:block; font-size:14px; font-weight:900; margin:0 0 6px; color:#334155}
-  .settings textarea{min-height:200px; resize:vertical; font-family:Consolas, monospace}
+  .settings textarea{min-height:360px; resize:vertical; font-family:Consolas, monospace; width:100%; line-height:1.55; padding:14px 16px}
   .hintText{font-size:13px; color:#64748b; line-height:1.5}
   .rowBtns{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
   .rowBtns .topBtn{min-height:54px}
@@ -151,9 +151,97 @@
   .flashWrong{box-shadow:0 0 0 8px rgba(239,68,68,.22), 0 24px 54px rgba(0,0,0,.22)!important; border-color:#ff7777!important}
 
   @media (max-width:1300px){ .topbar{grid-template-columns:1fr} .topControls{justify-content:flex-start} }
+
+
+/* ===== DARK THEME OVERRIDE v1 ===== */
+:root{
+  --bg1:#08111f; --bg2:#0b1730; --bg3:#050b16;
+  --text:#eaf3ff; --deep:#0d1526; --white:#ffffff;
+  --green:#35d07f; --green2:#17995a;
+  --red:#ff6d79; --red2:#d64053;
+  --orange:#ffb84f; --yellow:#ffd84f;
+  --blue:#5ab3ff; --blue2:#2d81ff;
+  --purple:#b48cff; --purple2:#825bf4;
+  --shadow:0 16px 40px rgba(0,0,0,.35);
+  --soft:0 8px 20px rgba(0,0,0,.24);
+}
+body{
+  color:#eef4ff;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(255,220,90,.08), transparent 16%),
+    radial-gradient(circle at 88% 14%, rgba(90,225,255,.08), transparent 18%),
+    radial-gradient(circle at 50% 90%, rgba(80,230,160,.08), transparent 22%),
+    linear-gradient(180deg,var(--bg1),var(--bg2) 40%,var(--bg3));
+}
+.hero,
+.pill,
+.panelWrap,
+.centerPanel,
+.questionArea{
+  background:linear-gradient(180deg,rgba(17,27,46,.96),rgba(11,18,32,.94)) !important;
+  border-color:rgba(126,162,255,.24) !important;
+  color:#eef4ff;
+}
+.topBtn.btnDeep{background:linear-gradient(180deg,#314a8e,#21345f)}
+.topBtn.btnYellow{background:linear-gradient(180deg,#ffd95f,#ffb92c); color:#5e3900}
+.pill .small,.teamMeta,.subHint{color:#b9c9ea !important}
+.pill select,.topBtn select,.settings select,.settings input,.settings textarea{
+  background:#0f1a2f !important;
+  color:#f6fbff !important;
+  border:2px solid #33476f !important;
+}
+.panelWhite,
+.sideWhite,
+.teamCard,
+.questionCard,
+.helperBox,
+.rankRow,
+.tipBox,
+.settings,
+.modalCard,
+.explainBox{
+  background:linear-gradient(180deg,#16243d,#0f1a2d) !important;
+  color:#eef4ff !important;
+  border-color:#30466d !important;
+}
+.infoName,.infoVal,.ruleList li,.helperBox,.rankRow,.tipBox,.teamHead,.statement,.qNo,.qBadge,.modalBody,.settingsBody,.settings label,.hintText,.infoBody,.rankBody{color:#eef4ff !important}
+.ruleList li::before{filter:brightness(1.15)}
+.questionCard{
+  box-shadow:0 24px 54px rgba(0,0,0,.35) !important;
+}
+.qBadge{background:#1f7aff !important; color:#fff !important}
+.qNo{background:#243554 !important; color:#dce9ff !important}
+.subHint{color:#b9c9ea !important}
+.explainBox{border:2px solid #36507a !important}
+.infoRow{border-bottom:1px solid rgba(255,255,255,.05); padding-bottom:8px}
+.rankRow{border:2px solid #324b74 !important}
+.stageDot{background:#182742 !important; border-color:#3b5279 !important; color:#dbe7ff !important}
+.stageDot.active{background:linear-gradient(180deg,#4c9cff,#1b77ff) !important; color:#fff !important; border-color:#fff !important}
+.tipBox{background:linear-gradient(180deg,#1a2437,#121a2a) !important; color:#ffe9a8 !important; border-color:#66542d !important}
+.teamCard.active{border-color:#ffe370 !important}
+.bar{background:#223250 !important}
+.questionHeader .miniPill,.resultStrip{background:#172640 !important; border-color:#30466d !important; color:#eef4ff !important}
+.progressBar{background:#172640 !important; border-color:#30466d !important}
+.settingsHead,.modalHead{background:linear-gradient(135deg,#1f57d1,#654cff) !important}
+.closeX{background:#0f1a2f !important; color:#eef4ff !important}
+#statementHint,#bankHint,#settingHint{color:#b9c9ea !important}
+#statementHint{display:none !important}
+#questionBank{background:#0c1424 !important; color:#f5fbff !important}
+#flashBox.flashCorrect{box-shadow:0 0 0 8px rgba(34,197,94,.22), 0 24px 54px rgba(0,0,0,.35)!important; border-color:#62da78!important}
+#flashBox.flashWrong{box-shadow:0 0 0 8px rgba(239,68,68,.22), 0 24px 54px rgba(0,0,0,.35)!important; border-color:#ff7777!important}
+
+
+/* ===== LAYOUT SIMPLIFY PATCH v2 ===== */
+.layout{grid-template-columns:300px 1fr !important;}
+.layout > .panelWrap:last-child{display:none !important;}
+.gameBoard{grid-template-columns:1fr !important;}
+.gameBoard > .sideWhite{display:none !important;}
+.questionArea{max-width:980px; width:100%; margin:0 auto;}
+.questionHeader{grid-template-columns:1fr auto auto; max-width:100%;}
+.questionCard{max-width:100%;}
+.answerRow{max-width:100%;}
+
 </style>
-  <link rel="stylesheet" href="../_shared/cute-unify.css" />
-  <script defer src="../_shared/cute-unify.js"></script>
 </head>
 <body>
 <div class="app" id="appRoot">
@@ -230,7 +318,6 @@
               <div class="qBadge" id="qBadge">Q</div>
               <div class="qNo" id="qNo">0/0</div>
               <div class="statement" id="statement">准备好后点击开始游戏</div>
-              <div class="subHint" id="statementHint">可用于 AI 素养、安全教育、常识判断与课堂快问快答。</div>
               <div class="explainBox" id="explainBox"></div>
             </div>
             <div class="answerRow">
@@ -345,14 +432,34 @@
 </div>
 
 <script>
-const SAMPLE_BANK = `Earth is the third planet from the Sun.,True,Earth is the third planet in the solar system.
+const SAMPLE_BANKS = {
+  zh: `太阳系中离太阳最近的行星是水星。,正确,水星是最靠近太阳的行星。
+地球是太阳系中的第三颗行星。,正确,地球排在水星和金星之后。
+学生可以把自己的密码告诉好朋友。,错误,密码属于个人资料，不应该随意分享。
+看到陌生网站链接时，应该先确认是否安全再点击。,正确,不明链接可能含有诈骗或恶意软件。
+所有 AI 生成的图片都一定是真实照片。,错误,AI 可以生成看起来很真实但并不存在的图片。
+网络霸凌发生时，可以保存证据并告诉可信任的大人。,正确,这是安全且负责任的做法。
+植物可以通过光合作用制造养分。,正确,植物会利用阳光、水和二氧化碳进行光合作用。
+水在标准大气压下通常会在 100°C 沸腾。,正确,这是常见的科学知识。
+吉隆坡是马来西亚的首都。,正确,吉隆坡是马来西亚的首都。
+在网上看到中奖信息时，马上提供身份证号码最安全。,错误,这可能是诈骗，应先查证。`,
+  en: `Earth is the third planet from the Sun.,True,Earth is the third planet in the solar system.
 Passwords should be shared with close friends.,False,Passwords should remain private.
 Plants can make food through photosynthesis.,True,Plants use sunlight, water and carbon dioxide.
 All AI-generated images are always real.,False,Some AI-generated images are synthetic or misleading.
 The capital of Malaysia is Kuala Lumpur.,True,Kuala Lumpur is the national capital.
 Any unknown website link is safe to click.,False,Unknown links may contain scams or malware.
 Water boils at 100°C at normal pressure.,True,That is the standard boiling point of water at sea level.
-If cyberbullying happens, you should save evidence and tell a trusted adult.,True,This is a safe and responsible action.`;
+If cyberbullying happens, you should save evidence and tell a trusted adult.,True,This is a safe and responsible action.`,
+  ms: `Bumi ialah planet ketiga dari Matahari.,Betul,Bumi ialah planet ketiga dalam Sistem Suria.
+Kata laluan boleh dikongsi dengan kawan rapat.,Salah,Kata laluan ialah maklumat peribadi dan perlu dirahsiakan.
+Tumbuhan boleh menghasilkan makanan melalui fotosintesis.,Betul,Tumbuhan menggunakan cahaya matahari, air dan karbon dioksida.
+Semua gambar yang dijana oleh AI pasti gambar sebenar.,Salah,Sesetengah gambar AI adalah rekaan atau boleh mengelirukan.
+Ibu negara Malaysia ialah Kuala Lumpur.,Betul,Kuala Lumpur ialah ibu negara Malaysia.
+Pautan laman web yang tidak dikenali sentiasa selamat untuk diklik.,Salah,Pautan tidak dikenali mungkin mengandungi penipuan atau perisian hasad.
+Air mendidih pada 100°C dalam tekanan biasa.,Betul,Ini ialah takat didih air pada paras laut.
+Jika buli siber berlaku, simpan bukti dan beritahu orang dewasa yang dipercayai.,Betul,Ini tindakan yang selamat dan bertanggungjawab.`
+};
 
 const I18N = {
   zh: {
@@ -446,7 +553,7 @@ function applyLanguage(){
   $('openSettingsBtn').textContent = t('openSettings'); $('fullscreenBtn').textContent = t('fullscreen');
   $('infoTitle').textContent = t('infoTitle'); $('stageLabel').textContent = t('stageLabel'); $('turnLabel').textContent = t('turnLabel'); $('turnTimeLabel').textContent = t('turnTimeLabel'); $('modeLabel').textContent = t('modeLabel');
   $('ruleTitle').textContent = t('ruleTitle'); $('rule1').textContent = t('rule1'); $('rule2').textContent = t('rule2'); $('rule3').textContent = t('rule3'); $('rule4').textContent = t('rule4'); $('helperText').textContent = t('helperText');
-  $('livePrompt').textContent = t('livePrompt'); $('statementHint').textContent = state.started && state.answerMode==='teacher' ? t('manualHint') : t('readyHint'); $('trueText').textContent = t('trueLabel'); $('falseText').textContent = t('falseLabel');
+  $('livePrompt').textContent = t('livePrompt'); $('trueText').textContent = t('trueLabel'); $('falseText').textContent = t('falseLabel');
   $('rankingTitle').textContent = t('ranking'); $('progressTitle').textContent = t('progress'); $('tipText').textContent = t('tip'); $('purchaseDummy').textContent = t('teacherPrep'); $('subjectBox').textContent = t('subjectBox'); $('sceneTitle').textContent = t('sceneTitle'); $('scene1').textContent = t('scene1'); $('scene2').textContent = t('scene2'); $('scene3').textContent = t('scene3'); $('scene4').textContent = t('scene4'); $('advTitle').textContent = t('advTitle'); $('adv1').textContent = t('adv1'); $('adv2').textContent = t('adv2'); $('adv3').textContent = t('adv3');
   $('startBtnText').textContent = t('startGame'); $('startBtnSub').textContent = t('startSub'); $('showAnswerText').textContent = t('showAnswer'); $('showAnswerSub').textContent = t('showAnswerSub'); $('nextBtnText').textContent = t('nextQuestion'); $('nextBtnSub').textContent = t('nextSub'); $('resetBtnText').textContent = t('reset'); $('resetBtnSub').textContent = t('resetSub');
   $('settingsTitle').textContent = t('settingsTitle'); $('sLangLabel').textContent = t('sLang'); $('sRatioLabel').textContent = t('sRatio'); $('sTeamLabel').textContent = t('sTeam'); $('sTeamModeLabel').textContent = t('sTeamMode'); $('sGameTimeLabel').textContent = t('sGameTime'); $('sTurnTimeLabel').textContent = t('sTurnTime'); $('sTargetLabel').textContent = t('sTarget'); $('sCorrectLabel').textContent = t('sCorrect'); $('sWrongLabel').textContent = t('sWrong'); $('sSoundLabel').textContent = t('sSound'); $('sOrderLabel').textContent = t('sOrder'); $('sTimeoutLabel').textContent = t('sTimeout'); $('sBankLabel').textContent = t('sBank'); $('bankHint').textContent = t('bankHint'); $('loadSampleBtn').textContent = t('loadSample'); $('importBtn').textContent = t('importTxt'); $('exportBtn').textContent = t('exportTxt'); $('settingHint').textContent = t('settingHint'); $('applySettingsBtn').textContent = t('applyStart'); $('closeSettingsBtn2').textContent = t('close');
@@ -455,11 +562,11 @@ function applyLanguage(){
   updateHud(); renderTeams(); renderProgress(); renderRanking();
 }
 
-function defaultQuestionBank(){ return SAMPLE_BANK; }
+function defaultQuestionBank(){ return SAMPLE_BANKS[state.lang] || SAMPLE_BANKS.zh; }
 
 function loadSaved(){
   try{
-    const s = JSON.parse(localStorage.getItem('s002_trilingual_redesign') || '{}');
+    const s = JSON.parse(localStorage.getItem('s002_dark_v4_chinese_bank') || '{}');
     Object.assign(state, {
       lang: s.lang || 'zh', ratio: s.ratio || '16:9', gameSeconds: s.gameSeconds ?? 300, remaining: s.gameSeconds ?? 300, turnLimit: s.turnLimit ?? 8, turnRemaining: s.turnLimit ?? 8, targetScore: s.targetScore ?? 10, correctPoint: s.correctPoint ?? 1, wrongPenalty: s.wrongPenalty ?? 1, questionMode: s.questionMode || 'random', answerMode: s.answerMode || 'turn', timeoutAction: s.timeoutAction || 'wrong', sound: s.sound || 'on'
     });
@@ -481,7 +588,7 @@ function saveSettings(){
     sound: $('sound')?.value || state.sound,
     questionBank: $('questionBank')?.value || defaultQuestionBank()
   };
-  localStorage.setItem('s002_trilingual_redesign', JSON.stringify(obj));
+  localStorage.setItem('s002_dark_v4_chinese_bank', JSON.stringify(obj));
 }
 
 function parseAnswer(raw){
@@ -555,7 +662,7 @@ function resetGame(ask=true){
   state.gameSeconds = Number($('gameTime').value || state.gameSeconds);
   state.remaining = state.gameSeconds; state.turnLimit = Number($('turnTime').value || state.turnLimit); state.turnRemaining = state.turnLimit; state.targetScore = Number($('targetScore').value || state.targetScore); state.correctPoint = Number($('correctPoint').value || state.correctPoint); state.wrongPenalty = Number($('wrongPenalty').value || state.wrongPenalty); state.questionMode = $('questionMode').value; state.answerMode = $('answerMode').value; state.timeoutAction = $('timeoutAction').value; state.sound = $('sound').value; state.ratio = $('sRatioSelect').value; state.lang = $('sLangSelect').value;
   buildTeams(); state.questions = parseBank();
-  $('statement').textContent = t('readyText'); $('statementHint').textContent = t('readyHint'); $('qNo').textContent = '0/0'; $('qBadge').textContent = 'Q'; $('explainBox').classList.remove('show'); $('explainBox').innerHTML=''; $('resultStrip').textContent = t('resultReady'); $('flashBox').classList.remove('flashCorrect','flashWrong'); $('trueBtn').disabled=false; $('falseBtn').disabled=false; $('turnFill').style.width='100%';
+  $('statement').textContent = t('readyText'); $('qNo').textContent = '0/0'; $('qBadge').textContent = 'Q'; $('explainBox').classList.remove('show'); $('explainBox').innerHTML=''; $('resultStrip').textContent = t('resultReady'); $('flashBox').classList.remove('flashCorrect','flashWrong'); $('trueBtn').disabled=false; $('falseBtn').disabled=false; $('turnFill').style.width='100%';
   applyLanguage(); fitStage(); saveSettings();
 }
 
@@ -601,7 +708,7 @@ function nextQuestion(advanceTeam=true){
     state.qIndex = 0;
   }
   state.currentQuestion = state.questions[state.qIndex++]; state.questionCount++; state.answered = false;
-  $('flashBox').classList.remove('flashCorrect','flashWrong'); $('statement').textContent = state.currentQuestion.statement; $('statementHint').textContent = state.answerMode === 'teacher' ? t('manualHint') : t('readyHint'); $('qNo').textContent = `${state.questionCount}/${state.questions.length}`; $('qBadge').textContent = 'Q'; $('explainBox').classList.remove('show'); $('explainBox').innerHTML=''; $('trueBtn').disabled=false; $('falseBtn').disabled=false; updateHud(); renderTeams(); renderRanking(); renderProgress(); startTurnTimer();
+  $('flashBox').classList.remove('flashCorrect','flashWrong'); $('statement').textContent = state.currentQuestion.statement; $('qNo').textContent = `${state.questionCount}/${state.questions.length}`; $('qBadge').textContent = 'Q'; $('explainBox').classList.remove('show'); $('explainBox').innerHTML=''; $('trueBtn').disabled=false; $('falseBtn').disabled=false; updateHud(); renderTeams(); renderRanking(); renderProgress(); startTurnTimer();
 }
 
 function revealAnswer(manual=true){
@@ -674,7 +781,7 @@ function bindEvents(){
   $('sLangSelect').addEventListener('change', e=>{ state.lang = e.target.value; syncTopSelectors(); applyLanguage(); saveSettings(); });
   $('sRatioSelect').addEventListener('change', e=>{ state.ratio = e.target.value; syncTopSelectors(); fitStage(); saveSettings(); });
   ['teamCount','gameTime','turnTime','targetScore','correctPoint','wrongPenalty','questionMode','answerMode','timeoutAction','sound'].forEach(id=> $(id).addEventListener('change', saveSettings));
-  $('questionBank').addEventListener('input', saveSettings); $('loadSampleBtn').addEventListener('click', ()=>{ $('questionBank').value = defaultQuestionBank(); saveSettings(); }); $('importBtn').addEventListener('click', ()=> $('fileInput').click()); $('fileInput').addEventListener('change', e=>{ importTxt(e.target.files?.[0]); e.target.value=''; }); $('exportBtn').addEventListener('click', exportTxt);
+  $('questionBank').addEventListener('input', saveSettings); $('loadSampleBtn').addEventListener('click', ()=>{ state.lang = $('sLangSelect')?.value || state.lang; $('questionBank').value = defaultQuestionBank(); saveSettings(); }); $('importBtn').addEventListener('click', ()=> $('fileInput').click()); $('fileInput').addEventListener('change', e=>{ importTxt(e.target.files?.[0]); e.target.value=''; }); $('exportBtn').addEventListener('click', exportTxt);
   $('applySettingsBtn').addEventListener('click', startGame); $('startBtn').addEventListener('click', ()=> state.started ? nextQuestion(true) : startGame()); $('showAnswerBtn').addEventListener('click', ()=>{ if(!state.started){ alert(t('pleaseStart')); return; } revealAnswer(true); }); $('nextBtn').addEventListener('click', ()=>{ if(!state.started){ alert(t('pleaseStart')); return; } nextQuestion(true); }); $('resetBtn').addEventListener('click', ()=> resetGame(true)); $('trueBtn').addEventListener('click', ()=> chooseAnswer(true)); $('falseBtn').addEventListener('click', ()=> chooseAnswer(false));
   window.addEventListener('resize', fitStage); window.addEventListener('orientationchange', ()=> setTimeout(fitStage,150)); document.addEventListener('fullscreenchange', ()=> setTimeout(fitStage,80));
   window.addEventListener('keydown', e=>{ if(e.key==='ArrowLeft' || e.key.toLowerCase()==='t') chooseAnswer(true); if(e.key==='ArrowRight' || e.key.toLowerCase()==='f') chooseAnswer(false); if(e.key===' ') { e.preventDefault(); if(state.started) nextQuestion(true); } if(e.key==='Escape') hideSettings(); });

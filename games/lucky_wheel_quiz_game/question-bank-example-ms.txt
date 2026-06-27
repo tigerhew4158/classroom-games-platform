@@ -1,0 +1,8 @@
+Apakah ibu negara Malaysia?,Kuala Lumpur,Penang,Johor Bahru,Melaka
+Di manakah matahari terbit?,Timur,Barat,Selatan,Utara
+Apakah maksud AI?,Kecerdasan Buatan,Internet Automatik,Imej Lanjutan,Input Aktif
+Bagaimanakah kata laluan patut ditetapkan?,Panjang dan sukar diteka
+Air biasanya mendidih pada 100°C pada tekanan atmosfera standard.,Betul,Salah
+Apakah proses tumbuhan menghasilkan makanan?,Fotosintesis,Respirasi,Penyejatan,Pencernaan
+Bagaimanakah sebutan selamat pagi dalam Bahasa Melayu?,selamat pagi,terima kasih,selamat malam,apa khabar
+ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Alat muzik

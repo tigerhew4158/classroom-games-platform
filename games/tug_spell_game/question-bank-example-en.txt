@@ -1,0 +1,18 @@
+banana,香蕉
+apple,苹果
+orange,橙
+capital of Malaysia,Kuala Lumpur
+Malaysia flag,Jalur Gemilang
+teacher,老师
+student,学生
+computer,电脑
+red color,红色
+blue color,蓝色
+cat,猫
+dog,狗
+water,水
+book,书
+school,学校
+table,桌子
+chair,椅子
+family,家庭

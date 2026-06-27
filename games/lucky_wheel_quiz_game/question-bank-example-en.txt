@@ -1,0 +1,8 @@
+What is the capital of Malaysia?,Kuala Lumpur,Penang,Johor Bahru,Malacca
+Where does the sun rise?,East,West,South,North
+What does AI stand for?,Artificial Intelligence,Auto Internet,Advanced Image,Active Input
+How should a password be set?,Long and hard to guess
+Water normally boils at 100°C at standard atmospheric pressure.,True,False
+What process helps plants make food?,Photosynthesis,Respiration,Evaporation,Digestion
+How do you say good morning in Malay?,selamat pagi,terima kasih,selamat malam,apa khabar
+ChatGPT belongs to which type of tool?,AI tool,Transport tool,Sports tool,Music tool

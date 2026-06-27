@@ -1,0 +1,18 @@
+香蕉,banana
+苹果,apple
+橙,orange
+马来西亚首都,吉隆坡
+国旗,Jalur Gemilang
+老师,teacher
+学生,student
+电脑,computer
+红色,red
+蓝色,blue
+猫,cat
+狗,dog
+水,water
+书,book
+学校,school
+桌子,table
+椅子,chair
+家庭,family

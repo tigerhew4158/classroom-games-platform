@@ -1,0 +1,10 @@
+马来西亚首都是哪里？,吉隆坡,新山,槟城,马六甲,怡保
+AI 的英文全名是什么？,Artificial Intelligence,Automatic Internet,Advanced Image,Artificial Internet,Auto Intelligence
+密码应该告诉朋友吗？,不可以,可以,只要是好朋友就可以,可以写在白板上,可以放在群组里
+水的化学式是什么？,H2O,CO2,O2,NaCl,H2
+太阳从哪里升起？,东方,西方,南方,北方,中间
+早安的马来文是什么？,selamat pagi,terima kasih,selamat malam,apa khabar,sama-sama
+CPU 的中文是什么？,中央处理器,显示器,键盘,滑鼠,硬盘
+植物制造养分的过程叫什么？,光合作用,蒸发作用,呼吸作用,消化作用,摩擦作用
+AI 可以随便用同学照片做搞笑图吗？,不可以,可以,只要好笑就可以,老师没看到就可以,发到群组就可以
+在网上看到不明链接应该怎么做？,不要随便点击,马上点击,转发给朋友,输入密码试试看,下载文件
