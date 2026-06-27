@@ -19,7 +19,11 @@ button,input,textarea,select{font:inherit}.app{height:100vh;width:min(1540px,98v
 .setup{position:fixed;inset:0;background:rgba(2,6,23,.92);z-index:20;display:grid;place-items:center;padding:18px}.setup-card{width:min(1000px,96vw);max-height:92vh;overflow:auto;background:#0f172a;border:1px solid var(--line);border-radius:24px;padding:18px}.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}textarea.input{grid-column:1/-1;min-height:300px;line-height:1.45}.win{position:fixed;inset:0;background:rgba(2,6,23,.88);z-index:40;display:grid;place-items:center;text-align:center;padding:20px}.win-card{width:min(760px,94vw);background:linear-gradient(135deg,rgba(56,189,248,.23),rgba(251,191,36,.16));border:1px solid rgba(56,189,248,.38);border-radius:28px;padding:28px}.win h2{font-size:42px;margin:0 0 8px}.hidden{display:none!important}
 @media(max-width:1100px){.main{grid-template-columns:260px 1fr}.panel.right{display:none}.wordGrid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:760px){html,body{overflow:auto}.app{height:auto}.main{grid-template-columns:1fr}.setup-grid{grid-template-columns:1fr}.wordGrid{grid-template-columns:repeat(2,1fr)}}
-</style></head>
+</style>  <link rel="stylesheet" href="../_shared/shared-polish.css" />
+  <script defer src="../_shared/shared-polish.js"></script>
+  <link rel="stylesheet" href="../_shared/cute-unify.css" />
+  <script defer src="../_shared/cute-unify.js"></script>
+</head>
 <body>
 <div class="app">
   <div class="topbar"><div class="brand"><div class="logo">🏖️</div><div><h1 id="title"></h1><div id="subtitle" class="sub"></div></div></div><div class="actions"><select id="lang" class="select" style="width:auto"><option value="zh">中文</option><option value="en">English</option><option value="ms">Bahasa Melayu</option></select><button id="setupBtn" class="btn secondary"></button><button id="fullBtn" class="btn secondary"></button><button id="resetBtn" class="btn bad"></button></div></div>

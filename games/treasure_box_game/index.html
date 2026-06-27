@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>宝箱开开看 Classroom Game</title>
+  <title>S004 宝箱开开看 Classroom Game</title>
   <style>
     :root{
       --bg1:#07111f; --bg2:#10264a; --card:#ffffff; --text:#1f2937; --muted:#6b7280;
@@ -52,6 +52,31 @@
     @media (max-width:1100px){.layout{grid-template-columns:1fr}.settings{position:static}.hud{grid-template-columns:1fr}.goalInfo{text-align:left}.teams{grid-template-columns:repeat(2,1fr)}.board{grid-template-columns:repeat(4,1fr)}}
     @media (max-width:640px){.app{padding:12px}.topbar{align-items:flex-start;flex-direction:column}.quickBtns{justify-content:flex-start}.grid2,.grid3{grid-template-columns:1fr}.teams{grid-template-columns:1fr}.board{grid-template-columns:repeat(3,1fr);gap:8px}.chest{min-height:70px;border-radius:16px}.options{grid-template-columns:1fr}.modalBody{padding:16px}}
   </style>
+  
+  <style id="s004-cute-override">
+
+    .topbar{background:linear-gradient(90deg,#0f67e8,#58b8ff);padding:16px 18px;border-radius:28px;box-shadow:0 16px 30px rgba(20,74,160,.18)}
+    .brand h1,.brand .subtitle{color:#fff!important;text-shadow:none}
+    .logo{background:linear-gradient(180deg,#ffd757,#ffad22)!important;border:3px solid rgba(255,255,255,.6);color:#7a4b00}
+    .game{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(214,239,255,.18))!important;border:2px solid rgba(255,255,255,.35)!important}
+    .panelHeader{background:linear-gradient(135deg,#2f86ff,#7ac8ff)!important;color:#fff}
+    .statusCard,.boardWrap,.eventLog{background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(233,246,255,.18))!important;border:2px solid rgba(255,255,255,.28)!important}
+    .teamCard{background:linear-gradient(180deg,#fffdf5,#eef7ff)!important;border:2px solid #b7dbff!important}
+    .teamCard.active{outline:0!important;border-color:#ffbf28!important;box-shadow:0 0 0 5px rgba(255,191,40,.18),0 16px 30px rgba(37,99,235,.16)!important}
+    .boardTitle{font-size:26px;color:#fff}
+    .chest{background:linear-gradient(180deg,#ffd95b 0%,#ffb229 58%,#e07b00 100%)!important;border:4px solid rgba(255,255,255,.55)!important;border-radius:24px!important}
+    .chest:before{background:rgba(140,74,0,.82)!important;height:12px!important;top:36%!important}
+    .chest:after{background:#fff4ca!important;border-color:#9b5b00!important;top:36%!important}
+    .chest .num{font-size:40px!important;color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.18),0 7px 16px rgba(0,0,0,.22)}
+    .chest.opened{background:linear-gradient(180deg,#9cc5ff,#5ea2ff)!important;color:#fff}
+    .modalHead{background:linear-gradient(135deg,#ffb31e,#ff7e22)!important}
+    .modalActions button:nth-child(1), .rowBtns .primary{background:linear-gradient(180deg,#57db85,#2fb969)!important;color:white!important}
+
+  </style>
+<link rel="stylesheet" href="../_shared/shared-polish.css" />
+  <script defer src="../_shared/shared-polish.js"></script>
+  <link rel="stylesheet" href="../_shared/cute-unify.css" />
+  <script defer src="../_shared/cute-unify.js"></script>
 </head>
 <body>
   <div class="app">
@@ -59,7 +84,7 @@
       <div class="brand">
         <div class="logo">💰</div>
         <div>
-          <h1 data-i18n="appTitle">宝箱开开看</h1>
+          <h1 data-i18n="appTitle">S004 宝箱开开看</h1>
           <div class="subtitle" data-i18n="appSub">适合老师投影使用的分组课堂小游戏</div>
         </div>
       </div>
@@ -205,7 +230,7 @@
 
 <script>
 const I18N = {
-  zh:{appTitle:'宝箱开开看',appSub:'适合老师投影使用的分组课堂小游戏',showSettings:'显示老师设定',fullscreen:'全屏',reset:'重置',teacherSettings:'老师设定',uiLang:'介面语言',teamCount:'组数',gameTime:'游戏时间',noLimit:'不限时',targetScore:'目标分',noTarget:'不设目标',boxCount:'宝箱数量',questionMode:'题目顺序',random:'随机',order:'顺序',quizPoints:'答题得分',wrongPenalty:'答错扣分',noDeduct:'不扣分',afterQuestion:'答题后',nextTeam:'换下一组',sameTeam:'本组继续',sound:'音效',on:'开启',off:'关闭',questionBank:'题库',bankHint:'格式：题目,正确答案,错误选项1,错误选项2,错误选项3。只有两栏时为开放题。',importTxt:'汇入 TXT',exportTxt:'导出 TXT',startGame:'开始游戏',startHint:'开始后老师设定区会隐藏，只保留游戏介面，适合投影使用。',boardTitle:'选择一个宝箱',boardHint:'每个宝箱都有不同事件：题目、加分、陷阱、交换、偷分或空箱。',reshuffle:'重新开局',logReady:'设定完成后点击开始游戏。',turn:'轮到',clickBox:'请点击一个未开启的宝箱。',goal:'目标分',noGoal:'无目标分',opened:'已开启',event:'宝箱事件',quiz:'答题宝箱',bonus:'奖励宝箱',trap:'陷阱宝箱',empty:'空宝箱',swap:'交换分数',steal:'偷分宝箱',double:'双倍挑战',question:'题目',correctAnswer:'正确答案',showAnswer:'显示答案',correct:'答对',wrong:'答错',continue:'继续',close:'关闭',gameOver:'游戏结束',ranking:'排名',teamRed:'红队',teamBlue:'蓝队',teamGreen:'绿队',teamPurple:'紫队',score:'分数',boxes:'宝箱',timeUp:'时间到！',allOpened:'所有宝箱已开启！',targetReached:'达到目标分！',chooseOption:'请选择一个答案。',openResult:'打开宝箱',gotPoints:'获得 {n} 分',lostPoints:'扣除 {n} 分',nothing:'什么都没有。',swapped:'与 {team} 交换分数。',stole:'从 {team} 偷到 {n} 分。',noSteal:'没有可偷的分数。',answerRight:'回答正确，获得 {n} 分。',answerWrong:'回答错误。',answerWrongPenalty:'回答错误，扣除 {n} 分。',pleaseStart:'请先点击开始游戏。',confirmReset:'确定要重置游戏吗？'},
+  zh:{appTitle:'S004 宝箱开开看',appSub:'适合老师投影使用的分组课堂小游戏',showSettings:'显示老师设定',fullscreen:'全屏',reset:'重置',teacherSettings:'老师设定',uiLang:'介面语言',teamCount:'组数',gameTime:'游戏时间',noLimit:'不限时',targetScore:'目标分',noTarget:'不设目标',boxCount:'宝箱数量',questionMode:'题目顺序',random:'随机',order:'顺序',quizPoints:'答题得分',wrongPenalty:'答错扣分',noDeduct:'不扣分',afterQuestion:'答题后',nextTeam:'换下一组',sameTeam:'本组继续',sound:'音效',on:'开启',off:'关闭',questionBank:'题库',bankHint:'格式：题目,正确答案,错误选项1,错误选项2,错误选项3。只有两栏时为开放题。',importTxt:'汇入 TXT',exportTxt:'导出 TXT',startGame:'开始游戏',startHint:'开始后老师设定区会隐藏，只保留游戏介面，适合投影使用。',boardTitle:'选择一个宝箱',boardHint:'每个宝箱都有不同事件：题目、加分、陷阱、交换、偷分或空箱。',reshuffle:'重新开局',logReady:'设定完成后点击开始游戏。',turn:'轮到',clickBox:'请点击一个未开启的宝箱。',goal:'目标分',noGoal:'无目标分',opened:'已开启',event:'宝箱事件',quiz:'答题宝箱',bonus:'奖励宝箱',trap:'陷阱宝箱',empty:'空宝箱',swap:'交换分数',steal:'偷分宝箱',double:'双倍挑战',question:'题目',correctAnswer:'正确答案',showAnswer:'显示答案',correct:'答对',wrong:'答错',continue:'继续',close:'关闭',gameOver:'游戏结束',ranking:'排名',teamRed:'红队',teamBlue:'蓝队',teamGreen:'绿队',teamPurple:'紫队',score:'分数',boxes:'宝箱',timeUp:'时间到！',allOpened:'所有宝箱已开启！',targetReached:'达到目标分！',chooseOption:'请选择一个答案。',openResult:'打开宝箱',gotPoints:'获得 {n} 分',lostPoints:'扣除 {n} 分',nothing:'什么都没有。',swapped:'与 {team} 交换分数。',stole:'从 {team} 偷到 {n} 分。',noSteal:'没有可偷的分数。',answerRight:'回答正确，获得 {n} 分。',answerWrong:'回答错误。',answerWrongPenalty:'回答错误，扣除 {n} 分。',pleaseStart:'请先点击开始游戏。',confirmReset:'确定要重置游戏吗？'},
   en:{appTitle:'Treasure Box Challenge',appSub:'A team classroom game for projection and quick revision',showSettings:'Show Teacher Settings',fullscreen:'Fullscreen',reset:'Reset',teacherSettings:'Teacher Settings',uiLang:'UI Language',teamCount:'Teams',gameTime:'Game Time',noLimit:'No limit',targetScore:'Target Score',noTarget:'No target',boxCount:'Number of Boxes',questionMode:'Question Order',random:'Random',order:'In order',quizPoints:'Quiz Points',wrongPenalty:'Wrong Penalty',noDeduct:'No penalty',afterQuestion:'After Quiz',nextTeam:'Next team',sameTeam:'Same team continues',sound:'Sound',on:'On',off:'Off',questionBank:'Question Bank',bankHint:'Format: Question,Correct Answer,Wrong Option 1,Wrong Option 2,Wrong Option 3. Two columns = open question.',importTxt:'Import TXT',exportTxt:'Export TXT',startGame:'Start Game',startHint:'After starting, the teacher settings will be hidden for projection.',boardTitle:'Choose a Treasure Box',boardHint:'Each box may contain a quiz, bonus, trap, swap, steal, double challenge, or empty box.',reshuffle:'New Round',logReady:'Set up the game and click Start Game.',turn:'Turn',clickBox:'Click an unopened treasure box.',goal:'Target',noGoal:'No target',opened:'Opened',event:'Box Event',quiz:'Quiz Box',bonus:'Bonus Box',trap:'Trap Box',empty:'Empty Box',swap:'Score Swap',steal:'Steal Box',double:'Double Challenge',question:'Question',correctAnswer:'Correct Answer',showAnswer:'Show Answer',correct:'Correct',wrong:'Wrong',continue:'Continue',close:'Close',gameOver:'Game Over',ranking:'Ranking',teamRed:'Red Team',teamBlue:'Blue Team',teamGreen:'Green Team',teamPurple:'Purple Team',score:'Score',boxes:'Boxes',timeUp:'Time is up!',allOpened:'All boxes have been opened!',targetReached:'Target score reached!',chooseOption:'Choose an answer.',openResult:'Opened box',gotPoints:'Gained {n} points',lostPoints:'Lost {n} points',nothing:'Nothing inside.',swapped:'Swapped scores with {team}.',stole:'Stole {n} point(s) from {team}.',noSteal:'No points available to steal.',answerRight:'Correct. Gained {n} point(s).',answerWrong:'Wrong answer.',answerWrongPenalty:'Wrong answer. Lost {n} point(s).',pleaseStart:'Please start the game first.',confirmReset:'Reset the game?'},
   ms:{appTitle:'Cabaran Kotak Harta',appSub:'Permainan kelas berkumpulan untuk projektor dan ulang kaji pantas',showSettings:'Tunjuk Tetapan Guru',fullscreen:'Skrin Penuh',reset:'Set Semula',teacherSettings:'Tetapan Guru',uiLang:'Bahasa Antara Muka',teamCount:'Bilangan Kumpulan',gameTime:'Masa Permainan',noLimit:'Tiada had',targetScore:'Markah Sasaran',noTarget:'Tiada sasaran',boxCount:'Bilangan Kotak',questionMode:'Susunan Soalan',random:'Rawak',order:'Ikut urutan',quizPoints:'Markah Soalan',wrongPenalty:'Denda Salah',noDeduct:'Tiada denda',afterQuestion:'Selepas Soalan',nextTeam:'Kumpulan seterusnya',sameTeam:'Kumpulan sama teruskan',sound:'Bunyi',on:'Buka',off:'Tutup',questionBank:'Bank Soalan',bankHint:'Format: Soalan,Jawapan Betul,Pilihan Salah 1,Pilihan Salah 2,Pilihan Salah 3. Dua ruangan = soalan terbuka.',importTxt:'Import TXT',exportTxt:'Eksport TXT',startGame:'Mula Permainan',startHint:'Selepas mula, tetapan guru akan disembunyikan untuk paparan projektor.',boardTitle:'Pilih Kotak Harta',boardHint:'Setiap kotak mungkin ada soalan, bonus, perangkap, tukar markah, curi markah, cabaran berganda atau kosong.',reshuffle:'Pusingan Baharu',logReady:'Sediakan permainan dan klik Mula Permainan.',turn:'Giliran',clickBox:'Klik kotak harta yang belum dibuka.',goal:'Sasaran',noGoal:'Tiada sasaran',opened:'Telah dibuka',event:'Peristiwa Kotak',quiz:'Kotak Soalan',bonus:'Kotak Bonus',trap:'Kotak Perangkap',empty:'Kotak Kosong',swap:'Tukar Markah',steal:'Kotak Curi Markah',double:'Cabaran Berganda',question:'Soalan',correctAnswer:'Jawapan Betul',showAnswer:'Tunjuk Jawapan',correct:'Betul',wrong:'Salah',continue:'Teruskan',close:'Tutup',gameOver:'Permainan Tamat',ranking:'Kedudukan',teamRed:'Kumpulan Merah',teamBlue:'Kumpulan Biru',teamGreen:'Kumpulan Hijau',teamPurple:'Kumpulan Ungu',score:'Markah',boxes:'Kotak',timeUp:'Masa tamat!',allOpened:'Semua kotak telah dibuka!',targetReached:'Markah sasaran dicapai!',chooseOption:'Pilih satu jawapan.',openResult:'Kotak dibuka',gotPoints:'Dapat {n} markah',lostPoints:'Hilang {n} markah',nothing:'Tiada apa-apa di dalam.',swapped:'Tukar markah dengan {team}.',stole:'Curi {n} markah daripada {team}.',noSteal:'Tiada markah untuk dicuri.',answerRight:'Betul. Dapat {n} markah.',answerWrong:'Jawapan salah.',answerWrongPenalty:'Jawapan salah. Hilang {n} markah.',pleaseStart:'Sila mula permainan dahulu.',confirmReset:'Set semula permainan?'}
 };

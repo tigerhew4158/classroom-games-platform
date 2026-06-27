@@ -115,6 +115,10 @@
     @media (max-width:980px){.layout{grid-template-columns:1fr}.game-top,.question-area{grid-template-columns:1fr}.team-cards{grid-template-columns:repeat(2,1fr)}.lane{grid-template-columns:90px 1fr 54px}.team-label{font-size:13px;padding:8px}.options{grid-template-columns:1fr}.header-actions{width:100%;justify-content:flex-start}header{flex-wrap:wrap}}
     @media (max-width:620px){.app{padding:10px}.form-row{grid-template-columns:1fr}.lane{grid-template-columns:1fr;gap:8px}.track{height:52px}.score-pill{width:100%}.question-text{font-size:28px}.team-cards{grid-template-columns:1fr}.open-answer{flex-direction:column}.quick-actions{justify-content:flex-start}}
   </style>
+  <link rel="stylesheet" href="../_shared/shared-polish.css" />
+  <script defer src="../_shared/shared-polish.js"></script>
+  <link rel="stylesheet" href="../_shared/cute-unify.css" />
+  <script defer src="../_shared/cute-unify.js"></script>
 </head>
 <body>
   <div class="app">
@@ -622,5 +626,92 @@
   resetGame(false);
 })();
 </script>
+
+<!-- built-in-sample-loader-fix -->
+<script>
+(function(){
+  const SAMPLE_TEXT = "# P004 知识赛马｜题库范例\n# 用途：分组竞速答题，答对前进。\n# 建议格式：题目 | 正确答案 | 选项A,选项B,选项C,选项D\n地球绕太阳一周大约多久？ | 1年 | 1天,1个月,1年,10年\n哪一个是输入设备？ | 键盘 | 键盘,屏幕,投影机,喇叭\n保护账号最重要的是？ | 使用强密码 | 使用弱密码,公开密码,使用强密码,告诉陌生人\n";
+  const TARGET_TEXTAREA_IDS = ["questionText"];
+  const SAMPLE_BUTTON_IDS = ["sampleBtn"];
+  const SAMPLE_URL = 'question-bank-example.txt?v=sample-loader-fixed-20260627';
+  function $(id){ return document.getElementById(id); }
+  function cleanSampleText(text){
+    return String(text || '')
+      .replace(/
+/g,'
+')
+      .split('
+')
+      .map(line => line.trim())
+      .filter(line => line && !line.startsWith('#'))
+      .join('
+');
+  }
+  function findBankField(){
+    for (const id of TARGET_TEXTAREA_IDS){
+      const el = $(id);
+      if (el && ('value' in el)) return el;
+    }
+    return document.querySelector('textarea');
+  }
+  async function getBuiltInSampleText(){
+    try {
+      const res = await fetch(SAMPLE_URL, { cache:'no-store' });
+      if (res && res.ok) {
+        const text = await res.text();
+        if (cleanSampleText(text)) return text;
+      }
+    } catch(e) {}
+    return SAMPLE_TEXT;
+  }
+  function afterFill(field){
+    try { field.dispatchEvent(new Event('input', { bubbles:true })); } catch(e) {}
+    try { field.dispatchEvent(new Event('change', { bubbles:true })); } catch(e) {}
+    try {
+      if (field.id === 'textItems') {
+        const mode = $('mode'); if (mode) mode.value = 'text';
+        const lines = cleanSampleText(field.value).split('
+');
+        const categories = [];
+        lines.forEach(line => {
+          const parts = line.split('|').map(x => x.trim()).filter(Boolean);
+          if (parts[1] && !categories.includes(parts[1])) categories.push(parts[1]);
+        });
+        if (categories.length) {
+          try { cats = categories; } catch(e) {}
+          const catCount = $('catCount'); if (catCount) catCount.value = String(Math.min(Math.max(categories.length,2),5));
+          try { if (typeof renderCats === 'function') renderCats(); } catch(e) {}
+        }
+        try { if (typeof buildItems === 'function') buildItems(false); } catch(e) {}
+        try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
+      }
+      if (field.id === 'wordBank') { try { if (typeof applyBank === 'function') applyBank(true); } catch(e) {} }
+      try { if (typeof saveSettings === 'function') saveSettings(); } catch(e) {}
+      try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
+      try { if (typeof renderItems === 'function') renderItems(); } catch(e) {}
+      try { if (typeof setMessage === 'function') setMessage('已载入内置题库范例 / Built-in sample loaded / Contoh terbina telah dimuat'); } catch(e) {}
+      try { if (typeof toast === 'function') toast('已载入内置题库范例'); } catch(e) {}
+    } catch(e) { console.warn('Sample after-fill warning:', e); }
+  }
+  async function loadBuiltInSampleQuestionBank(event){
+    if (event) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); }
+    const field = findBankField();
+    if (!field) return;
+    const sampleText = cleanSampleText(await getBuiltInSampleText());
+    if (!sampleText) return;
+    field.value = sampleText;
+    afterFill(field);
+  }
+  window.loadBuiltInSampleQuestionBank = loadBuiltInSampleQuestionBank;
+  SAMPLE_BUTTON_IDS.forEach(id => {
+    const btn = $(id);
+    if (btn && !btn.dataset.sampleLoaderFixed) {
+      btn.dataset.sampleLoaderFixed = '1';
+      btn.addEventListener('click', loadBuiltInSampleQuestionBank, true);
+    }
+  });
+})();
+</script>
+<!-- /built-in-sample-loader-fix -->
 </body>
 </html>

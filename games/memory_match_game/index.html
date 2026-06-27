@@ -3,1329 +3,1490 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>翻牌记忆配对赛｜Memory Match Classroom Game</title>
+  <title>S001 翻翻乐｜Trilingual Memory Match</title>
   <style>
-    :root {
-      --bg: #0f172a;
-      --panel: rgba(15, 23, 42, .88);
-      --panel2: rgba(30, 41, 59, .92);
-      --text: #f8fafc;
-      --muted: #cbd5e1;
-      --line: rgba(148, 163, 184, .22);
-      --accent: #facc15;
-      --good: #22c55e;
-      --bad: #ef4444;
-      --card: #1e293b;
-      --card2: #334155;
-      --red: #ef4444;
-      --blue: #3b82f6;
-      --green: #22c55e;
-      --purple: #a855f7;
-      --shadow: 0 18px 45px rgba(0, 0, 0, .35);
+    :root{
+      --bg1:#0a3db9;
+      --bg2:#032c8a;
+      --bg3:#0a1f6a;
+      --panel:#ffffff;
+      --text:#12305f;
+      --deep:#0f2d62;
+      --blue:#4ea9ff;
+      --blue2:#66c7ff;
+      --orange:#ffb134;
+      --yellow:#ffd84f;
+      --green:#61d871;
+      --purple:#a774ff;
+      --pink:#ff6fb2;
+      --danger:#ff5353;
+      --shadow:0 12px 32px rgba(0,20,80,.28);
+      --soft-shadow:0 8px 18px rgba(0,20,80,.16);
+      --radius:24px;
+      --card-radius:22px;
+      --outline:rgba(255,255,255,.85);
     }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
-      color: var(--text);
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      color:#fff;
       background:
-        radial-gradient(circle at 18% 15%, rgba(250, 204, 21, .16), transparent 28%),
-        radial-gradient(circle at 82% 20%, rgba(59, 130, 246, .18), transparent 28%),
-        radial-gradient(circle at 50% 88%, rgba(34, 197, 94, .15), transparent 26%),
-        linear-gradient(145deg, #020617, #0f172a 42%, #111827);
-      overflow-x: hidden;
+        radial-gradient(circle at 10% 10%, rgba(255,220,90,.22), transparent 22%),
+        radial-gradient(circle at 90% 15%, rgba(90,225,255,.16), transparent 20%),
+        radial-gradient(circle at 50% 95%, rgba(97,216,113,.15), transparent 28%),
+        linear-gradient(180deg, var(--bg1), var(--bg2) 38%, var(--bg3));
+      overflow-x:hidden;
     }
+    button, select, input, textarea{font:inherit}
+    .app{max-width:1680px; margin:0 auto; padding:14px}
 
-    button, select, input, textarea {
-      font: inherit;
+    .topbar{
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap:14px;
+      align-items:center;
+      margin-bottom:14px;
     }
-
-    .app {
-      width: min(1440px, calc(100vw - 28px));
-      margin: 0 auto;
-      padding: 18px 0 30px;
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .logo {
-      width: 54px;
-      height: 54px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #facc15, #fb7185, #60a5fa);
-      display: grid;
-      place-items: center;
-      color: #0f172a;
-      font-size: 28px;
-      font-weight: 950;
-      box-shadow: 0 8px 30px rgba(250, 204, 21, .25);
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(24px, 3.2vw, 42px);
-      line-height: 1.08;
-      letter-spacing: -0.04em;
-    }
-
-    .subtitle {
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .quick-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: flex-end;
-      align-items: center;
-    }
-
-    .lang-select, .control-input, .control-select {
-      background: rgba(15, 23, 42, .85);
-      color: var(--text);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 10px 12px;
-      outline: none;
-    }
-
-    .btn {
-      border: 0;
-      color: #0f172a;
-      background: var(--accent);
-      padding: 10px 14px;
-      border-radius: 13px;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 10px 22px rgba(250, 204, 21, .18);
-      transition: .15s transform, .15s filter, .15s opacity;
-    }
-    .btn:hover { transform: translateY(-1px); filter: brightness(1.04); }
-    .btn:active { transform: translateY(1px) scale(.99); }
-    .btn.secondary {
-      color: var(--text);
-      background: rgba(30, 41, 59, .95);
-      border: 1px solid var(--line);
-      box-shadow: none;
-    }
-    .btn.good { background: var(--good); color: #052e16; }
-    .btn.bad { background: var(--bad); color: #fff; }
-    .btn.small { padding: 8px 10px; border-radius: 10px; font-size: 13px; }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(280px, 360px) 1fr;
-      gap: 14px;
-      align-items: start;
-    }
-
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 24px;
+    .hero{
+      display:flex; align-items:center; gap:18px;
+      background:linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.08));
+      border:2px solid rgba(255,255,255,.18);
+      border-radius:28px;
+      padding:14px 18px;
       box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(10px);
     }
-
-    .settings {
-      padding: 16px;
-      position: sticky;
-      top: 12px;
+    .sparkles{display:flex; gap:8px; align-items:center; font-size:26px}
+    .code-badge{
+      font-size: clamp(40px, 5vw, 78px);
+      font-weight: 1000; letter-spacing:-.04em;
+      color:#ffd63f;
+      text-shadow: 0 5px 0 rgba(153,91,0,.55), 0 10px 20px rgba(0,0,0,.18);
     }
-
-    body.game-only .layout {
-      grid-template-columns: 1fr;
+    .title-main{
+      font-size: clamp(36px, 4.6vw, 80px); font-weight: 1000; letter-spacing:-.045em;
+      text-shadow: 0 5px 0 rgba(17,63,141,.45), 0 10px 20px rgba(0,0,0,.18);
+      line-height:.95;
     }
-
-    body.game-only .settings {
-      display: none;
-    }
-
-    .game-toolbar {
-      display: none;
-      justify-content: flex-end;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-
-    body.game-only .game-toolbar {
-      display: flex;
-    }
-
-    body.game-only .game {
-      min-height: calc(100vh - 130px);
-    }
-
-    .settings h2, .game h2 {
-      margin: 0 0 12px;
-      font-size: 20px;
-    }
-
-    .field {
-      margin-bottom: 13px;
-    }
-    .field label {
-      display: block;
-      color: #e2e8f0;
-      font-weight: 750;
-      margin-bottom: 7px;
-      font-size: 13px;
-    }
-
-    .control-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 185px;
-      resize: vertical;
-      background: rgba(2, 6, 23, .7);
-      color: var(--text);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 12px;
-      outline: none;
-      line-height: 1.45;
-    }
-
-    .hint {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-      margin-top: 6px;
-    }
-
-    .game {
-      padding: 16px;
-      min-height: 680px;
-    }
-
-    .statusbar {
-      display: grid;
-      grid-template-columns: 1.1fr .9fr .9fr;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .status-card {
-      background: rgba(30, 41, 59, .72);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 12px;
-      min-height: 78px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .status-card .label {
-      color: var(--muted);
-      font-size: 12px;
-      margin-bottom: 5px;
-    }
-    .status-card .value {
-      font-size: clamp(22px, 3vw, 34px);
-      font-weight: 950;
-      letter-spacing: -0.03em;
-    }
-    .status-card .small-value {
-      font-size: clamp(16px, 2vw, 24px);
-      font-weight: 850;
-    }
-
-    .teams {
-      display: grid;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-    .teams.cols-2 { grid-template-columns: repeat(2, 1fr); }
-    .teams.cols-3 { grid-template-columns: repeat(3, 1fr); }
-    .teams.cols-4 { grid-template-columns: repeat(4, 1fr); }
-
-    .team {
-      border-radius: 18px;
-      padding: 12px;
-      border: 1px solid var(--line);
-      background: rgba(15, 23, 42, .76);
-      position: relative;
-      overflow: hidden;
-      min-height: 100px;
-    }
-    .team::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,.14), transparent 50%);
-      opacity: .9;
-      pointer-events: none;
-    }
-    .team.active {
-      outline: 3px solid var(--accent);
-      box-shadow: 0 0 0 8px rgba(250, 204, 21, .13);
-    }
-    .team.red { border-color: rgba(239,68,68,.48); }
-    .team.blue { border-color: rgba(59,130,246,.48); }
-    .team.green { border-color: rgba(34,197,94,.48); }
-    .team.purple { border-color: rgba(168,85,247,.48); }
-    .team-top {
-      position: relative;
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      align-items: center;
-    }
-    .team-name {
-      font-weight: 950;
-      font-size: 18px;
-    }
-    .score {
-      font-size: 34px;
-      font-weight: 950;
-      line-height: 1;
-    }
-    .team-meta {
-      position: relative;
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .message {
-      min-height: 48px;
-      border-radius: 16px;
-      padding: 12px 14px;
-      background: rgba(30, 41, 59, .74);
-      border: 1px solid var(--line);
-      margin-bottom: 14px;
-      color: #e2e8f0;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 760;
-    }
-    .message .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 99px;
-      background: var(--accent);
-      flex: 0 0 auto;
-      box-shadow: 0 0 0 8px rgba(250, 204, 21, .15);
-    }
-
-    .board-wrap {
-      background: rgba(15, 23, 42, .55);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      padding: 14px;
-    }
-
-    .board {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(96px, 1fr));
-      gap: 12px;
-      perspective: 1100px;
-    }
-    .board.size-12 { grid-template-columns: repeat(4, minmax(96px, 1fr)); }
-    .board.size-16 { grid-template-columns: repeat(4, minmax(90px, 1fr)); }
-    .board.size-20 { grid-template-columns: repeat(5, minmax(82px, 1fr)); }
-    .board.size-24 { grid-template-columns: repeat(6, minmax(76px, 1fr)); }
-    .board.size-30 { grid-template-columns: repeat(6, minmax(72px, 1fr)); }
-
-    .card {
-      height: clamp(92px, 11vw, 130px);
-      border: 0;
-      background: transparent;
-      perspective: 900px;
-      cursor: pointer;
-      padding: 0;
-      border-radius: 18px;
-      position: relative;
-    }
-    .card[disabled] { cursor: default; }
-    .card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transform-style: preserve-3d;
-      transition: transform .45s cubic-bezier(.2,.8,.2,1);
-      border-radius: 18px;
-    }
-    .card.flipped .card-inner, .card.matched .card-inner {
-      transform: rotateY(180deg);
-    }
-    .card-front, .card-back {
-      position: absolute;
-      inset: 0;
-      backface-visibility: hidden;
-      border-radius: 18px;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      overflow: hidden;
-      padding: 10px;
-    }
-    .card-front {
-      background:
-        radial-gradient(circle at 30% 20%, rgba(250,204,21,.28), transparent 34%),
-        linear-gradient(135deg, #1d4ed8, #0f172a 66%);
-      border: 1px solid rgba(255, 255, 255, .16);
-      box-shadow: 0 12px 24px rgba(2, 6, 23, .34);
-    }
-    .card-front .card-no {
-      font-size: 28px;
-      font-weight: 950;
-      color: #f8fafc;
-      text-shadow: 0 2px 10px rgba(0,0,0,.45);
-    }
-    .card-front .card-symbol {
-      position: absolute;
-      right: 10px;
-      bottom: 8px;
-      opacity: .36;
-      font-size: 28px;
-    }
-    .card-back {
-      transform: rotateY(180deg);
-      background: linear-gradient(160deg, #f8fafc, #e0f2fe);
-      color: #0f172a;
-      border: 3px solid rgba(250,204,21,.9);
-      box-shadow: 0 12px 24px rgba(250, 204, 21, .12);
-    }
-    .card.matched .card-back {
-      background: linear-gradient(160deg, #dcfce7, #bbf7d0);
-      border-color: rgba(34, 197, 94, .95);
-    }
-    .card-text {
-      font-weight: 920;
-      line-height: 1.16;
-      font-size: clamp(18px, 2.2vw, 31px);
-      word-break: break-word;
-    }
-    .card-kind {
-      position: absolute;
-      left: 9px;
-      top: 8px;
-      font-size: 11px;
+    .title-sub{
+      margin-top:10px;
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 20px;
+      background:linear-gradient(180deg,#3ab1ff,#1c7cff);
+      border:3px solid rgba(255,255,255,.55);
+      border-radius:999px;
+      font-size: clamp(16px, 1.65vw, 34px);
       font-weight: 900;
-      color: rgba(15,23,42,.62);
-      background: rgba(15,23,42,.08);
-      padding: 3px 7px;
-      border-radius: 999px;
+      box-shadow: var(--soft-shadow);
     }
+    .top-controls{display:flex; flex-wrap:wrap; gap:12px; justify-content:flex-end}
+    .pill, .action-chip{
+      min-height:66px;
+      padding:12px 18px;
+      border-radius:22px;
+      border:3px solid rgba(255,255,255,.55);
+      background:linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.08));
+      display:flex; align-items:center; gap:12px;
+      box-shadow: var(--soft-shadow);
+      backdrop-filter: blur(8px);
+    }
+    .pill .value{font-size: clamp(20px, 2.2vw, 44px); font-weight:1000; line-height:1}
+    .pill .small{font-size:14px; font-weight:800; opacity:.95}
+    .lang-wrap select, .settings-grid select, .settings-grid input, .settings-grid textarea{
+      border-radius:16px; border:2px solid #d8ecff; background:#fff; color:#17396c;
+      padding:12px 14px; width:100%; outline:none;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,.85);
+    }
+    .btn-top{
+      min-height:66px; padding:12px 18px; border-radius:22px; border:0; cursor:pointer;
+      font-weight:1000; color:#fff; box-shadow: var(--soft-shadow);
+      transition:.16s transform, .16s filter;
+    }
+    .btn-top:hover{transform:translateY(-1px); filter:brightness(1.05)}
+    .btn-top:active{transform:translateY(1px) scale(.99)}
+    .btn-deep{background:linear-gradient(180deg,#315ec6,#27479a); border:3px solid rgba(255,255,255,.34)}
+    .btn-yellow{background:linear-gradient(180deg,#ffd650,#ffb81f); color:#703a00; border:3px solid rgba(255,255,255,.4)}
 
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(2, 6, 23, .72);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      z-index: 50;
+    .layout{
+      display:grid;
+      grid-template-columns: 310px 1fr 310px;
+      gap:16px;
+      align-items:start;
     }
-    .modal.show { display: flex; }
-    .modal-card {
-      width: min(680px, 94vw);
-      background: linear-gradient(160deg, rgba(15,23,42,.97), rgba(30,41,59,.97));
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      padding: 22px;
-      text-align: center;
+    .side-card, .center-card{
+      background:linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.10));
+      border:2px solid rgba(255,255,255,.20);
+      border-radius:30px;
+      padding:14px;
       box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
     }
-    .modal-card h2 {
-      margin: 0 0 10px;
-      font-size: clamp(28px, 4vw, 48px);
+    .panel-white{
+      background:linear-gradient(180deg,#fafdff,#eef8ff);
+      color:#16396a;
+      border-radius:26px;
+      border:4px solid rgba(255,255,255,.86);
+      box-shadow:var(--soft-shadow);
+      overflow:hidden;
     }
-    .modal-card p {
-      color: var(--muted);
-      line-height: 1.55;
-      margin: 8px 0 18px;
+    .ribbon{
+      background:linear-gradient(180deg,#47b2ff,#2178f6);
+      color:#fff; font-weight:1000; font-size:22px;
+      padding:14px 18px; text-align:center;
+      position:relative;
+      text-shadow:0 2px 0 rgba(0,0,0,.15);
     }
-    .winner-list {
-      display: grid;
-      gap: 8px;
-      margin: 16px 0 18px;
-      text-align: left;
-    }
-    .winner-row {
-      display: flex;
-      justify-content: space-between;
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      padding: 11px 14px;
-      background: rgba(15,23,42,.75);
-      font-weight: 850;
-    }
+    .ribbon.orange{background:linear-gradient(180deg,#ffbd44,#ff8e1c)}
+    .ribbon.purple{background:linear-gradient(180deg,#b38bff,#8f60ff)}
 
-    .footer-note {
-      color: rgba(203,213,225,.78);
-      font-size: 12px;
-      text-align: center;
-      margin-top: 14px;
+    .info-body{padding:18px 20px}
+    .info-grid{display:grid; gap:16px}
+    .info-row{display:grid; grid-template-columns:54px 1fr auto; gap:12px; align-items:center}
+    .icon-ball{
+      width:54px; height:54px; border-radius:50%; display:grid; place-items:center; font-size:26px; color:#fff;
+      box-shadow:0 8px 18px rgba(0,0,0,.12)
     }
-
-    input[type="file"] { display: none; }
-
-    @media (max-width: 1040px) {
-      .layout { grid-template-columns: 1fr; }
-      .settings { position: static; }
-      .statusbar { grid-template-columns: 1fr 1fr; }
-      .statusbar .status-card:first-child { grid-column: 1 / -1; }
+    .blue-ball{background:linear-gradient(180deg,#58afff,#347bff)}
+    .green-ball{background:linear-gradient(180deg,#6edc8b,#33b95c)}
+    .purple-ball{background:linear-gradient(180deg,#ba90ff,#8a57ff)}
+    .orange-ball{background:linear-gradient(180deg,#ffc55f,#ff9a18)}
+    .info-name{font-size:20px; font-weight:900}
+    .info-value{font-size:22px; font-weight:1000}
+    .rule-list{margin:0; padding:18px 22px 18px 30px; list-style:none; display:grid; gap:16px}
+    .rule-list li{position:relative; font-size:18px; line-height:1.45; font-weight:800; color:#16396a}
+    .rule-list li::before{content:'⭐'; position:absolute; left:-24px; top:0}
+    .helper-box{
+      margin:0 16px 16px;
+      background:#f7fbff;
+      border:3px solid #d7e8ff;
+      border-radius:22px;
+      padding:16px 18px;
+      display:flex; gap:14px; align-items:center;
+      font-size:17px; font-weight:900; color:#16396a;
     }
+    .helper-char{font-size:52px}
 
-    @media (max-width: 720px) {
-      .app { width: min(100vw - 14px, 1440px); padding-top: 10px; }
-      .topbar { flex-direction: column; align-items: stretch; }
-      .quick-actions { justify-content: stretch; }
-      .quick-actions > * { flex: 1 1 auto; }
-      .control-row, .statusbar { grid-template-columns: 1fr; }
-      .teams.cols-2, .teams.cols-3, .teams.cols-4 { grid-template-columns: 1fr; }
-      .board, .board.size-12, .board.size-16, .board.size-20, .board.size-24, .board.size-30 {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-      }
-      .card { height: 96px; }
-      .card-text { font-size: 18px; }
+    .center-card{padding:12px}
+    .board-shell{
+      background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.08));
+      border-radius:30px; padding:14px; border:2px solid rgba(255,255,255,.20);
     }
+    .board{
+      display:grid; gap:14px; min-height:640px;
+      background:linear-gradient(180deg, rgba(12,111,98,.28), rgba(13,66,92,.18));
+      border:2px solid rgba(255,255,255,.18);
+      border-radius:28px; padding:18px;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,.05);
+    }
+    .board.cols-4{grid-template-columns:repeat(4, 1fr)}
+    .board.cols-5{grid-template-columns:repeat(5, 1fr)}
+    .board.cols-6{grid-template-columns:repeat(6, 1fr)}
+
+    .card{position:relative; height:150px; border:0; background:none; padding:0; cursor:pointer; perspective:1000px}
+    .card:disabled{cursor:default}
+    .card-inner{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+    .card.flipped .card-inner, .card.matched .card-inner{transform:rotateY(180deg)}
+    .card-face{position:absolute; inset:0; border-radius:var(--card-radius); backface-visibility:hidden; overflow:hidden}
+    .card-front{
+      background:linear-gradient(180deg,#8dd2ff,#44a8ff);
+      border:4px solid rgba(255,255,255,.95);
+      box-shadow: inset 0 -8px 0 rgba(0,74,180,.18), 0 10px 18px rgba(0,38,120,.18);
+      display:grid; place-items:center;
+    }
+    .card-front::before{content:''; position:absolute; inset:12px; border-radius:18px; background:rgba(255,255,255,.12)}
+    .card-front .star-mark{font-size:56px; opacity:.34}
+    .card-front .star-mini{position:absolute; font-size:20px; opacity:.28}
+    .card-front .star-mini.s1{top:12px; left:14px}
+    .card-front .star-mini.s2{top:18px; right:18px}
+    .card-front .star-mini.s3{bottom:14px; left:20px}
+    .card-back{
+      transform:rotateY(180deg);
+      background:linear-gradient(180deg,#fff,#f5f9ff);
+      border:4px solid rgba(255,255,255,.98);
+      box-shadow: inset 0 -8px 0 rgba(0,0,0,.05), 0 10px 18px rgba(0,38,120,.16);
+      color:#102f60; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:8px 14px;
+    }
+    .card.matched .card-back{background:linear-gradient(180deg,#fffef7,#fff1b8); border-color:#ffe179}
+    .card-icon{font-size:40px; line-height:1; margin-bottom:8px}
+    .card-text{font-size:clamp(18px,1.6vw,34px); font-weight:1000; text-align:center; line-height:1.15; word-break:break-word}
+    .card-kind{margin-top:6px; font-size:13px; font-weight:900; color:#5172a5; background:#e9f4ff; border-radius:999px; padding:4px 10px}
+
+    .right-list{padding:14px}
+    .ranking-list, .progress-panel{padding:18px}
+    .rank-row{
+      display:grid; grid-template-columns:44px 1fr auto; gap:10px; align-items:center;
+      background:#f7fbff; border:2px solid #e1efff; border-radius:18px;
+      padding:10px 12px; margin-bottom:10px; color:#16396a; font-weight:900;
+    }
+    .medal{width:38px; height:38px; border-radius:50%; display:grid; place-items:center; color:#fff; font-weight:1000}
+    .medal.m1{background:linear-gradient(180deg,#ffd84f,#ffb021)}
+    .medal.m2{background:linear-gradient(180deg,#c8d2df,#8b9bb5)}
+    .medal.m3{background:linear-gradient(180deg,#ffb98d,#ef7b3a)}
+    .medal.m4{background:linear-gradient(180deg,#e9eef8,#b0bfd8); color:#4b6288}
+    .stage-dots{display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 18px}
+    .stage-dot{width:40px; height:40px; border-radius:50%; display:grid; place-items:center; font-weight:1000; border:3px solid #d6e8ff; background:#eef5ff; color:#4f6d9d}
+    .stage-dot.active{background:linear-gradient(180deg,#4c9cff,#1b77ff); color:#fff; border-color:#fff; box-shadow:0 8px 18px rgba(39,104,255,.25)}
+    .tip-box{background:#fffaf0; border:3px solid #ffecb2; border-radius:20px; padding:16px 16px 14px; color:#6b5214; font-weight:900}
+
+    .bottom-actions{display:grid; grid-template-columns: repeat(4, 1fr); gap:14px; margin-top:14px}
+    .action-btn{
+      border:0; cursor:pointer; border-radius:26px; min-height:108px; padding:10px 18px; color:#fff; font-weight:1000;
+      box-shadow: var(--shadow); position:relative; overflow:hidden;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+      transition:.15s transform, .15s filter, .15s opacity;
+      text-align:center;
+    }
+    .action-btn:hover{transform:translateY(-2px); filter:brightness(1.03)}
+    .action-btn:active{transform:translateY(1px) scale(.99)}
+    .action-btn[disabled]{opacity:.45; cursor:not-allowed; filter:none; transform:none}
+    .action-btn .icon{font-size:34px}
+    .action-btn .big{font-size: clamp(18px, 2vw, 34px); line-height:1; font-weight:1000}
+    .action-btn .small{font-size: clamp(14px, 1vw, 20px); opacity:.96}
+    .green-grad{background:linear-gradient(180deg,#75df7c,#33ba5b)}
+    .yellow-grad{background:linear-gradient(180deg,#ffd54a,#ffb10b); color:#7a4300}
+    .purple-grad{background:linear-gradient(180deg,#b994ff,#8e5cff)}
+    .blue-grad{background:linear-gradient(180deg,#57b2ff,#1f86ff)}
+
+    .toast{
+      position:fixed; left:50%; top:24px; transform:translateX(-50%) translateY(-120%);
+      background:linear-gradient(180deg,#fffef6,#fff0b3); color:#6b4c08; font-weight:1000;
+      padding:16px 24px; border-radius:22px; border:4px solid #fff; box-shadow:var(--shadow); z-index:80;
+      transition:.35s transform; text-align:center; min-width:min(520px, 94vw);
+    }
+    .toast.show{transform:translateX(-50%) translateY(0)}
+    .toast .toast-big{font-size:30px}
+    .toast .toast-sub{font-size:18px; margin-top:4px}
+
+    .overlay{
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center; padding:20px; z-index:90;
+      background:rgba(7,25,88,.58); backdrop-filter: blur(6px);
+    }
+    .overlay.show{display:flex}
+    .modal{
+      width:min(920px, 96vw); border-radius:32px; overflow:hidden; color:#16396a;
+      background:linear-gradient(180deg,#fafdff,#ebf7ff); border:4px solid rgba(255,255,255,.94); box-shadow:0 28px 80px rgba(0,0,0,.25)
+    }
+    .modal-header{
+      padding:22px 28px; background:linear-gradient(180deg,#4fb5ff,#1a77ff); color:#fff; text-align:center;
+      text-shadow:0 2px 0 rgba(0,0,0,.16)
+    }
+    .modal-title{font-size: clamp(32px, 4vw, 58px); font-weight:1000; margin:0}
+    .modal-sub{margin-top:8px; font-size:18px; font-weight:900}
+    .modal-body{padding:22px 24px}
+    .winner-grid{display:grid; gap:12px; margin-bottom:18px}
+    .winner-item{display:grid; grid-template-columns:50px 1fr auto; gap:12px; align-items:center; padding:16px; border:3px solid #ddecff; background:#fff; border-radius:22px; font-weight:1000}
+    .modal-actions{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; padding:0 0 24px}
+    .modal-btn{border:0; border-radius:22px; padding:14px 22px; font-size:20px; font-weight:1000; cursor:pointer; box-shadow:var(--soft-shadow)}
+    .modal-btn.primary{background:linear-gradient(180deg,#6bdd80,#37be5e); color:#fff}
+    .modal-btn.secondary{background:linear-gradient(180deg,#5bb3ff,#2287ff); color:#fff}
+    .modal-btn.light{background:linear-gradient(180deg,#f5f7fb,#dce7f8); color:#234171}
+
+    .settings-overlay{position:fixed; inset:0; display:none; align-items:center; justify-content:center; padding:18px; z-index:95; background:rgba(7,25,88,.62); backdrop-filter: blur(7px)}
+    .settings-overlay.show{display:flex}
+    .settings-modal{width:min(980px, 96vw); max-height:92vh; overflow:auto; background:#f8fcff; color:#12305f; border-radius:30px; border:4px solid #fff; box-shadow:0 28px 80px rgba(0,0,0,.25)}
+    .settings-head{padding:18px 24px; background:linear-gradient(180deg,#4fb5ff,#1a77ff); color:#fff}
+    .settings-head h2{margin:0; font-size:34px}
+    .settings-grid{padding:22px; display:grid; grid-template-columns:1fr 1fr; gap:16px}
+    .settings-grid .full{grid-column:1 / -1}
+    .settings-grid label{display:block; font-weight:1000; font-size:15px; margin-bottom:7px}
+    .settings-grid textarea{min-height:200px; resize:vertical}
+    .settings-row{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+    .setting-actions{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:0 22px 24px}
+    .ghost-btn, .solid-btn{border:0; border-radius:18px; padding:13px 18px; cursor:pointer; font-weight:1000; box-shadow:var(--soft-shadow)}
+    .ghost-btn{background:#eaf2ff; color:#274a86}
+    .solid-btn{background:linear-gradient(180deg,#71dd80,#31b85b); color:#fff}
+    .danger-btn{background:linear-gradient(180deg,#ff8a8a,#ff5a5a); color:#fff}
+
+    .hint-glow{animation:glow 1.1s ease-in-out 3}
+    @keyframes glow{0%,100%{box-shadow:0 0 0 rgba(255,216,79,0)}50%{box-shadow:0 0 0 10px rgba(255,216,79,.25)}}
+    .bounce{animation:bounce .5s ease}
+    @keyframes bounce{0%{transform:scale(.8)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+
+    @media (max-width: 1280px){
+      .layout{grid-template-columns:280px 1fr 280px}
+      .card{height:132px}
+      .board{min-height:560px}
+    }
+    @media (max-width: 1100px){
+      .layout{grid-template-columns:1fr}
+      .board{min-height:auto}
+      .bottom-actions{grid-template-columns: repeat(2,1fr)}
+    }
+    @media (max-width: 760px){
+      .topbar{grid-template-columns:1fr}
+      .hero{flex-direction:column; align-items:flex-start}
+      .top-controls{justify-content:flex-start}
+      .board.cols-4, .board.cols-5, .board.cols-6{grid-template-columns:repeat(3,1fr)}
+      .card{height:110px}
+      .settings-grid, .settings-row, .bottom-actions{grid-template-columns:1fr}
+      .pill{min-height:56px}
+      .btn-top{min-height:56px}
+    }
+  
+
+    /* === Safe full-screen stage: keep 16:9 / 4:3 visible without cropping === */
+    html, body { width:100%; height:100%; overflow:hidden; }
+    .app{
+      position:absolute; left:0; top:0; margin:0; max-width:none; width:1600px; height:900px;
+      padding:10px; transform-origin:0 0; display:grid; grid-template-rows:auto minmax(0,1fr); gap:8px;
+    }
+    .topbar{margin-bottom:0; min-height:0; gap:8px;}
+    .hero{padding:8px 12px; min-height:88px;}
+    .code-badge{font-size:52px;}
+    .title-main{font-size:54px;}
+    .title-sub{font-size:18px; padding:6px 14px; margin-top:4px;}
+    .sparkles{font-size:20px;}
+    .pill, .btn-top{min-height:50px; padding:7px 11px; border-radius:18px;}
+    .pill .value{font-size:26px;}
+    .pill .small{font-size:12px;}
+    .layout{height:100%; min-height:0; grid-template-columns:285px minmax(0,1fr) 285px; gap:10px; overflow:hidden;}
+    .side-card, .center-card{height:100%; min-height:0; overflow:hidden; padding:8px; border-radius:24px;}
+    .center-card{display:grid; grid-template-rows:minmax(0,1fr) auto; gap:8px;}
+    .panel-white{border-radius:20px;}
+    .ribbon{font-size:18px; padding:9px 12px;}
+    .info-body{padding:10px 12px;}
+    .info-grid{gap:8px;}
+    .info-row{grid-template-columns:38px 1fr auto; gap:7px;}
+    .icon-ball{width:38px; height:38px; font-size:18px;}
+    .info-name{font-size:16px;}
+    .info-value{font-size:17px;}
+    .rule-list{padding:10px 14px 10px 28px; gap:8px;}
+    .rule-list li{font-size:14px; line-height:1.25;}
+    .helper-box{margin:0 8px 8px; padding:8px 10px; font-size:13px; border-radius:16px; gap:8px;}
+    .helper-char{font-size:34px;}
+    .ranking-list, .progress-panel{padding:10px;}
+    .rank-row{grid-template-columns:32px 1fr auto; gap:7px; padding:7px 8px; border-radius:14px; margin-bottom:6px;}
+    .rank-row .medal{width:28px; height:28px; font-size:13px;}
+    .rank-row div[style*="font-size:20px"]{font-size:15px !important;}
+    .rank-row div[style*="font-size:18px"]{font-size:14px !important;}
+    .stage-dots{gap:6px; margin:8px 0 10px;}
+    .stage-dot{width:28px; height:28px; font-size:13px; border-width:2px;}
+    .tip-box{padding:10px; border-radius:16px; font-size:13px;}
+    .board-shell{height:100%; min-height:0; padding:8px; border-radius:24px;}
+    .board{height:100%; min-height:0; padding:10px; gap:9px; grid-auto-rows:minmax(0,1fr); border-radius:22px;}
+    .card{height:100%; min-height:0;}
+    .card-face{border-radius:18px;}
+    .card-front .star-mark{font-size:40px;}
+    .card-icon{font-size:28px; margin-bottom:4px;}
+    .card-text{font-size:clamp(16px, 1.35vw, 24px);}
+    .card-kind{font-size:11px; padding:2px 7px;}
+    .bottom-actions{margin-top:0; gap:8px;}
+    .action-btn{min-height:70px; padding:5px 8px; border-radius:20px;}
+    .action-btn .icon{font-size:24px;}
+    .action-btn .big{font-size:20px;}
+    .action-btn .small{font-size:13px;}
+    .settings-modal{max-height:86vh;}
+
+    body.ratio-43 .app{width:1200px; height:900px;}
+    body.ratio-43 .topbar{grid-template-columns:1fr; gap:6px;}
+    body.ratio-43 .top-controls{gap:6px;}
+    body.ratio-43 .hero{min-height:64px; padding:7px 10px;}
+    body.ratio-43 .code-badge{font-size:40px;}
+    body.ratio-43 .title-main{font-size:42px;}
+    body.ratio-43 .title-sub{font-size:14px; padding:5px 10px;}
+    body.ratio-43 .pill, body.ratio-43 .btn-top{min-height:42px; padding:5px 8px; border-radius:14px;}
+    body.ratio-43 .pill .value{font-size:20px;}
+    body.ratio-43 .layout{grid-template-columns:235px minmax(0,1fr) 235px; gap:7px;}
+    body.ratio-43 .side-card, body.ratio-43 .center-card{padding:6px; border-radius:20px;}
+    body.ratio-43 .ribbon{font-size:15px; padding:7px 8px;}
+    body.ratio-43 .info-body{padding:8px;}
+    body.ratio-43 .info-row{grid-template-columns:30px 1fr auto; gap:5px;}
+    body.ratio-43 .icon-ball{width:30px; height:30px; font-size:15px;}
+    body.ratio-43 .info-name{font-size:13px;}
+    body.ratio-43 .info-value{font-size:14px;}
+    body.ratio-43 .rule-list{gap:6px; padding:8px 9px 8px 24px;}
+    body.ratio-43 .rule-list li{font-size:12px;}
+    body.ratio-43 .helper-box{font-size:11px; padding:6px 8px;}
+    body.ratio-43 .helper-char{font-size:28px;}
+    body.ratio-43 .board-shell{padding:6px;}
+    body.ratio-43 .board{padding:7px; gap:7px;}
+    body.ratio-43 .card-text{font-size:16px;}
+    body.ratio-43 .card-icon{font-size:24px;}
+    body.ratio-43 .bottom-actions{gap:6px;}
+    body.ratio-43 .action-btn{min-height:58px; border-radius:16px;}
+    body.ratio-43 .action-btn .icon{font-size:19px;}
+    body.ratio-43 .action-btn .big{font-size:15px;}
+    body.ratio-43 .action-btn .small{font-size:11px;}
+    body.ratio-43 .rank-row{padding:5px 6px; margin-bottom:5px;}
+    body.ratio-43 .stage-dot{width:24px; height:24px;}
+    body.ratio-43 .tip-box{font-size:11px; padding:7px;}
+
   </style>
+  <link rel="stylesheet" href="../_shared/cute-unify.css" />
+  <script defer src="../_shared/cute-unify.js"></script>
 </head>
 <body>
   <div class="app">
     <div class="topbar">
-      <div class="brand">
-        <div class="logo">配</div>
+      <div class="hero">
+        <div class="sparkles">⭐ 🎉</div>
         <div>
-          <h1 data-i18n="title">翻牌记忆配对赛</h1>
-          <div class="subtitle" data-i18n="subtitle">老师投影即可玩：翻开两张牌，找出正确配对。</div>
+          <div style="display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap;">
+            <div class="code-badge">S001</div>
+            <div class="title-main" id="titleMain">翻翻乐</div>
+          </div>
+          <div class="title-sub" id="titleSub">记忆翻牌配对，适合暖身与小组竞赛</div>
         </div>
       </div>
-      <div class="quick-actions">
-        <select id="lang" class="lang-select" aria-label="Language">
-          <option value="zh">简体中文</option>
-          <option value="en">English</option>
-          <option value="ms">Bahasa Melayu</option>
-        </select>
-        <button class="btn secondary" id="fullscreenBtn" data-i18n="fullscreen">全屏</button>
-        <button class="btn secondary" id="soundBtn" data-i18n="soundOn">音效：开</button>
+      <div class="top-controls">
+        <div class="pill lang-wrap">
+          <div style="font-weight:1000" id="langLabel">语言</div>
+          <select id="langSelect" aria-label="Language" style="min-width:160px">
+            <option value="zh">简体中文</option>
+            <option value="en">English</option>
+            <option value="ms">Bahasa Melayu</option>
+          </select>
+        </div>
+        <div class="pill lang-wrap">
+          <div style="font-weight:1000" id="ratioLabel">比例</div>
+          <select id="ratioSelect" aria-label="Screen ratio" style="min-width:110px">
+            <option value="16:9">16:9</option>
+            <option value="4:3">4:3</option>
+          </select>
+        </div>
+        <div class="pill"><div style="font-size:28px">⏰</div><div><div class="small" id="timerLabel">时间</div><div class="value" id="timerText">01:20</div></div></div>
+        <div class="pill"><div style="font-size:28px">⭐</div><div><div class="small" id="scoreLabel">得分</div><div class="value" id="scoreText">0</div></div></div>
+        <button class="btn-top btn-deep" id="settingsBtn">设置题库</button>
+        <button class="btn-top btn-deep" id="restartBtn">重新开始</button>
+        <button class="btn-top btn-deep" id="fullscreenBtn">全屏</button>
       </div>
     </div>
 
     <div class="layout">
-      <aside id="teacherPanel" class="panel settings">
-        <h2 data-i18n="teacherSettings">老师设定</h2>
-
-        <div class="field">
-          <label data-i18n="teamCount">分组数量</label>
-          <select id="teamCount" class="control-select" style="width:100%">
-            <option value="2">2 组</option>
-            <option value="3">3 组</option>
-            <option value="4">4 组</option>
-          </select>
-        </div>
-
-        <div class="control-row">
-          <div class="field">
-            <label data-i18n="timeLimit">游戏时间</label>
-            <select id="timeLimit" class="control-select" style="width:100%">
-              <option value="0" data-i18n="noLimit">不限时</option>
-              <option value="180">3 分钟</option>
-              <option value="300" selected>5 分钟</option>
-              <option value="480">8 分钟</option>
-              <option value="600">10 分钟</option>
-            </select>
+      <aside class="side-card">
+        <section class="panel-white" style="margin-bottom:14px">
+          <div class="ribbon" id="gameInfoTitle">游戏信息</div>
+          <div class="info-body">
+            <div class="info-grid">
+              <div class="info-row"><div class="icon-ball blue-ball">🧩</div><div class="info-name" id="levelLabel">关卡</div><div class="info-value" id="stageValue">1 / 5</div></div>
+              <div class="info-row"><div class="icon-ball green-ball">👥</div><div class="info-name" id="teamLabel">队伍</div><div class="info-value" id="currentTeamName">蓝队</div></div>
+              <div class="info-row"><div class="icon-ball purple-ball">🪄</div><div class="info-name" id="openedLabel">已翻开</div><div class="info-value" id="openedValue">0</div></div>
+              <div class="info-row"><div class="icon-ball orange-ball">🎯</div><div class="info-name" id="matchedLabel">配对成功</div><div class="info-value" id="matchedValue">0</div></div>
+            </div>
           </div>
-          <div class="field">
-            <label data-i18n="pairCount">牌组数量</label>
-            <select id="pairCount" class="control-select" style="width:100%">
-              <option value="6">6 组 / 12 张</option>
-              <option value="8" selected>8 组 / 16 张</option>
-              <option value="10">10 组 / 20 张</option>
-              <option value="12">12 组 / 24 张</option>
-              <option value="15">15 组 / 30 张</option>
-            </select>
+        </section>
+        <section class="panel-white" style="margin-bottom:14px">
+          <div class="ribbon" id="rulesTitle">游戏规则</div>
+          <ul class="rule-list" id="ruleList"></ul>
+          <div class="helper-box">
+            <div class="helper-char">🧒</div>
+            <div id="helperText">记住位置，配对成功！加油哦！</div>
           </div>
-        </div>
-
-        <div class="control-row">
-          <div class="field">
-            <label data-i18n="correctTurn">答对后</label>
-            <select id="correctTurn" class="control-select" style="width:100%">
-              <option value="stay" data-i18n="stayTurn">继续作答</option>
-              <option value="next" data-i18n="nextTurn">换下一组</option>
-            </select>
-          </div>
-          <div class="field">
-            <label data-i18n="wrongTurn">答错后</label>
-            <select id="wrongTurn" class="control-select" style="width:100%">
-              <option value="next" data-i18n="nextTurn">换下一组</option>
-              <option value="stay" data-i18n="stayTurn">继续作答</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field">
-          <label data-i18n="teamNames">队伍名称</label>
-          <input id="teamNames" class="control-input" style="width:100%" value="红队,蓝队,绿队,紫队" />
-          <div class="hint" data-i18n="teamNamesHint">用逗号分隔；选择几组就会使用前几个名称。</div>
-        </div>
-
-        <div class="field">
-          <label data-i18n="questionBank">配对题库</label>
-          <textarea id="bank"></textarea>
-          <div class="hint" data-i18n="bankHint">每一行一组配对：左边文字,右边文字。例：苹果,apple</div>
-        </div>
-
-        <div class="control-row" style="margin-bottom:8px">
-          <button class="btn secondary small" id="sampleBtn" data-i18n="loadSample">载入示例</button>
-          <button class="btn secondary small" id="exportBtn" data-i18n="exportTxt">汇出 TXT</button>
-        </div>
-        <div class="control-row" style="margin-bottom:12px">
-          <label class="btn secondary small" for="importFile" style="text-align:center; cursor:pointer" data-i18n="importTxt">汇入 TXT</label>
-          <button class="btn secondary small" id="shuffleBtn" data-i18n="reshuffle">重新洗牌</button>
-        </div>
-        <input type="file" id="importFile" accept=".txt,.csv,text/plain" />
-
-        <div class="control-row">
-          <button class="btn good" id="startBtn" data-i18n="startGame">开始游戏</button>
-          <button class="btn bad" id="resetBtn" data-i18n="resetGame">重置</button>
-        </div>
-
-        <div class="footer-note" data-i18n="offlineNote">离线可用：直接双击 index.html，即可在课室投影使用。</div>
+        </section>
       </aside>
 
-      <main class="panel game">
-        <div class="game-toolbar" id="gameToolbar">
-          <button class="btn secondary small" id="showSettingsBtn" data-i18n="showSettings">显示老师设定</button>
-          <button class="btn secondary small" id="gameReshuffleBtn" data-i18n="reshuffle">重新洗牌</button>
-          <button class="btn bad small" id="gameResetBtn" data-i18n="resetGame">重置</button>
+      <main class="center-card">
+        <div class="board-shell">
+          <div class="board cols-4" id="board"></div>
         </div>
-        <div class="statusbar">
-          <div class="status-card">
-            <div class="label" data-i18n="currentTurn">当前回合</div>
-            <div class="value" id="turnText">—</div>
-          </div>
-          <div class="status-card">
-            <div class="label" data-i18n="timer">倒数时间</div>
-            <div class="value" id="timerText">05:00</div>
-          </div>
-          <div class="status-card">
-            <div class="label" data-i18n="matchedPairs">已配对</div>
-            <div class="value" id="matchedText">0 / 8</div>
-          </div>
-        </div>
-
-        <div id="teams" class="teams cols-2"></div>
-
-        <div class="message" id="messageBox">
-          <span class="dot"></span>
-          <span id="messageText" data-i18n="readyMsg">请先在左侧设定题库，然后点击“开始游戏”。</span>
-        </div>
-
-        <div class="board-wrap">
-          <div id="board" class="board size-16"></div>
+        <div class="bottom-actions">
+          <button class="action-btn green-grad" id="revealBtn">
+            <div class="icon">👁️</div>
+            <div class="big" id="revealBtnTitle">显示全部</div>
+            <div class="small" id="revealBtnCount">(3次)</div>
+          </button>
+          <button class="action-btn yellow-grad" id="hintBtn">
+            <div class="icon">🔍</div>
+            <div class="big" id="hintBtnTitle">提示一对</div>
+            <div class="small" id="hintBtnCount">(2次)</div>
+          </button>
+          <button class="action-btn purple-grad" id="reshuffleBtn">
+            <div class="icon">🔀</div>
+            <div class="big" id="reshuffleBtnTitle">重新洗牌</div>
+            <div class="small" id="reshuffleBtnCount">(1次)</div>
+          </button>
+          <button class="action-btn blue-grad" id="skipBtn">
+            <div class="icon">⏭️</div>
+            <div class="big" id="skipBtnTitle">跳过本轮</div>
+            <div class="small" id="skipBtnCount">(1次)</div>
+          </button>
         </div>
       </main>
+
+      <aside class="side-card">
+        <section class="panel-white" style="margin-bottom:14px">
+          <div class="ribbon purple" id="rankingTitle">队伍排行榜</div>
+          <div class="ranking-list" id="rankingList"></div>
+        </section>
+        <section class="panel-white">
+          <div class="ribbon orange" id="progressTitle">关卡进度</div>
+          <div class="progress-panel">
+            <div style="font-size:20px; font-weight:1000; margin-bottom:8px" id="currentStageText">当前关卡：1 / 5</div>
+            <div class="stage-dots" id="stageDots"></div>
+            <div class="tip-box">
+              <div style="font-size:22px; margin-bottom:8px">💡 <span id="tipTitle">小提示</span></div>
+              <div id="tipText">先记住角落和边缘的卡片，能更快找到配对哦！</div>
+            </div>
+          </div>
+        </section>
+      </aside>
     </div>
   </div>
 
-  <div id="endModal" class="modal">
-    <div class="modal-card">
-      <h2 id="endTitle">游戏结束</h2>
-      <p id="endDesc">成绩如下：</p>
-      <div id="winnerList" class="winner-list"></div>
-      <button class="btn good" id="playAgainBtn" data-i18n="playAgain">再玩一次</button>
-      <button class="btn secondary" id="closeModalBtn" data-i18n="close" style="margin-left:8px">关闭</button>
+  <div class="toast" id="toast">
+    <div class="toast-big" id="toastBig">配对成功！</div>
+    <div class="toast-sub" id="toastSub">本队获得 1 分</div>
+  </div>
+
+  <div class="overlay" id="stageModalOverlay">
+    <div class="modal bounce">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">过关成功！</h2>
+        <div class="modal-sub" id="modalSub">恭喜完成本关，一起来看看当前成绩。</div>
+      </div>
+      <div class="modal-body">
+        <div class="winner-grid" id="winnerGrid"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn primary" id="nextStageBtn">下一关</button>
+        <button class="modal-btn secondary" id="playAgainBtn">重新开始</button>
+        <button class="modal-btn light" id="closeStageModalBtn">关闭</button>
+      </div>
     </div>
   </div>
 
-  <script>
-    const I18N = {
-      zh: {
-        title: '翻牌记忆配对赛',
-        subtitle: '老师投影即可玩：翻开两张牌，找出正确配对。',
-        fullscreen: '全屏',
-        soundOn: '音效：开',
-        soundOff: '音效：关',
-        teacherSettings: '老师设定',
-        showSettings: '显示老师设定',
-        teamCount: '分组数量',
-        timeLimit: '游戏时间',
-        noLimit: '不限时',
-        pairCount: '牌组数量',
-        correctTurn: '答对后',
-        wrongTurn: '答错后',
-        stayTurn: '继续作答',
-        nextTurn: '换下一组',
-        teamNames: '队伍名称',
-        teamNamesHint: '用逗号分隔；选择几组就会使用前几个名称。',
-        questionBank: '配对题库',
-        bankHint: '每一行一组配对：左边文字,右边文字。例：苹果,apple',
-        loadSample: '载入示例',
-        exportTxt: '汇出 TXT',
-        importTxt: '汇入 TXT',
-        reshuffle: '重新洗牌',
-        startGame: '开始游戏',
-        resetGame: '重置',
-        offlineNote: '离线可用：直接双击 index.html，即可在课室投影使用。',
-        currentTurn: '当前回合',
-        timer: '倒数时间',
-        matchedPairs: '已配对',
-        readyMsg: '请先在左侧设定题库，然后点击“开始游戏”。',
-        selectFirst: '请选择第一张牌。',
-        selectSecond: '请再选择一张牌，看看是否配对。',
-        match: '配对成功！加 1 分。',
-        noMatch: '没有配对成功，记住位置，下次再试。',
-        gameStarted: '游戏开始！请当前队伍翻开两张牌。',
-        gameReset: '游戏已重置。',
-        notEnoughPairs: '题库配对不足，请至少输入 6 组配对。',
-        gameOver: '游戏结束',
-        allMatched: '全部配对完成！',
-        timeUp: '时间到！',
-        resultDesc: '成绩如下：',
-        winner: '获胜',
-        draw: '平手',
-        playAgain: '再玩一次',
-        close: '关闭',
-        cardA: 'A',
-        cardB: 'B',
-        teamsDefault: '红队,蓝队,绿队,紫队',
-        sampleBank: '苹果,apple\n香蕉,banana\n老师,teacher\n学生,student\n人工智能,AI\n吉隆坡,Kuala Lumpur\n早安,selamat pagi\n谢谢,thank you\n中央处理器,CPU\n光合作用,photosynthesis\n安全密码,strong password\n网络安全,cybersecurity'
-      },
-      en: {
-        title: 'Memory Match Classroom Game',
-        subtitle: 'Project it in class: flip two cards and find the correct match.',
-        fullscreen: 'Fullscreen',
-        soundOn: 'Sound: On',
-        soundOff: 'Sound: Off',
-        teacherSettings: 'Teacher Settings',
-        showSettings: 'Show Teacher Settings',
-        teamCount: 'Number of Teams',
-        timeLimit: 'Game Time',
-        noLimit: 'No limit',
-        pairCount: 'Number of Pairs',
-        correctTurn: 'After Correct Match',
-        wrongTurn: 'After Wrong Match',
-        stayTurn: 'Same team continues',
-        nextTurn: 'Next team',
-        teamNames: 'Team Names',
-        teamNamesHint: 'Separate by commas; the game uses the first few names based on team count.',
-        questionBank: 'Matching Bank',
-        bankHint: 'One pair per line: left text,right text. Example: apple,苹果',
-        loadSample: 'Load Sample',
-        exportTxt: 'Export TXT',
-        importTxt: 'Import TXT',
-        reshuffle: 'Reshuffle',
-        startGame: 'Start Game',
-        resetGame: 'Reset',
-        offlineNote: 'Works offline: double-click index.html and project it in class.',
-        currentTurn: 'Current Turn',
-        timer: 'Timer',
-        matchedPairs: 'Matched Pairs',
-        readyMsg: 'Set the matching bank on the left, then click “Start Game”.',
-        selectFirst: 'Choose the first card.',
-        selectSecond: 'Choose one more card and check if it matches.',
-        match: 'Correct match! +1 point.',
-        noMatch: 'Not a match. Remember the positions and try again.',
-        gameStarted: 'Game started! Current team flips two cards.',
-        gameReset: 'Game has been reset.',
-        notEnoughPairs: 'Not enough pairs. Please enter at least 6 pairs.',
-        gameOver: 'Game Over',
-        allMatched: 'All pairs matched!',
-        timeUp: 'Time is up!',
-        resultDesc: 'Final results:',
-        winner: 'Winner',
-        draw: 'Draw',
-        playAgain: 'Play Again',
-        close: 'Close',
-        cardA: 'A',
-        cardB: 'B',
-        teamsDefault: 'Red Team,Blue Team,Green Team,Purple Team',
-        sampleBank: 'apple,苹果\nbanana,香蕉\nteacher,老师\nstudent,学生\nAI,人工智能\nKuala Lumpur,吉隆坡\nselamat pagi,早安\nthank you,谢谢\nCPU,中央处理器\nphotosynthesis,光合作用\nstrong password,安全密码\ncybersecurity,网络安全'
-      },
-      ms: {
-        title: 'Permainan Padanan Kad Memori',
-        subtitle: 'Paparkan di kelas: buka dua kad dan cari pasangan yang betul.',
-        fullscreen: 'Skrin Penuh',
-        soundOn: 'Bunyi: Buka',
-        soundOff: 'Bunyi: Tutup',
-        teacherSettings: 'Tetapan Guru',
-        showSettings: 'Tunjuk Tetapan Guru',
-        teamCount: 'Bilangan Kumpulan',
-        timeLimit: 'Masa Permainan',
-        noLimit: 'Tiada had',
-        pairCount: 'Bilangan Pasangan',
-        correctTurn: 'Selepas Betul',
-        wrongTurn: 'Selepas Salah',
-        stayTurn: 'Kumpulan sama terus jawab',
-        nextTurn: 'Giliran kumpulan seterusnya',
-        teamNames: 'Nama Kumpulan',
-        teamNamesHint: 'Pisahkan dengan koma; permainan akan guna nama mengikut bilangan kumpulan.',
-        questionBank: 'Bank Padanan',
-        bankHint: 'Satu pasangan setiap baris: teks kiri,teks kanan. Contoh: epal,apple',
-        loadSample: 'Muat Sampel',
-        exportTxt: 'Eksport TXT',
-        importTxt: 'Import TXT',
-        reshuffle: 'Kocok Semula',
-        startGame: 'Mula Permainan',
-        resetGame: 'Set Semula',
-        offlineNote: 'Boleh guna tanpa internet: klik dua kali index.html dan paparkan di kelas.',
-        currentTurn: 'Giliran Semasa',
-        timer: 'Masa',
-        matchedPairs: 'Pasangan Berjaya',
-        readyMsg: 'Tetapkan bank padanan di sebelah kiri, kemudian tekan “Mula Permainan”.',
-        selectFirst: 'Pilih kad pertama.',
-        selectSecond: 'Pilih satu lagi kad dan lihat sama ada ia sepadan.',
-        match: 'Padanan betul! +1 markah.',
-        noMatch: 'Tidak sepadan. Ingat kedudukan kad dan cuba lagi.',
-        gameStarted: 'Permainan bermula! Kumpulan semasa membuka dua kad.',
-        gameReset: 'Permainan telah diset semula.',
-        notEnoughPairs: 'Pasangan tidak mencukupi. Sila masukkan sekurang-kurangnya 6 pasangan.',
-        gameOver: 'Permainan Tamat',
-        allMatched: 'Semua pasangan berjaya dipadankan!',
-        timeUp: 'Masa tamat!',
-        resultDesc: 'Keputusan akhir:',
-        winner: 'Pemenang',
-        draw: 'Seri',
-        playAgain: 'Main Lagi',
-        close: 'Tutup',
-        cardA: 'A',
-        cardB: 'B',
-        teamsDefault: 'Kumpulan Merah,Kumpulan Biru,Kumpulan Hijau,Kumpulan Ungu',
-        sampleBank: 'epal,apple\npisang,banana\nguru,teacher\nmurid,student\nkecerdasan buatan,AI\nKuala Lumpur,吉隆坡\nselamat pagi,早安\nterima kasih,thank you\nCPU,unit pemprosesan pusat\nfotosintesis,photosynthesis\nkata laluan kuat,strong password\nkeselamatan siber,cybersecurity'
-      }
-    };
-
-    const COLORS = ['red', 'blue', 'green', 'purple'];
-    const COLOR_EMOJI = ['🔴', '🔵', '🟢', '🟣'];
-
-    const state = {
-      lang: 'zh',
-      sound: true,
-      running: false,
-      teams: [],
-      currentTeam: 0,
-      cards: [],
-      flipped: [],
-      lock: false,
-      matchedPairs: 0,
-      totalPairs: 8,
-      secondsLeft: 300,
-      timerId: null,
-      bankPairs: []
-    };
-
-    const $ = (id) => document.getElementById(id);
-    const t = (key) => (I18N[state.lang] && I18N[state.lang][key]) || I18N.zh[key] || key;
-
-    function saveSettings() {
-      const data = {
-        lang: $('lang').value,
-        teamCount: $('teamCount').value,
-        timeLimit: $('timeLimit').value,
-        pairCount: $('pairCount').value,
-        correctTurn: $('correctTurn').value,
-        wrongTurn: $('wrongTurn').value,
-        teamNames: $('teamNames').value,
-        bank: $('bank').value,
-        sound: state.sound
-      };
-      localStorage.setItem('memoryMatchSettings', JSON.stringify(data));
-    }
-
-    function loadSettings() {
-      const raw = localStorage.getItem('memoryMatchSettings');
-      if (!raw) {
-        $('bank').value = I18N.zh.sampleBank;
-        return;
-      }
-      try {
-        const data = JSON.parse(raw);
-        $('lang').value = data.lang || 'zh';
-        state.lang = $('lang').value;
-        $('teamCount').value = data.teamCount || '2';
-        $('timeLimit').value = data.timeLimit || '300';
-        $('pairCount').value = data.pairCount || '8';
-        $('correctTurn').value = data.correctTurn || 'stay';
-        $('wrongTurn').value = data.wrongTurn || 'next';
-        $('teamNames').value = data.teamNames || t('teamsDefault');
-        $('bank').value = data.bank || t('sampleBank');
-        state.sound = data.sound !== false;
-      } catch (err) {
-        $('bank').value = I18N.zh.sampleBank;
-      }
-    }
-
-    function applyLanguage() {
-      document.documentElement.lang = state.lang === 'zh' ? 'zh-CN' : state.lang;
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (I18N[state.lang][key]) el.textContent = I18N[state.lang][key];
-      });
-      $('soundBtn').textContent = state.sound ? t('soundOn') : t('soundOff');
-      if (!state.running && !$('teamNames').dataset.customized) {
-        $('teamNames').value = t('teamsDefault');
-      }
-      updateStaticTexts();
-      saveSettings();
-    }
-
-    function updateStaticTexts() {
-      updateTimerText();
-      $('matchedText').textContent = `${state.matchedPairs} / ${state.totalPairs}`;
-      if (!state.running) $('turnText').textContent = '—';
-    }
-
-    function parseBank() {
-      return $('bank').value
-        .split(/\r?\n/)
-        .map(line => line.trim())
-        .filter(Boolean)
-        .map(line => {
-          let parts = line.includes('\t') ? line.split('\t') : line.split(',');
-          if (parts.length < 2) parts = line.split('|');
-          const left = (parts[0] || '').trim();
-          const right = parts.slice(1).join(',').trim();
-          return { left, right };
-        })
-        .filter(p => p.left && p.right);
-    }
-
-    function shuffle(arr) {
-      const a = [...arr];
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
-    }
-
-    function setupTeams() {
-      const count = Number($('teamCount').value);
-      const names = $('teamNames').value.split(',').map(x => x.trim()).filter(Boolean);
-      const defaults = t('teamsDefault').split(',');
-      state.teams = Array.from({ length: count }, (_, i) => ({
-        name: names[i] || defaults[i] || `Team ${i + 1}`,
-        score: 0,
-        attempts: 0,
-        matches: 0,
-        color: COLORS[i],
-        emoji: COLOR_EMOJI[i]
-      }));
-      state.currentTeam = 0;
-      renderTeams();
-      updateTurn();
-    }
-
-    function renderTeams() {
-      const box = $('teams');
-      box.className = `teams cols-${state.teams.length || Number($('teamCount').value)}`;
-      box.innerHTML = '';
-      state.teams.forEach((team, idx) => {
-        const div = document.createElement('div');
-        div.className = `team ${team.color} ${idx === state.currentTeam && state.running ? 'active' : ''}`;
-        div.innerHTML = `
-          <div class="team-top">
-            <div class="team-name">${team.emoji} ${escapeHtml(team.name)}</div>
-            <div class="score">${team.score}</div>
-          </div>
-          <div class="team-meta">${t('matchedPairs')}: ${team.matches} · ${state.lang === 'ms' ? 'Cubaan' : state.lang === 'en' ? 'Attempts' : '尝试'}: ${team.attempts}</div>
-        `;
-        box.appendChild(div);
-      });
-    }
-
-    function createCards() {
-      const pairs = shuffle(parseBank());
-      const requested = Number($('pairCount').value);
-      if (pairs.length < 6) {
-        showMessage(t('notEnoughPairs'));
-        beep('wrong');
-        return false;
-      }
-      const selected = pairs.slice(0, Math.min(requested, pairs.length));
-      state.totalPairs = selected.length;
-      state.matchedPairs = 0;
-      const cards = [];
-      selected.forEach((pair, index) => {
-        cards.push({ id: `${index}`, text: pair.left, kind: t('cardA'), matched: false });
-        cards.push({ id: `${index}`, text: pair.right, kind: t('cardB'), matched: false });
-      });
-      state.cards = shuffle(cards).map((card, idx) => ({ ...card, uid: `card-${idx}` }));
-      return true;
-    }
-
-    function renderBoard() {
-      const board = $('board');
-      board.className = `board size-${state.cards.length}`;
-      board.innerHTML = '';
-      state.cards.forEach((card, index) => {
-        const btn = document.createElement('button');
-        btn.className = `card ${card.matched ? 'matched' : ''}`;
-        btn.setAttribute('aria-label', `card ${index + 1}`);
-        btn.dataset.uid = card.uid;
-        btn.onclick = () => flipCard(card.uid);
-        btn.innerHTML = `
-          <div class="card-inner">
-            <div class="card-front">
-              <div class="card-no">${index + 1}</div>
-              <div class="card-symbol">✦</div>
-            </div>
-            <div class="card-back">
-              <div class="card-kind">${escapeHtml(card.kind)}</div>
-              <div class="card-text">${escapeHtml(card.text)}</div>
-            </div>
-          </div>
-        `;
-        board.appendChild(btn);
-      });
-      $('matchedText').textContent = `${state.matchedPairs} / ${state.totalPairs}`;
-    }
-
-    function flipCard(uid) {
-      if (!state.running || state.lock) return;
-      const card = state.cards.find(c => c.uid === uid);
-      if (!card || card.matched) return;
-      const el = document.querySelector(`[data-uid="${uid}"]`);
-      if (!el || el.classList.contains('flipped')) return;
-      if (state.flipped.length >= 2) return;
-
-      el.classList.add('flipped');
-      state.flipped.push(card);
-      beep('flip');
-
-      if (state.flipped.length === 1) {
-        showMessage(t('selectSecond'));
-      } else {
-        checkMatch();
-      }
-    }
-
-    function checkMatch() {
-      state.lock = true;
-      const [a, b] = state.flipped;
-      const team = state.teams[state.currentTeam];
-      team.attempts++;
-
-      if (a.id === b.id && a.uid !== b.uid) {
-        a.matched = true;
-        b.matched = true;
-        team.score++;
-        team.matches++;
-        state.matchedPairs++;
-        document.querySelector(`[data-uid="${a.uid}"]`).classList.add('matched');
-        document.querySelector(`[data-uid="${b.uid}"]`).classList.add('matched');
-        showMessage(t('match'));
-        beep('correct');
-        state.flipped = [];
-        state.lock = false;
-        if ($('correctTurn').value === 'next') nextTeam();
-        updateAll();
-        if (state.matchedPairs >= state.totalPairs) endGame('allMatched');
-      } else {
-        showMessage(t('noMatch'));
-        beep('wrong');
-        setTimeout(() => {
-          document.querySelector(`[data-uid="${a.uid}"]`)?.classList.remove('flipped');
-          document.querySelector(`[data-uid="${b.uid}"]`)?.classList.remove('flipped');
-          state.flipped = [];
-          state.lock = false;
-          if ($('wrongTurn').value === 'next') nextTeam();
-          updateAll();
-        }, 1050);
-      }
-    }
-
-    function nextTeam() {
-      state.currentTeam = (state.currentTeam + 1) % state.teams.length;
-      showMessage(`${state.teams[state.currentTeam].emoji} ${state.teams[state.currentTeam].name}: ${t('selectFirst')}`);
-      updateTurn();
-    }
-
-    function updateTurn() {
-      if (state.running && state.teams[state.currentTeam]) {
-        $('turnText').textContent = `${state.teams[state.currentTeam].emoji} ${state.teams[state.currentTeam].name}`;
-      } else {
-        $('turnText').textContent = '—';
-      }
-      renderTeams();
-    }
-
-    function updateAll() {
-      $('matchedText').textContent = `${state.matchedPairs} / ${state.totalPairs}`;
-      updateTurn();
-      saveSettings();
-    }
-
-    function showMessage(msg) {
-      $('messageText').textContent = msg;
-    }
-
-    function enterGameOnlyMode() {
-      document.body.classList.add('game-only');
-    }
-
-    function exitGameOnlyMode() {
-      document.body.classList.remove('game-only');
-    }
-
-    function startGame() {
-      stopTimer();
-      saveSettings();
-      setupTeams();
-      if (!createCards()) return;
-      enterGameOnlyMode();
-      state.running = true;
-      state.lock = false;
-      state.flipped = [];
-      state.secondsLeft = Number($('timeLimit').value);
-      renderBoard();
-      updateAll();
-      showMessage(t('gameStarted'));
-      if (state.secondsLeft > 0) {
-        updateTimerText();
-        state.timerId = setInterval(() => {
-          state.secondsLeft--;
-          updateTimerText();
-          if (state.secondsLeft <= 0) endGame('timeUp');
-        }, 1000);
-      } else {
-        updateTimerText();
-      }
-      $('endModal').classList.remove('show');
-      beep('start');
-    }
-
-    function resetGame() {
-      stopTimer();
-      exitGameOnlyMode();
-      state.running = false;
-      state.lock = false;
-      state.flipped = [];
-      state.matchedPairs = 0;
-      state.secondsLeft = Number($('timeLimit').value);
-      state.cards = [];
-      setupTeams();
-      renderEmptyBoard();
-      updateTimerText();
-      $('matchedText').textContent = `0 / ${Number($('pairCount').value)}`;
-      showMessage(t('gameReset'));
-      $('endModal').classList.remove('show');
-      saveSettings();
-    }
-
-    function renderEmptyBoard() {
-      const count = Number($('pairCount').value) * 2;
-      state.cards = Array.from({ length: count }, (_, i) => ({ uid: `empty-${i}`, text: '', id: `empty-${i}` }));
-      const board = $('board');
-      board.className = `board size-${count}`;
-      board.innerHTML = '';
-      for (let i = 0; i < count; i++) {
-        const card = document.createElement('button');
-        card.className = 'card';
-        card.disabled = true;
-        card.innerHTML = `
-          <div class="card-inner">
-            <div class="card-front">
-              <div class="card-no">${i + 1}</div>
-              <div class="card-symbol">✦</div>
-            </div>
-            <div class="card-back"><div class="card-text"></div></div>
-          </div>
-        `;
-        board.appendChild(card);
-      }
-    }
-
-    function reshuffle() {
-      if (!state.running) {
-        startGame();
-      } else {
-        if (!confirm(state.lang === 'zh' ? '要重新洗牌并重新开始吗？' : state.lang === 'ms' ? 'Kocok semula dan mula semula?' : 'Reshuffle and restart?')) return;
-        startGame();
-      }
-    }
-
-    function endGame(reasonKey) {
-      if (!state.running) return;
-      state.running = false;
-      state.lock = true;
-      stopTimer();
-      updateTurn();
-      showMessage(reasonKey === 'timeUp' ? t('timeUp') : t('allMatched'));
-      beep('end');
-      const sorted = [...state.teams].sort((a, b) => b.score - a.score || a.attempts - b.attempts);
-      const topScore = sorted[0]?.score ?? 0;
-      const winners = sorted.filter(team => team.score === topScore);
-      $('endTitle').textContent = winners.length > 1 ? `${t('gameOver')} · ${t('draw')}` : `${t('gameOver')} · ${winners[0].name} ${t('winner')}`;
-      $('endDesc').textContent = `${reasonKey === 'timeUp' ? t('timeUp') : t('allMatched')} ${t('resultDesc')}`;
-      $('winnerList').innerHTML = sorted.map((team, i) => `
-        <div class="winner-row">
-          <span>${i + 1}. ${team.emoji} ${escapeHtml(team.name)}</span>
-          <span>${team.score}</span>
+  <div class="settings-overlay" id="settingsOverlay">
+    <div class="settings-modal">
+      <div class="settings-head">
+        <h2 id="settingsTitle">老师设定</h2>
+        <div id="settingsSub" style="margin-top:6px; font-weight:900">可直接修改题库与规则，三语界面会自动切换。</div>
+      </div>
+      <div class="settings-grid">
+        <div>
+          <label id="setTeamCountLabel">分组数量</label>
+          <select id="teamCountInput"></select>
         </div>
-      `).join('');
-      $('endModal').classList.add('show');
-    }
+        <div>
+          <label id="setStageCountLabel">关卡数量</label>
+          <select id="stageCountInput"></select>
+        </div>
+        <div>
+          <label id="setTimeLimitLabel">每关时间</label>
+          <select id="timeLimitInput"></select>
+        </div>
+        <div>
+          <label id="setPairCountLabel">每关牌组数量</label>
+          <select id="pairCountInput"></select>
+        </div>
+        <div>
+          <label id="setCorrectTurnLabel">答对后</label>
+          <select id="correctTurnInput"></select>
+        </div>
+        <div>
+          <label id="setWrongTurnLabel">答错后</label>
+          <select id="wrongTurnInput"></select>
+        </div>
+        <div class="full">
+          <label id="setTeamNamesLabel">队伍名称（逗号分隔）</label>
+          <input id="teamNamesInput" type="text" />
+        </div>
+        <div class="full">
+          <label id="setQuestionBankLabel">配对题库（每行：左边,右边）</label>
+          <textarea id="bankInput"></textarea>
+        </div>
+      </div>
+      <div class="setting-actions">
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="ghost-btn" id="loadSampleBtn">载入示例题库</button>
+          <button class="ghost-btn" id="exportTxtBtn">汇出 TXT</button>
+          <label class="ghost-btn" for="importTxtFile" id="importTxtLabel" style="display:inline-flex; align-items:center; cursor:pointer;">汇入 TXT</label>
+          <input id="importTxtFile" type="file" accept=".txt,.csv,text/plain" hidden />
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="ghost-btn" id="cancelSettingsBtn">取消</button>
+          <button class="solid-btn" id="applySettingsBtn">套用并重新开始</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    function stopTimer() {
-      if (state.timerId) clearInterval(state.timerId);
-      state.timerId = null;
-    }
+<script>
+const I18N = {
+  zh: {
+    pageTitle: 'S001 翻翻乐',
+    title: '翻翻乐',
+    subtitle: '记忆翻牌配对，适合暖身与小组竞赛',
+    langLabel: '语言',
+    ratioLabel: '比例',
+    timerLabel: '时间',
+    scoreLabel: '得分',
+    settingsBtn: '设置题库',
+    restartBtn: '重新开始',
+    fullscreenBtn: '全屏',
+    gameInfoTitle: '游戏信息',
+    levelLabel: '关卡',
+    teamLabel: '队伍',
+    openedLabel: '已翻开',
+    matchedLabel: '配对成功',
+    rulesTitle: '游戏规则',
+    rules: [
+      '记住卡片位置，翻出相同的配对卡片。',
+      '每次翻开 2 张卡片。',
+      '配对成功可得 1 分，并可依设定继续或换队。',
+      '在倒计时结束前，配对更多卡片获得更高分！'
+    ],
+    helperText: '记住位置，配对成功！加油哦！',
+    rankingTitle: '队伍排行榜',
+    progressTitle: '关卡进度',
+    currentStageText: '当前关卡：{current} / {total}',
+    tipTitle: '小提示',
+    tips: [
+      '先记住角落和边缘的卡片，能更快找到配对哦！',
+      '如果看到同类词汇，先留意它们出现的位置。',
+      '可以先从容易记住的图像或短词开始。'
+    ],
+    revealBtnTitle: '显示全部', revealBtnCount: '({count}次)',
+    hintBtnTitle: '提示一对', hintBtnCount: '({count}次)',
+    reshuffleBtnTitle: '重新洗牌', reshuffleBtnCount: '({count}次)',
+    skipBtnTitle: '跳过本轮', skipBtnCount: '({count}次)',
+    toastSuccess: '配对成功！',
+    toastSuccessSub: '{team} 获得 1 分',
+    toastNoMatch: '没有配对成功',
+    toastNoMatchSub: '记住位置，轮到下一步行动！',
+    stageClear: '过关成功！',
+    stageClearSub: '恭喜完成本关，一起来看看当前成绩。',
+    finalClear: '全部过关！',
+    finalClearSub: '太棒了！所有关卡都完成了。',
+    nextStageBtn: '下一关',
+    playAgainBtn: '重新开始',
+    closeBtn: '关闭',
+    settingsTitle: '老师设定',
+    settingsSub: '可直接修改题库与规则，三语界面会自动切换。',
+    setTeamCountLabel: '分组数量', setStageCountLabel: '关卡数量', setTimeLimitLabel: '每关时间', setPairCountLabel: '每关牌组数量', setCorrectTurnLabel: '答对后', setWrongTurnLabel: '答错后', setTeamNamesLabel: '队伍名称（逗号分隔）', setQuestionBankLabel: '配对题库（每行：左边,右边）',
+    loadSampleBtn: '载入示例题库', exportTxtBtn: '汇出 TXT', importTxtLabel: '汇入 TXT', cancelSettingsBtn: '取消', applySettingsBtn: '套用并重新开始',
+    options: {
+      teamCount: ['2组','3组','4组'],
+      stageCount: ['3关','4关','5关','6关'],
+      timeLimit: [['0','不限时'],['180','3分钟'],['300','5分钟'],['480','8分钟'],['600','10分钟']],
+      pairCount: [['6','6组 / 12张'],['8','8组 / 16张'],['10','10组 / 20张'],['12','12组 / 24张']],
+      afterCorrect: [['stay','继续作答'],['next','换下一组']],
+      afterWrong: [['next','换下一组'],['stay','继续作答']]
+    },
+    kindA:'左边', kindB:'右边',
+    teamDefaults:'红队,蓝队,绿队,紫队',
+    teamEmoji:['🔴','🔵','🟢','🟣'],
+    teamType:'队',
+    rankScore:'分',
+    statusReady:'请点击卡片开始配对吧！',
+    statusTurn:'当前回合：{team}',
+    statusSkipped:'已跳过，轮到 {team}',
+    askRestart:'要重新开始整个游戏吗？',
+    sampleLoaded:'已载入示例题库。',
+    needPairs:'题库不足，请至少输入 6 组配对。',
+    allShown:'已短暂显示全部卡片。',
+    hintShown:'已提示一组配对。',
+    noMoreHelp:'这个功能次数已经用完。',
+    stageWinner:'本关领先',
+    totalScore:'总分',
+    attempts:'尝试',
+    matchCount:'配对',
+    stageWord:'第 {n} 关',
+    importOk:'题库已汇入。',
+    settingsApplied:'设定已套用，并重新开始游戏。',
+    soundWin:'恭喜过关！',
+    sampleBank: '苹果,apple\n香蕉,banana\n老师,teacher\n学生,student\n书本,book\n小猫,cat\n马来文,Melayu\n英文,English\n人工智能,AI\n网络安全,Cybersecurity\n光合作用,Photosynthesis\n首都,Kuala Lumpur\n感谢,Thank you\n早安,Selamat pagi\n圆形,Circle\n三角形,Triangle'
+  },
+  en: {
+    pageTitle: 'S001 Memory Match',
+    title: 'Memory Match',
+    subtitle: 'Flip and match cards for warm-ups and team competition',
+    langLabel: 'Language',
+    ratioLabel: 'Ratio',
+    timerLabel: 'Timer',
+    scoreLabel: 'Score',
+    settingsBtn: 'Question Bank',
+    restartBtn: 'Restart',
+    fullscreenBtn: 'Fullscreen',
+    gameInfoTitle: 'Game Info',
+    levelLabel: 'Stage',
+    teamLabel: 'Team',
+    openedLabel: 'Cards Opened',
+    matchedLabel: 'Matched',
+    rulesTitle: 'Game Rules',
+    rules: [
+      'Remember card positions and flip the matching pair.',
+      'Flip 2 cards each turn.',
+      'A correct match gives 1 point and may keep the turn or pass, based on settings.',
+      'Match more pairs before time runs out to get a higher score!'
+    ],
+    helperText: 'Remember the positions and make the match. Let’s go!',
+    rankingTitle: 'Team Ranking',
+    progressTitle: 'Stage Progress',
+    currentStageText: 'Current Stage: {current} / {total}',
+    tipTitle: 'Hint',
+    tips: [
+      'Remember corner and edge cards first to find matches faster.',
+      'When you see related words, note where they appear.',
+      'Start with easy pictures or short words to build momentum.'
+    ],
+    revealBtnTitle: 'Show All', revealBtnCount: '({count} use)',
+    hintBtnTitle: 'Hint a Pair', hintBtnCount: '({count} use)',
+    reshuffleBtnTitle: 'Reshuffle', reshuffleBtnCount: '({count} use)',
+    skipBtnTitle: 'Skip Turn', skipBtnCount: '({count} use)',
+    toastSuccess: 'Matched!',
+    toastSuccessSub: '{team} gains 1 point',
+    toastNoMatch: 'Not a Match',
+    toastNoMatchSub: 'Remember the positions and keep going!',
+    stageClear: 'Stage Cleared!',
+    stageClearSub: 'Great job! Here are the current results.',
+    finalClear: 'All Stages Cleared!',
+    finalClearSub: 'Excellent! You completed every stage.',
+    nextStageBtn: 'Next Stage',
+    playAgainBtn: 'Play Again',
+    closeBtn: 'Close',
+    settingsTitle: 'Teacher Settings',
+    settingsSub: 'You can edit the bank and rules here. All UI text changes with the selected language.',
+    setTeamCountLabel: 'Number of Teams', setStageCountLabel: 'Number of Stages', setTimeLimitLabel: 'Time per Stage', setPairCountLabel: 'Pairs per Stage', setCorrectTurnLabel: 'After Correct Match', setWrongTurnLabel: 'After Wrong Match', setTeamNamesLabel: 'Team Names (comma-separated)', setQuestionBankLabel: 'Matching Bank (one line: left,right)',
+    loadSampleBtn: 'Load Sample Bank', exportTxtBtn: 'Export TXT', importTxtLabel: 'Import TXT', cancelSettingsBtn: 'Cancel', applySettingsBtn: 'Apply & Restart',
+    options: {
+      teamCount: ['2 Teams','3 Teams','4 Teams'],
+      stageCount: ['3 Stages','4 Stages','5 Stages','6 Stages'],
+      timeLimit: [['0','No limit'],['180','3 min'],['300','5 min'],['480','8 min'],['600','10 min']],
+      pairCount: [['6','6 pairs / 12 cards'],['8','8 pairs / 16 cards'],['10','10 pairs / 20 cards'],['12','12 pairs / 24 cards']],
+      afterCorrect: [['stay','Same team continues'],['next','Next team']],
+      afterWrong: [['next','Next team'],['stay','Same team continues']]
+    },
+    kindA:'Left', kindB:'Right',
+    teamDefaults:'Red Team,Blue Team,Green Team,Purple Team',
+    teamEmoji:['🔴','🔵','🟢','🟣'],
+    teamType:'Team',
+    rankScore:'pts',
+    statusReady:'Tap a card to start matching!',
+    statusTurn:'Current turn: {team}',
+    statusSkipped:'Turn skipped. Now it is {team}',
+    askRestart:'Restart the whole game?',
+    sampleLoaded:'Sample bank loaded.',
+    needPairs:'Not enough pairs. Please enter at least 6 matching pairs.',
+    allShown:'All cards were shown briefly.',
+    hintShown:'One pair has been highlighted.',
+    noMoreHelp:'No more uses left for this feature.',
+    stageWinner:'Leading Team',
+    totalScore:'Total Score',
+    attempts:'Attempts',
+    matchCount:'Matches',
+    stageWord:'Stage {n}',
+    importOk:'Question bank imported.',
+    settingsApplied:'Settings applied and the game restarted.',
+    soundWin:'Stage clear!',
+    sampleBank: 'apple,苹果\nbanana,香蕉\nteacher,老师\nstudent,学生\nbook,书本\ncat,小猫\nMalay,Melayu\nEnglish,英文\nAI,人工智能\nCybersecurity,网络安全\nPhotosynthesis,光合作用\nCapital,Kuala Lumpur\nThank you,感谢\nGood morning,Selamat pagi\nCircle,圆形\nTriangle,三角形'
+  },
+  ms: {
+    pageTitle: 'S001 Padanan Memori',
+    title: 'Padanan Memori',
+    subtitle: 'Buka dan padankan kad untuk pemanasan serta pertandingan berkumpulan',
+    langLabel: 'Bahasa',
+    ratioLabel: 'Nisbah',
+    timerLabel: 'Masa',
+    scoreLabel: 'Skor',
+    settingsBtn: 'Tetapan Bank Soalan',
+    restartBtn: 'Mula Semula',
+    fullscreenBtn: 'Skrin Penuh',
+    gameInfoTitle: 'Maklumat Permainan',
+    levelLabel: 'Peringkat',
+    teamLabel: 'Kumpulan',
+    openedLabel: 'Kad Dibuka',
+    matchedLabel: 'Padanan Berjaya',
+    rulesTitle: 'Peraturan Permainan',
+    rules: [
+      'Ingat kedudukan kad dan buka pasangan yang sepadan.',
+      'Setiap giliran membuka 2 kad.',
+      'Padanan betul memberi 1 markah dan giliran boleh kekal atau berpindah ikut tetapan.',
+      'Padankan lebih banyak kad sebelum masa tamat untuk skor yang lebih tinggi!'
+    ],
+    helperText: 'Ingat kedudukan kad dan berjaya memadankan! Semangat!',
+    rankingTitle: 'Kedudukan Kumpulan',
+    progressTitle: 'Kemajuan Peringkat',
+    currentStageText: 'Peringkat Semasa: {current} / {total}',
+    tipTitle: 'Petua',
+    tips: [
+      'Ingat dahulu kad di penjuru dan tepi untuk mencari padanan lebih cepat.',
+      'Jika nampak perkataan yang berkaitan, perhatikan lokasinya.',
+      'Mulakan dengan gambar mudah atau perkataan pendek untuk bina keyakinan.'
+    ],
+    revealBtnTitle: 'Tunjuk Semua', revealBtnCount: '({count} kali)',
+    hintBtnTitle: 'Petunjuk Sepasang', hintBtnCount: '({count} kali)',
+    reshuffleBtnTitle: 'Kocok Semula', reshuffleBtnCount: '({count} kali)',
+    skipBtnTitle: 'Langkau Giliran', skipBtnCount: '({count} kali)',
+    toastSuccess: 'Padanan Berjaya!',
+    toastSuccessSub: '{team} mendapat 1 markah',
+    toastNoMatch: 'Tidak Sepadan',
+    toastNoMatchSub: 'Ingat lokasi kad dan cuba lagi!',
+    stageClear: 'Peringkat Selesai!',
+    stageClearSub: 'Syabas! Lihat keputusan semasa di bawah.',
+    finalClear: 'Semua Peringkat Selesai!',
+    finalClearSub: 'Hebat! Semua peringkat telah berjaya diselesaikan.',
+    nextStageBtn: 'Peringkat Seterusnya',
+    playAgainBtn: 'Main Semula',
+    closeBtn: 'Tutup',
+    settingsTitle: 'Tetapan Guru',
+    settingsSub: 'Anda boleh ubah bank soalan dan peraturan di sini. Semua teks akan berubah mengikut bahasa yang dipilih.',
+    setTeamCountLabel: 'Bilangan Kumpulan', setStageCountLabel: 'Bilangan Peringkat', setTimeLimitLabel: 'Masa Setiap Peringkat', setPairCountLabel: 'Bilangan Pasangan Setiap Peringkat', setCorrectTurnLabel: 'Selepas Betul', setWrongTurnLabel: 'Selepas Salah', setTeamNamesLabel: 'Nama Kumpulan (dipisahkan dengan koma)', setQuestionBankLabel: 'Bank Padanan (setiap baris: kiri,kanan)',
+    loadSampleBtn: 'Muat Bank Contoh', exportTxtBtn: 'Eksport TXT', importTxtLabel: 'Import TXT', cancelSettingsBtn: 'Batal', applySettingsBtn: 'Guna & Mula Semula',
+    options: {
+      teamCount: ['2 Kumpulan','3 Kumpulan','4 Kumpulan'],
+      stageCount: ['3 Peringkat','4 Peringkat','5 Peringkat','6 Peringkat'],
+      timeLimit: [['0','Tiada had'],['180','3 minit'],['300','5 minit'],['480','8 minit'],['600','10 minit']],
+      pairCount: [['6','6 pasangan / 12 kad'],['8','8 pasangan / 16 kad'],['10','10 pasangan / 20 kad'],['12','12 pasangan / 24 kad']],
+      afterCorrect: [['stay','Kumpulan sama terus'],['next','Kumpulan seterusnya']],
+      afterWrong: [['next','Kumpulan seterusnya'],['stay','Kumpulan sama terus']]
+    },
+    kindA:'Kiri', kindB:'Kanan',
+    teamDefaults:'Kumpulan Merah,Kumpulan Biru,Kumpulan Hijau,Kumpulan Ungu',
+    teamEmoji:['🔴','🔵','🟢','🟣'],
+    teamType:'Kumpulan',
+    rankScore:'mata',
+    statusReady:'Sentuh kad untuk mula memadankan!',
+    statusTurn:'Giliran semasa: {team}',
+    statusSkipped:'Giliran dilangkau. Kini giliran {team}',
+    askRestart:'Mulakan semula keseluruhan permainan?',
+    sampleLoaded:'Bank contoh telah dimuatkan.',
+    needPairs:'Pasangan tidak mencukupi. Sila masukkan sekurang-kurangnya 6 pasangan.',
+    allShown:'Semua kad telah dipaparkan sebentar.',
+    hintShown:'Satu pasangan telah ditonjolkan.',
+    noMoreHelp:'Penggunaan untuk fungsi ini telah habis.',
+    stageWinner:'Pendahulu',
+    totalScore:'Jumlah Skor',
+    attempts:'Cubaan',
+    matchCount:'Padanan',
+    stageWord:'Peringkat {n}',
+    importOk:'Bank soalan telah diimport.',
+    settingsApplied:'Tetapan telah digunakan dan permainan dimulakan semula.',
+    soundWin:'Peringkat selesai!',
+    sampleBank: 'epal,apple\npisang,banana\nguru,teacher\nmurid,student\nbuku,book\nkucing,cat\nBahasa Melayu,Melayu\nBahasa Inggeris,English\nAI,kecerdasan buatan\nKeselamatan Siber,Cybersecurity\nFotosintesis,Photosynthesis\nIbu negara,Kuala Lumpur\nTerima kasih,Thank you\nSelamat pagi,Good morning\nBulatan,Circle\nSegi tiga,Triangle'
+  }
+};
 
-    function updateTimerText() {
-      const val = Number($('timeLimit').value);
-      if (val === 0 && !state.running) {
-        $('timerText').textContent = '∞';
-        return;
-      }
-      if (state.running && Number($('timeLimit').value) === 0) {
-        $('timerText').textContent = '∞';
-        return;
-      }
-      const seconds = state.running ? state.secondsLeft : Number($('timeLimit').value);
-      if (seconds === 0) {
-        $('timerText').textContent = '∞';
-        return;
-      }
-      const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-      const s = Math.floor(seconds % 60).toString().padStart(2, '0');
-      $('timerText').textContent = `${m}:${s}`;
-    }
+const ICON_MAP = {
+  'apple':'🍎','苹果':'🍎','epal':'🍎',
+  'banana':'🍌','香蕉':'🍌','pisang':'🍌',
+  'teacher':'👩‍🏫','老师':'👩‍🏫','guru':'👩‍🏫',
+  'student':'🧒','学生':'🧒','murid':'🧒',
+  'book':'📕','书本':'📕','buku':'📕',
+  'cat':'🐱','小猫':'🐱','kucing':'🐱',
+  'ai':'🤖','人工智能':'🤖','kecerdasan buatan':'🤖',
+  'cybersecurity':'🛡️','网络安全':'🛡️','keselamatan siber':'🛡️',
+  'photosynthesis':'🌿','光合作用':'🌿','fotosintesis':'🌿',
+  'kuala lumpur':'🏙️','首都':'🏙️','ibu negara':'🏙️',
+  'english':'🔤','英文':'🔤','bahasa inggeris':'🔤',
+  'melayu':'📝','马来文':'📝','bahasa melayu':'📝',
+  'circle':'⚪','圆形':'⚪','bulatan':'⚪',
+  'triangle':'🔺','三角形':'🔺','segi tiga':'🔺',
+  'thank you':'🙏','感谢':'🙏','terima kasih':'🙏',
+  'good morning':'🌅','早安':'🌅','selamat pagi':'🌅'
+};
 
-    function exportTxt() {
-      const blob = new Blob([$('bank').value], { type: 'text/plain;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'memory-match-bank.txt';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
+const state = {
+  lang: 'zh',
+  ratio: '16:9',
+  running: false,
+  stage: 1,
+  stageCount: 5,
+  totalPairs: 8,
+  timerLimit: 300,
+  secondsLeft: 300,
+  timerId: null,
+  teamCount: 2,
+  correctTurn: 'stay',
+  wrongTurn: 'next',
+  teams: [],
+  currentTeam: 0,
+  cards: [],
+  flipped: [],
+  locked: false,
+  matchedPairs: 0,
+  openedCount: 0,
+  stagePairPool: [],
+  helpUses: { reveal: 3, hint: 2, reshuffle: 1, skip: 1 },
+  teamNames: '',
+  bankText: '',
+  settingsDirty: false,
+  gameStartedOnce: false
+};
 
-    function importTxt(file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        $('bank').value = String(reader.result || '');
-        saveSettings();
-      };
-      reader.readAsText(file, 'utf-8');
-    }
+const $ = id => document.getElementById(id);
+const bySel = sel => document.querySelector(sel);
+const t = (k) => I18N[state.lang][k];
+const format = (str, vars={}) => String(str).replace(/\{(\w+)\}/g, (_,k)=> vars[k] ?? '');
 
-    function beep(type) {
-      if (!state.sound) return;
-      try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const ctx = new AudioContext();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const now = ctx.currentTime;
-        const map = {
-          flip: [520, .045],
-          correct: [760, .12],
-          wrong: [180, .16],
-          start: [620, .12],
-          end: [420, .18]
-        };
-        const [freq, dur] = map[type] || map.flip;
-        osc.frequency.setValueAtTime(freq, now);
-        if (type === 'correct') osc.frequency.exponentialRampToValueAtTime(980, now + dur);
-        if (type === 'wrong') osc.frequency.exponentialRampToValueAtTime(110, now + dur);
-        gain.gain.setValueAtTime(.001, now);
-        gain.gain.exponentialRampToValueAtTime(.12, now + .01);
-        gain.gain.exponentialRampToValueAtTime(.001, now + dur);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + dur + .02);
-        setTimeout(() => ctx.close(), (dur + .08) * 1000);
-      } catch (e) {}
-    }
+function saveLocal(){
+  const data = {
+    lang: state.lang,
+    ratio: state.ratio,
+    stageCount: state.stageCount,
+    teamCount: state.teamCount,
+    timerLimit: state.timerLimit,
+    totalPairs: state.totalPairs,
+    correctTurn: state.correctTurn,
+    wrongTurn: state.wrongTurn,
+    teamNames: state.teamNames,
+    bankText: state.bankText
+  };
+  localStorage.setItem('s001_memory_match_v2', JSON.stringify(data));
+}
 
-    function escapeHtml(str) {
-      return String(str)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
-    }
+function loadLocal(){
+  const raw = localStorage.getItem('s001_memory_match_v2');
+  if(raw){
+    try{
+      const d = JSON.parse(raw);
+      state.lang = d.lang || 'zh';
+      state.ratio = d.ratio || '16:9';
+      state.stageCount = Number(d.stageCount || 5);
+      state.teamCount = Number(d.teamCount || 2);
+      state.timerLimit = Number(d.timerLimit ?? 300);
+      state.totalPairs = Number(d.totalPairs || 8);
+      state.correctTurn = d.correctTurn || 'stay';
+      state.wrongTurn = d.wrongTurn || 'next';
+      state.teamNames = d.teamNames || I18N[state.lang].teamDefaults;
+      state.bankText = d.bankText || I18N[state.lang].sampleBank;
+      return;
+    }catch(e){}
+  }
+  state.teamNames = I18N[state.lang].teamDefaults;
+  state.bankText = I18N[state.lang].sampleBank;
+}
 
-    function initEvents() {
-      $('lang').addEventListener('change', () => {
-        state.lang = $('lang').value;
-        applyLanguage();
-      });
-      ['teamCount', 'timeLimit', 'pairCount', 'correctTurn', 'wrongTurn', 'bank'].forEach(id => {
-        $(id).addEventListener('change', () => {
-          saveSettings();
-          if (!state.running && (id === 'pairCount' || id === 'timeLimit')) resetGame();
-        });
-      });
-      $('teamNames').addEventListener('input', () => {
-        $('teamNames').dataset.customized = '1';
-        saveSettings();
-        if (!state.running) setupTeams();
-      });
-      $('startBtn').onclick = startGame;
-      $('resetBtn').onclick = resetGame;
-      $('shuffleBtn').onclick = reshuffle;
-      $('showSettingsBtn').onclick = exitGameOnlyMode;
-      $('gameResetBtn').onclick = resetGame;
-      $('gameReshuffleBtn').onclick = reshuffle;
-      $('sampleBtn').onclick = () => {
-        $('bank').value = t('sampleBank');
-        saveSettings();
-        showMessage(state.lang === 'zh' ? '已载入示例题库。' : state.lang === 'ms' ? 'Bank sampel telah dimuatkan.' : 'Sample bank loaded.');
-      };
-      $('exportBtn').onclick = exportTxt;
-      $('importFile').addEventListener('change', (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (file) importTxt(file);
-        e.target.value = '';
-      });
-      $('fullscreenBtn').onclick = () => {
-        if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
-        else document.exitFullscreen?.();
-      };
-      $('soundBtn').onclick = () => {
-        state.sound = !state.sound;
-        $('soundBtn').textContent = state.sound ? t('soundOn') : t('soundOff');
-        saveSettings();
-      };
-      $('playAgainBtn').onclick = startGame;
-      $('closeModalBtn').onclick = () => $('endModal').classList.remove('show');
+function populateOptionSelect(select, items, values){
+  select.innerHTML = '';
+  items.forEach((txt,i)=>{
+    const op = document.createElement('option');
+    if(Array.isArray(txt)){
+      op.value = txt[0]; op.textContent = txt[1];
+    } else {
+      op.value = values ? values[i] : (i+2).toString();
+      op.textContent = txt;
     }
+    select.appendChild(op);
+  });
+}
 
-    function init() {
-      loadSettings();
-      initEvents();
-      applyLanguage();
-      setupTeams();
-      resetGame();
-      showMessage(t('readyMsg'));
+function applyLanguage(){
+  document.documentElement.lang = state.lang === 'zh' ? 'zh-CN' : state.lang;
+  document.title = t('pageTitle');
+  $('langSelect').value = state.lang;
+  $('ratioSelect').value = state.ratio;
+  $('ratioLabel').textContent = t('ratioLabel');
+  $('titleMain').textContent = t('title');
+  $('titleSub').textContent = t('subtitle');
+  $('langLabel').textContent = t('langLabel');
+  $('timerLabel').textContent = t('timerLabel');
+  $('scoreLabel').textContent = t('scoreLabel');
+  $('settingsBtn').textContent = t('settingsBtn');
+  $('restartBtn').textContent = t('restartBtn');
+  $('fullscreenBtn').textContent = t('fullscreenBtn');
+  $('gameInfoTitle').textContent = t('gameInfoTitle');
+  $('levelLabel').textContent = t('levelLabel');
+  $('teamLabel').textContent = t('teamLabel');
+  $('openedLabel').textContent = t('openedLabel');
+  $('matchedLabel').textContent = t('matchedLabel');
+  $('rulesTitle').textContent = t('rulesTitle');
+  $('helperText').textContent = t('helperText');
+  $('rankingTitle').textContent = t('rankingTitle');
+  $('progressTitle').textContent = t('progressTitle');
+  $('tipTitle').textContent = t('tipTitle');
+  $('settingsTitle').textContent = t('settingsTitle');
+  $('settingsSub').textContent = t('settingsSub');
+  $('setTeamCountLabel').textContent = t('setTeamCountLabel');
+  $('setStageCountLabel').textContent = t('setStageCountLabel');
+  $('setTimeLimitLabel').textContent = t('setTimeLimitLabel');
+  $('setPairCountLabel').textContent = t('setPairCountLabel');
+  $('setCorrectTurnLabel').textContent = t('setCorrectTurnLabel');
+  $('setWrongTurnLabel').textContent = t('setWrongTurnLabel');
+  $('setTeamNamesLabel').textContent = t('setTeamNamesLabel');
+  $('setQuestionBankLabel').textContent = t('setQuestionBankLabel');
+  $('loadSampleBtn').textContent = t('loadSampleBtn');
+  $('exportTxtBtn').textContent = t('exportTxtBtn');
+  $('importTxtLabel').textContent = t('importTxtLabel');
+  $('cancelSettingsBtn').textContent = t('cancelSettingsBtn');
+  $('applySettingsBtn').textContent = t('applySettingsBtn');
+  $('nextStageBtn').textContent = t('nextStageBtn');
+  $('playAgainBtn').textContent = t('playAgainBtn');
+  $('closeStageModalBtn').textContent = t('closeBtn');
+
+  populateOptionSelect($('teamCountInput'), t('options').teamCount, ['2','3','4']);
+  populateOptionSelect($('stageCountInput'), t('options').stageCount, ['3','4','5','6']);
+  populateOptionSelect($('timeLimitInput'), t('options').timeLimit);
+  populateOptionSelect($('pairCountInput'), t('options').pairCount);
+  populateOptionSelect($('correctTurnInput'), t('options').afterCorrect);
+  populateOptionSelect($('wrongTurnInput'), t('options').afterWrong);
+
+  renderRules();
+  updateActionButtons();
+  updateProgressPanel();
+  updateInfoPanel();
+  renderRanking();
+  renderBoard();
+  saveLocal();
+}
+
+function renderRules(){
+  $('ruleList').innerHTML = t('rules').map(r=>`<li>${escapeHtml(r)}</li>`).join('');
+}
+
+function parseBank(text){
+  return text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(line=>{
+    let parts = line.split(/[,|\t]/).map(s=>s.trim());
+    const left = parts[0] || ''; const right = parts.slice(1).join(',').trim();
+    return {left,right};
+  }).filter(x=>x.left && x.right);
+}
+
+function prepareTeams(){
+  const rawNames = (state.teamNames || t('teamDefaults')).split(',').map(s=>s.trim()).filter(Boolean);
+  const defaults = t('teamDefaults').split(',');
+  state.teams = Array.from({length:state.teamCount}, (_,i)=>(
+    {
+      name: rawNames[i] || defaults[i] || `${t('teamType')} ${i+1}`,
+      emoji: t('teamEmoji')[i] || '👥',
+      score: 0,
+      matches: 0,
+      attempts: 0
     }
+  ));
+  state.currentTeam = 0;
+}
 
-    init();
-  </script>
+function resetHelpUses(){ state.helpUses = { reveal:3, hint:2, reshuffle:1, skip:1 }; }
+
+function iconForText(text){
+  const key = String(text || '').trim().toLowerCase();
+  return ICON_MAP[key] || '';
+}
+
+function choosePairsForStage(){
+  const pool = parseBank(state.bankText);
+  if(pool.length < 6) return null;
+  const shuffled = shuffle(pool);
+  return shuffled.slice(0, Math.min(state.totalPairs, pool.length));
+}
+
+function buildStageCards(){
+  const pairs = choosePairsForStage();
+  if(!pairs) return false;
+  state.stagePairPool = pairs;
+  const cards = [];
+  pairs.forEach((pair, idx)=>{
+    cards.push({ uid:`${idx}-a`, matchId:`m-${idx}`, text:pair.left, kindKey:'kindA', matched:false, icon:iconForText(pair.left)});
+    cards.push({ uid:`${idx}-b`, matchId:`m-${idx}`, text:pair.right, kindKey:'kindB', matched:false, icon:iconForText(pair.right)});
+  });
+  state.cards = shuffle(cards);
+  state.matchedPairs = 0;
+  state.openedCount = 0;
+  state.flipped = [];
+  state.locked = false;
+  return true;
+}
+
+function getCols(){
+  const n = state.cards.length;
+  if(n <= 16) return 4;
+  if(n <= 20) return 5;
+  return 6;
+}
+
+function renderBoard(){
+  const board = $('board');
+  board.className = `board cols-${getCols()}`;
+  board.innerHTML = '';
+  state.cards.forEach(card=>{
+    const btn = document.createElement('button');
+    btn.className = `card ${card.matched ? 'matched':''}`;
+    if(card.flipped) btn.classList.add('flipped');
+    btn.dataset.uid = card.uid;
+    btn.disabled = !state.running || card.matched;
+    btn.innerHTML = `
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="star-mini s1">⭐</div>
+          <div class="star-mini s2">⭐</div>
+          <div class="star-mini s3">⭐</div>
+          <div class="star-mark">★</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="card-icon">${card.icon || '📘'}</div>
+          <div class="card-text">${escapeHtml(card.text)}</div>
+          <div class="card-kind">${escapeHtml(t(card.kindKey || "kindA"))}</div>
+        </div>
+      </div>`;
+    btn.addEventListener('click', ()=>flipCard(card.uid));
+    board.appendChild(btn);
+  });
+}
+
+function updateInfoPanel(){
+  $('stageValue').textContent = `${state.stage} / ${state.stageCount}`;
+  $('currentTeamName').textContent = state.teams[state.currentTeam] ? `${state.teams[state.currentTeam].emoji} ${state.teams[state.currentTeam].name}` : '--';
+  $('openedValue').textContent = state.openedCount;
+  $('matchedValue').textContent = `${state.matchedPairs} / ${state.totalPairs}`;
+  const totalScore = state.teams.reduce((sum, t)=> sum + t.score, 0);
+  $('scoreText').textContent = totalScore;
+  $('currentStageText').textContent = format(t('currentStageText'), {current: state.stage, total: state.stageCount});
+  $('tipText').textContent = t('tips')[(state.stage-1) % t('tips').length];
+}
+
+function renderRanking(){
+  const sorted = [...state.teams].sort((a,b)=> b.score-a.score || a.attempts-b.attempts);
+  $('rankingList').innerHTML = sorted.map((team, idx)=>{
+    const medalClass = ['m1','m2','m3','m4'][idx] || 'm4';
+    return `<div class="rank-row">
+      <div class="medal ${medalClass}">${idx+1}</div>
+      <div>
+        <div style="font-size:20px">${team.emoji} ${escapeHtml(team.name)}</div>
+        <div style="font-size:13px; color:#5271a4; margin-top:2px">${t('matchCount')}: ${team.matches} · ${t('attempts')}: ${team.attempts}</div>
+      </div>
+      <div style="font-size:18px">${team.score} ${t('rankScore')}</div>
+    </div>`;
+  }).join('');
+}
+
+function updateProgressPanel(){
+  $('stageDots').innerHTML = Array.from({length: state.stageCount}, (_,i)=>{
+    const n = i+1;
+    return `<div class="stage-dot ${n===state.stage?'active':''}">${n}</div>`;
+  }).join('');
+}
+
+function updateActionButtons(){
+  $('revealBtnTitle').textContent = t('revealBtnTitle');
+  $('revealBtnCount').textContent = format(t('revealBtnCount'), {count: state.helpUses.reveal});
+  $('hintBtnTitle').textContent = t('hintBtnTitle');
+  $('hintBtnCount').textContent = format(t('hintBtnCount'), {count: state.helpUses.hint});
+  $('reshuffleBtnTitle').textContent = t('reshuffleBtnTitle');
+  $('reshuffleBtnCount').textContent = format(t('reshuffleBtnCount'), {count: state.helpUses.reshuffle});
+  $('skipBtnTitle').textContent = t('skipBtnTitle');
+  $('skipBtnCount').textContent = format(t('skipBtnCount'), {count: state.helpUses.skip});
+  $('revealBtn').disabled = state.helpUses.reveal <= 0 || !state.running || state.locked;
+  $('hintBtn').disabled = state.helpUses.hint <= 0 || !state.running || state.locked;
+  $('reshuffleBtn').disabled = state.helpUses.reshuffle <= 0 || !state.running || state.locked;
+  $('skipBtn').disabled = state.helpUses.skip <= 0 || !state.running || state.locked;
+}
+
+function startTimer(){
+  stopTimer();
+  state.secondsLeft = state.timerLimit;
+  updateTimerText();
+  if(state.timerLimit === 0) return;
+  state.timerId = setInterval(()=>{
+    state.secondsLeft--;
+    updateTimerText();
+    if(state.secondsLeft <= 0){
+      stopTimer();
+      finishStage(false, 'time');
+    }
+  }, 1000);
+}
+
+function stopTimer(){ if(state.timerId){ clearInterval(state.timerId); state.timerId = null; } }
+function updateTimerText(){
+  if(state.timerLimit === 0){ $('timerText').textContent = '∞'; return; }
+  const sec = Math.max(state.secondsLeft, 0);
+  const m = String(Math.floor(sec/60)).padStart(2,'0');
+  const s = String(sec%60).padStart(2,'0');
+  $('timerText').textContent = `${m}:${s}`;
+}
+
+function startGame(resetTeams=true){
+  if(resetTeams) prepareTeams();
+  if(!buildStageCards()){
+    alert(t('needPairs')); return;
+  }
+  state.running = true;
+  state.flipped = [];
+  state.locked = false;
+  resetHelpUses();
+  startTimer();
+  renderBoard();
+  renderRanking();
+  updateProgressPanel();
+  updateInfoPanel();
+  updateActionButtons();
+  state.gameStartedOnce = true;
+}
+
+function restartAll(){
+  if(state.gameStartedOnce && !confirm(t('askRestart'))) return;
+  stopTimer();
+  state.stage = 1;
+  prepareTeams();
+  startGame(true);
+}
+
+function flipCard(uid){
+  if(!state.running || state.locked) return;
+  const card = state.cards.find(c=>c.uid===uid);
+  if(!card || card.matched || card.flipped) return;
+  if(state.flipped.length >= 2) return;
+  card.flipped = true;
+  state.flipped.push(card);
+  state.openedCount++;
+  renderBoard();
+  updateInfoPanel();
+  beep('flip');
+  if(state.flipped.length === 2) checkMatch();
+}
+
+function checkMatch(){
+  state.locked = true;
+  const [a,b] = state.flipped;
+  const team = state.teams[state.currentTeam];
+  team.attempts++;
+  if(a.matchId === b.matchId && a.uid !== b.uid){
+    a.matched = b.matched = true;
+    team.score += 1;
+    team.matches += 1;
+    state.matchedPairs += 1;
+    showToast(true, team.name);
+    beep('success');
+    setTimeout(()=>{
+      state.flipped = [];
+      state.locked = false;
+      if(state.correctTurn === 'next') nextTeam();
+      renderBoard();
+      renderRanking();
+      updateInfoPanel();
+      updateActionButtons();
+      if(state.matchedPairs >= state.totalPairs) finishStage(true, 'matched');
+    }, 650);
+  } else {
+    showToast(false);
+    beep('wrong');
+    setTimeout(()=>{
+      a.flipped = false; b.flipped = false;
+      state.flipped = [];
+      state.locked = false;
+      if(state.wrongTurn === 'next') nextTeam();
+      renderBoard();
+      renderRanking();
+      updateInfoPanel();
+      updateActionButtons();
+    }, 950);
+  }
+}
+
+function nextTeam(){
+  state.currentTeam = (state.currentTeam + 1) % state.teams.length;
+  updateInfoPanel();
+  renderRanking();
+}
+
+function finishStage(cleared, reason){
+  state.running = false;
+  state.locked = true;
+  stopTimer();
+  renderBoard();
+  renderRanking();
+  updateInfoPanel();
+  updateActionButtons();
+
+  const sorted = [...state.teams].sort((a,b)=> b.score-a.score || a.attempts-b.attempts);
+  $('winnerGrid').innerHTML = sorted.map((team, idx)=>`
+    <div class="winner-item">
+      <div class="medal ${['m1','m2','m3','m4'][idx] || 'm4'}">${idx+1}</div>
+      <div>
+        <div style="font-size:22px">${team.emoji} ${escapeHtml(team.name)}</div>
+        <div style="font-size:14px; color:#5879a9; margin-top:4px">${t('totalScore')}: ${team.score} · ${t('matchCount')}: ${team.matches} · ${t('attempts')}: ${team.attempts}</div>
+      </div>
+      <div style="font-size:20px">${team.score} ${t('rankScore')}</div>
+    </div>`).join('');
+
+  const finalStage = state.stage >= state.stageCount;
+  const title = finalStage ? t('finalClear') : t('stageClear');
+  const sub = finalStage ? t('finalClearSub') : t('stageClearSub');
+  $('modalTitle').textContent = title;
+  $('modalSub').textContent = sub;
+  $('nextStageBtn').style.display = finalStage ? 'none' : 'inline-block';
+  $('stageModalOverlay').classList.add('show');
+  beep('stage');
+}
+
+function showToast(success, team=''){
+  $('toastBig').textContent = success ? t('toastSuccess') : t('toastNoMatch');
+  $('toastSub').textContent = success ? format(t('toastSuccessSub'), {team}) : t('toastNoMatchSub');
+  $('toast').classList.add('show');
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(()=> $('toast').classList.remove('show'), 1200);
+}
+
+function revealAll(){
+  if(state.helpUses.reveal <= 0 || !state.running || state.locked) return showToast(false), $('toastSub').textContent=t('noMoreHelp');
+  state.helpUses.reveal--;
+  const affected = state.cards.filter(c=>!c.matched);
+  affected.forEach(c=>c.flipped = true);
+  renderBoard(); updateActionButtons();
+  setTimeout(()=>{
+    state.cards.filter(c=>!c.matched).forEach(c=>c.flipped = false);
+    renderBoard();
+  }, 1600);
+}
+
+function hintPair(){
+  if(state.helpUses.hint <= 0 || !state.running || state.locked) return showToast(false), $('toastSub').textContent=t('noMoreHelp');
+  state.helpUses.hint--;
+  const unmatched = state.cards.filter(c=>!c.matched);
+  const seen = new Map(); let pair = [];
+  for(const c of unmatched){
+    if(seen.has(c.matchId)){ pair=[seen.get(c.matchId), c]; break; }
+    seen.set(c.matchId, c);
+  }
+  if(pair.length){
+    pair.forEach(c=> bySel(`[data-uid="${c.uid}"]`)?.classList.add('hint-glow'));
+    setTimeout(()=> pair.forEach(c=> bySel(`[data-uid="${c.uid}"]`)?.classList.remove('hint-glow')), 2600);
+  }
+  updateActionButtons();
+}
+
+function reshuffleRemaining(){
+  if(state.helpUses.reshuffle <= 0 || !state.running || state.locked) return showToast(false), $('toastSub').textContent=t('noMoreHelp');
+  state.helpUses.reshuffle--;
+  const matched = state.cards.filter(c=>c.matched);
+  const unmatched = shuffle(state.cards.filter(c=>!c.matched).map(c=>({...c, flipped:false})));
+  const result = [];
+  let u=0, m=0;
+  state.cards.forEach(c=>{ result.push(c.matched ? matched[m++] : unmatched[u++]); });
+  state.cards = result;
+  state.flipped = []; state.locked = false;
+  renderBoard(); updateActionButtons(); beep('flip');
+}
+
+function skipTurn(){
+  if(state.helpUses.skip <= 0 || !state.running || state.locked) return showToast(false), $('toastSub').textContent=t('noMoreHelp');
+  state.helpUses.skip--;
+  state.flipped.forEach(c=>c.flipped=false);
+  state.flipped = [];
+  nextTeam();
+  renderBoard(); updateActionButtons();
+}
+
+function openSettings(){
+  syncStateToSettings();
+  $('settingsOverlay').classList.add('show');
+}
+function closeSettings(){ $('settingsOverlay').classList.remove('show'); }
+
+function syncStateToSettings(){
+  $('teamCountInput').value = String(state.teamCount);
+  $('stageCountInput').value = String(state.stageCount);
+  $('timeLimitInput').value = String(state.timerLimit);
+  $('pairCountInput').value = String(state.totalPairs);
+  $('correctTurnInput').value = state.correctTurn;
+  $('wrongTurnInput').value = state.wrongTurn;
+  $('teamNamesInput').value = state.teamNames;
+  $('bankInput').value = state.bankText;
+}
+
+function applySettingsFromForm(){
+  state.teamCount = Number($('teamCountInput').value);
+  state.stageCount = Number($('stageCountInput').value);
+  state.timerLimit = Number($('timeLimitInput').value);
+  state.totalPairs = Number($('pairCountInput').value);
+  state.correctTurn = $('correctTurnInput').value;
+  state.wrongTurn = $('wrongTurnInput').value;
+  state.teamNames = $('teamNamesInput').value.trim() || t('teamDefaults');
+  state.bankText = $('bankInput').value.trim() || t('sampleBank');
+  saveLocal();
+  closeSettings();
+  state.stage = 1;
+  prepareTeams();
+  startGame(true);
+}
+
+function exportTxt(){
+  const blob = new Blob([state.bankText], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'S001-memory-match-bank.txt'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importTxt(file){
+  const reader = new FileReader();
+  reader.onload = ()=>{ $('bankInput').value = String(reader.result || ''); };
+  reader.readAsText(file, 'utf-8');
+}
+
+function nextStage(){
+  $('stageModalOverlay').classList.remove('show');
+  state.stage += 1;
+  startGame(false);
+}
+
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function beep(type){ try{ const AC = window.AudioContext || window.webkitAudioContext; const ctx = new AC(); const osc = ctx.createOscillator(); const gain=ctx.createGain(); const now=ctx.currentTime; const map={ flip:[600,.04], success:[900,.12], wrong:[180,.12], stage:[680,.2]}; const [f,d]=map[type]||map.flip; osc.frequency.setValueAtTime(f,now); if(type==='success'||type==='stage') osc.frequency.exponentialRampToValueAtTime(f*1.35, now+d); if(type==='wrong') osc.frequency.exponentialRampToValueAtTime(110, now+d); gain.gain.setValueAtTime(.001,now); gain.gain.exponentialRampToValueAtTime(.1,now+.01); gain.gain.exponentialRampToValueAtTime(.001,now+d); osc.connect(gain); gain.connect(ctx.destination); osc.start(now); osc.stop(now+d+.02); setTimeout(()=>ctx.close(), (d+.1)*1000);}catch(e){} }
+
+function fitStageToScreen(){
+  const app = document.querySelector('.app');
+  const mode = state.ratio || '16:9';
+  const design = mode === '4:3' ? {w:1200, h:900} : {w:1600, h:900};
+  document.body.classList.toggle('ratio-43', mode === '4:3');
+  document.body.classList.toggle('ratio-169', mode !== '4:3');
+  app.style.width = design.w + 'px';
+  app.style.height = design.h + 'px';
+  const scale = Math.min(window.innerWidth / design.w, window.innerHeight / design.h);
+  const left = Math.max(0, (window.innerWidth - design.w * scale) / 2);
+  const top = Math.max(0, (window.innerHeight - design.h * scale) / 2);
+  app.style.transform = `translate(${left}px, ${top}px) scale(${scale})`;
+}
+
+window.addEventListener('resize', fitStageToScreen);
+window.addEventListener('orientationchange', ()=> setTimeout(fitStageToScreen, 150));
+document.addEventListener('fullscreenchange', ()=> setTimeout(fitStageToScreen, 80));
+
+function bindEvents(){
+  $('langSelect').addEventListener('change', ()=>{
+    const priorTeamNames = state.teams.map(x=>x.name).join(',');
+    state.lang = $('langSelect').value;
+    if(!state.bankText || state.bankText === '' || state.bankText === I18N.zh.sampleBank || state.bankText===I18N.en.sampleBank || state.bankText===I18N.ms.sampleBank){ state.bankText = t('sampleBank'); }
+    const usedDefaultNames = !state.teamNames || state.teamNames===I18N.zh.teamDefaults || state.teamNames===I18N.en.teamDefaults || state.teamNames===I18N.ms.teamDefaults || priorTeamNames===I18N.zh.teamDefaults || priorTeamNames===I18N.en.teamDefaults || priorTeamNames===I18N.ms.teamDefaults;
+    if(usedDefaultNames){
+      state.teamNames = t('teamDefaults');
+      const defs = t('teamDefaults').split(',');
+      state.teams.forEach((team, i)=>{ if(team) team.name = defs[i] || team.name; team.emoji = t('teamEmoji')[i] || team.emoji; });
+    }
+    applyLanguage();
+  });
+  $('settingsBtn').addEventListener('click', openSettings);
+  $('cancelSettingsBtn').addEventListener('click', closeSettings);
+  $('applySettingsBtn').addEventListener('click', ()=>{ state.bankText = $('bankInput').value; applySettingsFromForm(); });
+  $('loadSampleBtn').addEventListener('click', ()=>{ $('bankInput').value = t('sampleBank'); });
+  $('exportTxtBtn').addEventListener('click', ()=>{ state.bankText = $('bankInput').value || state.bankText; exportTxt(); });
+  $('importTxtFile').addEventListener('change', e=>{ const file = e.target.files?.[0]; if(file) importTxt(file); e.target.value=''; });
+  $('restartBtn').addEventListener('click', restartAll);
+  $('fullscreenBtn').addEventListener('click', async ()=>{ 
+    if(!document.fullscreenElement) await document.documentElement.requestFullscreen?.();
+    else await document.exitFullscreen?.();
+    setTimeout(fitStageToScreen, 80);
+  });
+  $('ratioSelect').addEventListener('change', ()=>{
+    state.ratio = $('ratioSelect').value;
+    saveLocal();
+    fitStageToScreen();
+  });
+  $('revealBtn').addEventListener('click', revealAll);
+  $('hintBtn').addEventListener('click', hintPair);
+  $('reshuffleBtn').addEventListener('click', reshuffleRemaining);
+  $('skipBtn').addEventListener('click', skipTurn);
+  $('nextStageBtn').addEventListener('click', nextStage);
+  $('playAgainBtn').addEventListener('click', ()=>{ $('stageModalOverlay').classList.remove('show'); state.stage = 1; prepareTeams(); startGame(true); });
+  $('closeStageModalBtn').addEventListener('click', ()=> $('stageModalOverlay').classList.remove('show'));
+  $('settingsOverlay').addEventListener('click', (e)=>{ if(e.target === $('settingsOverlay')) closeSettings(); });
+  $('stageModalOverlay').addEventListener('click', (e)=>{ if(e.target === $('stageModalOverlay')) $('stageModalOverlay').classList.remove('show'); });
+}
+
+function init(){
+  loadLocal();
+  bindEvents();
+  applyLanguage();
+  prepareTeams();
+  syncStateToSettings();
+  startGame(true);
+  fitStageToScreen();
+}
+
+init();
+</script>
 </body>
 </html>

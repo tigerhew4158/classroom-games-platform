@@ -1,8 +1,8 @@
-# S002 真假判断快闪｜题库范例
-# 用途：快速判断概念是否正确。
-# 建议格式：题目 | true/false
-AI 可以帮助老师准备课堂活动。 | true
-所有网络资料都一定正确。 | false
-密码越简单越安全。 | false
-遇到可疑链接，应先检查来源。 | true
-使用 AI 生成内容时，也要检查事实。 | true
+Earth is the third planet from the Sun.,True,Earth is the third planet in the solar system.
+Passwords should be shared with close friends.,False,Passwords should remain private.
+Plants can make food through photosynthesis.,True,Plants use sunlight, water and carbon dioxide.
+All AI-generated images are always real.,False,Some AI-generated images are synthetic or misleading.
+The capital of Malaysia is Kuala Lumpur.,True,Kuala Lumpur is the national capital.
+Any unknown website link is safe to click.,False,Unknown links may contain scams or malware.
+Water boils at 100°C at normal pressure.,True,That is the standard boiling point of water at sea level.
+If cyberbullying happens, you should save evidence and tell a trusted adult.,True,This is a safe and responsible action.

@@ -1,0 +1,10 @@
+
+:root{--cgp-shadow:0 10px 24px rgba(15,23,42,.16);--cgp-shadow-hover:0 14px 32px rgba(15,23,42,.22);--cgp-radius:16px;--cgp-font:"Segoe UI","Microsoft YaHei","PingFang SC",Arial,sans-serif;}
+html,body{font-family:var(--cgp-font);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+button,.btn,.button,[type="button"],[type="submit"]{border-radius:var(--cgp-radius);box-shadow:var(--cgp-shadow);transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;font-weight:800;}
+button:hover,.btn:hover,.button:hover,[type="button"]:hover,[type="submit"]:hover{transform:translateY(-1px);box-shadow:var(--cgp-shadow-hover);filter:brightness(1.03);}
+button:active,.btn:active,.button:active,[type="button"]:active,[type="submit"]:active{transform:translateY(1px) scale(.99);}
+select,input,textarea{border-radius:14px;font-family:var(--cgp-font);}
+.card,.panel,.box,.game-panel,.control-panel,.info-panel,.leaderboard,.settings-panel,.teacher-panel{box-shadow:var(--cgp-shadow);} 
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:rgba(148,163,184,.55);border-radius:999px}::-webkit-scrollbar-track{background:rgba(226,232,240,.22)}
+.cgp-pop{animation:cgp-pop-in .28s ease both;} @keyframes cgp-pop-in{from{opacity:.65;transform:translateY(6px) scale(.985)}to{opacity:1;transform:none}}

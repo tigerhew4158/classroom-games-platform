@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>课堂对应文字对战｜2组/3组可选｜三语介面</title>
+  <title>S006 课堂对应文字对战｜2组/3组可选｜三语介面</title>
   <style>
     :root{
       --bg:#f3f4f6;
@@ -159,6 +159,31 @@
       body{background:#0f172a}.shell{background:#111827;border-color:#334155}.setup{background:#0f172a;border-color:#334155}.team{border-color:#475569}.team.red{background:#2a1019}.team.blue{background:#0f203d}.team.green{background:#09261c}.answer,textarea,.duration,.select,.target,.smallBtn,.score,.pill,.key,.modal,.modeNote,.raceWrap{background:#fff;color:#0f172a}h1,.setupTitle{color:#fff}.hint,.footerNote,.promptLabel{color:#cbd5e1}.timer{color:#fb7185}
     }
   </style>
+  
+  <style id="s006-cute-override">
+
+    body{background:linear-gradient(180deg,#1c72e8 0%, #6cbefb 55%, #caeeff 100%)!important}
+    .shell{background:rgba(255,255,255,.92)!important;border:2px solid rgba(255,255,255,.6)!important;border-radius:28px!important}
+    .topbar{background:linear-gradient(90deg,#0f67e8,#58b8ff);padding:14px 16px;border-radius:24px;box-shadow:0 16px 30px rgba(20,74,160,.18)}
+    h1,.topbar h1{color:#fff!important;text-shadow:none!important}
+    .smallBtn{border:2px solid rgba(255,255,255,.6)!important;background:linear-gradient(180deg,#ffffff,#edf6ff)!important;color:#173055!important}
+    .setup{background:linear-gradient(180deg,#ffffff,#edf7ff)!important;border:2px solid #b7dbff!important;border-radius:20px!important}
+    .setupTitle{color:#14407a!important}
+    .pill,.score{background:linear-gradient(180deg,#ffffff,#edf6ff)!important;border:2px solid #b7dbff!important;color:#173055!important}
+    .ropeWrap,.raceWrap{background:linear-gradient(180deg,#ffffff,#edf7ff)!important;border:2px solid #b7dbff!important;border-radius:22px!important;padding:14px!important;box-shadow:var(--cute-shadow)!important}
+    .rope{background:linear-gradient(180deg,#f3ead0,#ddc89a)!important;height:36px!important}
+    .team{border:2px solid #b7dbff!important;border-radius:22px!important;box-shadow:0 14px 28px rgba(33,94,180,.12)!important}
+    .team.red{background:linear-gradient(180deg,#fff4f6,#fffafb)!important}.team.blue{background:linear-gradient(180deg,#eff7ff,#fbfdff)!important}.team.green{background:linear-gradient(180deg,#eefdf7,#fbfffd)!important}
+    .promptWord{color:#14407a!important}
+    .answer{border:2px solid #b7dbff!important;border-radius:16px!important;background:#fff!important}
+    .keyboard .key{border:2px solid #b7dbff!important;border-radius:14px!important;background:linear-gradient(180deg,#ffffff,#edf6ff)!important;min-height:44px!important}
+    .btn.green,.btn.gold,.btn.blue,.btn.purple,.btn.dark,.btn.red,.btn.gray{border-radius:18px!important}
+
+  </style>
+<link rel="stylesheet" href="../_shared/shared-polish.css" />
+  <script defer src="../_shared/shared-polish.js"></script>
+  <link rel="stylesheet" href="../_shared/cute-unify.css" />
+  <script defer src="../_shared/cute-unify.js"></script>
 </head>
 <body>
   <div class="app">
@@ -284,7 +309,7 @@ school,学校
 
   const I18N = {
     'zh-Hans': {
-      langCode:'zh-CN', title:'课堂对应文字对战', showSetup:'老师设定', hideSetup:'隐藏老师设定', fullscreen:'全屏',
+      langCode:'zh-CN', title:'S006 课堂对应文字对战', showSetup:'老师设定', hideSetup:'隐藏老师设定', fullscreen:'全屏',
       setupTitle:'老师设定：选择组数、时间与题库', teamCountLabel:'分组方式',
       teamTwoOption:'两组：红队 vs 蓝队（拔河）', teamThreeOption:'三组：红队 vs 蓝队 vs 绿队（抢旗）',
       minutesLabel:'游戏时间（分钟）', targetScoreLabel:'三组目标分', wordBankLabel:'题库',
@@ -303,7 +328,7 @@ school,学校
       space:'空格', clear:'清除', downloadName:'课堂对应文字题库.txt', playAgain:'再玩一局', close:'关闭'
     },
     en: {
-      langCode:'en-US', title:'Classroom Text Match Battle', showSetup:'Teacher setup', hideSetup:'Hide teacher setup', fullscreen:'Full screen',
+      langCode:'en-US', title:'S006 Classroom Text Match Battle', showSetup:'Teacher setup', hideSetup:'Hide teacher setup', fullscreen:'Full screen',
       setupTitle:'Teacher setup: teams, time and question bank', teamCountLabel:'Team mode',
       teamTwoOption:'2 teams: Red vs Blue (Tug of War)', teamThreeOption:'3 teams: Red vs Blue vs Green (Flag Race)',
       minutesLabel:'Game time (minutes)', targetScoreLabel:'Target score for 3 teams', wordBankLabel:'Question bank',
@@ -322,7 +347,7 @@ school,学校
       space:'Space', clear:'Clear', downloadName:'classroom-text-match-bank.txt', playAgain:'Play again', close:'Close'
     },
     ms: {
-      langCode:'ms-MY', title:'Pertandingan Padanan Teks Kelas', showSetup:'Tetapan guru', hideSetup:'Sembunyikan tetapan', fullscreen:'Skrin penuh',
+      langCode:'ms-MY', title:'S006 Pertandingan Padanan Teks Kelas', showSetup:'Tetapan guru', hideSetup:'Sembunyikan tetapan', fullscreen:'Skrin penuh',
       setupTitle:'Tetapan guru: kumpulan, masa dan bank soalan', teamCountLabel:'Mod kumpulan',
       teamTwoOption:'2 kumpulan: Merah vs Biru (Tarik Tali)', teamThreeOption:'3 kumpulan: Merah vs Biru vs Hijau (Lumba Bendera)',
       minutesLabel:'Masa permainan (minit)', targetScoreLabel:'Skor sasaran untuk 3 kumpulan', wordBankLabel:'Bank soalan',

@@ -1,0 +1,11 @@
+# S001 翻翻乐｜题库范例
+# 用途：记忆配对、词语配对、术语配对、图文配对。
+# 建议格式：配对A | 配对B
+苹果 | Apple
+香蕉 | Banana
+红色 | Red
+蓝色 | Blue
+人工智能 | Artificial Intelligence
+网络安全 | Cybersecurity
+数据 | Data
+算法 | Algorithm
