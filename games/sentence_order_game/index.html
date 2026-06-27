@@ -191,12 +191,94 @@ const els=['langSelect','teamCount','gameMinutes','targetScore','questionMode','
 function save(){const data={}; els.forEach(id=>data[id]=$(id).value); localStorage.setItem('sentenceOrderGameSettings_v2',JSON.stringify(data));}
 function load(){try{const d=JSON.parse(localStorage.getItem('sentenceOrderGameSettings_v2')||'{}'); els.forEach(id=>{if(d[id]!=null)$(id).value=d[id]});}catch(e){} state.lang=$('langSelect').value||'zh'; if(!$('bankInput').value.trim() || isBuiltInSample($('bankInput').value))$('bankInput').value=getSampleBank();}
 function applyLang(){state.lang=$('langSelect').value; document.documentElement.lang=state.lang==='zh'?'zh-CN':state.lang; document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)}); const gm=$('gameMinutes'); [...gm.options].forEach(o=>{const map={'0':'unlimited','3':'min3','5':'min5','8':'min8','10':'min10'}; o.textContent=t(map[o.value])}); const qm=$('questionMode'); qm.options[0].textContent=t('random'); qm.options[1].textContent=t('order'); $('wrongPenalty').options[0].textContent=t('no'); $('wrongPenalty').options[1].textContent=t('yes'); $('showAnswer').options[0].textContent=t('show'); $('showAnswer').options[1].textContent=t('hide'); $('soundOn').options[0].textContent=t('on'); $('soundOn').options[1].textContent=t('off'); ['rightTurn','wrongTurn'].forEach(id=>{const s=$(id); s.options[0].textContent=t('next'); s.options[1].textContent=t('same')}); renderScoreboard(); updateHeader(); save();}
-function parseBank(text){const qs=[]; text.split(/\r?\n/).forEach((line,idx)=>{line=line.trim(); if(!line||line.startsWith('#'))return; let prompt='', order=line; if(line.includes('|')){const parts=line.split('|'); prompt=parts.shift().trim(); order=parts.join('|').trim();}else if(line.includes('=>')){const parts=line.split('=>'); prompt=parts.shift().trim(); order=parts.join('=>').trim();}else if(line.includes('\t')){const parts=line.split('\t'); prompt=parts.shift().trim(); order=parts.join('\t').trim();}else{prompt=t('question')+' '+(idx+1);} let segs=splitSegments(order); if(segs.length>=2)qs.push({prompt,segments:segs,raw:line});}); return qs;}
+function parseBank(text){
+  const qs=[];
+  String(text||'').split(/\r?\n/).forEach((line,idx)=>{
+    line = line.trim();
+    if(!line || line.startsWith('#')) return;
+
+    // 修正：支持老师常用的中文符号，避免题库看起来有内容但开始游戏解析不到。
+    // 支持格式：
+    // 1. 提示 | 正确顺序1 / 正确顺序2 / 正确顺序3
+    // 2. 提示｜正确顺序1／正确顺序2／正确顺序3
+    // 3. 提示：正确顺序1 / 正确顺序2 / 正确顺序3
+    // 4. 直接输入：正确顺序1 / 正确顺序2 / 正确顺序3
+    let normalized = line
+      .replaceAll('｜','|')
+      .replaceAll('／','/')
+      .replaceAll('→','/')
+      .replaceAll('⇒','/')
+      .replaceAll('，',',')
+      .replaceAll('；',';');
+
+    let prompt='', order=normalized;
+    const separators = ['|','=>','：',':','\t'];
+    let used = false;
+    for(const sep of separators){
+      if(normalized.includes(sep)){
+        const parts = normalized.split(sep);
+        prompt = parts.shift().trim();
+        order = parts.join(sep).trim();
+        used = true;
+        break;
+      }
+    }
+
+    if(!used){
+      prompt = t('question')+' '+(idx+1);
+      order = normalized;
+    }
+
+    let segs = splitSegments(order);
+    if(segs.length >= 2){
+      qs.push({prompt,segments:segs,raw:line});
+    }
+  });
+  return qs;
+}
 function splitSegments(s){s=s.trim(); let arr=[]; if(s.includes('/')) arr=s.split('/'); else if(s.includes('→')) arr=s.split('→'); else if(/\s/.test(s)) arr=s.split(/\s+/); else {try{arr=[...s.matchAll(/[\p{Script=Han}]|[A-Za-z0-9]+|[^\s]/gu)].map(m=>m[0]);}catch(e){arr=s.split('')}} return arr.map(x=>x.trim()).filter(Boolean);}
 function shuffle(a){const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]];} return b;}
 function makeTeams(n){const keys=['teamRed','teamBlue','teamGreen','teamPurple'], colors=['var(--red)','var(--blue)','var(--green)','var(--purple)'], icons=['🐎','🏎️','🚀','⛵']; return Array.from({length:n},(_,i)=>({name:t(keys[i]),score:0,color:colors[i],icon:icons[i]}));}
 function readSettings(){state.teamCount=parseInt($('teamCount').value,10); state.targetScore=Math.max(1,parseInt($('targetScore').value,10)||8); state.settings={minutes:parseInt($('gameMinutes').value,10),mode:$('questionMode').value,wrongPenalty:$('wrongPenalty').value==='yes',rightTurn:$('rightTurn').value,wrongTurn:$('wrongTurn').value,showAnswer:$('showAnswer').value==='yes',sound:$('soundOn').value==='yes'};}
-function startGame(){readSettings(); const qs=parseBank($('bankInput').value); if(!qs.length){toast(t('bankError'),'bad'); return;} state.questions=state.settings.mode==='random'?shuffle(qs):qs; state.qIndex=0; state.round=0; state.currentTeam=0; state.teams=makeTeams(state.teamCount); state.started=true; state.timeLeft=state.settings.minutes>0?state.settings.minutes*60:0; document.body.classList.add('playing'); $('rankModal').style.display='none'; renderScoreboard(); updateTimer(); clearInterval(state.timer); if(state.settings.minutes>0){state.timer=setInterval(()=>{state.timeLeft--; updateTimer(); if(state.timeLeft<=0)endGame(t('timeUp'));},1000);} nextQuestion(false); toast(t('settingsHidden'),'warn'); save();}
+function startGame(){
+  readSettings();
+  save();
+
+  const bankText = $('bankInput').value;
+  const qs = parseBank(bankText);
+
+  if(!qs.length){
+    // 再尝试一次：把常见中文符号转成标准分隔符后解析。
+    const fixedText = String(bankText||'')
+      .replaceAll('｜','|')
+      .replaceAll('／','/')
+      .replaceAll('→','/')
+      .replaceAll('⇒','/')
+      .replaceAll('，',',')
+      .replaceAll('；',';');
+    const qs2 = parseBank(fixedText);
+    if(qs2.length){
+      $('bankInput').value = fixedText;
+      state.questions = state.settings.mode==='random'?shuffle(qs2):qs2;
+    }else{
+      toast(t('bankError'),'bad');
+      return;
+    }
+  }else{
+    state.questions=state.settings.mode==='random'?shuffle(qs):qs;
+  }
+
+  state.qIndex=0; state.round=0; state.currentTeam=0; state.teams=makeTeams(state.teamCount);
+  state.started=true; state.timeLeft=state.settings.minutes>0?state.settings.minutes*60:0;
+  document.body.classList.add('playing'); $('rankModal').style.display='none';
+  renderScoreboard(); updateTimer(); clearInterval(state.timer);
+  if(state.settings.minutes>0){
+    state.timer=setInterval(()=>{state.timeLeft--; updateTimer(); if(state.timeLeft<=0)endGame(t('timeUp'));},1000);
+  }
+  nextQuestion(false);
+  toast(t('settingsHidden'),'warn');
+  save();
+}
 function updateTimer(){if(state.settings.minutes===0){$('timer').textContent='∞'; return;} const m=Math.floor(state.timeLeft/60), s=state.timeLeft%60; $('timer').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
 function renderScoreboard(){const board=$('scoreboard'); board.innerHTML=''; const teams=state.teams.length?state.teams:makeTeams(parseInt($('teamCount').value,10)||2); board.style.gridTemplateColumns=`repeat(${Math.min(teams.length,4)},1fr)`; teams.forEach((team,i)=>{const pct=Math.max(0,Math.min(100,(team.score/(state.targetScore||8))*100)); const div=document.createElement('div'); div.className='teamCard '+(state.started&&i===state.currentTeam?'active':''); div.innerHTML=`<div class="teamHead"><span>${team.name}</span><span class="teamScore">${team.score}</span></div><div class="track"><div class="fill" style="width:${pct}%;background:${team.color}"></div></div><div class="teamIcon">${team.icon}</div>`; board.appendChild(div);});}
 function updateHeader(){$('gameTitle').textContent=t('title'); $('turnName').textContent=state.teams[state.currentTeam]?.name||'-'; $('roundNo').textContent=state.round||0;}
@@ -220,7 +302,7 @@ function exportTxt(){const blob=new Blob([$('bankInput').value],{type:'text/plai
 function importTxt(file){const r=new FileReader(); r.onload=()=>{$('bankInput').value=r.result; toast(t('loaded'),'good'); save();}; r.readAsText(file,'utf-8');}
 function fullscreen(){const el=document.documentElement; if(!document.fullscreenElement) el.requestFullscreen?.(); else document.exitFullscreen?.();}
 $('langSelect').addEventListener('change',applyLang); ['teamCount','gameMinutes','targetScore','questionMode','wrongPenalty','rightTurn','wrongTurn','showAnswer','soundOn','bankInput'].forEach(id=>$(id).addEventListener('change',save)); $('bankInput').addEventListener('input',save);
-$('startBtn').addEventListener('click',startGame); $('showSettingsBtn').addEventListener('click',()=>{document.body.classList.toggle('playing'); toast(document.body.classList.contains('playing')?t('settingsHidden'):t('settingsShown'),'warn')}); $('fullscreenBtn').addEventListener('click',fullscreen); $('nextBtn').addEventListener('click',()=>nextQuestion(true)); $('resetBtn').addEventListener('click',resetGame); $('clearBtn').addEventListener('click',clearAnswer); $('checkBtn').addEventListener('click',checkAnswer); $('sampleBtn').addEventListener('click',()=>{$('bankInput').value=SAMPLE; save(); toast(t('loaded'),'good')}); $('exportBtn').addEventListener('click',exportTxt); $('importBtn').addEventListener('click',()=>$('fileInput').click()); $('fileInput').addEventListener('change',e=>{if(e.target.files[0]) importTxt(e.target.files[0])}); $('closeRankBtn').addEventListener('click',()=>$('rankModal').style.display='none'); $('playAgainBtn').addEventListener('click',()=>{ $('rankModal').style.display='none'; startGame();});
+$('startBtn').addEventListener('click',startGame); $('showSettingsBtn').addEventListener('click',()=>{document.body.classList.toggle('playing'); toast(document.body.classList.contains('playing')?t('settingsHidden'):t('settingsShown'),'warn')}); $('fullscreenBtn').addEventListener('click',fullscreen); $('nextBtn').addEventListener('click',()=>nextQuestion(true)); $('resetBtn').addEventListener('click',resetGame); $('clearBtn').addEventListener('click',clearAnswer); $('checkBtn').addEventListener('click',checkAnswer); $('sampleBtn').addEventListener('click',()=>{ $('bankInput').value=getSampleBank(); save(); toast(t('loaded'),'good'); }); $('exportBtn').addEventListener('click',exportTxt); $('importBtn').addEventListener('click',()=>$('fileInput').click()); $('fileInput').addEventListener('change',e=>{if(e.target.files[0]) importTxt(e.target.files[0])}); $('closeRankBtn').addEventListener('click',()=>$('rankModal').style.display='none'); $('playAgainBtn').addEventListener('click',()=>{ $('rankModal').style.display='none'; startGame();});
 load(); applyLang(); resetGame();
 </script>
 
