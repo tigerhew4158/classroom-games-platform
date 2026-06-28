@@ -570,7 +570,16 @@
     transition:background-color 9999s ease-in-out 0s;
   }
 
-  </style>
+  
+  /* S001_TOP_BUTTON_CLICK_FIX_CSS_START */
+  /* Ensure top-right controls are above the game layout and can receive clicks. */
+  .topbar{position:relative !important; z-index:300 !important; pointer-events:auto !important;}
+  .hero,.top-controls,.top-controls *{position:relative; z-index:301 !important; pointer-events:auto !important;}
+  .btn-top{position:relative !important; z-index:302 !important; pointer-events:auto !important;}
+  .layout{position:relative; z-index:1;}
+  /* S001_TOP_BUTTON_CLICK_FIX_CSS_END */
+
+</style>
 </head>
 <body>
   <div class="app">
@@ -1642,5 +1651,47 @@ function init(){
 
 init();
 </script>
+
+<!-- S001_TOP_BUTTON_CLICK_FIX_START -->
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function safeBind(id, fn){
+    var el = $(id);
+    if(!el || el.dataset.s001ButtonFixed) return;
+    el.dataset.s001ButtonFixed = '1';
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      try{ fn(e); }catch(err){
+        console.error('[S001 button fix]', id, err);
+        alert('按钮执行失败 / Button error: ' + (err && err.message ? err.message : err));
+      }
+    }, true);
+  }
+  function bindS001TopButtons(){
+    safeBind('settingsBtn', function(){
+      if(typeof openSettings === 'function') openSettings();
+      else if($('settingsOverlay')) $('settingsOverlay').classList.add('show');
+    });
+    safeBind('restartBtn', function(){
+      if(typeof restartAll === 'function') restartAll();
+      else location.reload();
+    });
+    safeBind('fullscreenBtn', async function(){
+      if(!document.fullscreenElement){
+        await (document.documentElement.requestFullscreen && document.documentElement.requestFullscreen());
+      }else{
+        await (document.exitFullscreen && document.exitFullscreen());
+      }
+      if(typeof fitStageToScreen === 'function') setTimeout(fitStageToScreen,80);
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindS001TopButtons);
+  else bindS001TopButtons();
+})();
+</script>
+<!-- S001_TOP_BUTTON_CLICK_FIX_END -->
+
 </body>
 </html>
