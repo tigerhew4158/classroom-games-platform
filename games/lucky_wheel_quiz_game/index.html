@@ -179,6 +179,106 @@ body.ratio-916 h1{font-size:30px;}
 body.ratio-916 .wheelBox, body.ratio-34 .wheelBox{width:min(88vw,380px)!important;height:min(88vw,380px)!important;}
 /* S005_SPIN_ANIMATION_FIX_END */
 
+
+/* S005_FLAT_ROUND_WHEEL_FIX_START */
+.wheelPanel{
+  min-height:560px!important;
+  overflow:visible!important;
+}
+.pointer{
+  top:14px!important;
+  z-index:30!important;
+  border-left:24px solid transparent!important;
+  border-right:24px solid transparent!important;
+  border-top:0!important;
+  border-bottom:44px solid #fef3c7!important;
+}
+.wheelBox{
+  width:430px!important;
+  height:430px!important;
+  max-width:min(78vw,430px)!important;
+  max-height:min(78vw,430px)!important;
+  aspect-ratio:1/1!important;
+  position:relative!important;
+  display:block!important;
+  margin:24px auto 12px!important;
+  transform:none!important;
+  perspective:none!important;
+}
+.wheel{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:100%!important;
+  height:100%!important;
+  aspect-ratio:1/1!important;
+  border-radius:50%!important;
+  border:12px solid rgba(255,255,255,.92)!important;
+  overflow:hidden!important;
+  transform-style:flat!important;
+  transform-origin:50% 50%!important;
+  transition:transform 4s cubic-bezier(.12,.72,.12,1)!important;
+  box-shadow:inset 0 0 0 5px rgba(0,0,0,.16),0 20px 42px rgba(0,0,0,.36)!important;
+}
+.wheel::before{
+  content:""!important;
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  width:110px!important;
+  height:110px!important;
+  transform:translate(-50%,-50%)!important;
+  border-radius:50%!important;
+  background:#fffbea!important;
+  border:9px solid rgba(255,255,255,.78)!important;
+  box-shadow:0 6px 18px rgba(0,0,0,.28)!important;
+  z-index:6!important;
+}
+.wheelLabel{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  width:128px!important;
+  height:34px!important;
+  margin-left:-64px!important;
+  margin-top:-17px!important;
+  text-align:center!important;
+  color:#fff!important;
+  font-weight:1000!important;
+  font-size:14px!important;
+  line-height:1.05!important;
+  text-shadow:0 2px 5px rgba(0,0,0,.55)!important;
+  transform-origin:50% 50%!important;
+  pointer-events:none!important;
+  z-index:8!important;
+}
+.spinBtn{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  width:106px!important;
+  height:106px!important;
+  border-radius:999px!important;
+  background:linear-gradient(135deg,#fff,#fef3c7)!important;
+  font-size:22px!important;
+  color:#4c1d95!important;
+  z-index:20!important;
+  border:7px solid rgba(255,255,255,.82)!important;
+  box-shadow:0 12px 26px rgba(0,0,0,.32)!important;
+}
+.spinBtn:hover{transform:translate(-50%,-50%) scale(1.03)!important;}
+.wheel.spinning{
+  filter:drop-shadow(0 0 22px rgba(250,204,21,.42));
+}
+@media (max-width:760px){
+  .wheelBox{width:340px!important;height:340px!important;}
+  .wheel::before{width:88px!important;height:88px!important;}
+  .spinBtn{width:88px!important;height:88px!important;font-size:18px!important;}
+  .wheelLabel{font-size:11px!important;width:104px!important;margin-left:-52px!important;}
+}
+/* S005_FLAT_ROUND_WHEEL_FIX_END */
+
 </style>
 </head>
 <body>
@@ -1228,6 +1328,142 @@ ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Ala
 })();
 </script>
 <!-- S005_SPIN_ANIMATION_FIX_END -->
+
+
+<!-- S005_FLAT_ROUND_WHEEL_FIX_START -->
+<script>
+(function(){
+  const FALLBACK_EVENTS = [
+    {id:'quiz1',icon:'❓',label:'＋1题目',color:'#8b5cf6',quiz:true,score:1},
+    {id:'quiz2',icon:'⭐',label:'＋2题目',color:'#2563eb',quiz:true,score:2},
+    {id:'doubleQuiz',icon:'💎',label:'双倍挑战',color:'#06b6d4',quiz:true,score:4},
+    {id:'bonus1',icon:'🎁',label:'＋1奖励',color:'#22c55e',score:1},
+    {id:'bonus2',icon:'🏆',label:'＋2奖励',color:'#16a34a',score:2},
+    {id:'trap1',icon:'⚠️',label:'－1陷阱',color:'#ef4444',score:-1},
+    {id:'trap2',icon:'💣',label:'－2陷阱',color:'#dc2626',score:-2},
+    {id:'steal',icon:'🕵️',label:'偷1分',color:'#f97316',score:1},
+    {id:'swap',icon:'🔄',label:'交换分数',color:'#a855f7',score:0},
+    {id:'pass',icon:'⏭️',label:'跳过',color:'#64748b',score:0}
+  ];
+  let flatRotation = 0;
+  function $(id){ return document.getElementById(id); }
+  function activeDefs(){
+    try{
+      if(typeof getActiveEventDefs === 'function'){
+        const defs = getActiveEventDefs();
+        if(defs && defs.length) return defs.map((ev,i)=>({
+          id:ev.id || FALLBACK_EVENTS[i%FALLBACK_EVENTS.length].id,
+          icon:ev.icon || FALLBACK_EVENTS[i%FALLBACK_EVENTS.length].icon,
+          label:(typeof t === 'function' && ev.id ? t(ev.id) : '') || ev.label || FALLBACK_EVENTS[i%FALLBACK_EVENTS.length].label,
+          color:ev.color || FALLBACK_EVENTS[i%FALLBACK_EVENTS.length].color,
+          quiz:ev.quiz,
+          score:ev.score
+        }));
+      }
+    }catch(e){}
+    const checked = Array.from(document.querySelectorAll('#eventSelector .eventCheck:checked')).map(x=>x.value);
+    const ids = checked.length ? checked : ['quiz1','quiz2','doubleQuiz','bonus1','trap1','steal'];
+    return FALLBACK_EVENTS.filter(x=>ids.includes(x.id));
+  }
+  function drawFlatWheel(){
+    const wheel = $('wheel');
+    if(!wheel) return;
+    const defs = activeDefs();
+    if(!defs.length) return;
+    const seg = 360 / defs.length;
+    wheel.style.background = `conic-gradient(${defs.map((ev,i)=>`${ev.color} ${i*seg}deg ${(i+1)*seg}deg`).join(',')})`;
+    wheel.style.borderRadius = '50%';
+    wheel.style.transform = `rotate(${flatRotation}deg)`;
+    wheel.innerHTML = defs.map((ev,i)=>{
+      const angle = i*seg + seg/2;
+      const text = (ev.icon || '') + '<br>' + (ev.label || ev.id || '');
+      return `<div class="wheelLabel" style="transform:rotate(${angle}deg) translateY(-155px) rotate(90deg)">${text}</div>`;
+    }).join('');
+  }
+  function ensureFlatLayout(){
+    const wheel = $('wheel');
+    const box = wheel && wheel.closest('.wheelBox');
+    if(box){
+      box.style.transform = 'none';
+      box.style.perspective = 'none';
+      box.style.aspectRatio = '1/1';
+    }
+    if(wheel){
+      wheel.style.transformStyle = 'flat';
+      wheel.style.borderRadius = '50%';
+    }
+  }
+  function spinFlat(e){
+    if(e){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    }
+    try{
+      if(typeof started !== 'undefined' && !started){
+        if(typeof startGame === 'function') startGame();
+      }
+    }catch(err){}
+    const defs = activeDefs();
+    if(!defs.length) return;
+    const wheel = $('wheel');
+    const btn = $('spinBtn');
+    if(!wheel || !btn) return;
+
+    const idx = Math.floor(Math.random() * defs.length);
+    const seg = 360 / defs.length;
+    const center = idx * seg + seg / 2;
+    const stopAtPointer = 360 - center;
+    flatRotation += 360 * 6 + ((stopAtPointer - flatRotation) % 360 + 360) % 360;
+
+    wheel.classList.add('spinning');
+    wheel.style.transition = 'transform 4s cubic-bezier(.12,.72,.12,1)';
+    wheel.style.transform = `rotate(${flatRotation}deg)`;
+    btn.disabled = true;
+    const chosen = defs[idx];
+
+    const result = $('resultBadge');
+    if(result) result.innerHTML = `🎡 转动中...`;
+
+    setTimeout(function(){
+      wheel.classList.remove('spinning');
+      btn.disabled = false;
+      if(result) result.innerHTML = `${chosen.icon || '🎯'} ${chosen.label || chosen.id || ''}`;
+      try{
+        if(typeof selectedEvent !== 'undefined') selectedEvent = chosen;
+        if(typeof handleEvent === 'function') handleEvent(chosen);
+      }catch(err){
+        console.error('[S005 flat wheel handle]', err);
+      }
+    }, 4100);
+  }
+  function init(){
+    ensureFlatLayout();
+    drawFlatWheel();
+    const btn = $('spinBtn');
+    if(btn && !btn.dataset.s005FlatWheelFixed){
+      btn.dataset.s005FlatWheelFixed = '1';
+      btn.addEventListener('click', spinFlat, true);
+    }
+    document.querySelectorAll('#eventSelector .eventCheck').forEach(cb=>{
+      if(!cb.dataset.s005FlatWheelFixed){
+        cb.dataset.s005FlatWheelFixed = '1';
+        cb.addEventListener('change', function(){ setTimeout(drawFlatWheel, 30); });
+      }
+    });
+    const b1=$('eventSuggest6Btn'), b2=$('eventSelectAllBtn');
+    if(b1 && !b1.dataset.s005FlatWheelFixed){ b1.dataset.s005FlatWheelFixed='1'; b1.addEventListener('click',()=>setTimeout(drawFlatWheel,80),true); }
+    if(b2 && !b2.dataset.s005FlatWheelFixed){ b2.dataset.s005FlatWheelFixed='1'; b2.addEventListener('click',()=>setTimeout(drawFlatWheel,80),true); }
+    const lang=$('langSelect');
+    if(lang && !lang.dataset.s005FlatWheelFixed){ lang.dataset.s005FlatWheelFixed='1'; lang.addEventListener('change',()=>setTimeout(drawFlatWheel,80)); }
+    setTimeout(drawFlatWheel, 150);
+    setTimeout(drawFlatWheel, 800);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- S005_FLAT_ROUND_WHEEL_FIX_END -->
 
 </body>
 </html>
