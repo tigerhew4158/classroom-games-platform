@@ -579,6 +579,37 @@
   .layout{position:relative; z-index:1;}
   /* S001_TOP_BUTTON_CLICK_FIX_CSS_END */
 
+
+/* S001_MODAL_TOP_LAYER_FIX_START */
+.settings-overlay{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  display:none!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:20px!important;
+  z-index:2147483000!important;
+  background:rgba(0,0,0,.72)!important;
+  backdrop-filter:blur(10px)!important;
+  transform:none!important;
+}
+.settings-overlay.show{display:flex!important;}
+.settings-modal{
+  position:relative!important;
+  z-index:2147483001!important;
+  width:min(1040px, calc(100vw - 40px))!important;
+  max-height:calc(100vh - 40px)!important;
+  overflow:auto!important;
+  margin:auto!important;
+  transform:none!important;
+  box-shadow:0 30px 120px rgba(0,0,0,.75)!important;
+}
+.settings-overlay *{pointer-events:auto!important;}
+.topbar,.app,.hero,.top-controls{z-index:auto;}
+/* S001_MODAL_TOP_LAYER_FIX_END */
+
 </style>
 </head>
 <body>
@@ -1692,6 +1723,142 @@ init();
 })();
 </script>
 <!-- S001_TOP_BUTTON_CLICK_FIX_END -->
+
+
+<!-- S001_SAMPLE_BUTTON_FIX_START -->
+<script>
+(function(){
+  const SAMPLE_BANKS = {
+    zh:`苹果,apple
+香蕉,banana
+老师,teacher
+学生,student
+书本,book
+小猫,cat
+马来文,Melayu
+英文,English
+人工智能,AI
+网络安全,Cybersecurity
+光合作用,Photosynthesis
+首都,Kuala Lumpur
+感谢,Thank you
+早安,Selamat pagi
+圆形,Circle
+三角形,Triangle`,
+    en:`Apple,苹果
+Banana,香蕉
+Teacher,老师
+Student,学生
+Book,书本
+Cat,小猫
+Malay Language,马来文
+English Language,英文
+Artificial Intelligence,AI
+Cybersecurity,网络安全
+Photosynthesis,光合作用
+Capital,Kuala Lumpur
+Thank you,感谢
+Good morning,Selamat pagi
+Circle,圆形
+Triangle,三角形`,
+    ms:`Epal,apple
+Pisang,banana
+Guru,teacher
+Murid,student
+Buku,book
+Kucing,cat
+Bahasa Melayu,Melayu
+Bahasa Inggeris,English
+Kecerdasan Buatan,AI
+Keselamatan Siber,Cybersecurity
+Fotosintesis,Photosynthesis
+Ibu negara,Kuala Lumpur
+Terima kasih,Thank you
+Selamat pagi,Good morning
+Bulatan,Circle
+Segi tiga,Triangle`
+  };
+  function $(id){ return document.getElementById(id); }
+  function lang(){
+    const v = ($('langSelect') && $('langSelect').value) || document.documentElement.lang || 'zh';
+    if(String(v).toLowerCase().startsWith('en')) return 'en';
+    if(String(v).toLowerCase().startsWith('ms')) return 'ms';
+    return 'zh';
+  }
+  function sampleText(){
+    try{
+      if(typeof t === 'function'){
+        const s = t('sampleBank');
+        if(s && s !== 'sampleBank') return s;
+      }
+    }catch(e){}
+    return SAMPLE_BANKS[lang()] || SAMPLE_BANKS.zh;
+  }
+  function showNotice(msg){
+    try{
+      if(typeof showToast === 'function'){
+        showToast(true);
+        const big=$('toastBig'), sub=$('toastSub');
+        if(big) big.textContent = msg;
+        if(sub) sub.textContent = '';
+        return;
+      }
+    }catch(e){}
+    console.log(msg);
+  }
+  function loadSample(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+    const bank = $('bankInput');
+    if(!bank) return;
+    bank.value = sampleText();
+    try{ bank.dispatchEvent(new Event('input',{bubbles:true})); }catch(err){}
+    try{ bank.dispatchEvent(new Event('change',{bubbles:true})); }catch(err){}
+    try{ state.bankText = bank.value; }catch(err){}
+    try{ if(typeof saveLocal === 'function') saveLocal(); }catch(err){}
+    showNotice(lang()==='en' ? 'Sample bank loaded.' : lang()==='ms' ? 'Bank contoh telah dimuatkan.' : '已载入示例题库。');
+  }
+  function openSettingsTop(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+    try{ if(typeof syncStateToSettings === 'function') syncStateToSettings(); }catch(err){}
+    const overlay=$('settingsOverlay');
+    if(overlay){
+      overlay.classList.add('show');
+      overlay.style.zIndex = '2147483000';
+      overlay.style.display = 'flex';
+    }
+  }
+  function closeSettingsTop(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+    const overlay=$('settingsOverlay');
+    if(overlay){
+      overlay.classList.remove('show');
+      overlay.style.display = '';
+    }
+  }
+  function bind(id, fn){
+    const el=$(id);
+    if(!el) return;
+    if(el.dataset.s001ModalSampleFixed === '1') return;
+    el.dataset.s001ModalSampleFixed = '1';
+    el.addEventListener('click', fn, true);
+  }
+  function init(){
+    bind('settingsBtn', openSettingsTop);
+    bind('loadSampleBtn', loadSample);
+    bind('cancelSettingsBtn', closeSettingsTop);
+    const overlay=$('settingsOverlay');
+    if(overlay && overlay.dataset.s001OverlayFixed !== '1'){
+      overlay.dataset.s001OverlayFixed = '1';
+      overlay.addEventListener('click', function(e){
+        if(e.target === overlay) closeSettingsTop(e);
+      }, true);
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- S001_SAMPLE_BUTTON_FIX_END -->
 
 </body>
 </html>
