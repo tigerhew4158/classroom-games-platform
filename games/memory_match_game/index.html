@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-s001-version="v7-static-defaults">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -742,6 +742,7 @@
     </div>
   </div>
 
+  <!-- S001_V7_STATIC_DEFAULT_OPTIONS -->
   <div class="settings-overlay" id="settingsOverlay">
     <div class="settings-modal">
       <div class="settings-head">
@@ -751,27 +752,27 @@
       <div class="settings-grid">
         <div>
           <label id="setTeamCountLabel">分组数量</label>
-          <select id="teamCountInput"></select>
+          <select id="teamCountInput"><option value="2" selected>2组</option><option value="3">3组</option><option value="4">4组</option></select>
         </div>
         <div>
           <label id="setStageCountLabel">关卡数量</label>
-          <select id="stageCountInput"></select>
+          <select id="stageCountInput"><option value="3">3关</option><option value="4">4关</option><option value="5" selected>5关</option><option value="6">6关</option></select>
         </div>
         <div>
           <label id="setTimeLimitLabel">每关时间</label>
-          <select id="timeLimitInput"></select>
+          <select id="timeLimitInput"><option value="0">不限时</option><option value="180">3分钟</option><option value="300" selected>5分钟</option><option value="480">8分钟</option><option value="600">10分钟</option></select>
         </div>
         <div>
           <label id="setPairCountLabel">每关牌组数量</label>
-          <select id="pairCountInput"></select>
+          <select id="pairCountInput"><option value="6">6组 / 12张</option><option value="8" selected>8组 / 16张</option><option value="10">10组 / 20张</option><option value="12">12组 / 24张</option></select>
         </div>
         <div>
           <label id="setCorrectTurnLabel">答对后</label>
-          <select id="correctTurnInput"></select>
+          <select id="correctTurnInput"><option value="stay" selected>继续作答</option><option value="next">换下一组</option></select>
         </div>
         <div>
           <label id="setWrongTurnLabel">答错后</label>
-          <select id="wrongTurnInput"></select>
+          <select id="wrongTurnInput"><option value="next" selected>换下一组</option><option value="stay">继续作答</option></select>
         </div>
         <div class="full">
           <label id="setTeamNamesLabel">队伍名称（逗号分隔）</label>
@@ -1964,6 +1965,37 @@ Segi tiga,Triangle`
 })();
 </script>
 <!-- S001_RECOMMENDED_DEFAULTS_FIX_END -->
+
+
+<!-- S001_STATIC_SELECT_BACKUP_FIX_START -->
+<script>
+(function(){
+  const DEFAULT_SELECTS = {
+    teamCountInput:[['2','2组'],['3','3组'],['4','4组']],
+    stageCountInput:[['3','3关'],['4','4关'],['5','5关'],['6','6关']],
+    timeLimitInput:[['0','不限时'],['180','3分钟'],['300','5分钟'],['480','8分钟'],['600','10分钟']],
+    pairCountInput:[['6','6组 / 12张'],['8','8组 / 16张'],['10','10组 / 20张'],['12','12组 / 24张']],
+    correctTurnInput:[['stay','继续作答'],['next','换下一组']],
+    wrongTurnInput:[['next','换下一组'],['stay','继续作答']]
+  };
+  const DEFAULT_VALUES = {teamCountInput:'2',stageCountInput:'5',timeLimitInput:'300',pairCountInput:'8',correctTurnInput:'stay',wrongTurnInput:'next'};
+  function $(id){return document.getElementById(id)}
+  function fillStaticDefaults(){
+    Object.keys(DEFAULT_SELECTS).forEach(id=>{
+      const sel=$(id); if(!sel) return;
+      if(!sel.options || sel.options.length===0){
+        sel.innerHTML = DEFAULT_SELECTS[id].map(([v,t])=>`<option value="${v}">${t}</option>`).join('');
+      }
+      if(!sel.value) sel.value = DEFAULT_VALUES[id];
+      if(sel.selectedIndex < 0) sel.value = DEFAULT_VALUES[id];
+    });
+  }
+  window.S001_fillStaticDefaults = fillStaticDefaults;
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fillStaticDefaults); else fillStaticDefaults();
+  document.addEventListener('click', function(e){ if(e.target && e.target.id==='settingsBtn') setTimeout(fillStaticDefaults, 80); }, true);
+})();
+</script>
+<!-- S001_STATIC_SELECT_BACKUP_FIX_END -->
 
 </body>
 </html>
