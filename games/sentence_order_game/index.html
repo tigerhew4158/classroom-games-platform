@@ -44,7 +44,19 @@
     .workarea{display:grid;grid-template-columns:1fr;gap:12px;flex:1}.bank,.answerArea{background:rgba(15,23,42,.55);border:1px solid var(--border);border-radius:22px;padding:14px}.bankTitle{font-size:13px;color:var(--muted);font-weight:900;margin-bottom:10px;display:flex;justify-content:space-between;gap:10px}.tokenWrap{display:flex;gap:10px;flex-wrap:wrap;align-items:center;min-height:76px}.token{user-select:none;touch-action:none;border:1px solid rgba(255,255,255,.18);background:linear-gradient(180deg,rgba(255,255,255,.17),rgba(255,255,255,.08));border-radius:16px;padding:12px 16px;font-size:20px;font-weight:1000;box-shadow:0 8px 18px rgba(0,0,0,.16);cursor:pointer}.token:hover{filter:brightness(1.1)}.token.dragging{opacity:.45}.slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}.slot{min-height:64px;border:2px dashed rgba(255,255,255,.20);border-radius:16px;display:flex;align-items:center;justify-content:center;padding:8px;background:rgba(255,255,255,.035);position:relative}.slot:before{content:attr(data-n);position:absolute;top:5px;left:8px;color:rgba(255,255,255,.26);font-weight:900;font-size:12px}.slot.over{border-color:#93c5fd;background:rgba(147,197,253,.12)}.slot .token{width:100%;text-align:center;margin:0}.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}.bigbtn{font-size:18px;padding:13px 20px}.rankModal{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;z-index:20;padding:20px}.rankCard{width:min(640px,100%);background:#172236;border:1px solid var(--border);border-radius:26px;box-shadow:var(--shadow);padding:22px}.rankCard h2{margin:0 0 12px;font-size:28px}.rankList{display:grid;gap:10px}.rankItem{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:16px;padding:12px 14px;font-size:18px;font-weight:900}.confetti{position:fixed;pointer-events:none;inset:0;overflow:hidden;z-index:30}.confetti i{position:absolute;width:10px;height:14px;top:-20px;animation:fall 1.8s linear forwards}@keyframes fall{to{transform:translateY(110vh) rotate(680deg);opacity:.2}}
     @media(max-width:980px){.app{grid-template-columns:1fr}.settings{max-height:none}.questionPanel{grid-template-columns:1fr}.scoreboard{grid-template-columns:repeat(2,1fr)}.questionText{font-size:24px}.turnName{font-size:28px}}
     @media(max-width:560px){.app{padding:10px}.game,.settings{border-radius:18px;padding:12px}.row,.row3{grid-template-columns:1fr}.scoreboard{grid-template-columns:1fr}.token{font-size:18px}.slots{grid-template-columns:1fr}.topbar{align-items:flex-start}}
-  </style>
+  
+/* S003_START_SETTINGS_BUTTON_FIX_START */
+#startBtn,#showSettingsBtn,#fullscreenBtn,#nextBtn,#resetBtn,#sampleBtn,#exportBtn,#importBtn,#clearBtn,#checkBtn{
+  position:relative!important;
+  z-index:2147482000!important;
+  pointer-events:auto!important;
+}
+.settings,.game,.topbar,.actions{pointer-events:auto!important;}
+body.playing .settings{display:none!important;}
+body:not(.playing) .settings{display:block!important;}
+/* S003_START_SETTINGS_BUTTON_FIX_END */
+
+</style>
   <link rel="stylesheet" href="../_shared/shared-polish.css" />
   <script defer src="../_shared/shared-polish.js"></script>
 </head>
@@ -384,5 +396,191 @@ Struktur Karangan | Permulaan / Perkembangan / Klimaks / Penutup`
 })();
 </script>
 <!-- /built-in-sample-loader-fix -->
+
+<!-- S003_START_SETTINGS_BUTTON_FIX_START -->
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+
+  const SAMPLE_BANKS = {
+    zh:`中文句子 | 我 / 喜欢 / 学习 / 人工智能
+学习步骤 | 先观察 / 再思考 / 最后回答
+电脑操作 | 打开电脑 / 输入密码 / 开始学习
+资料处理 | 收集资料 / 分析资料 / 做出结论
+AI项目流程 | 收集资料 / 标注图片 / 训练模型 / 测试模型 / 展示成果
+网络安全步骤 | 发现可疑链接 / 不要点击 / 告诉老师或家长 / 删除信息
+科学实验步骤 | 提出问题 / 作出假设 / 进行实验 / 记录结果 / 得出结论
+作文结构 | 开头 / 发展 / 高潮 / 结尾`,
+    en:`English Sentence | I / like / to / learn / AI
+Learning Steps | Observe first / Think carefully / Answer clearly
+Computer Steps | Turn on the computer / Enter the password / Start learning
+Data Process | Collect data / Analyse data / Make a conclusion
+AI Project Flow | Collect data / Label images / Train the model / Test the model / Present the result
+Cyber Safety Steps | Find a suspicious link / Do not click it / Tell a teacher or parent / Delete the message
+Science Experiment | Ask a question / Make a hypothesis / Do the experiment / Record results / Draw a conclusion
+Story Structure | Beginning / Development / Climax / Ending`,
+    ms:`Ayat Bahasa Melayu | Saya / suka / belajar / AI
+Langkah Pembelajaran | Perhatikan dahulu / Fikir dengan teliti / Jawab dengan jelas
+Langkah Komputer | Hidupkan komputer / Masukkan kata laluan / Mula belajar
+Proses Data | Kumpul data / Analisis data / Buat kesimpulan
+Aliran Projek AI | Kumpul data / Label imej / Latih model / Uji model / Bentangkan hasil
+Langkah Keselamatan Siber | Jumpa pautan mencurigakan / Jangan klik / Beritahu guru atau ibu bapa / Padam mesej
+Eksperimen Sains | Tanya soalan / Buat hipotesis / Jalankan eksperimen / Catat keputusan / Buat kesimpulan
+Struktur Karangan | Permulaan / Perkembangan / Klimaks / Penutup`
+  };
+
+  function lang(){
+    const v = ($('langSelect') && $('langSelect').value) || document.documentElement.lang || 'zh';
+    if(String(v).toLowerCase().startsWith('en')) return 'en';
+    if(String(v).toLowerCase().startsWith('ms')) return 'ms';
+    return 'zh';
+  }
+  function sampleText(){
+    try{
+      if(typeof getSampleBank === 'function'){
+        const s = getSampleBank();
+        if(s) return s;
+      }
+    }catch(e){}
+    return SAMPLE_BANKS[lang()] || SAMPLE_BANKS.zh;
+  }
+  function normalizeBank(text){
+    return String(text || '')
+      .replace(/\r\n/g,'\n')
+      .replaceAll('｜','|')
+      .replaceAll('／','/')
+      .replaceAll('→','/')
+      .replaceAll('⇒','/')
+      .replaceAll('，',',')
+      .replaceAll('；',';')
+      .trim();
+  }
+  function toastSafe(msg,type){
+    try{ if(typeof toast === 'function') return toast(msg,type||'warn'); }catch(e){}
+    console.log(msg);
+  }
+  function fillSample(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+    const bank = $('bankInput');
+    if(!bank) return;
+    bank.value = sampleText();
+    try{ bank.dispatchEvent(new Event('input',{bubbles:true})); }catch(err){}
+    try{ bank.dispatchEvent(new Event('change',{bubbles:true})); }catch(err){}
+    try{ if(typeof save === 'function') save(); }catch(err){}
+    toastSafe(lang()==='en'?'Sample bank loaded.':lang()==='ms'?'Bank soalan contoh dimuatkan.':'已载入对应语言题库。','good');
+  }
+  function exportBank(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+    const bank = $('bankInput');
+    const content = (bank && bank.value.trim()) ? bank.value : sampleText();
+    const blob = new Blob([content],{type:'text/plain;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'S003-sentence-order-questions.txt';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },800);
+  }
+  function importBank(e){
+    e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+    const file = $('fileInput');
+    if(file) file.click();
+  }
+  function safeStart(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+    const bank = $('bankInput');
+    if(bank && !bank.value.trim()){
+      bank.value = sampleText();
+    }
+    if(bank){
+      bank.value = normalizeBank(bank.value);
+      try{ bank.dispatchEvent(new Event('input',{bubbles:true})); }catch(err){}
+      try{ bank.dispatchEvent(new Event('change',{bubbles:true})); }catch(err){}
+    }
+
+    try{
+      if(typeof startGame === 'function'){
+        startGame();
+        setTimeout(function(){
+          // If old startGame did not hide settings, force the playing layout.
+          document.body.classList.add('playing');
+        }, 60);
+        return;
+      }
+    }catch(err){
+      console.error('[S003 start button fix]', err);
+    }
+
+    // Emergency fallback: show a clear message instead of silent no reaction.
+    document.body.classList.add('playing');
+    if($('questionText')) $('questionText').textContent = lang()==='en' ? 'Game started. Please click Next Question if needed.' : lang()==='ms' ? 'Permainan dimulakan. Klik Soalan Seterusnya jika perlu.' : '游戏已开始。若需要，请点击下一题。';
+  }
+  function showSettings(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+    document.body.classList.remove('playing');
+    toastSafe(lang()==='en'?'Teacher settings shown.':lang()==='ms'?'Tetapan guru dipaparkan.':'老师设定区已显示。','warn');
+  }
+  function fullScreen(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+    try{
+      if(!document.fullscreenElement) document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+      else document.exitFullscreen && document.exitFullscreen();
+    }catch(err){ console.error(err); }
+  }
+  function nextQ(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+    try{ if(typeof nextQuestion === 'function') nextQuestion(true); }catch(err){ console.error(err); }
+  }
+  function reset(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+    try{ if(typeof resetGame === 'function') resetGame(); }catch(err){ location.reload(); }
+  }
+  function bind(id, fn){
+    const el=$(id);
+    if(!el) return;
+    if(el.dataset.s003ButtonFixed === '1') return;
+    el.dataset.s003ButtonFixed = '1';
+    el.addEventListener('click', fn, true);
+    el.style.pointerEvents='auto';
+    el.style.position='relative';
+    el.style.zIndex='2147482000';
+  }
+  function init(){
+    bind('startBtn', safeStart);
+    bind('showSettingsBtn', showSettings);
+    bind('sampleBtn', fillSample);
+    bind('exportBtn', exportBank);
+    bind('importBtn', importBank);
+    bind('fullscreenBtn', fullScreen);
+    bind('nextBtn', nextQ);
+    bind('resetBtn', reset);
+
+    const file = $('fileInput');
+    if(file && !file.dataset.s003ImportFixed){
+      file.dataset.s003ImportFixed='1';
+      file.addEventListener('change', function(ev){
+        const f = ev.target.files && ev.target.files[0];
+        if(!f) return;
+        const r = new FileReader();
+        r.onload = function(){
+          if($('bankInput')){
+            $('bankInput').value = String(r.result || '');
+            $('bankInput').dispatchEvent(new Event('input',{bubbles:true}));
+            $('bankInput').dispatchEvent(new Event('change',{bubbles:true}));
+          }
+        };
+        r.readAsText(f,'utf-8');
+        ev.target.value='';
+      }, true);
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- S003_START_SETTINGS_BUTTON_FIX_END -->
+
 </body>
 </html>

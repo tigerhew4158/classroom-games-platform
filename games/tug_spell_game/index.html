@@ -208,7 +208,11 @@
     .feedback.ok{color:#86efac!important}.feedback.bad{color:#ff8aa0!important}.modal{background:linear-gradient(180deg,#132542,#0b1830)!important;color:#eef5ff!important;border:1px solid #365783}.modal p{color:#dbeafe!important}.announcement{background:rgba(0,0,0,.64)!important}.footerNote{display:none!important}
     @media(max-width:1020px){.setupGrid{grid-template-columns:1fr}.teams.three,.teams{grid-template-columns:1fr}}
 
-  </style>
+  /* S006_BUTTONS_INTERNAL_FIX_START */
+#toggleSetup,#startBtn,#pauseBtn,#resetBtn,#fullScreenBtn,#applyBank,#importBtn,#exportBtn,#sampleBtn,#soundBtn,#playAgainBtn,#closeModalBtn{position:relative!important;z-index:2147482000!important;pointer-events:auto!important;}
+.setup,.topbar,.topActions,.toolbar{pointer-events:auto!important;}
+/* S006_BUTTONS_INTERNAL_FIX_END */
+</style>
 </head>
 <body>
   <div class="app">
@@ -1033,7 +1037,31 @@ keluarga,family`
     window.addEventListener('beforeunload', saveSettings);
   }
 
+
+  /* S006_BUTTONS_INTERNAL_FIX_START */
+  function bindSafeButtons(){
+    function safe(el, fn){
+      if(!el || el.dataset.s006SafeFixed) return;
+      el.dataset.s006SafeFixed='1';
+      el.addEventListener('click', (e)=>{e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{fn(e);}catch(err){console.error('[S006 button fix]',err);alert('按钮执行失败：'+(err.message||err));}}, true);
+      el.style.pointerEvents='auto'; el.style.zIndex='2147482000'; el.style.position='relative';
+    }
+    safe(els.toggleSetup, ()=>{els.setupPanel.classList.toggle('hidden');els.toggleSetup.textContent=els.setupPanel.classList.contains('hidden')?t('showSetup'):t('hideSetup');});
+    safe(els.fullScreenBtn, ()=>{if(!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.();});
+    safe(els.applyBank, ()=>applyBank(true));
+    safe(els.sampleBtn, ()=>{els.wordBank.value=defaultBank();applyBank(true);});
+    safe(els.importBtn, ()=>els.fileInput.click());
+    safe(els.exportBtn, exportTxt);
+    safe(els.startBtn, startGame);
+    safe(els.pauseBtn, pauseGame);
+    safe(els.resetBtn, ()=>resetRound(true));
+    safe(els.playAgainBtn, ()=>{els.announcement.classList.remove('show');startGame();});
+    safe(els.closeModalBtn, ()=>els.announcement.classList.remove('show'));
+  }
+  /* S006_BUTTONS_INTERNAL_FIX_END */
+
   bindEvents();
+  bindSafeButtons();
   loadSettings();
   resetRound(true);
 })();

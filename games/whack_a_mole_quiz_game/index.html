@@ -75,7 +75,11 @@
     .footerNote{display:none!important}.layout.playing .settings{display:none!important}.layout.playing{grid-template-columns:1fr!important}.layout.playing .game{min-height:calc(100vh - 116px)}
     @media(max-width:1000px){.stage{grid-template-columns:1fr!important}.layout{grid-template-columns:1fr!important}.settings{position:static!important}.hud{grid-template-columns:1fr!important}.teams{grid-template-columns:repeat(2,1fr)!important}.holes{grid-template-columns:repeat(2,1fr)!important}}
 
-  </style>
+  /* S007_BUTTONS_INTERNAL_FIX_START */
+#startBtn,#showSettingsBtn,#fullscreenBtn,#resetBtn,#sampleBtn,#importBtn,#exportBtn,#nextBtn,#pauseBtn,#closeModal{position:relative!important;z-index:2147482000!important;pointer-events:auto!important;}
+.settings,.game,.rowBtns,.quickBtns,.hud{pointer-events:auto!important;}
+/* S007_BUTTONS_INTERNAL_FIX_END */
+</style>
 </head>
 <body>
 <div class="app">
@@ -264,7 +268,24 @@ Apakah yang patut dibuat apabila melihat pautan tidak dikenali?,Jangan klik semb
     $('closeModal').addEventListener('click',()=>els.modalBackdrop.classList.remove('show'));
     els.modalBackdrop.addEventListener('click',e=>{if(e.target===els.modalBackdrop) els.modalBackdrop.classList.remove('show');});
   }
-  loadSettings();bind();applyI18n();setupTeams();createHoles();resetGame();
+
+  /* S007_BUTTONS_INTERNAL_FIX_START */
+  function bindSafeButtons(){
+    function safe(el, fn){if(!el||el.dataset.s007SafeFixed)return;el.dataset.s007SafeFixed='1';el.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();try{fn(e);}catch(err){console.error('[S007 button fix]',err);alert('按钮执行失败：'+(err.message||err));}},true);el.style.pointerEvents='auto';el.style.zIndex='2147482000';el.style.position='relative';}
+    safe($('startBtn'),()=>{if(!els.questionBank.value.trim())els.questionBank.value=currentSampleBank();startGame();});
+    safe($('showSettingsBtn'),()=>els.layout.classList.toggle('playing'));
+    safe($('fullscreenBtn'),fullscreen);
+    safe($('resetBtn'),resetGame);
+    safe($('nextBtn'),skipQuestion);
+    safe(els.pauseBtn,togglePause);
+    safe($('exportBtn'),exportTxt);
+    safe($('sampleBtn'),()=>{els.questionBank.value=currentSampleBank();saveSettings();els.feedback.textContent=t('sampleLoaded');});
+    safe($('importBtn'),()=>$('fileInput').click());
+    safe($('closeModal'),()=>els.modalBackdrop.classList.remove('show'));
+  }
+  /* S007_BUTTONS_INTERNAL_FIX_END */
+
+  loadSettings();bind();bindSafeButtons();applyI18n();setupTeams();createHoles();resetGame();
 })();
 </script>
 </body>
