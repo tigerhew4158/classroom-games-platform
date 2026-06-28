@@ -776,7 +776,7 @@
         </div>
         <div class="full">
           <label id="setTeamNamesLabel">队伍名称（逗号分隔）</label>
-          <input id="teamNamesInput" type="text" />
+          <input id="teamNamesInput" type="text" value="红队,蓝队,绿队,紫队" />
         </div>
         <div class="full">
           <label id="setQuestionBankLabel">配对题库（每行：左边,右边）</label>
@@ -1135,7 +1135,7 @@ function loadLocal(){
       state.totalPairs = Number(d.totalPairs || 8);
       state.correctTurn = d.correctTurn || 'stay';
       state.wrongTurn = d.wrongTurn || 'next';
-      state.teamNames = d.teamNames || I18N[state.lang].teamDefaults;
+      state.teamNames = (d.teamNames && String(d.teamNames).trim()) ? String(d.teamNames).trim() : I18N[state.lang].teamDefaults;
       state.bankText = d.bankText || I18N[state.lang].sampleBank;
       return;
     }catch(e){}
@@ -1227,7 +1227,7 @@ function ensureRecommendedSettingsDefaults(){
   fill('correctTurnInput', lists.correctTurn, state.correctTurn);
   fill('wrongTurnInput', lists.wrongTurn, state.wrongTurn);
 
-  if($('teamNamesInput') && !$('teamNamesInput').value.trim()) $('teamNamesInput').value = state.teamNames;
+  if($('teamNamesInput') && !$('teamNamesInput').value.trim()) $('teamNamesInput').value = (state.teamNames && String(state.teamNames).trim()) ? state.teamNames : t('teamDefaults');
   if($('bankInput') && !$('bankInput').value.trim()) $('bankInput').value = state.bankText;
 }
 
@@ -1643,7 +1643,7 @@ function syncStateToSettings(){
   $('pairCountInput').value = String(state.totalPairs);
   $('correctTurnInput').value = state.correctTurn;
   $('wrongTurnInput').value = state.wrongTurn;
-  $('teamNamesInput').value = state.teamNames;
+  $('teamNamesInput').value = (state.teamNames && String(state.teamNames).trim()) ? state.teamNames : t('teamDefaults');
   $('bankInput').value = state.bankText;
 }
 
@@ -1996,6 +1996,73 @@ Segi tiga,Triangle`
 })();
 </script>
 <!-- S001_STATIC_SELECT_BACKUP_FIX_END -->
+
+
+<!-- S001_TEAM_NAMES_DEFAULT_FIX_START -->
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+  const FALLBACK_NAMES = {
+    zh:'红队,蓝队,绿队,紫队',
+    en:'Red Team,Blue Team,Green Team,Purple Team',
+    ms:'Kumpulan Merah,Kumpulan Biru,Kumpulan Hijau,Kumpulan Ungu'
+  };
+  function currentLang(){
+    const v = ($('langSelect') && $('langSelect').value) || document.documentElement.lang || 'zh';
+    if(String(v).toLowerCase().startsWith('en')) return 'en';
+    if(String(v).toLowerCase().startsWith('ms')) return 'ms';
+    return 'zh';
+  }
+  function defaultNames(){
+    try{
+      if(typeof t === 'function'){
+        const v = t('teamDefaults');
+        if(v && v !== 'teamDefaults') return v;
+      }
+    }catch(e){}
+    return FALLBACK_NAMES[currentLang()] || FALLBACK_NAMES.zh;
+  }
+  function normalizeExistingDefault(v){
+    return Object.values(FALLBACK_NAMES).includes(String(v||'').trim());
+  }
+  function applyTeamNameDefault(forceLanguageDefault){
+    const input = $('teamNamesInput');
+    if(!input) return;
+    const cur = String(input.value || '').trim();
+    if(!cur || normalizeExistingDefault(cur) || forceLanguageDefault){
+      input.value = defaultNames();
+      try{ if(typeof state === 'object') state.teamNames = input.value; }catch(e){}
+      try{ if(typeof saveLocal === 'function') saveLocal(); }catch(e){}
+    }
+  }
+  function bind(){
+    applyTeamNameDefault(false);
+    const settings = $('settingsBtn');
+    if(settings && !settings.dataset.s001TeamNamesFixed){
+      settings.dataset.s001TeamNamesFixed = '1';
+      settings.addEventListener('click', function(){
+        setTimeout(function(){ applyTeamNameDefault(false); }, 0);
+        setTimeout(function(){ applyTeamNameDefault(false); }, 150);
+      }, true);
+    }
+    const lang = $('langSelect');
+    if(lang && !lang.dataset.s001TeamNamesLangFixed){
+      lang.dataset.s001TeamNamesLangFixed = '1';
+      lang.addEventListener('change', function(){
+        setTimeout(function(){ applyTeamNameDefault(true); }, 80);
+      }, true);
+    }
+    const input = $('teamNamesInput');
+    if(input && !input.dataset.s001TeamNamesInputFixed){
+      input.dataset.s001TeamNamesInputFixed = '1';
+      input.addEventListener('blur', function(){ applyTeamNameDefault(false); });
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+  else bind();
+})();
+</script>
+<!-- S001_TEAM_NAMES_DEFAULT_FIX_END -->
 
 </body>
 </html>
