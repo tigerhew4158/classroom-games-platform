@@ -107,6 +107,57 @@
 #startBtn,#showSettingsBtn,#fsBtn,#resetBtn,#sampleBtn,#importBtn,#exportBtn,#eventSuggest6Btn,#eventSelectAllBtn,#spinBtn,#modalClose,#showAnswerBtn,#correctBtn,#wrongBtn,#continueBtn,#closeEndBtn{position:relative!important;z-index:2147482000!important;pointer-events:auto!important;}
 .settings,.game,.topbar,.rowBtns,.quickBtns,.eventSelector,.eventChoice{pointer-events:auto!important;}
 /* S005_BUTTONS_GLOBAL_FIX_END */
+
+/* SHARED_RATIO_SUPPORT_START */
+.ratioSelect{
+  border:1px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  border-radius:12px;
+  padding:8px 10px;
+  font-weight:900;
+  min-width:112px;
+  outline:none;
+}
+.ratioSelect option{color:#111827;background:#fff;}
+body.ratio-169 .app{max-width:1480px;}
+body.ratio-43 .app{max-width:1120px;}
+body.ratio-34 .app{max-width:760px;}
+body.ratio-916 .app{max-width:540px;}
+body.ratio-43 .layout,
+body.ratio-34 .layout,
+body.ratio-916 .layout{grid-template-columns:1fr!important;}
+body.ratio-43 .settings,
+body.ratio-34 .settings,
+body.ratio-916 .settings{position:relative!important;top:auto!important;}
+body.ratio-34 .topbar,
+body.ratio-916 .topbar{align-items:flex-start;flex-direction:column;}
+body.ratio-34 .quickBtns,
+body.ratio-916 .quickBtns{width:100%;justify-content:flex-start;}
+body.ratio-34 .hud,
+body.ratio-916 .hud{grid-template-columns:1fr!important;}
+body.ratio-34 .stage,
+body.ratio-916 .stage{grid-template-columns:1fr!important;}
+body.ratio-34 .game,
+body.ratio-916 .game{min-height:auto!important;}
+body.ratio-34 .grid2,
+body.ratio-916 .grid2,
+body.ratio-34 .grid3,
+body.ratio-916 .grid3{grid-template-columns:1fr!important;}
+body.ratio-34 .teams,
+body.ratio-916 .teams{grid-template-columns:1fr!important;}
+body.ratio-34 .board,
+body.ratio-916 .board,
+body.ratio-34 .moleGrid,
+body.ratio-916 .moleGrid{grid-template-columns:repeat(2,1fr)!important;}
+body.ratio-34 .wheelBox,
+body.ratio-916 .wheelBox{transform:scale(.82);transform-origin:center;}
+body.ratio-34 .panelBody,
+body.ratio-916 .panelBody{padding:14px;}
+body.ratio-34 h1,
+body.ratio-916 h1{font-size:30px;}
+/* SHARED_RATIO_SUPPORT_END */
+
 </style>
 </head>
 <body>
@@ -188,7 +239,14 @@
             <button type="button" id="eventSelectAllBtn" class="ghost" data-i18n="selectAllEvents">全选全部</button>
           </div>
           <div class="eventSummary" id="eventSummary"></div>
-          <div class="eventSelector" id="eventSelector"></div>
+          <div class="eventSelector" id="eventSelector">
+<label class="eventChoice active"><input class="eventCheck" type="checkbox" value="quiz1" checked><span class="icon">❓</span><span>+1 题目</span></label>
+<label class="eventChoice active"><input class="eventCheck" type="checkbox" value="quiz2" checked><span class="icon">⭐</span><span>+2 题目</span></label>
+<label class="eventChoice active"><input class="eventCheck" type="checkbox" value="doubleQuiz" checked><span class="icon">💎</span><span>双倍挑战</span></label>
+<label class="eventChoice active"><input class="eventCheck" type="checkbox" value="bonus1" checked><span class="icon">🎁</span><span>+1 奖励</span></label>
+<label class="eventChoice active"><input class="eventCheck" type="checkbox" value="trap1" checked><span class="icon">⚠️</span><span>-1 陷阱</span></label>
+<label class="eventChoice active"><input class="eventCheck" type="checkbox" value="steal" checked><span class="icon">🕵️</span><span>偷 1 分</span></label>
+          </div>
 
           <div class="sectionTitle" data-i18n="questionBank">题库</div>
           <textarea id="questionBank" spellcheck="false"></textarea>
@@ -760,6 +818,128 @@ ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Ala
 })();
 </script>
 <!-- S005_BUTTONS_GLOBAL_FIX_END -->
+
+
+<!-- SHARED_RATIO_SUPPORT_START -->
+<script>
+(function(){
+  const LS_KEY = 'S005_ratio_mode_v1';
+  function qs(sel){return document.querySelector(sel);}
+  function setRatio(value){
+    const v = value || localStorage.getItem(LS_KEY) || '16:9';
+    document.body.classList.remove('ratio-169','ratio-43','ratio-34','ratio-916');
+    const cls = v === '4:3' ? 'ratio-43' : v === '3:4' ? 'ratio-34' : v === '9:16' ? 'ratio-916' : 'ratio-169';
+    document.body.classList.add(cls);
+    localStorage.setItem(LS_KEY, v);
+    const sel = document.getElementById('ratioModeSelect');
+    if(sel) sel.value = v;
+  }
+  function init(){
+    let bar = qs('.quickBtns') || qs('.actions') || qs('.topbar');
+    if(!bar) return;
+    if(!document.getElementById('ratioModeSelect')){
+      const sel = document.createElement('select');
+      sel.id = 'ratioModeSelect';
+      sel.className = 'ratioSelect';
+      sel.innerHTML = '<option value="16:9">16:9</option><option value="4:3">4:3</option><option value="3:4">3:4</option><option value="9:16">9:16</option>';
+      sel.title = '画面比例 / Screen Ratio';
+      sel.addEventListener('change', function(){ setRatio(sel.value); });
+      bar.insertBefore(sel, bar.firstChild);
+    }
+    setRatio(localStorage.getItem(LS_KEY) || '16:9');
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- SHARED_RATIO_SUPPORT_END -->
+
+
+<!-- S005_EVENT_SELECTOR_VISIBLE_FIX_START -->
+<script>
+(function(){
+  const EVENTS = [
+    {id:'quiz1',icon:'❓',zh:'+1 题目',en:'+1 Question',ms:'+1 Soalan',score:1,quiz:true,color:'#8b5cf6'},
+    {id:'quiz2',icon:'⭐',zh:'+2 题目',en:'+2 Questions',ms:'+2 Soalan',score:2,quiz:true,color:'#2563eb'},
+    {id:'doubleQuiz',icon:'💎',zh:'双倍挑战',en:'Double Challenge',ms:'Cabaran Berganda',score:4,quiz:true,color:'#06b6d4'},
+    {id:'bonus1',icon:'🎁',zh:'+1 奖励',en:'+1 Bonus',ms:'+1 Ganjaran',score:1,color:'#22c55e'},
+    {id:'bonus2',icon:'🏆',zh:'+2 奖励',en:'+2 Bonus',ms:'+2 Ganjaran',score:2,color:'#16a34a'},
+    {id:'trap1',icon:'⚠️',zh:'-1 陷阱',en:'-1 Trap',ms:'-1 Perangkap',score:-1,color:'#ef4444'},
+    {id:'trap2',icon:'💣',zh:'-2 陷阱',en:'-2 Trap',ms:'-2 Perangkap',score:-2,color:'#dc2626'},
+    {id:'steal',icon:'🕵️',zh:'偷 1 分',en:'Steal 1 Point',ms:'Curi 1 Markah',score:1,color:'#f97316'},
+    {id:'swap',icon:'🔄',zh:'交换分数',en:'Swap Scores',ms:'Tukar Markah',score:0,color:'#a855f7'},
+    {id:'pass',icon:'⏭️',zh:'跳过',en:'Skip',ms:'Langkau',score:0,color:'#64748b'}
+  ];
+  const RECOMMENDED = ['quiz1','quiz2','doubleQuiz','bonus1','trap1','steal'];
+  function $(id){return document.getElementById(id);}
+  function lang(){
+    const v = ($('langSelect') && $('langSelect').value) || document.documentElement.lang || 'zh';
+    if(String(v).toLowerCase().startsWith('en')) return 'en';
+    if(String(v).toLowerCase().startsWith('ms')) return 'ms';
+    return 'zh';
+  }
+  function selectedIds(){
+    return Array.from(document.querySelectorAll('#eventSelector .eventCheck:checked')).map(x=>x.value);
+  }
+  function getEvents(){
+    const ids = selectedIds();
+    const use = ids.length ? ids : RECOMMENDED;
+    return EVENTS.filter(e=>use.includes(e.id));
+  }
+  function renderSelector(ids){
+    const box = $('eventSelector');
+    if(!box) return;
+    const set = new Set(ids && ids.length ? ids : RECOMMENDED);
+    const l = lang();
+    box.innerHTML = EVENTS.map(ev=>`<label class="eventChoice ${set.has(ev.id)?'active':''}"><input class="eventCheck" type="checkbox" value="${ev.id}" ${set.has(ev.id)?'checked':''}><span class="icon">${ev.icon}</span><span>${ev[l]||ev.zh}</span></label>`).join('');
+    box.querySelectorAll('.eventCheck').forEach(cb=>{
+      cb.addEventListener('change', function(){
+        cb.closest('.eventChoice').classList.toggle('active', cb.checked);
+        renderWheelSafe();
+        renderListSafe();
+        updateSummary();
+      });
+    });
+    updateSummary();
+  }
+  function updateSummary(){
+    const el = $('eventSummary');
+    if(el) el.textContent = (lang()==='en'?'Selected ':lang()==='ms'?'Dipilih ':'已勾选 ') + selectedIds().length + ' / ' + EVENTS.length;
+  }
+  function renderWheelSafe(){
+    const wheel = $('wheel');
+    if(!wheel) return;
+    const defs = getEvents();
+    const seg = 360 / defs.length;
+    wheel.style.background = `conic-gradient(${defs.map((ev,i)=>`${ev.color} ${i*seg}deg ${(i+1)*seg}deg`).join(',')})`;
+    if(!wheel.style.transform) wheel.style.transform = 'rotate(0deg)';
+    const l=lang();
+    wheel.innerHTML = defs.map((ev,i)=>{
+      const angle = i*seg + seg/2;
+      return `<div class="wheelLabel" style="transform:rotate(${angle}deg) translateY(-158px) rotate(90deg)">${ev.icon}<br>${ev[l]||ev.zh}</div>`;
+    }).join('');
+  }
+  function renderListSafe(){
+    const list = $('eventList');
+    if(!list) return;
+    const l=lang();
+    list.innerHTML = getEvents().map((ev,i)=>`<div class="eventItem"><span><b>${i+1}.</b> <b>${ev.icon}</b>${ev[l]||ev.zh}</span><span>${ev.quiz ? (l==='en'?'Question':l==='ms'?'Soalan':'题目') : (l==='en'?'Wheel Event':l==='ms'?'Peristiwa':'转盘事件')}</span></div>`).join('');
+  }
+  function set(ids){ renderSelector(ids); renderWheelSafe(); renderListSafe(); }
+  function init(){
+    set(selectedIds().length ? selectedIds() : RECOMMENDED);
+    const b1=$('eventSuggest6Btn'), b2=$('eventSelectAllBtn');
+    if(b1 && !b1.dataset.s005VisibleFix){ b1.dataset.s005VisibleFix='1'; b1.addEventListener('click',e=>{e.preventDefault();set(RECOMMENDED);},true); }
+    if(b2 && !b2.dataset.s005VisibleFix){ b2.dataset.s005VisibleFix='1'; b2.addEventListener('click',e=>{e.preventDefault();set(EVENTS.map(x=>x.id));},true); }
+    const langSel=$('langSelect');
+    if(langSel && !langSel.dataset.s005VisibleLang){ langSel.dataset.s005VisibleLang='1'; langSel.addEventListener('change',()=>set(selectedIds().length?selectedIds():RECOMMENDED)); }
+    window.getActiveEventDefs = function(){ return getEvents().map(ev=>({id:ev.id,icon:ev.icon,score:ev.score,quiz:ev.quiz,color:ev.color})); };
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- S005_EVENT_SELECTOR_VISIBLE_FIX_END -->
 
 </body>
 </html>

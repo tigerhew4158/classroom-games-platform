@@ -212,6 +212,57 @@
 #toggleSetup,#startBtn,#pauseBtn,#resetBtn,#fullScreenBtn,#applyBank,#importBtn,#exportBtn,#sampleBtn,#soundBtn,#playAgainBtn,#closeModalBtn{position:relative!important;z-index:2147482000!important;pointer-events:auto!important;}
 .setup,.topbar,.topActions,.toolbar{pointer-events:auto!important;}
 /* S006_BUTTONS_INTERNAL_FIX_END */
+
+/* SHARED_RATIO_SUPPORT_START */
+.ratioSelect{
+  border:1px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  border-radius:12px;
+  padding:8px 10px;
+  font-weight:900;
+  min-width:112px;
+  outline:none;
+}
+.ratioSelect option{color:#111827;background:#fff;}
+body.ratio-169 .app{max-width:1480px;}
+body.ratio-43 .app{max-width:1120px;}
+body.ratio-34 .app{max-width:760px;}
+body.ratio-916 .app{max-width:540px;}
+body.ratio-43 .layout,
+body.ratio-34 .layout,
+body.ratio-916 .layout{grid-template-columns:1fr!important;}
+body.ratio-43 .settings,
+body.ratio-34 .settings,
+body.ratio-916 .settings{position:relative!important;top:auto!important;}
+body.ratio-34 .topbar,
+body.ratio-916 .topbar{align-items:flex-start;flex-direction:column;}
+body.ratio-34 .quickBtns,
+body.ratio-916 .quickBtns{width:100%;justify-content:flex-start;}
+body.ratio-34 .hud,
+body.ratio-916 .hud{grid-template-columns:1fr!important;}
+body.ratio-34 .stage,
+body.ratio-916 .stage{grid-template-columns:1fr!important;}
+body.ratio-34 .game,
+body.ratio-916 .game{min-height:auto!important;}
+body.ratio-34 .grid2,
+body.ratio-916 .grid2,
+body.ratio-34 .grid3,
+body.ratio-916 .grid3{grid-template-columns:1fr!important;}
+body.ratio-34 .teams,
+body.ratio-916 .teams{grid-template-columns:1fr!important;}
+body.ratio-34 .board,
+body.ratio-916 .board,
+body.ratio-34 .moleGrid,
+body.ratio-916 .moleGrid{grid-template-columns:repeat(2,1fr)!important;}
+body.ratio-34 .wheelBox,
+body.ratio-916 .wheelBox{transform:scale(.82);transform-origin:center;}
+body.ratio-34 .panelBody,
+body.ratio-916 .panelBody{padding:14px;}
+body.ratio-34 h1,
+body.ratio-916 h1{font-size:30px;}
+/* SHARED_RATIO_SUPPORT_END */
+
 </style>
 </head>
 <body>
@@ -1066,6 +1117,41 @@ keluarga,family`
   resetRound(true);
 })();
 </script>
+
+
+<!-- SHARED_RATIO_SUPPORT_START -->
+<script>
+(function(){
+  const LS_KEY = 'S006_ratio_mode_v1';
+  function qs(sel){return document.querySelector(sel);}
+  function setRatio(value){
+    const v = value || localStorage.getItem(LS_KEY) || '16:9';
+    document.body.classList.remove('ratio-169','ratio-43','ratio-34','ratio-916');
+    const cls = v === '4:3' ? 'ratio-43' : v === '3:4' ? 'ratio-34' : v === '9:16' ? 'ratio-916' : 'ratio-169';
+    document.body.classList.add(cls);
+    localStorage.setItem(LS_KEY, v);
+    const sel = document.getElementById('ratioModeSelect');
+    if(sel) sel.value = v;
+  }
+  function init(){
+    let bar = qs('.quickBtns') || qs('.actions') || qs('.topbar');
+    if(!bar) return;
+    if(!document.getElementById('ratioModeSelect')){
+      const sel = document.createElement('select');
+      sel.id = 'ratioModeSelect';
+      sel.className = 'ratioSelect';
+      sel.innerHTML = '<option value="16:9">16:9</option><option value="4:3">4:3</option><option value="3:4">3:4</option><option value="9:16">9:16</option>';
+      sel.title = '画面比例 / Screen Ratio';
+      sel.addEventListener('change', function(){ setRatio(sel.value); });
+      bar.insertBefore(sel, bar.firstChild);
+    }
+    setRatio(localStorage.getItem(LS_KEY) || '16:9');
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- SHARED_RATIO_SUPPORT_END -->
 
 </body>
 </html>
