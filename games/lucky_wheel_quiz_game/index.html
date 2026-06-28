@@ -168,6 +168,17 @@ body.ratio-916 h1{font-size:30px;}
 #layout.playing.showSettings #settingsPanel{display:block!important;visibility:visible!important;}
 /* S005_FORCE_START_FIX_END */
 
+
+/* S005_SPIN_ANIMATION_FIX_START */
+.wheelPanel{overflow:visible!important;}
+.wheelBox{position:relative!important;width:min(78vw,420px)!important;height:min(78vw,420px)!important;display:grid!important;place-items:center!important;margin:0 auto!important;transform:none;}
+.wheel{display:block!important;transform-origin:50% 50%!important;will-change:transform!important;transition:transform 3.8s cubic-bezier(.12,.72,.12,1)!important;}
+.spinBtn{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;z-index:20!important;pointer-events:auto!important;}
+.spinBtn:hover{transform:translate(-50%,-52%)!important;}
+.spinBtn:disabled{opacity:.75!important;cursor:wait!important;}
+body.ratio-916 .wheelBox, body.ratio-34 .wheelBox{width:min(88vw,380px)!important;height:min(88vw,380px)!important;}
+/* S005_SPIN_ANIMATION_FIX_END */
+
 </style>
 </head>
 <body>
@@ -1085,6 +1096,138 @@ ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Ala
 })();
 </script>
 <!-- S005_FORCE_START_FIX_END -->
+
+
+<!-- S005_SPIN_ANIMATION_FIX_START -->
+<script>
+(function(){
+  const EVENT_FALLBACKS = [
+    {id:'quiz1',icon:'❓',score:1,quiz:true,color:'#8b5cf6'},
+    {id:'quiz2',icon:'⭐',score:2,quiz:true,color:'#2563eb'},
+    {id:'doubleQuiz',icon:'💎',score:4,quiz:true,color:'#06b6d4'},
+    {id:'bonus1',icon:'🎁',score:1,color:'#22c55e'},
+    {id:'bonus2',icon:'🏆',score:2,color:'#16a34a'},
+    {id:'trap1',icon:'⚠️',score:-1,color:'#ef4444'},
+    {id:'trap2',icon:'💣',score:-2,color:'#dc2626'},
+    {id:'steal',icon:'🕵️',score:1,color:'#f97316'},
+    {id:'swap',icon:'🔄',score:0,color:'#a855f7'},
+    {id:'pass',icon:'⏭️',score:0,color:'#64748b'}
+  ];
+  const RECOMMENDED = ['quiz1','quiz2','doubleQuiz','bonus1','trap1','steal'];
+  function $(id){ return document.getElementById(id); }
+  function label(id){ try{ if(typeof t === 'function') return t(id); }catch(e){} return id; }
+  function activeEvents(){
+    try{
+      if(typeof getActiveEventDefs === 'function'){
+        const defs = getActiveEventDefs();
+        if(Array.isArray(defs) && defs.length) return defs;
+      }
+    }catch(e){}
+    const checked = Array.from(document.querySelectorAll('#eventSelector .eventCheck:checked')).map(x=>x.value);
+    const ids = checked.length ? checked : RECOMMENDED;
+    return EVENT_FALLBACKS.filter(e=>ids.includes(e.id));
+  }
+  function renderWheelIfEmpty(){
+    const wheel = $('wheel');
+    if(!wheel) return;
+    if(wheel.children.length && wheel.style.background) return;
+    const defs = activeEvents();
+    const seg = 360 / defs.length;
+    wheel.style.background = `conic-gradient(${defs.map((ev,i)=>`${ev.color} ${i*seg}deg ${(i+1)*seg}deg`).join(',')})`;
+    wheel.innerHTML = defs.map((ev,i)=>{
+      const angle = i*seg + seg/2;
+      return `<div class="wheelLabel" style="transform:rotate(${angle}deg) translateY(-158px) rotate(90deg)">${ev.icon}<br>${label(ev.id)}</div>`;
+    }).join('');
+  }
+  function ensureStarted(){
+    try{
+      if(typeof started !== 'undefined' && started) return true;
+      if(typeof startGame === 'function') startGame();
+      if(typeof started !== 'undefined') started = true;
+      const layout = $('layout');
+      if(layout){ layout.classList.add('playing'); layout.classList.remove('showSettings'); }
+      const btn = $('spinBtn'); if(btn) btn.disabled = false;
+      return true;
+    }catch(err){
+      console.error('[S005 ensureStarted]', err);
+      return false;
+    }
+  }
+  function forceSpin(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+    const wheel = $('wheel');
+    const btn = $('spinBtn');
+    if(!wheel || !btn) return;
+    if(!ensureStarted()) return;
+    try{ if(typeof spinning !== 'undefined' && spinning) return; spinning = true; }catch(err){}
+
+    const defs = activeEvents();
+    if(!defs.length){ alert(label('eventSelectHint') || 'Please select events'); try{spinning=false;}catch(err){} return; }
+    renderWheelIfEmpty();
+
+    btn.disabled = true;
+    try{ if(typeof playSound === 'function') playSound('spin'); }catch(err){}
+
+    const idx = Math.floor(Math.random() * defs.length);
+    const ev = defs[idx];
+    const seg = 360 / defs.length;
+    const center = idx * seg + seg / 2;
+    const base = 360 - center;
+    let current = 0;
+    try{ current = Number(rotation) || 0; }catch(err){ current = Number(wheel.dataset.rotation || 0) || 0; }
+    const extraTurns = 6 + Math.floor(Math.random() * 2);
+    const next = current + extraTurns * 360 + ((base - current) % 360 + 360) % 360;
+    try{ rotation = next; }catch(err){}
+    wheel.dataset.rotation = String(next);
+
+    wheel.style.transition = 'none';
+    wheel.style.transform = `rotate(${current}deg)`;
+    // force browser to apply the starting transform before transition
+    void wheel.offsetWidth;
+    wheel.style.transition = 'transform 3.8s cubic-bezier(.12,.72,.12,1)';
+    wheel.style.transform = `rotate(${next}deg)`;
+
+    const result = $('resultBadge');
+    if(result) result.innerHTML = `🎡 ${label('wheelEvent') || 'Spinning'}...`;
+    const log = $('eventLog');
+    if(log) log.innerHTML = `🎡 ${label('spin') || '转动'}...`;
+
+    window.clearTimeout(window.__s005SpinTimer);
+    window.__s005SpinTimer = window.setTimeout(function(){
+      try{ selectedEvent = ev; }catch(err){}
+      if(result) result.innerHTML = `${ev.icon} ${label(ev.id)}`;
+      try{ spinning = false; }catch(err){}
+      btn.disabled = false;
+      try{
+        if(typeof handleEvent === 'function') handleEvent(ev);
+        else if(log) log.innerHTML = `${ev.icon} ${label(ev.id)}`;
+      }catch(err){
+        console.error('[S005 handleEvent]', err);
+        if(log) log.innerHTML = `${ev.icon} ${label(ev.id)}`;
+      }
+    }, 3900);
+  }
+  function init(){
+    renderWheelIfEmpty();
+    const btn = $('spinBtn');
+    if(btn && !btn.dataset.s005SpinAnimationFixed){
+      btn.dataset.s005SpinAnimationFixed = '1';
+      btn.addEventListener('click', forceSpin, true);
+      btn.disabled = false;
+    }
+    ['eventSelector','eventSuggest6Btn','eventSelectAllBtn','langSelect'].forEach(id=>{
+      const el=$(id); if(el && !el.dataset.s005SpinRenderFixed){
+        el.dataset.s005SpinRenderFixed='1';
+        el.addEventListener('change', ()=>setTimeout(renderWheelIfEmpty,50), true);
+        el.addEventListener('click', ()=>setTimeout(renderWheelIfEmpty,80), true);
+      }
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- S005_SPIN_ANIMATION_FIX_END -->
 
 </body>
 </html>
