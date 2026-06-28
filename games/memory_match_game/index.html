@@ -1157,6 +1157,79 @@ function populateOptionSelect(select, items, values){
   });
 }
 
+
+function ensureRecommendedSettingsDefaults(){
+  const opts = t('options');
+  const fallback = {
+    zh:{
+      teamCount:[['2','2组'],['3','3组'],['4','4组']],
+      stageCount:[['3','3关'],['4','4关'],['5','5关'],['6','6关']],
+      timeLimit:[['0','不限时'],['180','3分钟'],['300','5分钟'],['480','8分钟'],['600','10分钟']],
+      pairCount:[['6','6组 / 12张'],['8','8组 / 16张'],['10','10组 / 20张'],['12','12组 / 24张']],
+      afterCorrect:[['stay','继续作答'],['next','换下一组']],
+      afterWrong:[['next','换下一组'],['stay','继续作答']]
+    },
+    en:{
+      teamCount:[['2','2 Teams'],['3','3 Teams'],['4','4 Teams']],
+      stageCount:[['3','3 Stages'],['4','4 Stages'],['5','5 Stages'],['6','6 Stages']],
+      timeLimit:[['0','No limit'],['180','3 min'],['300','5 min'],['480','8 min'],['600','10 min']],
+      pairCount:[['6','6 pairs / 12 cards'],['8','8 pairs / 16 cards'],['10','10 pairs / 20 cards'],['12','12 pairs / 24 cards']],
+      afterCorrect:[['stay','Same team continues'],['next','Next team']],
+      afterWrong:[['next','Next team'],['stay','Same team continues']]
+    },
+    ms:{
+      teamCount:[['2','2 Kumpulan'],['3','3 Kumpulan'],['4','4 Kumpulan']],
+      stageCount:[['3','3 Peringkat'],['4','4 Peringkat'],['5','5 Peringkat'],['6','6 Peringkat']],
+      timeLimit:[['0','Tiada had'],['180','3 minit'],['300','5 minit'],['480','8 minit'],['600','10 minit']],
+      pairCount:[['6','6 pasangan / 12 kad'],['8','8 pasangan / 16 kad'],['10','10 pasangan / 20 kad'],['12','12 pasangan / 24 kad']],
+      afterCorrect:[['stay','Kumpulan sama teruskan'],['next','Kumpulan seterusnya']],
+      afterWrong:[['next','Kumpulan seterusnya'],['stay','Kumpulan sama teruskan']]
+    }
+  };
+  const langSet = fallback[state.lang] || fallback.zh;
+  function pairsFrom(maybeList, fallbackPairs, values){
+    if(!Array.isArray(maybeList)) return fallbackPairs;
+    return maybeList.map((item,i)=>Array.isArray(item) ? item : [values ? values[i] : String(i), item]);
+  }
+  const lists = {
+    teamCount: pairsFrom(opts && opts.teamCount, langSet.teamCount, ['2','3','4']),
+    stageCount: pairsFrom(opts && opts.stageCount, langSet.stageCount, ['3','4','5','6']),
+    timeLimit: pairsFrom(opts && opts.timeLimit, langSet.timeLimit),
+    pairCount: pairsFrom(opts && opts.pairCount, langSet.pairCount),
+    correctTurn: pairsFrom(opts && opts.afterCorrect, langSet.afterCorrect),
+    wrongTurn: pairsFrom(opts && opts.afterWrong, langSet.afterWrong)
+  };
+  function fill(id, pairs, value){
+    const sel = $(id);
+    if(!sel) return;
+    const current = String(value);
+    sel.innerHTML = pairs.map(([v,txt])=>`<option value="${String(v).replace(/"/g,'&quot;')}">${String(txt)}</option>`).join('');
+    sel.value = current;
+    if(sel.selectedIndex < 0 && sel.options.length){
+      sel.selectedIndex = 0;
+    }
+  }
+
+  state.teamCount = [2,3,4].includes(Number(state.teamCount)) ? Number(state.teamCount) : 2;
+  state.stageCount = [3,4,5,6].includes(Number(state.stageCount)) ? Number(state.stageCount) : 5;
+  state.timerLimit = [0,180,300,480,600].includes(Number(state.timerLimit)) ? Number(state.timerLimit) : 300;
+  state.totalPairs = [6,8,10,12].includes(Number(state.totalPairs)) ? Number(state.totalPairs) : 8;
+  state.correctTurn = ['stay','next'].includes(state.correctTurn) ? state.correctTurn : 'stay';
+  state.wrongTurn = ['next','stay'].includes(state.wrongTurn) ? state.wrongTurn : 'next';
+  state.teamNames = (state.teamNames && state.teamNames.trim()) ? state.teamNames : t('teamDefaults');
+  state.bankText = (state.bankText && state.bankText.trim()) ? state.bankText : t('sampleBank');
+
+  fill('teamCountInput', lists.teamCount, state.teamCount);
+  fill('stageCountInput', lists.stageCount, state.stageCount);
+  fill('timeLimitInput', lists.timeLimit, state.timerLimit);
+  fill('pairCountInput', lists.pairCount, state.totalPairs);
+  fill('correctTurnInput', lists.correctTurn, state.correctTurn);
+  fill('wrongTurnInput', lists.wrongTurn, state.wrongTurn);
+
+  if($('teamNamesInput') && !$('teamNamesInput').value.trim()) $('teamNamesInput').value = state.teamNames;
+  if($('bankInput') && !$('bankInput').value.trim()) $('bankInput').value = state.bankText;
+}
+
 function applyLanguage(){
   document.documentElement.lang = state.lang === 'zh' ? 'zh-CN' : state.lang;
   document.title = t('pageTitle');
@@ -1206,6 +1279,7 @@ function applyLanguage(){
   populateOptionSelect($('pairCountInput'), t('options').pairCount);
   populateOptionSelect($('correctTurnInput'), t('options').afterCorrect);
   populateOptionSelect($('wrongTurnInput'), t('options').afterWrong);
+  ensureRecommendedSettingsDefaults();
 
   renderRules();
   updateActionButtons();
@@ -1561,6 +1635,7 @@ function openSettings(){
 function closeSettings(){ $('settingsOverlay').classList.remove('show'); }
 
 function syncStateToSettings(){
+  ensureRecommendedSettingsDefaults();
   $('teamCountInput').value = String(state.teamCount);
   $('stageCountInput').value = String(state.stageCount);
   $('timeLimitInput').value = String(state.timerLimit);
@@ -1859,6 +1934,36 @@ Segi tiga,Triangle`
 })();
 </script>
 <!-- S001_SAMPLE_BUTTON_FIX_END -->
+
+
+<!-- S001_RECOMMENDED_DEFAULTS_FIX_START -->
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function runDefaults(){
+    try{
+      if(typeof ensureRecommendedSettingsDefaults === 'function') ensureRecommendedSettingsDefaults();
+    }catch(e){ console.error('[S001 defaults]', e); }
+  }
+  function bind(){
+    const settings = $('settingsBtn');
+    if(settings && !settings.dataset.s001DefaultsFixed){
+      settings.dataset.s001DefaultsFixed = '1';
+      settings.addEventListener('click', function(){ setTimeout(runDefaults, 0); setTimeout(runDefaults, 120); }, true);
+    }
+    const overlay = $('settingsOverlay');
+    if(overlay && !overlay.dataset.s001DefaultObserver){
+      overlay.dataset.s001DefaultObserver = '1';
+      new MutationObserver(function(){ if(overlay.classList.contains('show')) runDefaults(); })
+        .observe(overlay, {attributes:true, attributeFilter:['class','style']});
+    }
+    runDefaults();
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+  else bind();
+})();
+</script>
+<!-- S001_RECOMMENDED_DEFAULTS_FIX_END -->
 
 </body>
 </html>
