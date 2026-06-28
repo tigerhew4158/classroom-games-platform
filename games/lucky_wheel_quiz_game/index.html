@@ -292,6 +292,33 @@ body.ratio-916 .wheelBox, body.ratio-34 .wheelBox{width:min(88vw,380px)!importan
 }
 /* S005_DOCUMENT_CLICK_SPIN_FIX_END */
 
+
+/* S005_ALWAYS_QUESTION_AFTER_SPIN_FIX_START */
+.modalBackdrop.show{
+  z-index:2147483500!important;
+}
+.modal{
+  z-index:2147483501!important;
+}
+.question{
+  font-size:clamp(24px,3vw,38px)!important;
+  line-height:1.35!important;
+  font-weight:1000!important;
+  color:#111827!important;
+  text-align:center!important;
+  margin:12px 0 18px!important;
+}
+.option{
+  font-size:22px!important;
+  padding:14px 18px!important;
+  border-radius:16px!important;
+  font-weight:900!important;
+}
+.eventText{
+  color:#111827!important;
+}
+/* S005_ALWAYS_QUESTION_AFTER_SPIN_FIX_END */
+
 </style>
 </head>
 <body>
@@ -1666,6 +1693,237 @@ ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Ala
 })();
 </script>
 <!-- S005_DOCUMENT_CLICK_SPIN_FIX_END -->
+
+
+<!-- S005_ALWAYS_QUESTION_AFTER_SPIN_FIX_START -->
+<script>
+(function(){
+  const LABELS = {
+    zh:{quiz1:'+1 题目',quiz2:'+2 题目',doubleQuiz:'双倍挑战',bonus1:'+1 奖励',bonus2:'+2 奖励',trap1:'-1 陷阱',trap2:'-2 陷阱',steal:'偷 1 分',swap:'交换分数',pass:'跳过',spinning:'转动中...',questionReady:'请回答题目'},
+    en:{quiz1:'+1 Question',quiz2:'+2 Questions',doubleQuiz:'Double Challenge',bonus1:'+1 Bonus',bonus2:'+2 Bonus',trap1:'-1 Trap',trap2:'-2 Trap',steal:'Steal 1 Point',swap:'Swap Scores',pass:'Skip',spinning:'Spinning...',questionReady:'Please answer the question'},
+    ms:{quiz1:'+1 Soalan',quiz2:'+2 Soalan',doubleQuiz:'Cabaran Berganda',bonus1:'+1 Ganjaran',bonus2:'+2 Ganjaran',trap1:'-1 Perangkap',trap2:'-2 Perangkap',steal:'Curi 1 Markah',swap:'Tukar Markah',pass:'Langkau',spinning:'Sedang berpusing...',questionReady:'Sila jawab soalan'}
+  };
+  const EVENTS = [
+    {id:'quiz1',icon:'❓',score:1,quiz:true,color:'#8b5cf6'},
+    {id:'quiz2',icon:'⭐',score:2,quiz:true,color:'#2563eb'},
+    {id:'doubleQuiz',icon:'💎',score:4,quiz:true,color:'#06b6d4'},
+    {id:'bonus1',icon:'🎁',score:1,quiz:true,color:'#22c55e'},
+    {id:'bonus2',icon:'🏆',score:2,quiz:true,color:'#16a34a'},
+    {id:'trap1',icon:'⚠️',score:1,quiz:true,color:'#ef4444'},
+    {id:'trap2',icon:'💣',score:2,quiz:true,color:'#dc2626'},
+    {id:'steal',icon:'🕵️',score:1,quiz:true,color:'#f97316'},
+    {id:'swap',icon:'🔄',score:1,quiz:true,color:'#a855f7'},
+    {id:'pass',icon:'⏭️',score:1,quiz:true,color:'#64748b'}
+  ];
+  const RECOMMENDED = ['quiz1','quiz2','doubleQuiz','bonus1','trap1','steal'];
+  const SAMPLE_BANKS = {
+    zh:`马来西亚的首都是什么？,吉隆坡,槟城,新山,马六甲
+太阳从哪里升起？,东方,西方,南方,北方
+AI 的中文意思是什么？,人工智能,自动输入,高级网络,主动图像
+网络账号密码应该怎样设置？,复杂且不轻易告诉别人
+水在标准大气压下通常会在 100°C 沸腾。,正确,错误
+植物制造食物的过程叫什么？,光合作用,呼吸作用,蒸发作用,消化作用
+早安的马来文是什么？,selamat pagi,terima kasih,selamat malam,apa khabar
+ChatGPT 属于什么工具？,AI工具,交通工具,运动工具,音乐工具`,
+    en:`What is the capital of Malaysia?,Kuala Lumpur,Penang,Johor Bahru,Malacca
+Where does the sun rise?,East,West,South,North
+What does AI stand for?,Artificial Intelligence,Auto Internet,Advanced Image,Active Input
+How should a password be set?,Long and hard to guess
+Water normally boils at 100°C at standard atmospheric pressure.,True,False
+What process helps plants make food?,Photosynthesis,Respiration,Evaporation,Digestion
+How do you say good morning in Malay?,selamat pagi,terima kasih,selamat malam,apa khabar
+ChatGPT belongs to which type of tool?,AI tool,Transport tool,Sports tool,Music tool`,
+    ms:`Apakah ibu negara Malaysia?,Kuala Lumpur,Penang,Johor Bahru,Melaka
+Di manakah matahari terbit?,Timur,Barat,Selatan,Utara
+Apakah maksud AI?,Kecerdasan Buatan,Internet Automatik,Imej Lanjutan,Input Aktif
+Bagaimanakah kata laluan patut ditetapkan?,Panjang dan sukar diteka
+Air biasanya mendidih pada 100°C pada tekanan atmosfera standard.,Betul,Salah
+Apakah proses tumbuhan menghasilkan makanan?,Fotosintesis,Respirasi,Penyejatan,Pencernaan
+Bagaimanakah sebutan selamat pagi dalam Bahasa Melayu?,selamat pagi,terima kasih,selamat malam,apa khabar
+ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Alat muzik`
+  };
+  let locked = false;
+  function $(id){ return document.getElementById(id); }
+  function lang(){
+    const v = ($('langSelect') && $('langSelect').value) || document.documentElement.lang || 'zh';
+    if(String(v).toLowerCase().startsWith('en')) return 'en';
+    if(String(v).toLowerCase().startsWith('ms')) return 'ms';
+    return 'zh';
+  }
+  function eventLabel(id){ return (LABELS[lang()] && LABELS[lang()][id]) || LABELS.zh[id] || id; }
+  function text(key){ return (LABELS[lang()] && LABELS[lang()][key]) || LABELS.zh[key] || key; }
+  function selectedIds(){
+    return Array.from(document.querySelectorAll('#eventSelector .eventCheck:checked')).map(x=>x.value);
+  }
+  function activeEvents(){
+    const ids = selectedIds();
+    const use = ids.length ? ids : RECOMMENDED;
+    return EVENTS.filter(ev=>use.includes(ev.id)).map(ev=>({...ev,label:eventLabel(ev.id)}));
+  }
+  function ensureQuestionBank(){
+    const bank = $('questionBank');
+    if(bank && !bank.value.trim()) bank.value = SAMPLE_BANKS[lang()] || SAMPLE_BANKS.zh;
+    try{ if(typeof parseQuestions === 'function') parseQuestions(); }catch(e){}
+    try{
+      if(typeof questions !== 'undefined' && (!questions || !questions.length)){
+        if(bank) bank.value = SAMPLE_BANKS[lang()] || SAMPLE_BANKS.zh;
+        if(typeof parseQuestions === 'function') parseQuestions();
+      }
+    }catch(e){}
+  }
+  function ensureStarted(){
+    try{
+      if(typeof started !== 'undefined' && started) return true;
+      if(typeof startGame === 'function') startGame();
+      if(typeof started !== 'undefined') started = true;
+      const layout = $('layout');
+      if(layout){ layout.classList.add('playing'); layout.classList.remove('showSettings'); }
+      if($('spinBtn')) $('spinBtn').disabled = false;
+    }catch(e){
+      console.error('[S005 v18 ensureStarted]', e);
+    }
+    return true;
+  }
+  function drawWheel(){
+    const wheel = $('wheel');
+    if(!wheel) return;
+    const defs = activeEvents();
+    if(!defs.length) return;
+    const seg = 360 / defs.length;
+    wheel.style.background = `conic-gradient(${defs.map((ev,i)=>`${ev.color} ${i*seg}deg ${(i+1)*seg}deg`).join(',')})`;
+    const current = Number(wheel.dataset.v18Rotation || wheel.dataset.v17Rotation || wheel.dataset.rotation || 0) || 0;
+    wheel.style.setProperty('transform',`rotate(${current}deg)`,'important');
+    wheel.innerHTML = defs.map((ev,i)=>{
+      const angle = i*seg + seg/2;
+      return `<div class="wheelLabel" style="transform:rotate(${angle}deg) translateY(-155px) rotate(90deg)">${ev.icon}<br>${eventLabel(ev.id)}</div>`;
+    }).join('');
+  }
+  function showQuestionForEvent(ev){
+    ensureQuestionBank();
+    const qev = {
+      id:ev.id,
+      icon:ev.icon,
+      score:Math.max(1, Math.abs(Number(ev.score)||1)),
+      quiz:true,
+      color:ev.color
+    };
+    try{
+      if(typeof currentQuizScore !== 'undefined') currentQuizScore = qev.score;
+      if(typeof selectedEvent !== 'undefined') selectedEvent = qev;
+    }catch(e){}
+    const log = $('eventLog');
+    if(log) log.innerHTML = `${ev.icon} <b>${eventLabel(ev.id)}</b>：${text('questionReady')}`;
+    if(typeof showQuestion === 'function'){
+      showQuestion(qev);
+    }else{
+      alert(text('questionReady'));
+    }
+  }
+  function spin(e){
+    if(e){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    }
+    if(locked) return;
+    const wheel = $('wheel');
+    const btn = $('spinBtn');
+    if(!wheel) return;
+
+    ensureStarted();
+    ensureQuestionBank();
+    drawWheel();
+
+    const defs = activeEvents();
+    if(!defs.length) return;
+
+    locked = true;
+    try{ if(typeof spinning !== 'undefined') spinning = true; }catch(e){}
+    if(btn) btn.disabled = true;
+
+    const idx = Math.floor(Math.random()*defs.length);
+    const ev = defs[idx];
+    const seg = 360 / defs.length;
+    const center = idx*seg + seg/2;
+    const stopAtPointer = 360 - center;
+
+    const current = Number(wheel.dataset.v18Rotation || wheel.dataset.v17Rotation || wheel.dataset.rotation || 0) || 0;
+    const target = current + 360*6 + ((stopAtPointer - current) % 360 + 360) % 360;
+    wheel.dataset.v18Rotation = String(target);
+    wheel.dataset.v17Rotation = String(target);
+    wheel.dataset.rotation = String(target);
+
+    wheel.classList.add('s005-v17-spinning');
+    wheel.style.setProperty('transition','none','important');
+    wheel.style.setProperty('transform',`rotate(${current}deg)`,'important');
+    wheel.getBoundingClientRect();
+
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      wheel.style.setProperty('transition','transform 4s cubic-bezier(.12,.72,.12,1)','important');
+      wheel.style.setProperty('transform',`rotate(${target}deg)`,'important');
+    }));
+
+    const result = $('resultBadge');
+    const log = $('eventLog');
+    if(result) result.innerHTML = `🎡 ${text('spinning')}`;
+    if(log) log.innerHTML = `🎡 ${text('spinning')}`;
+
+    window.clearTimeout(window.__s005V18QuestionTimer);
+    window.__s005V18QuestionTimer = window.setTimeout(function(){
+      wheel.classList.remove('s005-v17-spinning');
+      if(result) result.innerHTML = `${ev.icon} ${eventLabel(ev.id)}`;
+      locked = false;
+      try{ if(typeof spinning !== 'undefined') spinning = false; }catch(e){}
+      if(btn) btn.disabled = false;
+      showQuestionForEvent(ev);
+    }, 4100);
+  }
+  function shouldSpin(target){
+    if(!target || !target.closest) return false;
+    return !!(target.closest('#spinBtn') || target.closest('.wheelBox'));
+  }
+  function patchEventLabels(){
+    const list = $('eventList');
+    if(list){
+      Array.from(list.querySelectorAll('.eventItem')).forEach(item=>{
+        EVENTS.forEach(ev=>{
+          if(item.innerHTML.includes(ev.id)){
+            item.innerHTML = item.innerHTML.replaceAll(ev.id, eventLabel(ev.id));
+          }
+        });
+      });
+    }
+  }
+  function init(){
+    drawWheel();
+    patchEventLabels();
+    const btn = $('spinBtn');
+    if(btn){
+      btn.disabled = false;
+      btn.onclick = spin;
+    }
+    if(!document.documentElement.dataset.s005V18QuestionSpin){
+      document.documentElement.dataset.s005V18QuestionSpin = '1';
+      window.addEventListener('click', function(e){
+        if(shouldSpin(e.target)) spin(e);
+      }, true);
+    }
+    ['eventSelector','eventSuggest6Btn','eventSelectAllBtn','langSelect'].forEach(id=>{
+      const el=$(id);
+      if(el && !el.dataset.s005V18Labels){
+        el.dataset.s005V18Labels='1';
+        el.addEventListener('change',()=>setTimeout(()=>{drawWheel();patchEventLabels();},80),true);
+        el.addEventListener('click',()=>setTimeout(()=>{drawWheel();patchEventLabels();},120),true);
+      }
+    });
+    setTimeout(()=>{drawWheel();patchEventLabels();},180);
+    setTimeout(()=>{drawWheel();patchEventLabels();},900);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- S005_ALWAYS_QUESTION_AFTER_SPIN_FIX_END -->
 
 </body>
 </html>
