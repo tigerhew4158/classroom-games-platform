@@ -610,6 +610,24 @@
 .topbar,.app,.hero,.top-controls{z-index:auto;}
 /* S001_MODAL_TOP_LAYER_FIX_END */
 
+
+/* S001_START_BOARD_FIX_START */
+body.ratio-34 .app, body.ratio-916 .app{grid-template-rows:auto minmax(0,1fr);}
+body.ratio-34 .topbar, body.ratio-916 .topbar{grid-template-columns:1fr; gap:8px;}
+body.ratio-34 .hero, body.ratio-916 .hero{min-height:78px;}
+body.ratio-34 .top-controls, body.ratio-916 .top-controls{justify-content:flex-start; gap:8px;}
+body.ratio-34 .layout, body.ratio-916 .layout{grid-template-columns:1fr; gap:8px; overflow:auto;}
+body.ratio-34 .side-card, body.ratio-916 .side-card{display:none;}
+body.ratio-34 .center-card, body.ratio-916 .center-card{min-height:760px;}
+body.ratio-34 .board, body.ratio-916 .board{min-height:660px; grid-template-columns:repeat(4,1fr)!important;}
+body.ratio-34 .card, body.ratio-916 .card{height:132px;}
+body.ratio-34 .bottom-actions, body.ratio-916 .bottom-actions{grid-template-columns:repeat(2,1fr);}
+body.ratio-34 .settings-modal, body.ratio-916 .settings-modal{width:min(860px, calc(100vw - 40px))!important;}
+.board.s001-empty{display:flex!important;align-items:center;justify-content:center;color:#dbeafe;font-size:26px;font-weight:1000;text-align:center;padding:28px;}
+.board.s001-empty::before{content:"正在载入题库与卡片…";}
+.card{visibility:visible!important;opacity:1!important;}
+/* S001_START_BOARD_FIX_END */
+
 </style>
 </head>
 <body>
@@ -639,6 +657,8 @@
           <select id="ratioSelect" aria-label="Screen ratio" style="min-width:110px">
             <option value="16:9">16:9</option>
             <option value="4:3">4:3</option>
+            <option value="3:4">3:4</option>
+            <option value="9:16">9:16</option>
           </select>
         </div>
         <div class="pill"><div style="font-size:28px">⏰</div><div><div class="small" id="timerLabel">时间</div><div class="value" id="timerText">01:20</div></div></div>
@@ -1690,9 +1710,16 @@ function beep(type){ try{ const AC = window.AudioContext || window.webkitAudioCo
 function fitStageToScreen(){
   const app = document.querySelector('.app');
   const mode = state.ratio || '16:9';
-  const design = mode === '4:3' ? {w:1200, h:900} : {w:1600, h:900};
+  let design = {w:1600, h:900};
+  if(mode === '4:3') design = {w:1200, h:900};
+  if(mode === '3:4') design = {w:900, h:1200};
+  if(mode === '9:16') design = {w:900, h:1600};
+
   document.body.classList.toggle('ratio-43', mode === '4:3');
-  document.body.classList.toggle('ratio-169', mode !== '4:3');
+  document.body.classList.toggle('ratio-169', mode === '16:9');
+  document.body.classList.toggle('ratio-34', mode === '3:4');
+  document.body.classList.toggle('ratio-916', mode === '9:16');
+
   app.style.width = design.w + 'px';
   app.style.height = design.h + 'px';
   const scale = Math.min(window.innerWidth / design.w, window.innerHeight / design.h);
@@ -2243,6 +2270,228 @@ Segi tiga,Triangle`
 })();
 </script>
 <!-- S001_EXPORT_APPLY_BUTTON_FIX_END -->
+
+
+<!-- S001_START_BOARD_FIX_START -->
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+
+  const FALLBACK_BANKS = {
+    zh:`苹果,apple
+香蕉,banana
+老师,teacher
+学生,student
+书本,book
+小猫,cat
+马来文,Melayu
+英文,English
+人工智能,AI
+网络安全,Cybersecurity
+光合作用,Photosynthesis
+首都,Kuala Lumpur
+感谢,Thank you
+早安,Selamat pagi
+圆形,Circle
+三角形,Triangle`,
+    en:`Apple,苹果
+Banana,香蕉
+Teacher,老师
+Student,学生
+Book,书本
+Cat,小猫
+Malay Language,马来文
+English Language,英文
+Artificial Intelligence,AI
+Cybersecurity,网络安全
+Photosynthesis,光合作用
+Capital,Kuala Lumpur
+Thank you,感谢
+Good morning,Selamat pagi
+Circle,圆形
+Triangle,三角形`,
+    ms:`Epal,apple
+Pisang,banana
+Guru,teacher
+Murid,student
+Buku,book
+Kucing,cat
+Bahasa Melayu,Melayu
+Bahasa Inggeris,English
+Kecerdasan Buatan,AI
+Keselamatan Siber,Cybersecurity
+Fotosintesis,Photosynthesis
+Ibu negara,Kuala Lumpur
+Terima kasih,Thank you
+Selamat pagi,Good morning
+Bulatan,Circle
+Segi tiga,Triangle`
+  };
+
+  function currentLang(){
+    try{ if(typeof state !== 'undefined' && state.lang) return state.lang; }catch(e){}
+    const v = ($('langSelect') && $('langSelect').value) || 'zh';
+    if(String(v).toLowerCase().startsWith('en')) return 'en';
+    if(String(v).toLowerCase().startsWith('ms')) return 'ms';
+    return 'zh';
+  }
+  function sampleBank(){
+    try{
+      if(typeof t === 'function'){
+        const s = t('sampleBank');
+        if(s && s !== 'sampleBank') return s;
+      }
+    }catch(e){}
+    return FALLBACK_BANKS[currentLang()] || FALLBACK_BANKS.zh;
+  }
+  function safeParse(text){
+    try{
+      if(typeof parseBank === 'function'){
+        const p = parseBank(String(text || ''));
+        if(Array.isArray(p)) return p;
+      }
+    }catch(e){}
+    return String(text || '').split(/\r?\n/)
+      .map(x=>x.trim()).filter(Boolean)
+      .map(line=>{
+        const parts = line.split(/[,|，\t]/).map(s=>s.trim()).filter(Boolean);
+        return {left:parts[0]||'', right:parts.slice(1).join(',')||''};
+      }).filter(x=>x.left && x.right);
+  }
+  function ensureUsableBank(){
+    let bank = '';
+    try{ bank = state.bankText || ''; }catch(e){}
+    let pool = safeParse(bank);
+    if(pool.length < 6){
+      bank = sampleBank();
+      try{ state.bankText = bank; }catch(e){}
+      const input = $('bankInput');
+      if(input) input.value = bank;
+      pool = safeParse(bank);
+    }
+    if(pool.length < 6){
+      pool = safeParse(FALLBACK_BANKS.zh);
+      try{ state.bankText = FALLBACK_BANKS.zh; }catch(e){}
+    }
+    return pool;
+  }
+  function localShuffle(arr){
+    const a = [...arr];
+    for(let i=a.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
+  }
+  function buildCardsManually(){
+    let pool = ensureUsableBank();
+    let pairsCount = 8;
+    try{ pairsCount = Math.max(6, Math.min(Number(state.totalPairs)||8, pool.length)); }catch(e){}
+    const pairs = localShuffle(pool).slice(0, pairsCount);
+    try{
+      state.stagePairPool = pairs;
+      state.cards = [];
+      pairs.forEach((pair, idx)=>{
+        const iconLeft = typeof iconForText === 'function' ? iconForText(pair.left) : '';
+        const iconRight = typeof iconForText === 'function' ? iconForText(pair.right) : '';
+        state.cards.push({uid:`${idx}-a`,matchId:`m-${idx}`,text:pair.left,kindKey:'kindA',matched:false,flipped:false,icon:iconLeft});
+        state.cards.push({uid:`${idx}-b`,matchId:`m-${idx}`,text:pair.right,kindKey:'kindB',matched:false,flipped:false,icon:iconRight});
+      });
+      state.cards = (typeof shuffle === 'function') ? shuffle(state.cards) : localShuffle(state.cards);
+      state.matchedPairs = 0;
+      state.openedCount = 0;
+      state.flipped = [];
+      state.locked = false;
+      return true;
+    }catch(e){
+      console.error('[S001 manual build]', e);
+      return false;
+    }
+  }
+  function boardCount(){
+    const b = $('board');
+    return b ? b.querySelectorAll('.card').length : 0;
+  }
+  function forceRenderBoard(){
+    const b = $('board');
+    if(b) b.classList.add('s001-empty');
+    try{
+      ensureUsableBank();
+      if(typeof buildStageCards === 'function'){
+        const ok = buildStageCards();
+        if(!ok) buildCardsManually();
+      }else{
+        buildCardsManually();
+      }
+      try{ state.running = true; }catch(e){}
+      try{ resetHelpUses && resetHelpUses(); }catch(e){}
+      try{ renderBoard && renderBoard(); }catch(e){ console.error('[S001 renderBoard]', e); }
+      if($('board')) $('board').classList.remove('s001-empty');
+      try{ renderRanking && renderRanking(); }catch(e){}
+      try{ updateProgressPanel && updateProgressPanel(); }catch(e){}
+      try{ updateInfoPanel && updateInfoPanel(); }catch(e){}
+      try{ updateActionButtons && updateActionButtons(); }catch(e){}
+      try{ fitStageToScreen && fitStageToScreen(); }catch(e){}
+    }catch(err){
+      console.error('[S001 forceRenderBoard]', err);
+    }
+  }
+
+  const originalStartGame = (typeof startGame === 'function') ? startGame : null;
+  if(originalStartGame){
+    startGame = function(resetTeams=true){
+      try{
+        ensureUsableBank();
+        if(resetTeams && typeof prepareTeams === 'function') prepareTeams();
+        let ok = false;
+        try{ ok = typeof buildStageCards === 'function' ? buildStageCards() : false; }catch(e){ ok = false; }
+        if(!ok) ok = buildCardsManually();
+        if(!ok) return forceRenderBoard();
+
+        state.running = true;
+        state.flipped = [];
+        state.locked = false;
+        try{ resetHelpUses(); }catch(e){}
+        try{ startTimer(); }catch(e){}
+        try{ renderBoard(); }catch(e){ console.error(e); }
+        try{ renderRanking(); }catch(e){}
+        try{ updateProgressPanel(); }catch(e){}
+        try{ updateInfoPanel(); }catch(e){}
+        try{ updateActionButtons(); }catch(e){}
+        state.gameStartedOnce = true;
+        setTimeout(function(){ if(boardCount()===0) forceRenderBoard(); }, 120);
+      }catch(err){
+        console.error('[S001 robust start]', err);
+        forceRenderBoard();
+      }
+    };
+  }
+
+  function init(){
+    const ratio = $('ratioSelect');
+    if(ratio && !ratio.querySelector('option[value="9:16"]')){
+      ratio.insertAdjacentHTML('beforeend','<option value="3:4">3:4</option><option value="9:16">9:16</option>');
+    }
+    const board = $('board');
+    if(board) board.classList.add('s001-empty');
+    setTimeout(function(){ if(boardCount()===0) forceRenderBoard(); }, 250);
+    setTimeout(function(){ if(boardCount()===0) forceRenderBoard(); }, 900);
+
+    const restart = $('restartBtn');
+    if(restart && !restart.dataset.s001StartFixed){
+      restart.dataset.s001StartFixed = '1';
+      restart.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+        try{ state.stage = 1; }catch(err){}
+        startGame(true);
+      }, true);
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- S001_START_BOARD_FIX_END -->
 
 </body>
 </html>
