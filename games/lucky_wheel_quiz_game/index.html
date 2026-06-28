@@ -279,6 +279,19 @@ body.ratio-916 .wheelBox, body.ratio-34 .wheelBox{width:min(88vw,380px)!importan
 }
 /* S005_FLAT_ROUND_WHEEL_FIX_END */
 
+
+/* S005_DOCUMENT_CLICK_SPIN_FIX_START */
+.wheelBox,.wheel,.spinBtn{pointer-events:auto!important;}
+.wheelBox{cursor:pointer!important;}
+.spinBtn{
+  cursor:pointer!important;
+  user-select:none!important;
+}
+.wheel.s005-v17-spinning{
+  filter:drop-shadow(0 0 24px rgba(250,204,21,.55))!important;
+}
+/* S005_DOCUMENT_CLICK_SPIN_FIX_END */
+
 </style>
 </head>
 <body>
@@ -1464,6 +1477,195 @@ ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Ala
 })();
 </script>
 <!-- S005_FLAT_ROUND_WHEEL_FIX_END -->
+
+
+<!-- S005_DOCUMENT_CLICK_SPIN_FIX_START -->
+<script>
+(function(){
+  const FALLBACK_EVENTS = [
+    {id:'quiz1',icon:'❓',label:'＋1题目',color:'#8b5cf6',quiz:true,score:1},
+    {id:'quiz2',icon:'⭐',label:'＋2题目',color:'#2563eb',quiz:true,score:2},
+    {id:'doubleQuiz',icon:'💎',label:'双倍挑战',color:'#06b6d4',quiz:true,score:4},
+    {id:'bonus1',icon:'🎁',label:'＋1奖励',color:'#22c55e',score:1},
+    {id:'bonus2',icon:'🏆',label:'＋2奖励',color:'#16a34a',score:2},
+    {id:'trap1',icon:'⚠️',label:'－1陷阱',color:'#ef4444',score:-1},
+    {id:'trap2',icon:'💣',label:'－2陷阱',color:'#dc2626',score:-2},
+    {id:'steal',icon:'🕵️',label:'偷1分',color:'#f97316',score:1},
+    {id:'swap',icon:'🔄',label:'交换分数',color:'#a855f7',score:0},
+    {id:'pass',icon:'⏭️',label:'跳过',color:'#64748b',score:0}
+  ];
+  const RECOMMENDED = ['quiz1','quiz2','doubleQuiz','bonus1','trap1','steal'];
+  let locked = false;
+
+  function $(id){ return document.getElementById(id); }
+  function label(ev){
+    if(!ev) return '';
+    try{
+      if(typeof t === 'function' && ev.id){
+        const s = t(ev.id);
+        if(s && s !== ev.id) return s;
+      }
+    }catch(e){}
+    return ev.label || ev.id || '';
+  }
+  function activeEvents(){
+    try{
+      if(typeof getActiveEventDefs === 'function'){
+        const defs = getActiveEventDefs();
+        if(Array.isArray(defs) && defs.length){
+          return defs.map((ev,i)=>({
+            id:ev.id || FALLBACK_EVENTS[i%FALLBACK_EVENTS.length].id,
+            icon:ev.icon || FALLBACK_EVENTS[i%FALLBACK_EVENTS.length].icon,
+            label:label(ev) || FALLBACK_EVENTS[i%FALLBACK_EVENTS.length].label,
+            color:ev.color || FALLBACK_EVENTS[i%FALLBACK_EVENTS.length].color,
+            quiz:ev.quiz,
+            score:typeof ev.score === 'number' ? ev.score : FALLBACK_EVENTS[i%FALLBACK_EVENTS.length].score
+          }));
+        }
+      }
+    }catch(e){}
+    const checked = Array.from(document.querySelectorAll('#eventSelector .eventCheck:checked')).map(x=>x.value);
+    const ids = checked.length ? checked : RECOMMENDED;
+    return FALLBACK_EVENTS.filter(x=>ids.includes(x.id));
+  }
+  function drawWheel(){
+    const wheel = $('wheel');
+    if(!wheel) return;
+    const defs = activeEvents();
+    if(!defs.length) return;
+    const seg = 360 / defs.length;
+    wheel.style.background = `conic-gradient(${defs.map((ev,i)=>`${ev.color} ${i*seg}deg ${(i+1)*seg}deg`).join(',')})`;
+    wheel.innerHTML = defs.map((ev,i)=>{
+      const angle = i*seg + seg/2;
+      return `<div class="wheelLabel" style="transform:rotate(${angle}deg) translateY(-155px) rotate(90deg)">${ev.icon}<br>${label(ev)}</div>`;
+    }).join('');
+  }
+  function ensureStarted(){
+    try{
+      if(typeof started !== 'undefined' && started) return true;
+      if(typeof startGame === 'function') startGame();
+      if(typeof started !== 'undefined') started = true;
+      const layout = $('layout');
+      if(layout){ layout.classList.add('playing'); layout.classList.remove('showSettings'); }
+      return true;
+    }catch(err){
+      console.error('[S005 v17 ensureStarted]', err);
+      return true;
+    }
+  }
+  function spinNow(e){
+    if(e){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    }
+    if(locked) return;
+    const wheel = $('wheel');
+    const btn = $('spinBtn');
+    if(!wheel) return;
+
+    ensureStarted();
+    drawWheel();
+
+    const defs = activeEvents();
+    if(!defs.length) return;
+
+    locked = true;
+    try{ if(typeof spinning !== 'undefined') spinning = true; }catch(err){}
+    if(btn) btn.disabled = true;
+
+    const idx = Math.floor(Math.random() * defs.length);
+    const ev = defs[idx];
+    const seg = 360 / defs.length;
+    const center = idx * seg + seg / 2;
+    const stopAtPointer = 360 - center;
+
+    const current = Number(wheel.dataset.v17Rotation || wheel.dataset.rotation || 0) || 0;
+    const target = current + (6 + Math.floor(Math.random()*2)) * 360 + ((stopAtPointer - current) % 360 + 360) % 360;
+    wheel.dataset.v17Rotation = String(target);
+    wheel.dataset.rotation = String(target);
+
+    // Force a visible animation even if older scripts set other transforms/transitions.
+    wheel.classList.add('s005-v17-spinning');
+    wheel.style.setProperty('transition','none','important');
+    wheel.style.setProperty('transform',`rotate(${current}deg)`,'important');
+    wheel.getBoundingClientRect();
+
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        wheel.style.setProperty('transition','transform 4s cubic-bezier(.12,.72,.12,1)','important');
+        wheel.style.setProperty('transform',`rotate(${target}deg)`,'important');
+      });
+    });
+
+    const result = $('resultBadge');
+    const log = $('eventLog');
+    if(result) result.innerHTML = '🎡 转动中...';
+    if(log) log.innerHTML = '🎡 转盘正在转动...';
+
+    window.clearTimeout(window.__s005V17SpinTimer);
+    window.__s005V17SpinTimer = window.setTimeout(function(){
+      wheel.classList.remove('s005-v17-spinning');
+      if(result) result.innerHTML = `${ev.icon} ${label(ev)}`;
+      if(log) log.innerHTML = `${ev.icon} ${label(ev)}`;
+      locked = false;
+      try{ if(typeof spinning !== 'undefined') spinning = false; }catch(err){}
+      if(btn) btn.disabled = false;
+
+      try{
+        if(typeof selectedEvent !== 'undefined') selectedEvent = ev;
+        if(typeof handleEvent === 'function') handleEvent(ev);
+      }catch(err){
+        console.error('[S005 v17 handleEvent]', err);
+      }
+    }, 4100);
+  }
+  function shouldSpinFromTarget(target){
+    if(!target || !target.closest) return false;
+    if(target.closest('#spinBtn')) return true;
+    const box = target.closest('.wheelBox');
+    if(box) return true;
+    return false;
+  }
+  function init(){
+    drawWheel();
+    const btn = $('spinBtn');
+    if(btn){
+      btn.disabled = false;
+      btn.onclick = function(ev){ spinNow(ev); };
+    }
+
+    // This runs before target-level listeners from older code, so it cannot be blocked by them.
+    if(!document.documentElement.dataset.s005V17DocSpin){
+      document.documentElement.dataset.s005V17DocSpin = '1';
+      document.addEventListener('click', function(e){
+        if(shouldSpinFromTarget(e.target)) spinNow(e);
+      }, true);
+      document.addEventListener('pointerup', function(e){
+        if(shouldSpinFromTarget(e.target)){
+          // Use click as the main trigger; pointerup is only a fallback for browsers that swallow click.
+          if(e.pointerType === 'touch') spinNow(e);
+        }
+      }, true);
+    }
+
+    ['eventSelector','eventSuggest6Btn','eventSelectAllBtn','langSelect'].forEach(id=>{
+      const el=$(id);
+      if(el && !el.dataset.s005V17Draw){
+        el.dataset.s005V17Draw = '1';
+        el.addEventListener('change', ()=>setTimeout(drawWheel,60), true);
+        el.addEventListener('click', ()=>setTimeout(drawWheel,90), true);
+      }
+    });
+
+    setTimeout(drawWheel,100);
+    setTimeout(drawWheel,800);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- S005_DOCUMENT_CLICK_SPIN_FIX_END -->
 
 </body>
 </html>
