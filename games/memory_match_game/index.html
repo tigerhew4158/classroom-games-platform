@@ -2064,5 +2064,185 @@ Segi tiga,Triangle`
 </script>
 <!-- S001_TEAM_NAMES_DEFAULT_FIX_END -->
 
+
+<!-- S001_EXPORT_APPLY_BUTTON_FIX_START -->
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+
+  function currentLang(){
+    try{
+      if(typeof state !== 'undefined' && state.lang) return state.lang;
+    }catch(e){}
+    const v = ($('langSelect') && $('langSelect').value) || 'zh';
+    if(String(v).toLowerCase().startsWith('en')) return 'en';
+    if(String(v).toLowerCase().startsWith('ms')) return 'ms';
+    return 'zh';
+  }
+
+  function sampleBankFallback(){
+    const banks = {
+      zh:`苹果,apple
+香蕉,banana
+老师,teacher
+学生,student
+书本,book
+小猫,cat
+马来文,Melayu
+英文,English
+人工智能,AI
+网络安全,Cybersecurity
+光合作用,Photosynthesis
+首都,Kuala Lumpur
+感谢,Thank you
+早安,Selamat pagi
+圆形,Circle
+三角形,Triangle`,
+      en:`Apple,苹果
+Banana,香蕉
+Teacher,老师
+Student,学生
+Book,书本
+Cat,小猫
+Malay Language,马来文
+English Language,英文
+Artificial Intelligence,AI
+Cybersecurity,网络安全
+Photosynthesis,光合作用
+Capital,Kuala Lumpur
+Thank you,感谢
+Good morning,Selamat pagi
+Circle,圆形
+Triangle,三角形`,
+      ms:`Epal,apple
+Pisang,banana
+Guru,teacher
+Murid,student
+Buku,book
+Kucing,cat
+Bahasa Melayu,Melayu
+Bahasa Inggeris,English
+Kecerdasan Buatan,AI
+Keselamatan Siber,Cybersecurity
+Fotosintesis,Photosynthesis
+Ibu negara,Kuala Lumpur
+Terima kasih,Thank you
+Selamat pagi,Good morning
+Bulatan,Circle
+Segi tiga,Triangle`
+    };
+    try{
+      if(typeof t === 'function'){
+        const s = t('sampleBank');
+        if(s && s !== 'sampleBank') return s;
+      }
+    }catch(e){}
+    return banks[currentLang()] || banks.zh;
+  }
+
+  function teamNamesFallback(){
+    const lang = currentLang();
+    if(lang === 'en') return 'Red Team,Blue Team,Green Team,Purple Team';
+    if(lang === 'ms') return 'Kumpulan Merah,Kumpulan Biru,Kumpulan Hijau,Kumpulan Ungu';
+    return '红队,蓝队,绿队,紫队';
+  }
+
+  function toastMsg(msg){
+    try{
+      if(typeof showToast === 'function'){
+        showToast(true);
+        if($('toastBig')) $('toastBig').textContent = msg;
+        if($('toastSub')) $('toastSub').textContent = '';
+        return;
+      }
+    }catch(e){}
+    console.log(msg);
+  }
+
+  function safeExportTxt(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+    const bank = $('bankInput');
+    const content = (bank && bank.value && bank.value.trim()) ? bank.value : sampleBankFallback();
+    try{
+      if(typeof state !== 'undefined') state.bankText = content;
+      if(typeof saveLocal === 'function') saveLocal();
+    }catch(err){}
+
+    const blob = new Blob([content], {type:'text/plain;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'S001-memory-match-bank.txt';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function(){
+      URL.revokeObjectURL(url);
+      a.remove();
+    }, 800);
+  }
+
+  function safeApplyRestart(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+
+    try{ if(typeof ensureRecommendedSettingsDefaults === 'function') ensureRecommendedSettingsDefaults(); }catch(err){}
+
+    const teamCount = Number(($('teamCountInput') && $('teamCountInput').value) || 2);
+    const stageCount = Number(($('stageCountInput') && $('stageCountInput').value) || 5);
+    const timerLimit = Number(($('timeLimitInput') && $('timeLimitInput').value) || 300);
+    const totalPairs = Number(($('pairCountInput') && $('pairCountInput').value) || 8);
+    const correctTurn = ($('correctTurnInput') && $('correctTurnInput').value) || 'stay';
+    const wrongTurn = ($('wrongTurnInput') && $('wrongTurnInput').value) || 'next';
+    const names = (($('teamNamesInput') && $('teamNamesInput').value) || '').trim() || teamNamesFallback();
+    const bank = (($('bankInput') && $('bankInput').value) || '').trim() || sampleBankFallback();
+
+    try{
+      if(typeof state !== 'undefined'){
+        state.teamCount = [2,3,4].includes(teamCount) ? teamCount : 2;
+        state.stageCount = [3,4,5,6].includes(stageCount) ? stageCount : 5;
+        state.timerLimit = [0,180,300,480,600].includes(timerLimit) ? timerLimit : 300;
+        state.totalPairs = [6,8,10,12].includes(totalPairs) ? totalPairs : 8;
+        state.correctTurn = ['stay','next'].includes(correctTurn) ? correctTurn : 'stay';
+        state.wrongTurn = ['next','stay'].includes(wrongTurn) ? wrongTurn : 'next';
+        state.teamNames = names;
+        state.bankText = bank;
+        state.stage = 1;
+      }
+      if(typeof saveLocal === 'function') saveLocal();
+      if(typeof closeSettings === 'function') closeSettings();
+      else if($('settingsOverlay')) $('settingsOverlay').classList.remove('show');
+      if(typeof prepareTeams === 'function') prepareTeams();
+      if(typeof startGame === 'function') startGame(true);
+      if(typeof fitStageToScreen === 'function') setTimeout(fitStageToScreen, 80);
+      toastMsg(currentLang()==='en' ? 'Settings applied and game restarted.' : currentLang()==='ms' ? 'Tetapan digunakan dan permainan dimulakan semula.' : '设定已套用，并重新开始游戏。');
+    }catch(err){
+      console.error('[S001 apply button fix]', err);
+      try{ if(typeof applySettingsFromForm === 'function') applySettingsFromForm(); }
+      catch(err2){ alert('套用失败 / Apply failed: ' + (err2 && err2.message ? err2.message : err2)); }
+    }
+  }
+
+  function bindOnce(id, fn){
+    const el = $(id);
+    if(!el) return;
+    if(el.dataset.s001ExportApplyFixed === '1') return;
+    el.dataset.s001ExportApplyFixed = '1';
+    el.addEventListener('click', fn, true);
+    el.style.pointerEvents = 'auto';
+    el.style.position = 'relative';
+    el.style.zIndex = '2147483002';
+  }
+
+  function init(){
+    bindOnce('exportTxtBtn', safeExportTxt);
+    bindOnce('applySettingsBtn', safeApplyRestart);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- S001_EXPORT_APPLY_BUTTON_FIX_END -->
+
 </body>
 </html>
