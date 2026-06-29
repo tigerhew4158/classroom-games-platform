@@ -319,6 +319,77 @@ body.ratio-916 .wheelBox, body.ratio-34 .wheelBox{width:min(88vw,380px)!importan
 }
 /* S005_ALWAYS_QUESTION_AFTER_SPIN_FIX_END */
 
+
+/* S005_REAL_QUESTION_MODAL_FIX_START */
+.modalBackdrop.show{
+  display:flex!important;
+  z-index:2147483600!important;
+}
+.modal{
+  background:#ffffff!important;
+  color:#111827!important;
+}
+.s005QuestionCard{
+  text-align:center;
+}
+.s005QuestionTitle{
+  font-size:clamp(26px,3.4vw,42px);
+  line-height:1.3;
+  font-weight:1000;
+  color:#111827;
+  margin:14px 0 18px;
+}
+.s005EventHeader{
+  font-size:clamp(20px,2.4vw,30px);
+  font-weight:1000;
+  color:#4c1d95;
+  margin-bottom:10px;
+}
+.s005Options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:18px 0;
+}
+.s005Option{
+  border:2px solid #c7d2fe!important;
+  background:#eef2ff!important;
+  color:#111827!important;
+  border-radius:18px!important;
+  padding:16px 18px!important;
+  font-size:22px!important;
+  font-weight:1000!important;
+  box-shadow:none!important;
+}
+.s005Option.correct{background:#bbf7d0!important;border-color:#22c55e!important;}
+.s005Option.wrong{background:#fecaca!important;border-color:#ef4444!important;}
+.s005AnswerBox{
+  display:none;
+  margin:16px 0;
+  padding:16px 18px;
+  border-radius:18px;
+  background:#fef3c7;
+  color:#111827;
+  font-size:22px;
+  font-weight:900;
+}
+.s005ModalActions{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+.s005ModalActions button{
+  min-width:140px;
+  font-size:20px!important;
+  padding:13px 18px!important;
+}
+@media (max-width:760px){
+  .s005Options{grid-template-columns:1fr;}
+}
+/* S005_REAL_QUESTION_MODAL_FIX_END */
+
 </style>
 </head>
 <body>
@@ -1798,6 +1869,167 @@ ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Ala
       return `<div class="wheelLabel" style="transform:rotate(${angle}deg) translateY(-155px) rotate(90deg)">${ev.icon}<br>${eventLabel(ev.id)}</div>`;
     }).join('');
   }
+
+  function escapeV19(s){
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function(ch){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch];
+    });
+  }
+  function normV19(s){
+    return String(s || '').trim().toLowerCase().replace(/\s+/g,' ');
+  }
+  function shuffleV19(arr){
+    const a=[...arr];
+    for(let i=a.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
+  }
+  function readQuestionsV19(){
+    ensureQuestionBank();
+    const bank = $('questionBank');
+    let textBank = bank && bank.value ? bank.value : (SAMPLE_BANKS[lang()] || SAMPLE_BANKS.zh);
+    if(!textBank.trim()) textBank = SAMPLE_BANKS[lang()] || SAMPLE_BANKS.zh;
+    return String(textBank).split(/\r?\n/)
+      .map(line=>line.trim())
+      .filter(Boolean)
+      .map(line=>{
+        const parts = line.split(/[,，\t|｜]/).map(x=>x.trim()).filter(Boolean);
+        const q = parts[0] || '';
+        const answer = parts[1] || '';
+        const options = parts.slice(1);
+        return {q, answer, options: options.length >= 2 ? shuffleV19(options) : []};
+      })
+      .filter(q=>q.q && q.answer);
+  }
+  function nextQuestionV19(){
+    const qs = readQuestionsV19();
+    if(!qs.length) return null;
+    const mode = $('questionMode') ? $('questionMode').value : 'random';
+    if(mode === 'order'){
+      let idx = 0;
+      try{ idx = Number(questionIndex || 0); questionIndex = idx + 1; }catch(e){
+        idx = Number(document.body.dataset.s005QIndex || 0);
+        document.body.dataset.s005QIndex = String(idx + 1);
+      }
+      return qs[idx % qs.length];
+    }
+    return qs[Math.floor(Math.random() * qs.length)];
+  }
+  function teamNameV19(){
+    try{
+      if(typeof teams !== 'undefined' && teams[currentTeam]){
+        if(typeof t === 'function' && teams[currentTeam].nameKey) return t(teams[currentTeam].nameKey);
+        return teams[currentTeam].name || ('第' + (currentTeam+1) + '组');
+      }
+    }catch(e){}
+    return lang()==='en'?'Current Team':lang()==='ms'?'Kumpulan Semasa':'当前队伍';
+  }
+  function addScoreV19(delta){
+    try{
+      if(typeof updateScore === 'function') updateScore(currentTeam, delta);
+      else if(typeof teams !== 'undefined' && teams[currentTeam]){
+        teams[currentTeam].score = Math.max(0, Number(teams[currentTeam].score || 0) + delta);
+      }
+    }catch(e){}
+    try{ if(typeof renderTeams === 'function') renderTeams(); }catch(e){}
+    try{ if(typeof updateHud === 'function') updateHud(); }catch(e){}
+  }
+  function closeModalV19(){
+    const back = $('modalBackdrop');
+    if(back) back.classList.remove('show');
+  }
+  function finishTurnV19(){
+    closeModalV19();
+    try{
+      if(typeof finishTurn === 'function'){ finishTurn(); return; }
+    }catch(e){}
+    try{
+      if($('turnAfter') && $('turnAfter').value === 'next' && typeof currentTeam !== 'undefined' && typeof teams !== 'undefined' && teams.length){
+        currentTeam = (currentTeam + 1) % teams.length;
+      }
+      if(typeof renderTeams === 'function') renderTeams();
+      if(typeof updateHud === 'function') updateHud();
+      if($('spinBtn')) $('spinBtn').disabled = false;
+    }catch(e){}
+  }
+  function judgeV19(isCorrect, score){
+    const penalty = parseInt(($('wrongPenalty') && $('wrongPenalty').value) || '0', 10) || 0;
+    const msg = isCorrect
+      ? (lang()==='en' ? `Correct! +${score}` : lang()==='ms' ? `Betul! +${score}` : `答对！+${score}`)
+      : (penalty>0
+          ? (lang()==='en' ? `Wrong. -${penalty}` : lang()==='ms' ? `Salah. -${penalty}` : `答错！-${penalty}`)
+          : (lang()==='en' ? 'Wrong.' : lang()==='ms' ? 'Salah.' : '答错。'));
+    addScoreV19(isCorrect ? score : (penalty>0 ? -penalty : 0));
+    const log = $('eventLog');
+    if(log) log.innerHTML = `❓ <b>${teamNameV19()}</b>：${msg}`;
+    const action = document.querySelector('.s005ModalActions');
+    if(action){
+      action.innerHTML = `<button class="primary" id="s005ContinueBtn">${lang()==='en'?'Continue':lang()==='ms'?'Teruskan':'继续'}</button>`;
+      $('s005ContinueBtn').addEventListener('click', finishTurnV19, true);
+    }
+  }
+  function showQuestionModalV19(ev){
+    const q = nextQuestionV19();
+    if(!q){
+      const bank = $('questionBank');
+      if(bank) bank.value = SAMPLE_BANKS[lang()] || SAMPLE_BANKS.zh;
+      return showQuestionModalV19(ev);
+    }
+
+    const score = Math.max(1, Math.abs(Number(ev.score)||1));
+    const title = $('modalTitle');
+    const body = $('modalBody');
+    const back = $('modalBackdrop');
+    if(title) title.textContent = lang()==='en'?'Question':lang()==='ms'?'Soalan':'题目';
+    if(!body || !back){ alert(q.q); return; }
+
+    const evText = `${ev.icon || '❓'} ${eventLabel(ev.id)} · ${teamNameV19()}`;
+    const questionHtml = `
+      <div class="s005QuestionCard">
+        <div class="bigEvent">${ev.icon || '❓'}</div>
+        <div class="s005EventHeader">${escapeV19(evText)}</div>
+        <div class="s005QuestionTitle">${escapeV19(q.q)}</div>
+        ${q.options && q.options.length >= 2
+          ? `<div class="s005Options">${q.options.map(opt=>`<button class="s005Option" data-answer="${escapeV19(opt)}">${escapeV19(opt)}</button>`).join('')}</div>`
+          : `<div class="s005AnswerBox" id="s005AnswerBox"><b>${lang()==='en'?'Correct answer':lang()==='ms'?'Jawapan betul':'正确答案'}：</b>${escapeV19(q.answer)}</div>
+             <div class="s005ModalActions">
+               <button id="s005ShowAnswerBtn">${lang()==='en'?'Show Answer':lang()==='ms'?'Tunjuk Jawapan':'显示答案'}</button>
+               <button class="good" id="s005CorrectBtn">${lang()==='en'?'Correct':lang()==='ms'?'Betul':'答对'}</button>
+               <button class="bad" id="s005WrongBtn">${lang()==='en'?'Wrong':lang()==='ms'?'Salah':'答错'}</button>
+             </div>`
+        }
+      </div>`;
+    body.innerHTML = questionHtml;
+    back.classList.add('show');
+
+    if(q.options && q.options.length >= 2){
+      body.querySelectorAll('.s005Option').forEach(btn=>{
+        btn.addEventListener('click', function(){
+          const correct = normV19(btn.dataset.answer) === normV19(q.answer);
+          body.querySelectorAll('.s005Option').forEach(b=>{
+            b.disabled = true;
+            if(normV19(b.dataset.answer) === normV19(q.answer)) b.classList.add('correct');
+            else if(b === btn) b.classList.add('wrong');
+          });
+          const actions = document.createElement('div');
+          actions.className = 's005ModalActions';
+          actions.innerHTML = `<button class="primary" id="s005ContinueBtn">${lang()==='en'?'Continue':lang()==='ms'?'Teruskan':'继续'}</button>`;
+          body.querySelector('.s005QuestionCard').appendChild(actions);
+          judgeV19(correct, score);
+        }, true);
+      });
+    }else{
+      const showBtn = $('s005ShowAnswerBtn');
+      const correctBtn = $('s005CorrectBtn');
+      const wrongBtn = $('s005WrongBtn');
+      if(showBtn) showBtn.addEventListener('click', function(){ const ans=$('s005AnswerBox'); if(ans) ans.style.display='block'; }, true);
+      if(correctBtn) correctBtn.addEventListener('click', function(){ judgeV19(true, score); }, true);
+      if(wrongBtn) wrongBtn.addEventListener('click', function(){ judgeV19(false, score); }, true);
+    }
+  }
+
   function showQuestionForEvent(ev){
     ensureQuestionBank();
     const qev = {
@@ -1813,11 +2045,7 @@ ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Ala
     }catch(e){}
     const log = $('eventLog');
     if(log) log.innerHTML = `${ev.icon} <b>${eventLabel(ev.id)}</b>：${text('questionReady')}`;
-    if(typeof showQuestion === 'function'){
-      showQuestion(qev);
-    }else{
-      alert(text('questionReady'));
-    }
+    showQuestionModalV19(qev);
   }
   function spin(e){
     if(e){
