@@ -1,7 +1,10 @@
-memory_match_game: 0 
-true_false_flash_game: 0 
-sentence_order_game: 0 
-treasure_box_game: 0 
-lucky_wheel_quiz_game: 0 
-tug_spell_game: 0 
-whack_a_mole_quiz_game: 0 
+classification_conveyor_game: 0 
+image_puzzle_speed_race_game: 0 
+bomb_quiz_game: 0 
+knowledge_race_game: 0 
+monster_defense_game: 0 
+find_difference_game: 0 
+keyword_beachhead_game: 0 
+timeline_sort_challenge_game: 0 
+team_relay_quiz_game: 0 
+image_label_match_game: 0 
