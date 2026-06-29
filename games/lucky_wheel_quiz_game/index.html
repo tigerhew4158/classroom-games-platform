@@ -267,7 +267,6 @@ body.ratio-34 .spinBtn,body.ratio-916 .spinBtn{width:88px;height:88px;font-size:
       </div>
     </main>
   </div>
-  <div class="footerNote">LEAD AI Classroom Game Box · S005</div>
 </div>
 
 <div class="modalBackdrop" id="modalBackdrop">
@@ -438,9 +437,9 @@ function load(){
   $('soundSelect').value = saved.soundSelect || 'on';
   $('questionBank').value = saved.questionBank || SAMPLE_BANKS[state.lang] || SAMPLE_BANKS.zh;
   renderEventSelector(saved.events || RECOMMENDED);
-  applyLanguage();
-  setRatio($('ratioSelect').value);
   setupTeams(true);
+  setRatio($('ratioSelect').value);
+  applyLanguage();
 }
 function readSettings(updateState=true){
   const data = {
@@ -534,7 +533,8 @@ function renderScoreBoard(){
   }).join('');
 }
 function renderHud(){
-  const tm = current();
+  if(!state.teams || !state.teams.length) setupTeams(false);
+  const tm = current() || {score:0,rounds:0};
   $('turnText').textContent = `${t('turn')}：${teamName(state.currentTeam)}（${t('score')} ${tm.score}）`;
   $('roundInfo').textContent = state.started ? t('spinNow') : t('logReady');
   const target = Number($('targetScore').value) || 0;
@@ -838,5 +838,42 @@ function init(){
 }
 init();
 </script>
+
+<!-- S005_START_INIT_FIX_V25 -->
+<script>
+(function(){
+  function safe(id){ return document.getElementById(id); }
+  function emergencyStart(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); }
+    try{
+      if(!state.teams || !state.teams.length) setupTeams(true);
+      startGame();
+      const layout=safe('layout');
+      if(layout){ layout.classList.add('playing'); layout.classList.remove('showSettings'); }
+    }catch(err){
+      console.error('[S005 v25 start emergency]', err);
+      try{
+        if(typeof state !== 'undefined'){
+          state.started=true; state.currentTeam=0; state.spinning=false; state.answerLocked=false;
+          if(!state.teams || !state.teams.length) setupTeams(true);
+        }
+        const layout=safe('layout');
+        if(layout){ layout.classList.add('playing'); layout.classList.remove('showSettings'); }
+        if(typeof renderAll==='function') renderAll();
+        if(safe('eventLog')) safe('eventLog').innerHTML='🎡 '+(typeof t==='function'?t('spinNow'):'请点击转盘按钮。');
+      }catch(err2){ alert('开始游戏失败：'+(err2.message||err2)); }
+    }
+  }
+  function init(){
+    const btn=safe('startBtn');
+    if(btn && !btn.dataset.v25Bound){
+      btn.dataset.v25Bound='1';
+      btn.addEventListener('click', emergencyStart, true);
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+
 </body>
 </html>
