@@ -1290,3 +1290,20 @@ body.theme-light .game-card p,
 body.theme-light .game-card small{
   color:#5f7ea8!important;
 }
+
+
+/* Purchase list grouped by level and sorted by template code */
+.purchase-check-list{display:grid;gap:16px;margin-top:12px}
+.purchase-level-group{border:1px solid rgba(147,197,253,.22);border-radius:18px;padding:12px;background:rgba(15,23,42,.28)}
+.purchase-level-title{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-bottom:10px;padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.06)}
+.purchase-level-title b{font-size:17px;color:#fff;white-space:nowrap}
+.purchase-level-title span{flex:1;color:#cbd5e1;font-size:13px;font-weight:700}
+.purchase-level-title em{font-style:normal;display:grid;place-items:center;min-width:28px;height:28px;border-radius:999px;background:#111827;color:#fde047;font-weight:950}
+.purchase-level-group.beginner .purchase-level-title{border-left:5px solid #22c55e}
+.purchase-level-group.intermediate .purchase-level-title{border-left:5px solid #38bdf8}
+.purchase-level-group.advanced .purchase-level-title{border-left:5px solid #a855f7}
+.purchase-check-grid{margin-top:0}
+body.theme-light .purchase-level-group{background:rgba(255,255,255,.74);border-color:rgba(37,99,235,.16)}
+body.theme-light .purchase-level-title{background:#eff6ff}
+body.theme-light .purchase-level-title b{color:#111827}
+body.theme-light .purchase-level-title span{color:#334155}

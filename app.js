@@ -69,6 +69,7 @@ const GAME_LEVELS = {
   advanced: ['platform_quiz','dungeon_dragon_raid','picture_word_guess','two_team_puzzle_duel','island_conquest','kingdom_resource_battle','spot_diff_v2']
 };
 
+const HIDDEN_TEMPLATE_IDS = ['find_difference','keyword_beachhead']; // P006 / P007 reserved, temporarily hidden from teacher menus and purchase lists.
 const LEVEL_ORDER = ['beginner','intermediate','advanced'];
 
 const BASE_FREE_GAMES = ['memory_match','true_false'];
@@ -1084,6 +1085,28 @@ function gameLevel(id){
   }
   return 'beginner';
 }
+
+function shouldShowTemplate(gameOrId){
+  const id = typeof gameOrId === 'string' ? gameOrId : gameOrId?.id;
+  return !HIDDEN_TEMPLATE_IDS.includes(id);
+}
+function sortGamesForDisplay(games){
+  return [...(games || [])].filter(shouldShowTemplate).sort((a,b)=>{
+    const la = LEVEL_ORDER.indexOf(gameLevel(a.id));
+    const lb = LEVEL_ORDER.indexOf(gameLevel(b.id));
+    if(la !== lb) return la - lb;
+    return String(gameCode(a.id)).localeCompare(String(gameCode(b.id)), 'en', {numeric:true});
+  });
+}
+function sortGameIdsForDisplay(ids){
+  return [...(ids || [])].filter(shouldShowTemplate).sort((a,b)=>{
+    const la = LEVEL_ORDER.indexOf(gameLevel(a));
+    const lb = LEVEL_ORDER.indexOf(gameLevel(b));
+    if(la !== lb) return la - lb;
+    return String(gameCode(a)).localeCompare(String(gameCode(b)), 'en', {numeric:true});
+  });
+}
+
 function levelText(level){
   return (LEVEL_TEXT[state.lang || 'zh'] || LEVEL_TEXT.zh)[level] || LEVEL_TEXT.zh[level] || {label:level, desc:''};
 }
@@ -1576,7 +1599,7 @@ function renderLevelLegend(){
 }
 function renderGameGroups(games, accessible, user, prefix=''){
   return LEVEL_ORDER.map(level=>{
-    const group = games.filter(g => gameLevel(g.id) === level);
+    const group = sortGamesForDisplay(games.filter(g => gameLevel(g.id) === level));
     if(!group.length) return '';
     const info = levelText(level);
     const openAttr = accessible ? 'open' : '';
@@ -1590,7 +1613,7 @@ function renderGameGroups(games, accessible, user, prefix=''){
   }).join('');
 }
 function renderAuthorizedSummary(user, available){
-  const list = available.map(g=>`<span class="summary-game ${gameLevel(g.id)}">${gameCode(g.id)}｜${gameName(g.id)}</span>`).join('');
+  const list = sortGamesForDisplay(available).map(g=>`<span class="summary-game ${gameLevel(g.id)}">${gameCode(g.id)}｜${gameName(g.id)}</span>`).join('');
   return `<div class="authorized-summary">
     <div>
       <h3>${tt('authorizedSummaryTitle', {n: available.length})}</h3>
@@ -1648,7 +1671,7 @@ function gamePrice(gameId){
   return 20;
 }
 function formatGameLabel(id){ return `${gameCode(id)}｜${gameName(id)}`; }
-function purchasableGamesForUser(user){ return GAME_DATA.filter(g => !g.free && !userHasAccess(user, g.id)); }
+function purchasableGamesForUser(user){ return sortGamesForDisplay(GAME_DATA.filter(g => !g.free && !userHasAccess(user, g.id))); }
 function teacherOrders(user){ return (state.purchaseOrders || []).filter(o => o.teacherId === user?.id); }
 function orderStatusLabel(status){
   if(status === 'confirmed') return pc('confirmed');
@@ -1661,17 +1684,26 @@ function orderPackageLabel(o){
   return `${pc('single')}｜RM${o.amount}`;
 }
 function orderGamesText(o){
-  if(o.packageType === 'all_access') return GAME_DATA.filter(g=>!g.free).map(g=>formatGameLabel(g.id)).join('，');
-  return (o.gameIds || []).map(formatGameLabel).join('，');
+  if(o.packageType === 'all_access') return sortGamesForDisplay(GAME_DATA.filter(g=>!g.free)).map(g=>formatGameLabel(g.id)).join('，');
+  return sortGameIdsForDisplay(o.gameIds || []).map(formatGameLabel).join('，');
 }
 function calcOrderAmount(type, ids){
   if(type === 'all_access') return 300;
   if(type === 'combo') return 100;
-  return [...new Set(ids || [])].reduce((sum,id)=>sum+gamePrice(id),0);
+  return sortGameIdsForDisplay([...new Set(ids || [])]).reduce((sum,id)=>sum+gamePrice(id),0);
 }
 function renderGamePurchaseChecks(games, className){
-  if(!games.length) return `<div class="muted">${pc('alreadyAuthorized')}</div>`;
-  return `<div class="purchase-check-grid">${games.map(g=>`<label class="purchase-check"><input type="checkbox" class="${className}" value="${g.id}"> <b>${gameCode(g.id)}</b><span>${gameName(g.id)}</span><em>RM${gamePrice(g.id)}</em></label>`).join('')}</div>`;
+  const sorted = sortGamesForDisplay(games);
+  if(!sorted.length) return `<div class="muted">${pc('alreadyAuthorized')}</div>`;
+  return `<div class="purchase-check-list">${LEVEL_ORDER.map(level=>{
+    const group = sorted.filter(g => gameLevel(g.id) === level);
+    if(!group.length) return '';
+    const info = levelText(level);
+    return `<div class="purchase-level-group ${level}">
+      <div class="purchase-level-title"><b>${info.label}</b><span>${info.desc}</span><em>${group.length}</em></div>
+      <div class="purchase-check-grid">${group.map(g=>`<label class="purchase-check"><input type="checkbox" class="${className}" value="${g.id}"> <b>${gameCode(g.id)}</b><span>${gameName(g.id)}</span><em>RM${gamePrice(g.id)}</em></label>`).join('')}</div>
+    </div>`;
+  }).join('')}</div>`;
 }
 function renderMyOrders(user){
   const orders = teacherOrders(user).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
@@ -1680,9 +1712,9 @@ function renderMyOrders(user){
 function renderPurchasePanel(user){
   if(!user || user.role === 'admin') return '';
   const locked = purchasableGamesForUser(user);
-  const singleGames = locked;
-  const biGames = locked.filter(g => ['beginner','intermediate'].includes(gameLevel(g.id)));
-  const advGames = locked.filter(g => gameLevel(g.id) === 'advanced');
+  const singleGames = sortGamesForDisplay(locked);
+  const biGames = sortGamesForDisplay(locked.filter(g => ['beginner','intermediate'].includes(gameLevel(g.id))));
+  const advGames = sortGamesForDisplay(locked.filter(g => gameLevel(g.id) === 'advanced'));
   return `<div class="card purchase-panel" id="purchasePanel">
     <div class="filter-row"><div><h3>${pc('panelTitle')}</h3><div class="muted">${pc('panelDesc')}</div></div></div>
     <div class="notice trial-notice"><b>${pc('trialTemplates')}</b><br>${pc('trialTemplatesDesc')}</div>
