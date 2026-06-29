@@ -553,6 +553,27 @@ body.ratio-916 .wheelBox, body.ratio-34 .wheelBox{width:min(88vw,380px)!importan
 #s005ScoreBoard .s005TurnBadge{background:#facc15!important;color:#111827!important;}
 /* S005_ANSWER_SCORE_AUTOTURN_FIX_END */
 
+
+/* S005_HARD_SCORE_TURN_FIX_START */
+#teams.teams{display:none!important;visibility:hidden!important;height:0!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important;}
+#s005ScoreBoard.s005ScoreBoard{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;margin:0 0 16px!important;position:relative!important;z-index:20!important;}
+#s005TurnPanel.s005TurnPanel{position:relative!important;z-index:20!important;margin:0 0 14px!important;}
+.s005ScoreCard{background:linear-gradient(180deg,#0f2747,#071b36)!important;color:#f8fbff!important;border:2px solid rgba(147,197,253,.38)!important;border-radius:18px!important;padding:13px 14px!important;min-height:108px!important;box-shadow:0 12px 28px rgba(0,0,0,.35)!important;}
+.s005ScoreCard.active{border-color:#facc15!important;outline:4px solid rgba(250,204,21,.42)!important;box-shadow:0 0 0 4px rgba(250,204,21,.20),0 16px 34px rgba(0,0,0,.38)!important;}
+.s005ScoreTop{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:18px;font-weight:1000;}
+.s005TurnBadge{display:inline-flex;align-items:center;padding:4px 9px;border-radius:999px;background:#facc15;color:#111827;font-size:13px;font-weight:1000;white-space:nowrap;}
+.s005ScoreNumber{font-size:clamp(36px,4.5vw,58px)!important;line-height:1!important;font-weight:1000!important;color:#fff!important;margin:8px 0 4px!important;}
+.s005ScoreMeta{color:#dbeafe!important;font-size:14px!important;font-weight:900!important;}
+.s005TurnPanel{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 18px;border-radius:20px;background:linear-gradient(90deg,rgba(37,99,235,.32),rgba(124,58,237,.28));border:1px solid rgba(147,197,253,.35);}
+.s005TurnMain{font-size:clamp(24px,3.2vw,36px);font-weight:1000;color:#fff;}
+.s005TurnSub{color:#dbeafe;font-weight:900;font-size:15px;margin-top:4px;}
+.s005ScoreChange{min-width:130px;text-align:center;padding:10px 14px;border-radius:16px;background:#071b36;border:1px solid rgba(255,255,255,.18);color:#fef3c7;font-size:18px;font-weight:1000;}
+.s005ScoreChange.good{color:#86efac}.s005ScoreChange.bad{color:#fecaca}.s005ScoreChange.next{color:#93c5fd}
+.s005AutoMsg{font-size:20px;font-weight:1000;color:#111827;text-align:center;margin-top:12px;padding:12px 14px;border-radius:14px;background:#fef3c7;}
+@media(max-width:1150px){#s005ScoreBoard.s005ScoreBoard{grid-template-columns:repeat(2,minmax(0,1fr))!important}.s005TurnPanel{flex-direction:column;align-items:flex-start}}
+@media(max-width:640px){#s005ScoreBoard.s005ScoreBoard{grid-template-columns:1fr!important}}
+/* S005_HARD_SCORE_TURN_FIX_END */
+
 </style>
 </head>
 <body>
@@ -2890,6 +2911,192 @@ ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Ala
 })();
 </script>
 <!-- S005_ANSWER_SCORE_AUTOTURN_FIX_END -->
+
+
+<!-- S005_HARD_SCORE_TURN_FIX_START -->
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function lang(){
+    const v = ($('langSelect') && $('langSelect').value) || document.documentElement.lang || 'zh';
+    if(String(v).toLowerCase().startsWith('en')) return 'en';
+    if(String(v).toLowerCase().startsWith('ms')) return 'ms';
+    return 'zh';
+  }
+  const TXT = {
+    zh:{turn:'当前轮到',score:'得分',rounds:'回合',answering:'正在作答',waiting:'等待答题',next:'下一队',correct:'答对',wrong:'答错',autoNext:'已自动换到下一队',same:'本队继续',choose:'请作答',done:'已记录分数'},
+    en:{turn:'Current Turn',score:'Score',rounds:'Turns',answering:'Answering',waiting:'Waiting',next:'Next Team',correct:'Correct',wrong:'Wrong',autoNext:'Moved to next team',same:'Same team continues',choose:'Please answer',done:'Score recorded'},
+    ms:{turn:'Giliran Semasa',score:'Markah',rounds:'Giliran',answering:'Menjawab',waiting:'Menunggu',next:'Kumpulan Seterusnya',correct:'Betul',wrong:'Salah',autoNext:'Beralih ke kumpulan seterusnya',same:'Kumpulan sama teruskan',choose:'Sila jawab',done:'Markah direkodkan'}
+  };
+  const COLORS = ['#ef4444','#3b82f6','#22c55e','#a855f7'];
+  function text(k){ return (TXT[lang()] && TXT[lang()][k]) || TXT.zh[k] || k; }
+  function count(){ const n = Number(($('teamCount') && $('teamCount').value) || 2); return [2,3,4].includes(n) ? n : 2; }
+  function fallbackName(i){
+    const zh=['红队','蓝队','绿队','紫队'];
+    const en=['Red Team','Blue Team','Green Team','Purple Team'];
+    const ms=['Kumpulan Merah','Kumpulan Biru','Kumpulan Hijau','Kumpulan Ungu'];
+    const arr = lang()==='en'?en:lang()==='ms'?ms:zh;
+    return arr[i] || ('Team '+(i+1));
+  }
+  function getState(){
+    let st = window.S005_HARD_STATE;
+    const c = count();
+    if(!st || st.count !== c){
+      const old = st || {};
+      st = window.S005_HARD_STATE = {
+        count:c,
+        current: Math.min(Number(old.current||0), c-1),
+        scores: Array.from({length:c},(_,i)=>Number(old.scores && old.scores[i] || 0)),
+        turns: Array.from({length:c},(_,i)=>Number(old.turns && old.turns[i] || 0)),
+        answered:false,
+        lastMsg:''
+      };
+    }
+    return st;
+  }
+  function syncToOriginal(){
+    const st=getState();
+    try{
+      currentTeam = st.current;
+      if(typeof teams !== 'undefined' && Array.isArray(teams)){
+        if(teams.length !== st.count){
+          const keys=['teamRed','teamBlue','teamGreen','teamPurple'];
+          teams = Array.from({length:st.count},(_,i)=>({nameKey:keys[i],score:0,turns:0,color:COLORS[i]}));
+        }
+        teams.forEach((tm,i)=>{tm.score=st.scores[i]||0; tm.turns=st.turns[i]||0; tm.color=tm.color||COLORS[i];});
+      }
+    }catch(e){}
+  }
+  function ensurePanels(){
+    const game=$('gameArea'), hud=game && game.querySelector('.hud');
+    if(!game || !hud) return;
+    const native=$('teams');
+    if(native){ native.innerHTML=''; native.style.setProperty('display','none','important'); native.style.setProperty('height','0','important'); }
+    if(!$('s005TurnPanel')){
+      const p=document.createElement('div');
+      p.id='s005TurnPanel'; p.className='s005TurnPanel';
+      p.innerHTML='<div><div class="s005TurnMain" id="s005TurnMain"></div><div class="s005TurnSub" id="s005TurnSub"></div></div><div class="s005ScoreChange" id="s005ScoreChange"></div>';
+      hud.insertAdjacentElement('afterend',p);
+    }
+    if(!$('s005ScoreBoard')){
+      const b=document.createElement('div');
+      b.id='s005ScoreBoard'; b.className='s005ScoreBoard';
+      $('s005TurnPanel').insertAdjacentElement('afterend',b);
+    }
+  }
+  function render(msg,kind){
+    ensurePanels();
+    const st=getState(); syncToOriginal();
+    const board=$('s005ScoreBoard');
+    if(board){
+      board.innerHTML = Array.from({length:st.count},(_,i)=>`
+        <div class="s005ScoreCard ${i===st.current?'active':''}">
+          <div class="s005ScoreTop"><span><span class="teamDot" style="background:${COLORS[i]}"></span> ${fallbackName(i)}</span>${i===st.current?`<span class="s005TurnBadge">${text('answering')}</span>`:''}</div>
+          <div class="s005ScoreNumber">${st.scores[i]||0}</div>
+          <div class="s005ScoreMeta">${text('rounds')}：${st.turns[i]||0}</div>
+          <div class="bar"><div class="barFill" style="width:${Math.min(100,(st.scores[i]||0)*10)}%"></div></div>
+        </div>`).join('');
+    }
+    const next=(st.current+1)%st.count;
+    if($('s005TurnMain')) $('s005TurnMain').textContent=`${text('turn')}：${fallbackName(st.current)}`;
+    if($('s005TurnSub')) $('s005TurnSub').textContent=`${text('score')}：${st.scores[st.current]||0}｜${text('rounds')}：${st.turns[st.current]||0}｜${text('next')}：${fallbackName(next)}`;
+    const ch=$('s005ScoreChange');
+    if(ch){ ch.className=`s005ScoreChange ${kind||''}`; ch.textContent=msg || st.lastMsg || text('waiting'); }
+    if($('turnText')) $('turnText').textContent=`${text('turn')}：${fallbackName(st.current)}（${text('score')} ${st.scores[st.current]||0}）`;
+    if($('roundInfo')) $('roundInfo').textContent=`${text('answering')}：${fallbackName(st.current)}｜${text('score')}：${st.scores[st.current]||0}`;
+  }
+  function eventScore(){
+    try{ if(typeof selectedEvent !== 'undefined' && selectedEvent && selectedEvent.score) return Math.max(1, Math.abs(Number(selectedEvent.score)||1)); }catch(e){}
+    try{ if(typeof currentQuizScore !== 'undefined') return Math.max(1, Math.abs(Number(currentQuizScore)||1)); }catch(e){}
+    const rb=$('resultBadge');
+    const txt=rb?rb.textContent:'';
+    if(txt.includes('+2')||txt.includes('2 题')||txt.includes('双倍')||txt.toLowerCase().includes('double')) return 2;
+    return 1;
+  }
+  function answerCorrectFromOption(opt){
+    if(!opt) return false;
+    const chosen = String(opt.dataset.answer || opt.textContent || '').trim().toLowerCase();
+    const qTitle = document.querySelector('.s005QuestionTitle,.question');
+    const qText = qTitle ? String(qTitle.textContent || '').trim() : '';
+    const bank = $('questionBank') ? $('questionBank').value : '';
+    let answer='';
+    String(bank).split(/\r?\n/).forEach(line=>{
+      const parts=line.split(/[,，\t|｜]/).map(x=>x.trim()).filter(Boolean);
+      if(parts.length>=2 && parts[0]===qText) answer=parts[1];
+    });
+    if(!answer){
+      const corr = opt.parentElement && opt.parentElement.querySelector('.s005Option.correct,.option.correct');
+      if(corr) return corr===opt;
+    }
+    return chosen === String(answer).trim().toLowerCase();
+  }
+  function applyAnswer(isCorrect){
+    const st=getState();
+    if(st.answered) return;
+    st.answered=true;
+    const idx=st.current;
+    const score=eventScore();
+    const penalty=Number(($('wrongPenalty')&&$('wrongPenalty').value)||0)||0;
+    const delta = isCorrect ? score : (penalty>0 ? -penalty : 0);
+    st.scores[idx]=Math.max(0,Number(st.scores[idx]||0)+delta);
+    st.turns[idx]=Number(st.turns[idx]||0)+1;
+    const sign=delta>=0?'+':'';
+    st.lastMsg=`${fallbackName(idx)}：${isCorrect?text('correct'):text('wrong')} ${sign}${delta}`;
+    render(st.lastMsg,delta>=0?'good':'bad');
+    const log=$('eventLog'); if(log) log.innerHTML=`❓ <b>${fallbackName(idx)}</b>：${st.lastMsg}`;
+    const body=$('modalBody');
+    if(body && !document.querySelector('.s005AutoMsg')){
+      const div=document.createElement('div'); div.className='s005AutoMsg'; div.textContent=`${text('done')}，${text('autoNext')}`; body.appendChild(div);
+    }
+    clearTimeout(window.__s005HardNextTimer);
+    window.__s005HardNextTimer=setTimeout(nextTeam,900);
+  }
+  function nextTeam(){
+    const st=getState();
+    const same = $('turnAfter') && $('turnAfter').value === 'same';
+    if(!same) st.current=(st.current+1)%st.count;
+    st.answered=false;
+    st.lastMsg=same?text('same'):text('autoNext');
+    const back=$('modalBackdrop'); if(back) back.classList.remove('show');
+    const btn=$('spinBtn'); if(btn) btn.disabled=false;
+    syncToOriginal(); render(st.lastMsg,'next');
+  }
+  function resetState(){
+    const c=count(); window.S005_HARD_STATE={count:c,current:0,scores:Array(c).fill(0),turns:Array(c).fill(0),answered:false,lastMsg:''};
+    syncToOriginal(); render();
+  }
+  function handleClick(e){
+    const t=e.target;
+    if(!t || !t.closest) return;
+    const start=t.closest('#startBtn');
+    if(start){ setTimeout(resetState,150); setTimeout(resetState,600); return; }
+    const spin=t.closest('#spinBtn,.wheelBox');
+    if(spin){ const st=getState(); st.answered=false; syncToOriginal(); setTimeout(()=>render(),150); return; }
+    const cont=t.closest('#s005ContinueBtn,#continueBtn');
+    if(cont){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); nextTeam(); return; }
+    const correct=t.closest('#s005CorrectBtn,#correctBtn');
+    if(correct){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); applyAnswer(true); return; }
+    const wrong=t.closest('#s005WrongBtn,#wrongBtn');
+    if(wrong){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); applyAnswer(false); return; }
+    const opt=t.closest('.s005Option,.option');
+    if(opt){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      const ok=answerCorrectFromOption(opt);
+      opt.classList.add(ok?'correct':'wrong');
+      const parent=opt.parentElement; if(parent){ parent.querySelectorAll('.s005Option,.option').forEach(b=>{b.disabled=true;}); }
+      applyAnswer(ok); return;
+    }
+  }
+  function init(){
+    ensurePanels(); render();
+    if(!window.__s005HardClickBound){ window.__s005HardClickBound=true; window.addEventListener('click',handleClick,true); }
+    const sel=$('teamCount'); if(sel && !sel.dataset.s005HardTeam){ sel.dataset.s005HardTeam='1'; sel.addEventListener('change',resetState,true); }
+    setInterval(()=>render(),700);
+  }
+  window.S005HardRender=render; window.S005HardNextTeam=nextTeam; window.S005HardReset=resetState;
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
+<!-- S005_HARD_SCORE_TURN_FIX_END -->
 
 </body>
 </html>
