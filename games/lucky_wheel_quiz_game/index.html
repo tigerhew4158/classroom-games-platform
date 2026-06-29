@@ -508,6 +508,41 @@ body.ratio-916 .wheelBox, body.ratio-34 .wheelBox{width:min(88vw,380px)!importan
 }
 /* S005_SCORE_TURN_PANEL_FIX_END */
 
+
+/* S005_SCORE_TURN_LOGIC_FIX_START */
+/* 隐藏旧的原生队伍卡片，避免出现两套队伍，造成“多了一组”的错觉 */
+#teams.teams{
+  display:none!important;
+}
+
+/* 只保留新版分数板 */
+#s005ScoreBoard.s005ScoreBoard{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:12px!important;
+  margin:0 0 16px!important;
+  position:relative!important;
+  z-index:10!important;
+}
+
+#s005TurnPanel.s005TurnPanel{
+  position:relative!important;
+  z-index:10!important;
+}
+
+.s005ScoreCard{
+  min-height:104px!important;
+}
+
+.s005ScoreCard.active{
+  outline:4px solid rgba(250,204,21,.88)!important;
+}
+
+.s005TurnBadge{
+  white-space:nowrap!important;
+}
+/* S005_SCORE_TURN_LOGIC_FIX_END */
+
 </style>
 </head>
 <body>
@@ -2443,6 +2478,243 @@ ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Ala
 })();
 </script>
 <!-- S005_SCORE_TURN_PANEL_FIX_END -->
+
+
+<!-- S005_SCORE_TURN_LOGIC_FIX_START -->
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function lang(){
+    const v = ($('langSelect') && $('langSelect').value) || document.documentElement.lang || 'zh';
+    if(String(v).toLowerCase().startsWith('en')) return 'en';
+    if(String(v).toLowerCase().startsWith('ms')) return 'ms';
+    return 'zh';
+  }
+  const TXT = {
+    zh:{turn:'当前轮到',score:'得分',rounds:'回合',answering:'正在作答',waiting:'等待答题',next:'下一队',changed:'分数变化',correct:'答对',wrong:'答错',continued:'已换到下一队',same:'本队继续'},
+    en:{turn:'Current Turn',score:'Score',rounds:'Turns',answering:'Answering',waiting:'Waiting',next:'Next Team',changed:'Score Change',correct:'Correct',wrong:'Wrong',continued:'Moved to next team',same:'Same team continues'},
+    ms:{turn:'Giliran Semasa',score:'Markah',rounds:'Giliran',answering:'Menjawab',waiting:'Menunggu',next:'Kumpulan Seterusnya',changed:'Perubahan Markah',correct:'Betul',wrong:'Salah',continued:'Beralih ke kumpulan seterusnya',same:'Kumpulan sama teruskan'}
+  };
+  const COLORS = ['#ef4444','#3b82f6','#22c55e','#a855f7'];
+  function text(k){ return (TXT[lang()] && TXT[lang()][k]) || TXT.zh[k] || k; }
+  function getTeamCount(){
+    const select = $('teamCount');
+    const n = Number(select && select.value ? select.value : 2);
+    return [2,3,4].includes(n) ? n : 2;
+  }
+  function fallbackName(i){
+    const zh=['红队','蓝队','绿队','紫队'];
+    const en=['Red Team','Blue Team','Green Team','Purple Team'];
+    const ms=['Kumpulan Merah','Kumpulan Biru','Kumpulan Hijau','Kumpulan Ungu'];
+    const arr = lang()==='en'?en:lang()==='ms'?ms:zh;
+    return arr[i] || `${text('turn')} ${i+1}`;
+  }
+  function teamName(tm,i){
+    try{
+      if(tm && tm.nameKey && typeof t === 'function'){
+        const n = t(tm.nameKey);
+        if(n && n !== tm.nameKey) return n;
+      }
+    }catch(e){}
+    return (tm && tm.name) || fallbackName(i);
+  }
+  function ensureTeams(){
+    const count = getTeamCount();
+    try{
+      if(typeof teams === 'undefined' || !Array.isArray(teams)) return [];
+      if(!teams.length || teams.length !== count){
+        const old = Array.isArray(teams) ? teams : [];
+        const keys = ['teamRed','teamBlue','teamGreen','teamPurple'];
+        teams = Array.from({length:count}, function(_,i){
+          return {
+            nameKey: keys[i],
+            score: Number(old[i] && old[i].score || 0),
+            turns: Number(old[i] && old[i].turns || 0),
+            color: (old[i] && old[i].color) || COLORS[i%COLORS.length]
+          };
+        });
+      }
+      if(typeof currentTeam === 'undefined' || Number(currentTeam) >= teams.length) currentTeam = 0;
+      return teams;
+    }catch(e){
+      return [];
+    }
+  }
+  function getTeams(){
+    const list = ensureTeams();
+    if(list && list.length){
+      return list.map(function(tm,i){
+        return {
+          name: teamName(tm,i),
+          score: Number(tm.score || 0),
+          turns: Number(tm.turns || 0),
+          color: tm.color || COLORS[i%COLORS.length]
+        };
+      });
+    }
+    return Array.from({length:getTeamCount()},(_,i)=>({name:fallbackName(i),score:0,turns:0,color:COLORS[i%COLORS.length]}));
+  }
+  function getCurrent(){
+    try{
+      const list = ensureTeams();
+      const n = Number(currentTeam || 0);
+      return Math.max(0, Math.min(n, Math.max(0,(list.length || getTeamCount())-1)));
+    }catch(e){ return 0; }
+  }
+  function ensurePanel(){
+    const game = $('gameArea');
+    const hud = game && game.querySelector('.hud');
+    if(!game || !hud) return;
+    if(!$('s005TurnPanel')){
+      const p = document.createElement('div');
+      p.id = 's005TurnPanel';
+      p.className = 's005TurnPanel';
+      p.innerHTML = '<div><div class="s005TurnMain" id="s005TurnMain"></div><div class="s005TurnSub" id="s005TurnSub"></div></div><div class="s005ScoreChange" id="s005ScoreChange"></div>';
+      hud.insertAdjacentElement('afterend', p);
+    }
+    if(!$('s005ScoreBoard')){
+      const b = document.createElement('div');
+      b.id = 's005ScoreBoard';
+      b.className = 's005ScoreBoard';
+      $('s005TurnPanel').insertAdjacentElement('afterend', b);
+    }
+    const native = $('teams');
+    if(native){
+      native.style.setProperty('display','none','important');
+      native.innerHTML = '';
+    }
+  }
+  function render(changeMsg, kind){
+    ensurePanel();
+    const list = getTeams();
+    const cur = getCurrent();
+    const target = Number(($('targetScore') && $('targetScore').value) || 0) || 0;
+    const board = $('s005ScoreBoard');
+    if(board){
+      board.innerHTML = list.map(function(tm,i){
+        const pct = target ? Math.max(0,Math.min(100,tm.score/target*100)) : Math.max(0,Math.min(100,tm.score*10));
+        return `<div class="s005ScoreCard ${i===cur?'active':''}">
+          <div class="s005ScoreTop">
+            <span><span class="teamDot" style="background:${tm.color}"></span> ${tm.name}</span>
+            ${i===cur?`<span class="s005TurnBadge">${text('answering')}</span>`:''}
+          </div>
+          <div class="s005ScoreNumber">${tm.score}</div>
+          <div class="s005ScoreMeta">${text('rounds')}：${tm.turns}</div>
+          <div class="bar"><div class="barFill" style="width:${pct}%"></div></div>
+        </div>`;
+      }).join('');
+    }
+    const current = list[cur] || list[0];
+    const next = list[(cur+1)%list.length] || current;
+    if($('s005TurnMain')) $('s005TurnMain').textContent = `${text('turn')}：${current ? current.name : '-'}`;
+    if($('s005TurnSub')) $('s005TurnSub').textContent = `${text('score')}：${current ? current.score : 0}｜${text('rounds')}：${current ? current.turns : 0}｜${text('next')}：${next ? next.name : '-'}`;
+    const ch = $('s005ScoreChange');
+    if(ch){
+      ch.className = `s005ScoreChange ${kind || ''}`;
+      ch.textContent = changeMsg || text('waiting');
+    }
+    if($('turnText') && current) $('turnText').textContent = `${text('turn')}：${current.name}（${text('score')} ${current.score}）`;
+    if($('roundInfo') && current) $('roundInfo').textContent = `${text('answering')}：${current.name}｜${text('score')}：${current.score}`;
+  }
+
+  function applyScore(delta){
+    const list = ensureTeams();
+    const idx = getCurrent();
+    if(!list[idx]) return;
+    if(!window.__s005V21TurnCounted){
+      list[idx].turns = Number(list[idx].turns || 0) + 1;
+      window.__s005V21TurnCounted = true;
+    }
+    list[idx].score = Math.max(0, Number(list[idx].score || 0) + Number(delta || 0));
+    const sign = Number(delta || 0) >= 0 ? '+' : '';
+    const kind = Number(delta || 0) >= 0 ? 'good' : 'bad';
+    render(`${teamName(list[idx],idx)} ${sign}${Number(delta || 0)}`, kind);
+    try{ if(typeof updateHud === 'function') updateHud(); }catch(e){}
+  }
+
+  function advanceTurn(){
+    const list = ensureTeams();
+    const idx = getCurrent();
+    const same = $('turnAfter') && $('turnAfter').value === 'same';
+    if(!same && list.length){
+      try{ currentTeam = (idx + 1) % list.length; }catch(e){}
+      window.__s005V21TurnCounted = false;
+      render(text('continued'), 'good');
+    }else{
+      window.__s005V21TurnCounted = false;
+      render(text('same'), 'good');
+    }
+    const back = $('modalBackdrop');
+    if(back) back.classList.remove('show');
+    const btn = $('spinBtn');
+    if(btn) btn.disabled = false;
+    try{ if(typeof updateHud === 'function') updateHud(); }catch(e){}
+  }
+
+  /* 直接覆盖旧 updateScore / finishTurn，避免答对答错后分数不更新、不会换队 */
+  try{
+    updateScore = function(i, delta){ applyScore(delta); };
+    window.updateScore = updateScore;
+  }catch(e){}
+
+  try{
+    finishTurn = function(){ advanceTurn(); };
+    window.finishTurn = finishTurn;
+  }catch(e){}
+
+  function answerClickDetected(target){
+    return target && target.closest && target.closest('.s005Option,.option,#s005CorrectBtn,#s005WrongBtn,#correctBtn,#wrongBtn');
+  }
+
+  function continueClickDetected(target){
+    return target && target.closest && target.closest('#s005ContinueBtn,#continueBtn');
+  }
+
+  function spinClickDetected(target){
+    return target && target.closest && target.closest('#spinBtn,.wheelBox');
+  }
+
+  function bindCapture(){
+    if(document.documentElement.dataset.s005V21LogicBound) return;
+    document.documentElement.dataset.s005V21LogicBound = '1';
+
+    document.addEventListener('click', function(e){
+      if(spinClickDetected(e.target)){
+        window.__s005V21TurnCounted = false;
+        setTimeout(()=>render(),120);
+        return;
+      }
+
+      if(answerClickDetected(e.target)){
+        /* 原本的按钮先处理答题，再刷新得分板 */
+        setTimeout(()=>render(),80);
+        setTimeout(()=>render(),500);
+        return;
+      }
+
+      if(continueClickDetected(e.target)){
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        advanceTurn();
+      }
+    }, true);
+  }
+
+  function init(){
+    ensurePanel();
+    render();
+    bindCapture();
+    setInterval(()=>render(),1200);
+  }
+
+  window.S005RenderScoreBoard = render;
+  window.S005AdvanceTurn = advanceTurn;
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- S005_SCORE_TURN_LOGIC_FIX_END -->
 
 </body>
 </html>
