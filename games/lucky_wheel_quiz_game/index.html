@@ -390,6 +390,124 @@ body.ratio-916 .wheelBox, body.ratio-34 .wheelBox{width:min(88vw,380px)!importan
 }
 /* S005_REAL_QUESTION_MODAL_FIX_END */
 
+
+/* S005_SCORE_TURN_PANEL_FIX_START */
+#teams.teams{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:12px!important;
+  margin:0 0 16px!important;
+  min-height:92px!important;
+  position:relative!important;
+  z-index:5!important;
+}
+.s005ScoreBoard{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+  margin:0 0 16px;
+  position:relative;
+  z-index:6;
+}
+.s005ScoreCard,
+#teams .teamCard{
+  background:linear-gradient(180deg,#102747,#071b36)!important;
+  color:#f8fbff!important;
+  border:2px solid rgba(147,197,253,.35)!important;
+  border-radius:18px!important;
+  padding:12px 14px!important;
+  box-shadow:0 10px 26px rgba(0,0,0,.32)!important;
+}
+.s005ScoreCard.active,
+#teams .teamCard.active{
+  border-color:#facc15!important;
+  box-shadow:0 0 0 3px rgba(250,204,21,.35),0 14px 30px rgba(0,0,0,.35)!important;
+  transform:translateY(-2px)!important;
+}
+.s005ScoreTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  font-size:18px;
+  font-weight:1000;
+}
+.s005TurnBadge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 9px;
+  border-radius:999px;
+  background:#facc15;
+  color:#111827;
+  font-size:13px;
+  font-weight:1000;
+}
+.s005ScoreNumber,
+#teams .teamScore{
+  font-size:clamp(32px,4vw,52px)!important;
+  line-height:1!important;
+  font-weight:1000!important;
+  color:#ffffff!important;
+  margin:8px 0 4px!important;
+}
+.s005ScoreMeta,
+#teams .teamMeta{
+  color:#cbd5e1!important;
+  font-size:14px!important;
+  font-weight:800!important;
+}
+#teams .teamName{
+  color:#ffffff!important;
+}
+#teams .bar{background:rgba(255,255,255,.16)!important;}
+#teams .barFill{background:linear-gradient(90deg,#60a5fa,#facc15)!important;}
+.s005TurnPanel{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin:0 0 14px;
+  padding:14px 18px;
+  border-radius:20px;
+  background:linear-gradient(90deg,rgba(37,99,235,.28),rgba(124,58,237,.24));
+  border:1px solid rgba(147,197,253,.32);
+  position:relative;
+  z-index:6;
+}
+.s005TurnMain{
+  font-size:clamp(22px,3vw,34px);
+  font-weight:1000;
+  color:#ffffff;
+}
+.s005TurnSub{
+  color:#dbeafe;
+  font-weight:850;
+  font-size:15px;
+  margin-top:4px;
+}
+.s005ScoreChange{
+  min-width:120px;
+  text-align:center;
+  padding:10px 14px;
+  border-radius:16px;
+  background:#071b36;
+  border:1px solid rgba(255,255,255,.18);
+  color:#fef3c7;
+  font-size:18px;
+  font-weight:1000;
+}
+.s005ScoreChange.good{color:#86efac;}
+.s005ScoreChange.bad{color:#fecaca;}
+@media (max-width:1150px){
+  .s005ScoreBoard,#teams.teams{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .s005TurnPanel{flex-direction:column;align-items:flex-start;}
+}
+@media (max-width:640px){
+  .s005ScoreBoard,#teams.teams{grid-template-columns:1fr!important;}
+}
+/* S005_SCORE_TURN_PANEL_FIX_END */
+
 </style>
 </head>
 <body>
@@ -2152,6 +2270,179 @@ ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Ala
 })();
 </script>
 <!-- S005_ALWAYS_QUESTION_AFTER_SPIN_FIX_END -->
+
+
+<!-- S005_SCORE_TURN_PANEL_FIX_START -->
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function lang(){
+    const v = ($('langSelect') && $('langSelect').value) || document.documentElement.lang || 'zh';
+    if(String(v).toLowerCase().startsWith('en')) return 'en';
+    if(String(v).toLowerCase().startsWith('ms')) return 'ms';
+    return 'zh';
+  }
+  const TXT = {
+    zh:{turn:'当前轮到',score:'得分',rounds:'回合',now:'正在作答',next:'下一队',change:'分数变化',noChange:'等待答题',correct:'答对',wrong:'答错',continue:'继续后换组'},
+    en:{turn:'Current Turn',score:'Score',rounds:'Turns',now:'Answering',next:'Next Team',change:'Score Change',noChange:'Waiting',correct:'Correct',wrong:'Wrong',continue:'Next team after Continue'},
+    ms:{turn:'Giliran Semasa',score:'Markah',rounds:'Giliran',now:'Menjawab',next:'Kumpulan Seterusnya',change:'Perubahan Markah',noChange:'Menunggu',correct:'Betul',wrong:'Salah',continue:'Kumpulan seterusnya selepas Teruskan'}
+  };
+  const COLORS = ['#ef4444','#3b82f6','#22c55e','#a855f7'];
+  function text(k){ return (TXT[lang()] && TXT[lang()][k]) || TXT.zh[k] || k; }
+  function teamName(team,i){
+    try{
+      if(team && team.nameKey && typeof t === 'function') return t(team.nameKey);
+    }catch(e){}
+    const zh=['红队','蓝队','绿队','紫队'];
+    const en=['Red Team','Blue Team','Green Team','Purple Team'];
+    const ms=['Kumpulan Merah','Kumpulan Biru','Kumpulan Hijau','Kumpulan Ungu'];
+    const map = lang()==='en'?en:lang()==='ms'?ms:zh;
+    return (team && team.name) || map[i] || `${text('turn')} ${i+1}`;
+  }
+  function getTeamData(){
+    try{
+      if(typeof teams !== 'undefined' && Array.isArray(teams) && teams.length){
+        return teams.map((tm,i)=>({
+          name:teamName(tm,i),
+          score:Number(tm.score || 0),
+          turns:Number(tm.turns || 0),
+          color:tm.color || COLORS[i%COLORS.length]
+        }));
+      }
+    }catch(e){}
+    const count = Number(($('teamCount') && $('teamCount').value) || 2) || 2;
+    return Array.from({length:count},(_,i)=>({name:teamName(null,i),score:0,turns:0,color:COLORS[i%COLORS.length]}));
+  }
+  function getCurrentIndex(){
+    try{ return Math.max(0, Number(currentTeam || 0)); }catch(e){ return 0; }
+  }
+  function ensurePanels(){
+    const game = $('gameArea');
+    const hud = game && game.querySelector('.hud');
+    if(!game || !hud) return;
+    if(!$('s005TurnPanel')){
+      const turnPanel = document.createElement('div');
+      turnPanel.id = 's005TurnPanel';
+      turnPanel.className = 's005TurnPanel';
+      turnPanel.innerHTML = `
+        <div>
+          <div class="s005TurnMain" id="s005TurnMain"></div>
+          <div class="s005TurnSub" id="s005TurnSub"></div>
+        </div>
+        <div class="s005ScoreChange" id="s005ScoreChange"></div>`;
+      hud.insertAdjacentElement('afterend', turnPanel);
+    }
+    if(!$('s005ScoreBoard')){
+      const board = document.createElement('div');
+      board.id = 's005ScoreBoard';
+      board.className = 's005ScoreBoard';
+      const teamsEl = $('teams');
+      if(teamsEl) teamsEl.insertAdjacentElement('afterend', board);
+      else $('s005TurnPanel').insertAdjacentElement('afterend', board);
+    }
+  }
+  function renderScoreBoard(changeMsg, changeKind){
+    ensurePanels();
+    const data = getTeamData();
+    const current = Math.min(getCurrentIndex(), Math.max(0,data.length-1));
+    const board = $('s005ScoreBoard');
+    const nativeTeams = $('teams');
+    const target = Number(($('targetScore') && $('targetScore').value) || 0) || 0;
+    const html = data.map((tm,i)=>{
+      const pct = target ? Math.max(0,Math.min(100,tm.score/target*100)) : Math.max(0,Math.min(100,tm.score*10));
+      return `<div class="s005ScoreCard ${i===current?'active':''}">
+        <div class="s005ScoreTop">
+          <span><span class="teamDot" style="background:${tm.color}"></span> ${tm.name}</span>
+          ${i===current?`<span class="s005TurnBadge">${text('now')}</span>`:''}
+        </div>
+        <div class="s005ScoreNumber">${tm.score}</div>
+        <div class="s005ScoreMeta">${text('rounds')}：${tm.turns}</div>
+        <div class="bar"><div class="barFill" style="width:${pct}%"></div></div>
+      </div>`;
+    }).join('');
+    if(board) board.innerHTML = html;
+    if(nativeTeams && !nativeTeams.innerHTML.trim()) nativeTeams.innerHTML = html.replaceAll('s005ScoreCard','teamCard').replaceAll('s005ScoreNumber','teamScore').replaceAll('s005ScoreMeta','teamMeta');
+
+    const currentTeam = data[current] || data[0];
+    const nextTeam = data[(current+1)%data.length] || currentTeam;
+    if($('s005TurnMain')) $('s005TurnMain').textContent = `${text('turn')}：${currentTeam ? currentTeam.name : '-'}`;
+    if($('s005TurnSub')) $('s005TurnSub').textContent = `${text('score')}：${currentTeam ? currentTeam.score : 0}｜${text('rounds')}：${currentTeam ? currentTeam.turns : 0}｜${text('next')}：${nextTeam ? nextTeam.name : '-'}`;
+    const change = $('s005ScoreChange');
+    if(change){
+      change.className = `s005ScoreChange ${changeKind || ''}`;
+      change.textContent = changeMsg || text('noChange');
+    }
+    if($('turnText') && currentTeam) $('turnText').textContent = `${text('turn')}：${currentTeam.name}（${text('score')} ${currentTeam.score}）`;
+    if($('roundInfo') && currentTeam) $('roundInfo').textContent = `${text('now')}：${currentTeam.name}｜${text('score')}：${currentTeam.score}`;
+  }
+
+  const originalRenderTeams = window.renderTeams;
+  if(typeof originalRenderTeams === 'function' && !window.__s005RenderTeamsWrappedV20){
+    window.__s005RenderTeamsWrappedV20 = true;
+    window.renderTeams = function(){
+      const result = originalRenderTeams.apply(this, arguments);
+      setTimeout(()=>renderScoreBoard(),0);
+      return result;
+    };
+  }
+
+  const originalUpdateHud = window.updateHud;
+  if(typeof originalUpdateHud === 'function' && !window.__s005UpdateHudWrappedV20){
+    window.__s005UpdateHudWrappedV20 = true;
+    window.updateHud = function(){
+      const result = originalUpdateHud.apply(this, arguments);
+      setTimeout(()=>renderScoreBoard(),0);
+      return result;
+    };
+  }
+
+  const originalUpdateScore = window.updateScore;
+  if(typeof originalUpdateScore === 'function' && !window.__s005UpdateScoreWrappedV20){
+    window.__s005UpdateScoreWrappedV20 = true;
+    window.updateScore = function(i,delta){
+      const before = getTeamData();
+      const result = originalUpdateScore.apply(this, arguments);
+      const after = getTeamData();
+      const team = after[i] || before[i];
+      const sign = Number(delta || 0) >= 0 ? '+' : '';
+      const kind = Number(delta || 0) >= 0 ? 'good' : 'bad';
+      setTimeout(()=>renderScoreBoard(`${team ? team.name : ''} ${sign}${Number(delta||0)}`, kind),0);
+      return result;
+    };
+  }
+
+  const originalNextTurn = window.nextTurn;
+  if(typeof originalNextTurn === 'function' && !window.__s005NextTurnWrappedV20){
+    window.__s005NextTurnWrappedV20 = true;
+    window.nextTurn = function(){
+      const result = originalNextTurn.apply(this, arguments);
+      setTimeout(()=>renderScoreBoard(text('continue')),0);
+      return result;
+    };
+  }
+
+  function hookAnswerButtons(){
+    document.addEventListener('click', function(e){
+      const opt = e.target && e.target.closest && e.target.closest('.s005Option,.option,#s005CorrectBtn,#s005WrongBtn,#correctBtn,#wrongBtn,#s005ContinueBtn,#continueBtn,#spinBtn,.wheelBox');
+      if(!opt) return;
+      setTimeout(()=>renderScoreBoard(),120);
+      setTimeout(()=>renderScoreBoard(),650);
+    }, true);
+  }
+
+  function init(){
+    ensurePanels();
+    renderScoreBoard();
+    hookAnswerButtons();
+    setInterval(()=>renderScoreBoard(),1500);
+  }
+
+  window.S005RenderScoreBoard = renderScoreBoard;
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- S005_SCORE_TURN_PANEL_FIX_END -->
 
 </body>
 </html>
