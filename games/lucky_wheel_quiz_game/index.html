@@ -543,6 +543,16 @@ body.ratio-916 .wheelBox, body.ratio-34 .wheelBox{width:min(88vw,380px)!importan
 }
 /* S005_SCORE_TURN_LOGIC_FIX_END */
 
+
+/* S005_ANSWER_SCORE_AUTOTURN_FIX_START */
+.s005ScoreChange.good{background:rgba(34,197,94,.16)!important;border-color:rgba(134,239,172,.55)!important;color:#86efac!important;}
+.s005ScoreChange.bad{background:rgba(239,68,68,.14)!important;border-color:rgba(252,165,165,.55)!important;color:#fecaca!important;}
+.s005ScoreChange.next{background:rgba(250,204,21,.16)!important;border-color:rgba(250,204,21,.6)!important;color:#fef3c7!important;}
+#s005TurnPanel{border:1px solid rgba(250,204,21,.42)!important;}
+#s005ScoreBoard .s005ScoreCard.active{outline:4px solid #facc15!important;}
+#s005ScoreBoard .s005TurnBadge{background:#facc15!important;color:#111827!important;}
+/* S005_ANSWER_SCORE_AUTOTURN_FIX_END */
+
 </style>
 </head>
 <body>
@@ -2715,6 +2725,171 @@ ChatGPT tergolong dalam alat jenis apa?,Alat AI,Alat pengangkutan,Alat sukan,Ala
 })();
 </script>
 <!-- S005_SCORE_TURN_LOGIC_FIX_END -->
+
+
+<!-- S005_ANSWER_SCORE_AUTOTURN_FIX_START -->
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function lang(){
+    const v = ($('langSelect') && $('langSelect').value) || document.documentElement.lang || 'zh';
+    if(String(v).toLowerCase().startsWith('en')) return 'en';
+    if(String(v).toLowerCase().startsWith('ms')) return 'ms';
+    return 'zh';
+  }
+  const TXT = {
+    zh:{score:'得分',rounds:'回合',turn:'当前轮到',next:'下一队',correct:'答对',wrong:'答错',autoNext:'已自动换到下一队',same:'本队继续',waiting:'等待答题',answering:'正在作答'},
+    en:{score:'Score',rounds:'Turns',turn:'Current Turn',next:'Next Team',correct:'Correct',wrong:'Wrong',autoNext:'Moved to next team',same:'Same team continues',waiting:'Waiting',answering:'Answering'},
+    ms:{score:'Markah',rounds:'Giliran',turn:'Giliran Semasa',next:'Kumpulan Seterusnya',correct:'Betul',wrong:'Salah',autoNext:'Beralih ke kumpulan seterusnya',same:'Kumpulan sama teruskan',waiting:'Menunggu',answering:'Menjawab'}
+  };
+  const COLORS = ['#ef4444','#3b82f6','#22c55e','#a855f7'];
+  function text(k){ return (TXT[lang()] && TXT[lang()][k]) || TXT.zh[k] || k; }
+  function count(){ const n = Number(($('teamCount') && $('teamCount').value) || 2); return [2,3,4].includes(n) ? n : 2; }
+  function fallbackName(i){
+    const zh=['红队','蓝队','绿队','紫队'], en=['Red Team','Blue Team','Green Team','Purple Team'], ms=['Kumpulan Merah','Kumpulan Biru','Kumpulan Hijau','Kumpulan Ungu'];
+    const arr = lang()==='en'?en:lang()==='ms'?ms:zh; return arr[i] || ('Team '+(i+1));
+  }
+  function nameOf(tm,i){
+    try{ if(tm && tm.nameKey && typeof t === 'function'){ const n=t(tm.nameKey); if(n && n!==tm.nameKey) return n; } }catch(e){}
+    return (tm && tm.name) || fallbackName(i);
+  }
+  function ensureTeams(){
+    try{
+      const c = count();
+      if(typeof teams === 'undefined' || !Array.isArray(teams)) return [];
+      if(!teams.length || teams.length !== c){
+        const old = Array.isArray(teams) ? teams : [];
+        const keys=['teamRed','teamBlue','teamGreen','teamPurple'];
+        teams = Array.from({length:c}, (_,i)=>({
+          nameKey: keys[i],
+          score: Number(old[i] && old[i].score || 0),
+          turns: Number(old[i] && old[i].turns || 0),
+          color: (old[i] && old[i].color) || COLORS[i%COLORS.length]
+        }));
+      }
+      if(typeof currentTeam === 'undefined' || Number(currentTeam) >= teams.length || Number(currentTeam)<0) currentTeam = 0;
+      return teams;
+    }catch(e){ return []; }
+  }
+  function cur(){ const list=ensureTeams(); try{return Math.max(0,Math.min(Number(currentTeam||0), Math.max(0,list.length-1)));}catch(e){return 0;} }
+  function data(){ return ensureTeams().map((tm,i)=>({name:nameOf(tm,i), score:Number(tm.score||0), turns:Number(tm.turns||0), color:tm.color||COLORS[i%COLORS.length]})); }
+  function ensurePanel(){
+    const game=$('gameArea'), hud=game && game.querySelector('.hud');
+    if(!game || !hud) return;
+    if(!$('s005TurnPanel')){
+      const p=document.createElement('div'); p.id='s005TurnPanel'; p.className='s005TurnPanel';
+      p.innerHTML='<div><div class="s005TurnMain" id="s005TurnMain"></div><div class="s005TurnSub" id="s005TurnSub"></div></div><div class="s005ScoreChange" id="s005ScoreChange"></div>';
+      hud.insertAdjacentElement('afterend', p);
+    }
+    if(!$('s005ScoreBoard')){
+      const b=document.createElement('div'); b.id='s005ScoreBoard'; b.className='s005ScoreBoard';
+      $('s005TurnPanel').insertAdjacentElement('afterend', b);
+    }
+    const native=$('teams'); if(native){ native.style.setProperty('display','none','important'); native.innerHTML=''; }
+  }
+  function render(change, kind){
+    ensurePanel();
+    const list=data(); if(!list.length) return;
+    const c=cur(); const target=Number(($('targetScore')&&$('targetScore').value)||0)||0;
+    const board=$('s005ScoreBoard');
+    if(board){
+      board.innerHTML=list.map((tm,i)=>{
+        const pct=target?Math.max(0,Math.min(100,tm.score/target*100)):Math.max(0,Math.min(100,tm.score*10));
+        return `<div class="s005ScoreCard ${i===c?'active':''}"><div class="s005ScoreTop"><span><span class="teamDot" style="background:${tm.color}"></span> ${tm.name}</span>${i===c?`<span class="s005TurnBadge">${text('answering')}</span>`:''}</div><div class="s005ScoreNumber">${tm.score}</div><div class="s005ScoreMeta">${text('rounds')}：${tm.turns}</div><div class="bar"><div class="barFill" style="width:${pct}%"></div></div></div>`;
+      }).join('');
+    }
+    const now=list[c], nxt=list[(c+1)%list.length] || now;
+    if($('s005TurnMain')) $('s005TurnMain').textContent = `${text('turn')}：${now.name}`;
+    if($('s005TurnSub')) $('s005TurnSub').textContent = `${text('score')}：${now.score}｜${text('rounds')}：${now.turns}｜${text('next')}：${nxt.name}`;
+    const ch=$('s005ScoreChange'); if(ch){ ch.className=`s005ScoreChange ${kind||''}`; ch.textContent=change || text('waiting'); }
+    if($('turnText')) $('turnText').textContent = `${text('turn')}：${now.name}（${text('score')} ${now.score}）`;
+    if($('roundInfo')) $('roundInfo').textContent = `${text('answering')}：${now.name}｜${text('score')}：${now.score}`;
+  }
+  function eventScore(){
+    try{ if(typeof selectedEvent !== 'undefined' && selectedEvent && selectedEvent.score) return Math.max(1,Math.abs(Number(selectedEvent.score)||1)); }catch(e){}
+    try{ if(typeof currentQuizScore !== 'undefined') return Math.max(1,Math.abs(Number(currentQuizScore)||1)); }catch(e){}
+    return 1;
+  }
+  function applyAnswer(isCorrect){
+    const list=ensureTeams(); if(!list.length) return;
+    const i=cur(); const tm=list[i];
+    if(tm.__s005LastAnswerApplied) return;
+    tm.__s005LastAnswerApplied = Date.now();
+    const score = eventScore();
+    const penalty = Number(($('wrongPenalty') && $('wrongPenalty').value) || 0) || 0;
+    const delta = isCorrect ? score : (penalty>0 ? -penalty : 0);
+    tm.score = Math.max(0, Number(tm.score||0) + delta);
+    tm.turns = Number(tm.turns||0) + 1;
+    const sign = delta>=0 ? '+' : '';
+    render(`${nameOf(tm,i)}：${isCorrect?text('correct'):text('wrong')} ${sign}${delta}`, delta>=0?'good':'bad');
+    const log=$('eventLog'); if(log) log.innerHTML = `❓ <b>${nameOf(tm,i)}</b>：${isCorrect?text('correct'):text('wrong')} ${sign}${delta}`;
+    try{ if(typeof updateHud === 'function') updateHud(); }catch(e){}
+    window.clearTimeout(window.__s005AutoNextTimer);
+    window.__s005AutoNextTimer = window.setTimeout(nextTeam, 700);
+  }
+  function nextTeam(){
+    const list=ensureTeams(); if(!list.length) return;
+    const old=cur();
+    if($('turnAfter') && $('turnAfter').value === 'same'){
+      list[old].__s005LastAnswerApplied = 0;
+      render(text('same'), 'next');
+    }else{
+      list[old].__s005LastAnswerApplied = 0;
+      try{ currentTeam = (old + 1) % list.length; }catch(e){}
+      render(text('autoNext'), 'next');
+    }
+    const back=$('modalBackdrop'); if(back) back.classList.remove('show');
+    const btn=$('spinBtn'); if(btn) btn.disabled=false;
+    try{ if(typeof updateHud === 'function') updateHud(); }catch(e){}
+  }
+  function detectChoice(target){
+    if(!target || !target.closest) return null;
+    const correctBtn = target.closest('#s005CorrectBtn,#correctBtn');
+    const wrongBtn = target.closest('#s005WrongBtn,#wrongBtn');
+    if(correctBtn) return true;
+    if(wrongBtn) return false;
+    const opt = target.closest('.s005Option,.option');
+    if(opt){
+      /* 等原本程序加上 correct/wrong class 后再判断 */
+      return 'option';
+    }
+    return null;
+  }
+  function bind(){
+    if(document.documentElement.dataset.s005V22ScoreBound) return;
+    document.documentElement.dataset.s005V22ScoreBound='1';
+    document.addEventListener('click', function(e){
+      const d=detectChoice(e.target);
+      if(d === true || d === false){
+        e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+        applyAnswer(d);
+        return;
+      }
+      if(d === 'option'){
+        const opt=e.target.closest('.s005Option,.option');
+        setTimeout(function(){
+          let correct = opt.classList.contains('correct');
+          if(!correct){
+            const corr = opt.parentElement && opt.parentElement.querySelector('.s005Option.correct,.option.correct');
+            correct = corr === opt;
+          }
+          applyAnswer(!!correct);
+        }, 80);
+      }
+      const cont = e.target && e.target.closest && e.target.closest('#s005ContinueBtn,#continueBtn');
+      if(cont){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); nextTeam(); }
+      const spin = e.target && e.target.closest && e.target.closest('#spinBtn,.wheelBox');
+      if(spin){ ensureTeams().forEach(tm=>tm.__s005LastAnswerApplied=0); setTimeout(()=>render(),150); }
+    }, true);
+    const teamSel=$('teamCount'); if(teamSel){ teamSel.addEventListener('change', function(){ ensureTeams(); render(); }, true); }
+  }
+  function init(){ ensurePanel(); ensureTeams(); render(); bind(); setInterval(()=>render(),1200); }
+  window.S005V22Render = render;
+  window.S005V22NextTeam = nextTeam;
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+<!-- S005_ANSWER_SCORE_AUTOTURN_FIX_END -->
 
 </body>
 </html>
