@@ -16,13 +16,8 @@ h1{margin:0;font-size:clamp(22px,2.5vw,36px);line-height:1.05}.sub{font-size:13p
 .log-row{display:flex;gap:8px;flex-wrap:wrap;padding:10px;border-radius:16px;background:rgba(15,23,42,.72);border:1px solid var(--line);min-height:54px}.log-pill{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.08);font-size:13px;color:#e2e8f0}
 .setup{position:fixed;inset:0;background:rgba(2,6,23,.92);z-index:20;display:grid;place-items:center;padding:18px}.setup-card{width:min(980px,96vw);max-height:92vh;overflow:auto;background:#0f172a;border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:0 28px 80px rgba(0,0,0,.5)}.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}textarea.input{grid-column:1/-1;min-height:230px;line-height:1.45}
 .win{position:fixed;inset:0;background:rgba(2,6,23,.88);z-index:40;display:grid;place-items:center;text-align:center;padding:20px}.win-card{width:min(760px,94vw);background:linear-gradient(135deg,rgba(56,189,248,.23),rgba(34,197,94,.16));border:1px solid rgba(56,189,248,.38);border-radius:28px;padding:28px}.win h2{font-size:42px;margin:0 0 8px}.hidden{display:none!important}
-.field{display:grid;gap:6px}.field.wide{grid-column:1/-1}.field-label{font-size:13px;font-weight:900;color:#fde68a;line-height:1.25}.field-help{font-size:12px;color:#94a3b8;margin-top:-2px}.select option{background:#08111f;color:#fff}
 @media(max-width:900px){html,body{overflow:auto}.app{height:auto}.main{grid-template-columns:1fr}.options,.setup-grid{grid-template-columns:1fr}textarea.input{grid-column:auto}}
 </style>
-  <link rel="stylesheet" href="../_shared/shared-polish.css" />
-  <script defer src="../_shared/shared-polish.js"></script>
-  <link rel="stylesheet" href="../_shared/cute-unify.css" />
-  <script defer src="../_shared/cute-unify.js"></script>
 </head>
 <body>
 <div class="app">
@@ -32,24 +27,17 @@ h1{margin:0;font-size:clamp(22px,2.5vw,36px);line-height:1.05}.sub{font-size:13p
     <div class="game"><div class="statusbar"><div><div id="turnText" class="turn"></div><div id="progressText" class="help"></div></div><div id="timer" class="timer">00:00</div></div><div class="question-card"><div class="question-inner"><div id="qTitle" class="q-title"></div><div id="options" class="options"></div></div></div><div id="logs" class="log-row"></div></div>
   </div>
 </div>
-<div id="setup" class="setup"><div class="setup-card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><h2 id="setupTitle" style="margin:0"></h2><select id="setupLang" class="select" style="width:auto"><option value="zh">中文</option><option value="en">English</option><option value="ms">Bahasa Melayu</option></select></div><div id="setupHelp" class="help" style="margin-top:8px"></div><div class="setup-grid" style="margin-top:12px">
-  <div class="field"><label id="teamCountLabel" class="field-label" for="teamCount"></label><select id="teamCount" class="select"><option value="2">2 Teams</option><option value="3">3 Teams</option><option value="4">4 Teams</option><option value="5">5 Teams</option></select></div>
-  <div class="field"><label id="finishStepsLabel" class="field-label" for="finishSteps"></label><input id="finishSteps" class="input" type="number" min="3" max="20" value="8"><div id="finishStepsHelp" class="field-help"></div></div>
-  <div class="field"><label id="timeLimitLabel" class="field-label" for="timeLimit"></label><input id="timeLimit" class="input" type="number" min="60" max="900" value="300"><div id="timeLimitHelp" class="field-help"></div></div>
-  <div class="field"><label id="wrongModeLabel" class="field-label" for="wrongMode"></label><select id="wrongMode" class="select"><option value="stay"></option><option value="back"></option></select></div>
-  <div class="field wide"><label id="questionBankLabel" class="field-label" for="questionText"></label><textarea id="questionText" class="input"></textarea><div id="questionBankHelp" class="field-help"></div></div>
-</div><div class="actions" style="margin-top:12px;justify-content:flex-start"><button id="sampleBtn" class="btn secondary"></button><button id="startBtn" class="btn good"></button></div></div></div>
+<div id="setup" class="setup"><div class="setup-card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><h2 id="setupTitle" style="margin:0"></h2><select id="setupLang" class="select" style="width:auto"><option value="zh">中文</option><option value="en">English</option><option value="ms">Bahasa Melayu</option></select></div><div id="setupHelp" class="help" style="margin-top:8px"></div><div class="setup-grid" style="margin-top:12px"><select id="teamCount" class="select"><option value="2">2 Teams</option><option value="3">3 Teams</option><option value="4">4 Teams</option><option value="5">5 Teams</option></select><input id="finishSteps" class="input" type="number" min="3" max="20" value="8"><input id="timeLimit" class="input" type="number" min="60" max="900" value="300"><select id="wrongMode" class="select"><option value="stay">答错停留</option><option value="back">答错后退一格</option></select><textarea id="questionText" class="input"></textarea></div><div class="actions" style="margin-top:12px;justify-content:flex-start"><button id="sampleBtn" class="btn secondary"></button><button id="startBtn" class="btn good"></button></div></div></div>
 <div id="win" class="win hidden"><div class="win-card"><h2 id="winTitle"></h2><p id="winDesc" style="font-size:20px;color:#e2e8f0"></p><button id="againBtn" class="btn good" onclick="location.reload()"></button></div></div>
 <script>
 const I18N={
- zh:{title:"团队答题接力赛",subtitle:"每队轮流答题，答对前进一格，先跑完全程的队伍获胜。",setup:"设置题库",fullscreen:"全屏",restart:"重开",setupTitle:"团队答题接力赛｜老师设置",setupHelp:"老师输入题库后，各队轮流作答。答对前进，答错停留或后退。适合全班分组复习。",teamTitle:"队伍进度",ruleTitle:"玩法说明",ruleText:"轮到某队时，该队派一位学生作答。答对就接力前进；答错按老师设定处理。先到终点获胜。",turn:"轮到",progress:"进度",sample:"载入示范",start:"开始游戏",again:"再玩一次",win:"获胜！",timeup:"时间到！",qph:"题目格式：题目 | 答案 | 选项1,选项2,选项3,选项4",correct:"答对，前进！",wrong:"答错。",team:"第 {n} 队",teamCountLabel:"队伍数量",finishStepsLabel:"接力终点步数",finishStepsHelp:"每队答对一次前进一格，达到这个步数即获胜。",timeLimitLabel:"游戏时间（秒）",timeLimitHelp:"例如 300 秒 = 5 分钟。时间结束时按进度与分数判定胜负。",wrongModeLabel:"答错处理方式",wrongStay:"答错停留",wrongBack:"答错后退一格",questionBankLabel:"题库内容",questionBankHelp:"每行一题，格式：题目 | 正确答案 | 选项1,选项2,选项3,选项4",teamCount2:"2 队",teamCount3:"3 队",teamCount4:"4 队",teamCount5:"5 队",score:"分数"},
- en:{title:"Team Relay Quiz",subtitle:"Teams answer in turns. Correct answers move forward. First team to finish wins.",setup:"Question settings",fullscreen:"Fullscreen",restart:"Restart",setupTitle:"Team Relay Quiz | Teacher Settings",setupHelp:"Enter questions. Teams answer in turns. Correct answers move forward; wrong answers stay or move back. Great for team revision.",teamTitle:"Team progress",ruleTitle:"How to play",ruleText:"On each turn, one student answers for the team. Correct answer moves the team forward. First team to reach the finish wins.",turn:"Turn",progress:"Progress",sample:"Load sample",start:"Start game",again:"Play again",win:"wins!",timeup:"Time up!",qph:"Format: Question | Correct answer | Option 1,Option 2,Option 3,Option 4",correct:"Correct, move forward!",wrong:"Incorrect.",team:"Team {n}",teamCountLabel:"Number of teams",finishStepsLabel:"Steps to finish",finishStepsHelp:"Each correct answer moves the team forward by one step. The first team to reach this number wins.",timeLimitLabel:"Time limit (seconds)",timeLimitHelp:"For example, 300 seconds = 5 minutes. When time is up, the winner is decided by progress and score.",wrongModeLabel:"Wrong answer action",wrongStay:"Stay in place",wrongBack:"Move back one step",questionBankLabel:"Question bank",questionBankHelp:"One question per line. Format: Question | Correct answer | Option 1,Option 2,Option 3,Option 4",teamCount2:"2 Teams",teamCount3:"3 Teams",teamCount4:"4 Teams",teamCount5:"5 Teams",score:"Score"},
- ms:{title:"Kuiz Relay Berkumpulan",subtitle:"Pasukan menjawab secara bergilir. Jawapan betul maju satu langkah. Pasukan pertama tamat menang.",setup:"Tetapan soalan",fullscreen:"Skrin penuh",restart:"Mula semula",setupTitle:"Kuiz Relay Berkumpulan | Tetapan Guru",setupHelp:"Masukkan soalan. Pasukan menjawab bergilir. Betul maju; salah kekal atau undur. Sesuai untuk ulang kaji kumpulan.",teamTitle:"Kemajuan pasukan",ruleTitle:"Cara bermain",ruleText:"Setiap giliran, seorang murid menjawab untuk pasukan. Jawapan betul menggerakkan pasukan ke depan. Pasukan pertama sampai penamat menang.",turn:"Giliran",progress:"Kemajuan",sample:"Muat contoh",start:"Mula permainan",again:"Main lagi",win:"menang!",timeup:"Masa tamat!",qph:"Format: Soalan | Jawapan betul | Pilihan 1,Pilihan 2,Pilihan 3,Pilihan 4",correct:"Betul, maju!",wrong:"Salah.",team:"Pasukan {n}",teamCountLabel:"Bilangan pasukan",finishStepsLabel:"Langkah ke penamat",finishStepsHelp:"Setiap jawapan betul menggerakkan pasukan satu langkah. Pasukan pertama mencapai nombor ini menang.",timeLimitLabel:"Had masa (saat)",timeLimitHelp:"Contoh: 300 saat = 5 minit. Apabila masa tamat, pemenang ditentukan melalui kemajuan dan markah.",wrongModeLabel:"Tindakan jika salah",wrongStay:"Kekal di tempat asal",wrongBack:"Undur satu langkah",questionBankLabel:"Bank soalan",questionBankHelp:"Satu soalan setiap baris. Format: Soalan | Jawapan betul | Pilihan 1,Pilihan 2,Pilihan 3,Pilihan 4",teamCount2:"2 Pasukan",teamCount3:"3 Pasukan",teamCount4:"4 Pasukan",teamCount5:"5 Pasukan",score:"Markah"}
+ zh:{title:"团队答题接力赛",subtitle:"每队轮流答题，答对前进一格，先跑完全程的队伍获胜。",setup:"设置题库",fullscreen:"全屏",restart:"重开",setupTitle:"团队答题接力赛｜老师设置",setupHelp:"老师输入题库后，各队轮流作答。答对前进，答错停留或后退。适合全班分组复习。",teamTitle:"队伍进度",ruleTitle:"玩法说明",ruleText:"轮到某队时，该队派一位学生作答。答对就接力前进；答错按老师设定处理。先到终点获胜。",turn:"轮到",progress:"进度",sample:"载入示范",start:"开始游戏",again:"再玩一次",win:"获胜！",timeup:"时间到！",qph:"题目格式：题目 | 答案 | 选项1,选项2,选项3,选项4",correct:"答对，前进！",wrong:"答错。",team:"第 {n} 队"},
+ en:{title:"Team Relay Quiz",subtitle:"Teams answer in turns. Correct answers move forward. First team to finish wins.",setup:"Question settings",fullscreen:"Fullscreen",restart:"Restart",setupTitle:"Team Relay Quiz | Teacher Settings",setupHelp:"Enter questions. Teams answer in turns. Correct answers move forward; wrong answers stay or move back. Great for team revision.",teamTitle:"Team progress",ruleTitle:"How to play",ruleText:"On each turn, one student answers for the team. Correct answer moves the team forward. First team to reach the finish wins.",turn:"Turn",progress:"Progress",sample:"Load sample",start:"Start game",again:"Play again",win:"wins!",timeup:"Time up!",qph:"Format: Question | Answer | Option 1,Option 2,Option 3,Option 4",correct:"Correct, move forward!",wrong:"Incorrect.",team:"Team {n}"},
+ ms:{title:"Kuiz Relay Berkumpulan",subtitle:"Pasukan menjawab secara bergilir. Jawapan betul maju satu langkah. Pasukan pertama tamat menang.",setup:"Tetapan soalan",fullscreen:"Skrin penuh",restart:"Mula semula",setupTitle:"Kuiz Relay Berkumpulan | Tetapan Guru",setupHelp:"Masukkan soalan. Pasukan menjawab bergilir. Betul maju; salah kekal atau undur. Sesuai untuk ulang kaji kumpulan.",teamTitle:"Kemajuan pasukan",ruleTitle:"Cara bermain",ruleText:"Setiap giliran, seorang murid menjawab untuk pasukan. Jawapan betul menggerakkan pasukan ke depan. Pasukan pertama sampai penamat menang.",turn:"Giliran",progress:"Kemajuan",sample:"Muat contoh",start:"Mula permainan",again:"Main lagi",win:"menang!",timeup:"Masa tamat!",qph:"Format: Soalan | Jawapan | Pilihan 1,Pilihan 2,Pilihan 3,Pilihan 4",correct:"Betul, maju!",wrong:"Salah.",team:"Pasukan {n}"}
 };
 let lang=new URLSearchParams(location.search).get("lang")||localStorage.getItem("relay_lang")||"zh";let teams=[],questions=[],turn=0,current=null,finish=8,wrongMode="stay",logs=[],timerId=null,endAt=0;
 const $=s=>document.querySelector(s);function T(k){return(I18N[lang]||I18N.zh)[k]||k}function shuffle(a){return[...a].sort(()=>Math.random()-.5)}
-function setOptionText(selectId, optionTexts){const sel=$("#"+selectId);if(!sel)return;[...sel.options].forEach((opt,i)=>{if(optionTexts[i])opt.textContent=optionTexts[i];});}
-function applyLang(){document.documentElement.lang=lang==="zh"?"zh-Hans":lang;document.title=T("title");["title","subtitle","setupTitle","setupHelp","teamTitle","ruleTitle","ruleText","teamCountLabel","finishStepsLabel","finishStepsHelp","timeLimitLabel","timeLimitHelp","wrongModeLabel","questionBankLabel","questionBankHelp"].forEach(id=>{const el=$("#"+id);if(el)el.textContent=T(id);});$("#setupBtn").textContent=T("setup");$("#fullBtn").textContent=T("fullscreen");$("#resetBtn").textContent=T("restart");$("#sampleBtn").textContent=T("sample");$("#startBtn").textContent=T("start");$("#againBtn").textContent=T("again");$("#questionText").placeholder=T("qph");setOptionText("teamCount",[T("teamCount2"),T("teamCount3"),T("teamCount4"),T("teamCount5")]);setOptionText("wrongMode",[T("wrongStay"),T("wrongBack")]);$("#lang").value=lang;$("#setupLang").value=lang;renderTeams();}
+function applyLang(){document.documentElement.lang=lang==="zh"?"zh-Hans":lang;document.title=T("title");["title","subtitle","setupTitle","setupHelp","teamTitle","ruleTitle","ruleText"].forEach(id=>$("#"+id).textContent=T(id));$("#setupBtn").textContent=T("setup");$("#fullBtn").textContent=T("fullscreen");$("#resetBtn").textContent=T("restart");$("#sampleBtn").textContent=T("sample");$("#startBtn").textContent=T("start");$("#againBtn").textContent=T("again");$("#questionText").placeholder=T("qph");$("#lang").value=lang;$("#setupLang").value=lang;renderTeams();}
 function sample(){const s=lang==="en"?"What does AI stand for? | Artificial Intelligence | Artificial Intelligence,Auto Internet,Advanced Image,Active Input\nWhich password is safer? | Long with mixed characters | Long with mixed characters,123456,Birthday,Name":lang==="ms"?"Apakah maksud AI? | Artificial Intelligence | Artificial Intelligence,Auto Internet,Advanced Image,Active Input\nKata laluan mana lebih selamat? | Panjang dan bercampur aksara | Panjang dan bercampur aksara,123456,Tarikh lahir,Nama":"AI 的英文全名是什么？ | Artificial Intelligence | Artificial Intelligence,Auto Internet,Advanced Image,Active Input\n安全密码应该怎样？ | 长且混合不同字符 | 长且混合不同字符,123456,生日,名字";$("#questionText").value=s;}
 function parseQ(){const rows=$("#questionText").value.split("\n").map(x=>x.trim()).filter(Boolean),out=[];rows.forEach(row=>{const p=row.split("|").map(x=>x.trim());if(p.length>=2){let opts=p[2]?p[2].split(",").map(x=>x.trim()).filter(Boolean):[];if(!opts.includes(p[1]))opts.unshift(p[1]);out.push({q:p[0],a:p[1],opts:shuffle(opts).slice(0,4)})}});return out.length?out:[]}
 function start(){questions=parseQ();if(!questions.length){sample();questions=parseQ()}finish=Number($("#finishSteps").value||8);wrongMode=$("#wrongMode").value;teams=Array.from({length:Number($("#teamCount").value||2)},(_,i)=>({name:T("team").replace("{n}",i+1),pos:0,score:0}));turn=0;logs=[];$("#setup").classList.add("hidden");nextQuestion();endAt=Date.now()+Number($("#timeLimit").value||300)*1000;timerId=setInterval(tick,200);renderTeams();}
@@ -58,96 +46,9 @@ function nextQuestion(){current=questions[Math.floor(Math.random()*questions.len
 function answer(ans,btn){const team=teams[turn],ok=ans===current.a;if(ok){btn.classList.add("good");team.pos++;team.score+=10;addLog(`✅ ${team.name} ${T("correct")}`)}else{btn.classList.add("bad");if(wrongMode==="back")team.pos=Math.max(0,team.pos-1);addLog(`❌ ${team.name} ${T("wrong")}`)}renderTeams();if(team.pos>=finish){win(team);return;}setTimeout(()=>{turn=(turn+1)%teams.length;nextQuestion()},650)}
 function renderTeams(){$("#teamList").innerHTML=teams.map((t,i)=>`<div class="team-card ${i===turn?"active":""}"><div class="team-head"><div class="team-name">${t.name}</div><div class="team-score">${t.score}</div></div><div class="track"><div class="bar" style="width:${Math.min(100,t.pos/finish*100)}%"></div><div class="runner" style="left:${Math.min(100,t.pos/finish*100)}%">🏃</div></div><div class="help">${t.pos}/${finish}</div></div>`).join("")}
 function addLog(x){logs.unshift(x);logs=logs.slice(0,8);$("#logs").innerHTML=logs.map(l=>`<span class="log-pill">${l}</span>`).join("")}
-function win(t){clearInterval(timerId);$("#winTitle").textContent=`🏆 ${t.name} ${T("win")}`;$("#winDesc").textContent=`${T("progress")}：${t.pos}/${finish}｜${T("score")}：${t.score}`;$("#win").classList.remove("hidden")}
-function timeup(){clearInterval(timerId);const w=[...teams].sort((a,b)=>b.pos-a.pos||b.score-a.score)[0];$("#winTitle").textContent=`⏱️ ${T("timeup")}`;$("#winDesc").textContent=`🏆 ${w.name}｜${T("progress")}：${w.pos}/${finish}｜${T("score")}：${w.score}`;$("#win").classList.remove("hidden")}
+function win(t){clearInterval(timerId);$("#winTitle").textContent=`🏆 ${t.name} ${T("win")}`;$("#winDesc").textContent=`${T("progress")}：${t.pos}/${finish}｜Score：${t.score}`;$("#win").classList.remove("hidden")}
+function timeup(){clearInterval(timerId);const w=[...teams].sort((a,b)=>b.pos-a.pos||b.score-a.score)[0];$("#winTitle").textContent=`⏱️ ${T("timeup")}`;$("#winDesc").textContent=`🏆 ${w.name}｜${T("progress")}：${w.pos}/${finish}｜Score：${w.score}`;$("#win").classList.remove("hidden")}
 $("#lang").onchange=e=>{lang=e.target.value;localStorage.setItem("relay_lang",lang);applyLang();sample()};$("#setupLang").onchange=e=>{lang=e.target.value;localStorage.setItem("relay_lang",lang);applyLang();sample()};$("#sampleBtn").onclick=sample;$("#startBtn").onclick=start;$("#setupBtn").onclick=()=>$("#setup").classList.remove("hidden");$("#resetBtn").onclick=()=>location.reload();$("#fullBtn").onclick=()=>document.documentElement.requestFullscreen?.();applyLang();sample();
 </script>
-
-<!-- built-in-sample-loader-fix -->
-<script>
-(function(){
-  const SAMPLE_TEXT = "# P010 团队答题接力赛｜题库范例\n# 用途：分组接力答题，答对前进，适合全班复习。\n# 建议格式：题目 | 正确答案 | 错误选项A,错误选项B,错误选项C\nAI 的英文全名是什么？ | Artificial Intelligence | Auto Internet,Advanced Image,Active Input\n哪一种密码较安全？ | 长且混合不同字符 | 123456,生日日期,名字拼音\n看到可疑链接时应该？ | 先检查来源 | 马上点开,输入密码,转发给朋友\n";
-  const TARGET_TEXTAREA_IDS = ["questionText"];
-  const SAMPLE_BUTTON_IDS = ["sampleBtn"];
-  const SAMPLE_URL = 'question-bank-example.txt?v=sample-loader-fixed-20260627';
-  function $(id){ return document.getElementById(id); }
-  function cleanSampleText(text){
-    return String(text || '')
-      .replace(/
-/g,'
-')
-      .split('
-')
-      .map(line => line.trim())
-      .filter(line => line && !line.startsWith('#'))
-      .join('
-');
-  }
-  function findBankField(){
-    for (const id of TARGET_TEXTAREA_IDS){
-      const el = $(id);
-      if (el && ('value' in el)) return el;
-    }
-    return document.querySelector('textarea');
-  }
-  async function getBuiltInSampleText(){
-    try {
-      const res = await fetch(SAMPLE_URL, { cache:'no-store' });
-      if (res && res.ok) {
-        const text = await res.text();
-        if (cleanSampleText(text)) return text;
-      }
-    } catch(e) {}
-    return SAMPLE_TEXT;
-  }
-  function afterFill(field){
-    try { field.dispatchEvent(new Event('input', { bubbles:true })); } catch(e) {}
-    try { field.dispatchEvent(new Event('change', { bubbles:true })); } catch(e) {}
-    try {
-      if (field.id === 'textItems') {
-        const mode = $('mode'); if (mode) mode.value = 'text';
-        const lines = cleanSampleText(field.value).split('
-');
-        const categories = [];
-        lines.forEach(line => {
-          const parts = line.split('|').map(x => x.trim()).filter(Boolean);
-          if (parts[1] && !categories.includes(parts[1])) categories.push(parts[1]);
-        });
-        if (categories.length) {
-          try { cats = categories; } catch(e) {}
-          const catCount = $('catCount'); if (catCount) catCount.value = String(Math.min(Math.max(categories.length,2),5));
-          try { if (typeof renderCats === 'function') renderCats(); } catch(e) {}
-        }
-        try { if (typeof buildItems === 'function') buildItems(false); } catch(e) {}
-        try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
-      }
-      if (field.id === 'wordBank') { try { if (typeof applyBank === 'function') applyBank(true); } catch(e) {} }
-      try { if (typeof saveSettings === 'function') saveSettings(); } catch(e) {}
-      try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
-      try { if (typeof renderItems === 'function') renderItems(); } catch(e) {}
-      try { if (typeof setMessage === 'function') setMessage('已载入内置题库范例 / Built-in sample loaded / Contoh terbina telah dimuat'); } catch(e) {}
-      try { if (typeof toast === 'function') toast('已载入内置题库范例'); } catch(e) {}
-    } catch(e) { console.warn('Sample after-fill warning:', e); }
-  }
-  async function loadBuiltInSampleQuestionBank(event){
-    if (event) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); }
-    const field = findBankField();
-    if (!field) return;
-    const sampleText = cleanSampleText(await getBuiltInSampleText());
-    if (!sampleText) return;
-    field.value = sampleText;
-    afterFill(field);
-  }
-  window.loadBuiltInSampleQuestionBank = loadBuiltInSampleQuestionBank;
-  SAMPLE_BUTTON_IDS.forEach(id => {
-    const btn = $(id);
-    if (btn && !btn.dataset.sampleLoaderFixed) {
-      btn.dataset.sampleLoaderFixed = '1';
-      btn.addEventListener('click', loadBuiltInSampleQuestionBank, true);
-    }
-  });
-})();
-</script>
-<!-- /built-in-sample-loader-fix -->
 </body>
 </html>

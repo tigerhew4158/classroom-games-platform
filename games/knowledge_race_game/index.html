@@ -88,7 +88,7 @@
     .track:after{content:"";position:absolute;top:0;bottom:0;right:3.5%;width:6px;background:repeating-linear-gradient(0deg,#111 0 8px,#fff 8px 16px);box-shadow:0 0 0 2px rgba(255,255,255,.7);}
     .steps{position:absolute;inset:0;display:flex;}
     .step{flex:1;border-right:1px dashed rgba(74,42,12,.35)}
-    .racer{position:absolute;top:50%;transform:translate(-50%,-50%);font-size:38px;filter:drop-shadow(0 5px 5px rgba(0,0,0,.23));transition:left .55s cubic-bezier(.18,.78,.24,1.24);white-space:nowrap;z-index:3;}
+    .racer{position:absolute;top:50%;transform:translate(-50%,-50%) scaleX(var(--flip,1));font-size:38px;filter:drop-shadow(0 5px 5px rgba(0,0,0,.23));transition:left .55s cubic-bezier(.18,.78,.24,1.24);white-space:nowrap;z-index:3;}
     .score-pill{font-weight:950;color:#fff;background:rgba(0,0,0,.35);padding:10px 8px;border-radius:14px;text-align:center;}
     .question-area{margin-top:14px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(270px,.8fr);gap:14px;}
     .question-card,.answer-card{background:rgba(255,255,255,.92);border:1px solid var(--border);border-radius:22px;padding:16px;box-shadow:0 10px 25px rgba(70,43,10,.08);}
@@ -115,10 +115,6 @@
     @media (max-width:980px){.layout{grid-template-columns:1fr}.game-top,.question-area{grid-template-columns:1fr}.team-cards{grid-template-columns:repeat(2,1fr)}.lane{grid-template-columns:90px 1fr 54px}.team-label{font-size:13px;padding:8px}.options{grid-template-columns:1fr}.header-actions{width:100%;justify-content:flex-start}header{flex-wrap:wrap}}
     @media (max-width:620px){.app{padding:10px}.form-row{grid-template-columns:1fr}.lane{grid-template-columns:1fr;gap:8px}.track{height:52px}.score-pill{width:100%}.question-text{font-size:28px}.team-cards{grid-template-columns:1fr}.open-answer{flex-direction:column}.quick-actions{justify-content:flex-start}}
   </style>
-  <link rel="stylesheet" href="../_shared/shared-polish.css" />
-  <script defer src="../_shared/shared-polish.js"></script>
-  <link rel="stylesheet" href="../_shared/cute-unify.css" />
-  <script defer src="../_shared/cute-unify.js"></script>
 </head>
 <body>
   <div class="app">
@@ -301,6 +297,7 @@
   const TEAM_KEYS = ['red','blue','green','purple'];
   const TEAM_DOTS = ['🔴','🔵','🟢','🟣'];
   const THEME_EMOJI = {horse:'🐎', car:'🏎️', rocket:'🚀', boat:'⛵'};
+  function getRacerFlip(theme){ return theme==='horse' ? -1 : 1; }
   const SAMPLE = `马来西亚首都是哪里？,吉隆坡,新山,槟城,马六甲\nAI 可以随便用同学照片做搞笑图吗？,不可以,可以,只要好笑就可以,老师没看到就可以\n太阳从哪里升起？,东方,西方,南方,北方\nCPU 的中文意思是什么？,中央处理器,显卡,硬盘,显示器\n光合作用需要什么？,阳光,盐,铁,沙子\npassword 的中文意思是什么？,密码\nChatGPT 属于什么工具？,AI工具\nJalur Gemilang 是什么？,马来西亚国旗\nSelamat pagi 的中文意思是什么？,早安\n水的化学式是什么？,H2O,CO2,O2,NaCl`;
 
   const $ = (id)=>document.getElementById(id);
@@ -405,7 +402,7 @@
     goalSteps=parseInt($('goalSteps').value,10);
     teams.forEach((tm,i)=>{
       const lane=document.createElement('div'); lane.className='lane';
-      lane.innerHTML=`<div class="team-label" style="background:${tm.color}">${tm.dot} ${tm.name}<small>${t('score')}: ${tm.score}</small></div><div class="track"><div class="steps">${Array.from({length:goalSteps},()=>'<div class="step"></div>').join('')}</div><div class="racer" id="racer-${i}">${THEME_EMOJI[theme] || '🐎'}</div></div><div class="score-pill">${tm.steps}/${goalSteps}</div>`;
+      lane.innerHTML=`<div class="team-label" style="background:${tm.color}">${tm.dot} ${tm.name}<small>${t('score')}: ${tm.score}</small></div><div class="track"><div class="steps">${Array.from({length:goalSteps},()=>'<div class="step"></div>').join('')}</div><div class="racer" id="racer-${i}" style="--flip:${getRacerFlip(theme)}">${THEME_EMOJI[theme] || '🐎'}</div></div><div class="score-pill">${tm.steps}/${goalSteps}</div>`;
       tracks.appendChild(lane);
       const card=document.createElement('div'); card.className='team-card'+(i===activeTeam?' active':'');
       card.innerHTML=`<div class="emoji">${tm.dot}</div><div class="name">${tm.name}</div><div class="score">${tm.score}</div><div class="hint">${tm.steps} ${t('step')}</div>`;
@@ -626,92 +623,5 @@
   resetGame(false);
 })();
 </script>
-
-<!-- built-in-sample-loader-fix -->
-<script>
-(function(){
-  const SAMPLE_TEXT = "# P004 知识赛马｜题库范例\n# 用途：分组竞速答题，答对前进。\n# 建议格式：题目 | 正确答案 | 选项A,选项B,选项C,选项D\n地球绕太阳一周大约多久？ | 1年 | 1天,1个月,1年,10年\n哪一个是输入设备？ | 键盘 | 键盘,屏幕,投影机,喇叭\n保护账号最重要的是？ | 使用强密码 | 使用弱密码,公开密码,使用强密码,告诉陌生人\n";
-  const TARGET_TEXTAREA_IDS = ["questionText"];
-  const SAMPLE_BUTTON_IDS = ["sampleBtn"];
-  const SAMPLE_URL = 'question-bank-example.txt?v=sample-loader-fixed-20260627';
-  function $(id){ return document.getElementById(id); }
-  function cleanSampleText(text){
-    return String(text || '')
-      .replace(/
-/g,'
-')
-      .split('
-')
-      .map(line => line.trim())
-      .filter(line => line && !line.startsWith('#'))
-      .join('
-');
-  }
-  function findBankField(){
-    for (const id of TARGET_TEXTAREA_IDS){
-      const el = $(id);
-      if (el && ('value' in el)) return el;
-    }
-    return document.querySelector('textarea');
-  }
-  async function getBuiltInSampleText(){
-    try {
-      const res = await fetch(SAMPLE_URL, { cache:'no-store' });
-      if (res && res.ok) {
-        const text = await res.text();
-        if (cleanSampleText(text)) return text;
-      }
-    } catch(e) {}
-    return SAMPLE_TEXT;
-  }
-  function afterFill(field){
-    try { field.dispatchEvent(new Event('input', { bubbles:true })); } catch(e) {}
-    try { field.dispatchEvent(new Event('change', { bubbles:true })); } catch(e) {}
-    try {
-      if (field.id === 'textItems') {
-        const mode = $('mode'); if (mode) mode.value = 'text';
-        const lines = cleanSampleText(field.value).split('
-');
-        const categories = [];
-        lines.forEach(line => {
-          const parts = line.split('|').map(x => x.trim()).filter(Boolean);
-          if (parts[1] && !categories.includes(parts[1])) categories.push(parts[1]);
-        });
-        if (categories.length) {
-          try { cats = categories; } catch(e) {}
-          const catCount = $('catCount'); if (catCount) catCount.value = String(Math.min(Math.max(categories.length,2),5));
-          try { if (typeof renderCats === 'function') renderCats(); } catch(e) {}
-        }
-        try { if (typeof buildItems === 'function') buildItems(false); } catch(e) {}
-        try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
-      }
-      if (field.id === 'wordBank') { try { if (typeof applyBank === 'function') applyBank(true); } catch(e) {} }
-      try { if (typeof saveSettings === 'function') saveSettings(); } catch(e) {}
-      try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
-      try { if (typeof renderItems === 'function') renderItems(); } catch(e) {}
-      try { if (typeof setMessage === 'function') setMessage('已载入内置题库范例 / Built-in sample loaded / Contoh terbina telah dimuat'); } catch(e) {}
-      try { if (typeof toast === 'function') toast('已载入内置题库范例'); } catch(e) {}
-    } catch(e) { console.warn('Sample after-fill warning:', e); }
-  }
-  async function loadBuiltInSampleQuestionBank(event){
-    if (event) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); }
-    const field = findBankField();
-    if (!field) return;
-    const sampleText = cleanSampleText(await getBuiltInSampleText());
-    if (!sampleText) return;
-    field.value = sampleText;
-    afterFill(field);
-  }
-  window.loadBuiltInSampleQuestionBank = loadBuiltInSampleQuestionBank;
-  SAMPLE_BUTTON_IDS.forEach(id => {
-    const btn = $(id);
-    if (btn && !btn.dataset.sampleLoaderFixed) {
-      btn.dataset.sampleLoaderFixed = '1';
-      btn.addEventListener('click', loadBuiltInSampleQuestionBank, true);
-    }
-  });
-})();
-</script>
-<!-- /built-in-sample-loader-fix -->
 </body>
 </html>

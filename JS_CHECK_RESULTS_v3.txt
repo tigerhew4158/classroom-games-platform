@@ -1,0 +1,10 @@
+classification_conveyor_game: 0 
+image_puzzle_speed_race_game: 0 
+bomb_quiz_game: 0 
+knowledge_race_game: 0 
+monster_defense_game: 0 
+find_difference_game: 0 
+keyword_beachhead_game: 0 
+timeline_sort_challenge_game: 0 
+team_relay_quiz_game: 0 
+image_label_match_game: 0 

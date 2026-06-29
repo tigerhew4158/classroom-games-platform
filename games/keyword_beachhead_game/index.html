@@ -19,11 +19,7 @@ button,input,textarea,select{font:inherit}.app{height:100vh;width:min(1540px,98v
 .setup{position:fixed;inset:0;background:rgba(2,6,23,.92);z-index:20;display:grid;place-items:center;padding:18px}.setup-card{width:min(1000px,96vw);max-height:92vh;overflow:auto;background:#0f172a;border:1px solid var(--line);border-radius:24px;padding:18px}.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}textarea.input{grid-column:1/-1;min-height:300px;line-height:1.45}.win{position:fixed;inset:0;background:rgba(2,6,23,.88);z-index:40;display:grid;place-items:center;text-align:center;padding:20px}.win-card{width:min(760px,94vw);background:linear-gradient(135deg,rgba(56,189,248,.23),rgba(251,191,36,.16));border:1px solid rgba(56,189,248,.38);border-radius:28px;padding:28px}.win h2{font-size:42px;margin:0 0 8px}.hidden{display:none!important}
 @media(max-width:1100px){.main{grid-template-columns:260px 1fr}.panel.right{display:none}.wordGrid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:760px){html,body{overflow:auto}.app{height:auto}.main{grid-template-columns:1fr}.setup-grid{grid-template-columns:1fr}.wordGrid{grid-template-columns:repeat(2,1fr)}}
-</style>  <link rel="stylesheet" href="../_shared/shared-polish.css" />
-  <script defer src="../_shared/shared-polish.js"></script>
-  <link rel="stylesheet" href="../_shared/cute-unify.css" />
-  <script defer src="../_shared/cute-unify.js"></script>
-</head>
+</style></head>
 <body>
 <div class="app">
   <div class="topbar"><div class="brand"><div class="logo">🏖️</div><div><h1 id="title"></h1><div id="subtitle" class="sub"></div></div></div><div class="actions"><select id="lang" class="select" style="width:auto"><option value="zh">中文</option><option value="en">English</option><option value="ms">Bahasa Melayu</option></select><button id="setupBtn" class="btn secondary"></button><button id="fullBtn" class="btn secondary"></button><button id="resetBtn" class="btn bad"></button></div></div>
@@ -76,91 +72,4 @@ function finish(){clearInterval(timerId); const winner=scoreA===scoreB?'Draw':(s
 $('#lang').onchange=e=>{lang=e.target.value; localStorage.setItem('beach_lang',lang); applyLang();}; $('#setupLang').onchange=e=>{lang=e.target.value; localStorage.setItem('beach_lang',lang); applyLang();};
 $('#setupBtn').onclick=()=>$('#setup').classList.remove('hidden'); $('#fullBtn').onclick=()=>document.documentElement.requestFullscreen?.(); $('#resetBtn').onclick=()=>location.reload(); $('#sampleBtn').onclick=sample; $('#startBtn').onclick=start; $('#skipBtn').onclick=skipRound; $('#nextBtn').onclick=nextRound;
 sample(); applyLang();
-</script>
-<!-- built-in-sample-loader-fix -->
-<script>
-(function(){
-  const SAMPLE_TEXT = "# P007 关键词抢滩战｜题库范例\n# 用途：学生根据提示抢关键词，适合词汇、概念、重点复习。\n# 建议格式：提示 | 正确关键词 | 干扰词1,干扰词2,干扰词3\n保护账号的秘密文字 | 密码 | 用户名,头像,背景图\n让机器学习资料并做判断的技术 | 人工智能 | 计算器,投影机,白板笔\n网页的基本结构语言 | HTML | CSS,Excel,PowerPoint\n";
-  const TARGET_TEXTAREA_IDS = ["roundTextArea"];
-  const SAMPLE_BUTTON_IDS = ["sampleBtn"];
-  const SAMPLE_URL = 'question-bank-example.txt?v=sample-loader-fixed-20260627';
-  function $(id){ return document.getElementById(id); }
-  function cleanSampleText(text){
-    return String(text || '')
-      .replace(/
-/g,'
-')
-      .split('
-')
-      .map(line => line.trim())
-      .filter(line => line && !line.startsWith('#'))
-      .join('
-');
-  }
-  function findBankField(){
-    for (const id of TARGET_TEXTAREA_IDS){
-      const el = $(id);
-      if (el && ('value' in el)) return el;
-    }
-    return document.querySelector('textarea');
-  }
-  async function getBuiltInSampleText(){
-    try {
-      const res = await fetch(SAMPLE_URL, { cache:'no-store' });
-      if (res && res.ok) {
-        const text = await res.text();
-        if (cleanSampleText(text)) return text;
-      }
-    } catch(e) {}
-    return SAMPLE_TEXT;
-  }
-  function afterFill(field){
-    try { field.dispatchEvent(new Event('input', { bubbles:true })); } catch(e) {}
-    try { field.dispatchEvent(new Event('change', { bubbles:true })); } catch(e) {}
-    try {
-      if (field.id === 'textItems') {
-        const mode = $('mode'); if (mode) mode.value = 'text';
-        const lines = cleanSampleText(field.value).split('
-');
-        const categories = [];
-        lines.forEach(line => {
-          const parts = line.split('|').map(x => x.trim()).filter(Boolean);
-          if (parts[1] && !categories.includes(parts[1])) categories.push(parts[1]);
-        });
-        if (categories.length) {
-          try { cats = categories; } catch(e) {}
-          const catCount = $('catCount'); if (catCount) catCount.value = String(Math.min(Math.max(categories.length,2),5));
-          try { if (typeof renderCats === 'function') renderCats(); } catch(e) {}
-        }
-        try { if (typeof buildItems === 'function') buildItems(false); } catch(e) {}
-        try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
-      }
-      if (field.id === 'wordBank') { try { if (typeof applyBank === 'function') applyBank(true); } catch(e) {} }
-      try { if (typeof saveSettings === 'function') saveSettings(); } catch(e) {}
-      try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
-      try { if (typeof renderItems === 'function') renderItems(); } catch(e) {}
-      try { if (typeof setMessage === 'function') setMessage('已载入内置题库范例 / Built-in sample loaded / Contoh terbina telah dimuat'); } catch(e) {}
-      try { if (typeof toast === 'function') toast('已载入内置题库范例'); } catch(e) {}
-    } catch(e) { console.warn('Sample after-fill warning:', e); }
-  }
-  async function loadBuiltInSampleQuestionBank(event){
-    if (event) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); }
-    const field = findBankField();
-    if (!field) return;
-    const sampleText = cleanSampleText(await getBuiltInSampleText());
-    if (!sampleText) return;
-    field.value = sampleText;
-    afterFill(field);
-  }
-  window.loadBuiltInSampleQuestionBank = loadBuiltInSampleQuestionBank;
-  SAMPLE_BUTTON_IDS.forEach(id => {
-    const btn = $(id);
-    if (btn && !btn.dataset.sampleLoaderFixed) {
-      btn.dataset.sampleLoaderFixed = '1';
-      btn.addEventListener('click', loadBuiltInSampleQuestionBank, true);
-    }
-  });
-})();
-</script>
-<!-- /built-in-sample-loader-fix -->
-</body></html>
+</script></body></html>

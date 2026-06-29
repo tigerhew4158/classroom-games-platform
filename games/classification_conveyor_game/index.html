@@ -20,36 +20,8 @@ h1{margin:0;font-size:clamp(22px,2.5vw,36px);line-height:1.05}.sub{font-size:13p
 .conveyor-wrap{position:relative;min-height:0;border-radius:24px;border:1px solid rgba(255,255,255,.14);overflow:hidden;background:linear-gradient(180deg,rgba(15,23,42,.66),rgba(3,7,18,.25)),repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 18px,rgba(255,255,255,.02) 18px 36px)}
 .conveyor-line{position:absolute;left:24px;right:24px;top:50%;height:112px;transform:translateY(-50%);border-radius:24px;background:repeating-linear-gradient(90deg,#334155 0 36px,#1e293b 36px 72px);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 0 20px rgba(0,0,0,.35);animation:belt 1.8s linear infinite}@keyframes belt{from{background-position:0 0}to{background-position:72px 0}}
 .item-card{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(360px,44vw);height:220px;background:#0f172a;border:2px solid rgba(255,255,255,.18);border-radius:22px;box-shadow:0 18px 42px rgba(0,0,0,.38);display:grid;grid-template-rows:1fr auto;overflow:hidden}.item-img{min-height:0;background:#020617 center/contain no-repeat;display:grid;place-items:center;color:#fff;font-size:32px;font-weight:950}.item-label{padding:9px 12px;text-align:center;font-weight:950;background:rgba(255,255,255,.06)}
-.dropzones{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}
-.dropzone{
-  min-height:96px;border-radius:20px;
-  background:linear-gradient(180deg,rgba(15,23,42,.92),rgba(30,41,59,.96));
-  border:2px solid rgba(255,255,255,.18);
-  display:grid;place-items:center;text-align:center;padding:12px 10px;
-  font-weight:950;font-size:clamp(20px,2.1vw,30px);line-height:1.15;
-  color:#f8fafc;text-shadow:0 2px 6px rgba(0,0,0,.45);
-  cursor:pointer;transition:.15s transform,.15s background,.15s box-shadow,.15s border-color;
-  box-shadow:0 10px 22px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.05);
-}
-.dropzone:hover{
-  transform:translateY(-3px);
-  background:linear-gradient(180deg,rgba(8,47,73,.96),rgba(14,116,144,.8));
-  border-color:rgba(125,211,252,.72);
-  box-shadow:0 14px 28px rgba(0,0,0,.32), 0 0 0 3px rgba(56,189,248,.12);
-}
-.dropzone:active{transform:translateY(0) scale(.985)}
-.dropzone.good{border-color:rgba(34,197,94,.92);background:linear-gradient(180deg,rgba(20,83,45,.96),rgba(34,197,94,.34));color:#ecfdf5}
-.dropzone.bad{border-color:rgba(239,68,68,.92);background:linear-gradient(180deg,rgba(127,29,29,.96),rgba(239,68,68,.28));color:#fff1f2}
-.item-list{height:100%;display:grid;grid-template-rows:auto 1fr;gap:10px}
-.mini-list{min-height:0;overflow:auto;display:flex;flex-direction:column;gap:8px;padding-right:2px}
-.mini{
-  display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:14px;
-  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));
-  border:1px solid rgba(255,255,255,.1);font-size:13px;color:#e2e8f0;
-}
-.mini b{display:block;color:#f8fafc;font-size:14px;line-height:1.2;margin-bottom:2px}
-.mini span{color:#cbd5e1}
-.thumb{width:46px;height:36px;background:#020617 center/cover no-repeat;border-radius:9px;flex:0 0 auto;border:1px solid rgba(255,255,255,.1);color:#f8fafc;font-weight:900}
+.dropzones{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}.dropzone{min-height:92px;border-radius:18px;background:rgba(15,23,42,.72);border:2px dashed rgba(255,255,255,.2);display:grid;place-items:center;text-align:center;padding:10px;font-weight:950;cursor:pointer;transition:.15s transform,.15s background}.dropzone:hover{transform:translateY(-2px);background:rgba(56,189,248,.16)}.dropzone.good{border-color:rgba(34,197,94,.8);background:rgba(34,197,94,.16)}.dropzone.bad{border-color:rgba(239,68,68,.8);background:rgba(239,68,68,.16)}
+.item-list{height:100%;display:grid;grid-template-rows:auto 1fr;gap:8px}.mini-list{min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:7px}.mini{display:flex;align-items:center;gap:8px;padding:7px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:12px}.thumb{width:42px;height:34px;background:#020617 center/cover no-repeat;border-radius:8px;flex:0 0 auto}
 .setup{position:fixed;inset:0;background:rgba(2,6,23,.92);z-index:20;display:grid;place-items:center;padding:18px}.setup-card{width:min(1180px,96vw);max-height:92vh;overflow:auto;background:#0f172a;border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:0 28px 80px rgba(0,0,0,.5)}.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.wide{grid-column:1/-1}.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.cat-box{padding:10px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}.cat-box label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.preview-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(115px,1fr));gap:8px;max-height:190px;overflow:auto}.preview{border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);padding:6px;font-size:11px}.preview-img{height:62px;border-radius:8px;background:#020617 center/cover no-repeat;margin-bottom:5px;display:grid;place-items:center;font-weight:900}
 .win{position:fixed;inset:0;background:rgba(2,6,23,.88);z-index:40;display:grid;place-items:center;text-align:center;padding:20px}.win-card{width:min(760px,94vw);background:linear-gradient(135deg,rgba(34,197,94,.22),rgba(56,189,248,.16));border:1px solid rgba(34,197,94,.38);border-radius:28px;padding:28px}.win h2{font-size:42px;margin:0 0 8px}.hidden{display:none!important}
 @media(max-width:1100px){.main{grid-template-columns:270px 1fr}.panel.right{display:none}.item-card{width:min(420px,70vw)}}@media(max-width:760px){html,body{overflow:auto}.app{height:auto}.main{grid-template-columns:1fr}.setup-grid{grid-template-columns:1fr}.wide{grid-column:auto}.conveyor-wrap{height:360px}}
@@ -91,92 +63,5 @@ function updateScore(){$("#score").textContent=score;$("#correctCount").textCont
 function finish(){clearInterval(timerId);current=null;$("#itemCard").classList.add("hidden");$("#winTitle").textContent=T("finish");$("#winDesc").textContent=`${T("finalScore")}：${score}｜${T("correct")}：${correct}｜${T("wrong")}：${wrong}`;$("#win").classList.remove("hidden");}
 $("#lang").onchange=e=>{lang=e.target.value;localStorage.setItem("classify_lang",lang);applyLang()};$("#setupLang").onchange=e=>{lang=e.target.value;localStorage.setItem("classify_lang",lang);applyLang()};$("#catCount").onchange=renderCats;$("#mode").onchange=()=>{renderCats();};$("#buildCatsBtn").onclick=renderCats;$("#loadSampleBtn").onclick=loadSample;$("#startBtn").onclick=start;$("#setupBtn").onclick=()=>$("#setup").classList.remove("hidden");$("#resetBtn").onclick=()=>location.reload();$("#fullBtn").onclick=()=>document.documentElement.requestFullscreen?.();applyLang();
 </script>
-
-<!-- built-in-sample-loader-fix -->
-<script>
-(function(){
-  const SAMPLE_TEXT = "# P001 分类输送带｜题库范例\n# 用途：把项目归类到正确分类。\n# 建议格式：项目 | 正确分类\n苹果 | 水果\n香蕉 | 水果\n老虎 | 动物\n狮子 | 动物\n键盘 | 电脑设备\n鼠标 | 电脑设备\n密码 | 网络安全\n可疑链接 | 网络安全\n";
-  const TARGET_TEXTAREA_IDS = ["textItems"];
-  const SAMPLE_BUTTON_IDS = ["loadSampleBtn"];
-  const SAMPLE_URL = 'question-bank-example.txt?v=sample-loader-fixed-20260627';
-  function $(id){ return document.getElementById(id); }
-  function cleanSampleText(text){
-    return String(text || '')
-      .replace(/
-/g,'
-')
-      .split('
-')
-      .map(line => line.trim())
-      .filter(line => line && !line.startsWith('#'))
-      .join('
-');
-  }
-  function findBankField(){
-    for (const id of TARGET_TEXTAREA_IDS){
-      const el = $(id);
-      if (el && ('value' in el)) return el;
-    }
-    return document.querySelector('textarea');
-  }
-  async function getBuiltInSampleText(){
-    try {
-      const res = await fetch(SAMPLE_URL, { cache:'no-store' });
-      if (res && res.ok) {
-        const text = await res.text();
-        if (cleanSampleText(text)) return text;
-      }
-    } catch(e) {}
-    return SAMPLE_TEXT;
-  }
-  function afterFill(field){
-    try { field.dispatchEvent(new Event('input', { bubbles:true })); } catch(e) {}
-    try { field.dispatchEvent(new Event('change', { bubbles:true })); } catch(e) {}
-    try {
-      if (field.id === 'textItems') {
-        const mode = $('mode'); if (mode) mode.value = 'text';
-        const lines = cleanSampleText(field.value).split('
-');
-        const categories = [];
-        lines.forEach(line => {
-          const parts = line.split('|').map(x => x.trim()).filter(Boolean);
-          if (parts[1] && !categories.includes(parts[1])) categories.push(parts[1]);
-        });
-        if (categories.length) {
-          try { cats = categories; } catch(e) {}
-          const catCount = $('catCount'); if (catCount) catCount.value = String(Math.min(Math.max(categories.length,2),5));
-          try { if (typeof renderCats === 'function') renderCats(); } catch(e) {}
-        }
-        try { if (typeof buildItems === 'function') buildItems(false); } catch(e) {}
-        try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
-      }
-      if (field.id === 'wordBank') { try { if (typeof applyBank === 'function') applyBank(true); } catch(e) {} }
-      try { if (typeof saveSettings === 'function') saveSettings(); } catch(e) {}
-      try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
-      try { if (typeof renderItems === 'function') renderItems(); } catch(e) {}
-      try { if (typeof setMessage === 'function') setMessage('已载入内置题库范例 / Built-in sample loaded / Contoh terbina telah dimuat'); } catch(e) {}
-      try { if (typeof toast === 'function') toast('已载入内置题库范例'); } catch(e) {}
-    } catch(e) { console.warn('Sample after-fill warning:', e); }
-  }
-  async function loadBuiltInSampleQuestionBank(event){
-    if (event) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); }
-    const field = findBankField();
-    if (!field) return;
-    const sampleText = cleanSampleText(await getBuiltInSampleText());
-    if (!sampleText) return;
-    field.value = sampleText;
-    afterFill(field);
-  }
-  window.loadBuiltInSampleQuestionBank = loadBuiltInSampleQuestionBank;
-  SAMPLE_BUTTON_IDS.forEach(id => {
-    const btn = $(id);
-    if (btn && !btn.dataset.sampleLoaderFixed) {
-      btn.dataset.sampleLoaderFixed = '1';
-      btn.addEventListener('click', loadBuiltInSampleQuestionBank, true);
-    }
-  });
-})();
-</script>
-<!-- /built-in-sample-loader-fix -->
 </body>
 </html>
