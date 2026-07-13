@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-s001-version="v28-main-script-card-render-final-fix">
+<html lang="zh-CN" data-s001-version="v29-script-scope-button-fix">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -803,6 +803,9 @@
   </div>
 
 <script>
+// S001_V29_IIFE_SCOPE_FIX_START
+(function(){
+"use strict";
 const I18N = {
   zh: {
     pageTitle: 'S001 翻翻乐',
@@ -1801,6 +1804,8 @@ function init(){
 }
 
 init();
+})();
+// S001_V29_IIFE_SCOPE_FIX_END
 </script>
 
 
