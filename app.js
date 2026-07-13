@@ -1581,7 +1581,7 @@ function renderAuth(){
         </div>
         <div class="template-hero-card">
           <div class="template-preview-window"><div class="preview-toolbar"><i></i><i></i><i></i></div><div class="preview-board"><span>🧩</span><span>🎡</span><span>🏰</span><span>🔎</span></div></div>
-          <h3>${c.badge}</h3><p>${c.subtitle}</p>
+          <p>${c.subtitle}</p>
         </div>
       </section>
       ${renderLandingSteps(c)}
