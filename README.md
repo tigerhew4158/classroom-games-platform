@@ -643,3 +643,10 @@ Built-in admin account is protected from old localStorage lockout: admin@lead.ai
 - 对文字对应模板会自动套用题库。
 - 图片型模板原本的图片示例逻辑保留，不强行覆盖。
 - 已同步更新各单独离线包与 `all_classroom_games_offline_pack.zip`。
+
+
+## v27 更新：S001 翻翻乐卡片显示修正
+- 修正 S001 进入游戏后中央区域没有显示卡片的问题。
+- 自动检查并修复旧版 localStorage 里空白或无效题库导致的空白棋盘。
+- 若题库不足，会自动载入示例题库并重新生成卡片。
+- 修正后打开 `/games/memory_match_game/index.html?lang=zh` 应直接显示翻牌卡片。
