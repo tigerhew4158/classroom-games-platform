@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-s001-version="v7-static-defaults">
+<html lang="zh-CN" data-s001-version="v27-card-display-force-fix">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -2492,6 +2492,336 @@ Segi tiga,Triangle`
 })();
 </script>
 <!-- S001_START_BOARD_FIX_END -->
+
+
+
+<!-- S001_FORCE_CARD_DISPLAY_FINAL_FIX_START -->
+<script>
+(function(){
+  const STORAGE_KEY = 's001_memory_match_v2';
+
+  const FALLBACK_BANKS = {
+    zh:`苹果,apple
+香蕉,banana
+老师,teacher
+学生,student
+书本,book
+小猫,cat
+马来文,Melayu
+英文,English
+人工智能,AI
+网络安全,Cybersecurity
+光合作用,Photosynthesis
+首都,Kuala Lumpur
+感谢,Thank you
+早安,Selamat pagi
+圆形,Circle
+三角形,Triangle`,
+    en:`Apple,苹果
+Banana,香蕉
+Teacher,老师
+Student,学生
+Book,书本
+Cat,小猫
+Malay Language,马来文
+English Language,英文
+Artificial Intelligence,AI
+Cybersecurity,网络安全
+Photosynthesis,光合作用
+Capital,Kuala Lumpur
+Thank you,感谢
+Good morning,Selamat pagi
+Circle,圆形
+Triangle,三角形`,
+    ms:`Epal,apple
+Pisang,banana
+Guru,teacher
+Murid,student
+Buku,book
+Kucing,cat
+Bahasa Melayu,Melayu
+Bahasa Inggeris,English
+Kecerdasan Buatan,AI
+Keselamatan Siber,Cybersecurity
+Fotosintesis,Photosynthesis
+Ibu negara,Kuala Lumpur
+Terima kasih,Thank you
+Selamat pagi,Good morning
+Bulatan,Circle
+Segi tiga,Triangle`
+  };
+
+  const FALLBACK_TEAM_NAMES = {
+    zh:'红队,蓝队,绿队,紫队',
+    en:'Red Team,Blue Team,Green Team,Purple Team',
+    ms:'Kumpulan Merah,Kumpulan Biru,Kumpulan Hijau,Kumpulan Ungu'
+  };
+
+  function $(id){ return document.getElementById(id); }
+
+  function currentLang(){
+    try{
+      if(typeof state !== 'undefined' && state.lang){
+        if(String(state.lang).startsWith('en')) return 'en';
+        if(String(state.lang).startsWith('ms')) return 'ms';
+        return 'zh';
+      }
+    }catch(e){}
+    const q = new URLSearchParams(location.search).get('lang') || '';
+    if(q.startsWith('en')) return 'en';
+    if(q.startsWith('ms') || q.startsWith('bm')) return 'ms';
+    const v = ($('langSelect') && $('langSelect').value) || document.documentElement.lang || 'zh';
+    if(String(v).toLowerCase().startsWith('en')) return 'en';
+    if(String(v).toLowerCase().startsWith('ms')) return 'ms';
+    return 'zh';
+  }
+
+  function sampleBank(){
+    const lang = currentLang();
+    try{
+      if(typeof t === 'function'){
+        const s = t('sampleBank');
+        if(s && s !== 'sampleBank') return s;
+      }
+    }catch(e){}
+    return FALLBACK_BANKS[lang] || FALLBACK_BANKS.zh;
+  }
+
+  function parsePairs(text){
+    const raw = String(text || '').trim();
+    if(!raw) return [];
+    return raw.split(/\r?\n/)
+      .map(line => line.trim())
+      .filter(Boolean)
+      .map(line => {
+        const parts = line.split(/[,，|\t]/).map(x => x.trim()).filter(Boolean);
+        return { left: parts[0] || '', right: parts.slice(1).join(',') || '' };
+      })
+      .filter(x => x.left && x.right);
+  }
+
+  function ensureGoodState(){
+    const lang = currentLang();
+    const bank = sampleBank();
+    let pairs = [];
+
+    try{
+      pairs = parsePairs(typeof state !== 'undefined' ? state.bankText : '');
+    }catch(e){ pairs = []; }
+
+    if(pairs.length < 6){
+      try{
+        if(typeof state !== 'undefined'){
+          state.lang = lang;
+          state.bankText = bank;
+          state.totalPairs = [6,8,10,12].includes(Number(state.totalPairs)) ? Number(state.totalPairs) : 8;
+          state.stageCount = [3,4,5,6].includes(Number(state.stageCount)) ? Number(state.stageCount) : 5;
+          state.teamCount = [2,3,4].includes(Number(state.teamCount)) ? Number(state.teamCount) : 2;
+          state.timerLimit = [0,180,300,480,600].includes(Number(state.timerLimit)) ? Number(state.timerLimit) : 300;
+          state.correctTurn = ['stay','next'].includes(state.correctTurn) ? state.correctTurn : 'stay';
+          state.wrongTurn = ['next','stay'].includes(state.wrongTurn) ? state.wrongTurn : 'next';
+          state.teamNames = (state.teamNames && String(state.teamNames).trim()) ? state.teamNames : (FALLBACK_TEAM_NAMES[lang] || FALLBACK_TEAM_NAMES.zh);
+        }
+      }catch(e){}
+      try{
+        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        stored.lang = lang;
+        stored.bankText = bank;
+        stored.totalPairs = stored.totalPairs || 8;
+        stored.stageCount = stored.stageCount || 5;
+        stored.teamCount = stored.teamCount || 2;
+        stored.timerLimit = stored.timerLimit ?? 300;
+        stored.teamNames = stored.teamNames || (FALLBACK_TEAM_NAMES[lang] || FALLBACK_TEAM_NAMES.zh);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+      }catch(e){}
+      if($('bankInput')) $('bankInput').value = bank;
+      pairs = parsePairs(bank);
+    }
+    return pairs;
+  }
+
+  function shuffleLocal(arr){
+    const a = [...arr];
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random() * (i+1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function iconFor(txt){
+    try{
+      if(typeof iconForText === 'function') return iconForText(txt) || '';
+    }catch(e){}
+    const key = String(txt || '').toLowerCase();
+    if(key.includes('apple') || key.includes('苹果') || key.includes('epal')) return '🍎';
+    if(key.includes('banana') || key.includes('香蕉') || key.includes('pisang')) return '🍌';
+    if(key.includes('teacher') || key.includes('老师') || key.includes('guru')) return '👩‍🏫';
+    if(key.includes('student') || key.includes('学生') || key.includes('murid')) return '🧒';
+    if(key.includes('book') || key.includes('书') || key.includes('buku')) return '📕';
+    if(key.includes('cat') || key.includes('猫') || key.includes('kucing')) return '🐱';
+    if(key.includes('ai') || key.includes('智能')) return '🤖';
+    return '📘';
+  }
+
+  function buildCardsFallback(){
+    const pairs = ensureGoodState();
+    const count = Math.max(6, Math.min(12, Number((typeof state !== 'undefined' && state.totalPairs) || 8), pairs.length));
+    const selected = shuffleLocal(pairs).slice(0, count);
+    const cards = [];
+    selected.forEach((pair, idx) => {
+      cards.push({uid:`${idx}-a`, matchId:`m-${idx}`, text:pair.left, kindKey:'kindA', matched:false, flipped:false, icon:iconFor(pair.left)});
+      cards.push({uid:`${idx}-b`, matchId:`m-${idx}`, text:pair.right, kindKey:'kindB', matched:false, flipped:false, icon:iconFor(pair.right)});
+    });
+
+    try{
+      if(typeof state !== 'undefined'){
+        state.stagePairPool = selected;
+        state.cards = shuffleLocal(cards);
+        state.matchedPairs = 0;
+        state.openedCount = 0;
+        state.flipped = [];
+        state.locked = false;
+        state.running = true;
+      }
+      return true;
+    }catch(e){
+      console.error('[S001 final card fix] state build failed', e);
+      return false;
+    }
+  }
+
+  function boardCount(){
+    const board = $('board');
+    return board ? board.querySelectorAll('.card').length : 0;
+  }
+
+  function manualBoardRender(){
+    const board = $('board');
+    if(!board) return;
+
+    try{
+      if(typeof state === 'undefined' || !Array.isArray(state.cards) || state.cards.length < 12){
+        buildCardsFallback();
+      }
+    }catch(e){
+      buildCardsFallback();
+    }
+
+    let cards = [];
+    try{ cards = Array.isArray(state.cards) ? state.cards : []; }catch(e){}
+    if(cards.length < 12) return;
+
+    const n = cards.length;
+    const cols = n <= 16 ? 4 : n <= 20 ? 5 : 6;
+    board.className = `board cols-${cols}`;
+    board.innerHTML = cards.map(card => `
+      <button class="card ${card.flipped ? 'flipped':''} ${card.matched ? 'matched':''}" data-uid="${String(card.uid).replace(/"/g,'&quot;')}">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <div class="star-mini s1">⭐</div>
+            <div class="star-mini s2">⭐</div>
+            <div class="star-mini s3">⭐</div>
+            <div class="star-mark">★</div>
+          </div>
+          <div class="card-face card-back">
+            <div class="card-icon">${card.icon || '📘'}</div>
+            <div class="card-text">${escapeHtmlLocal(card.text)}</div>
+            <div class="card-kind">${escapeHtmlLocal(kindName(card.kindKey))}</div>
+          </div>
+        </div>
+      </button>
+    `).join('');
+
+    board.querySelectorAll('.card').forEach(btn => {
+      btn.addEventListener('click', function(){
+        try{
+          if(typeof flipCard === 'function') flipCard(this.dataset.uid);
+        }catch(e){}
+      });
+    });
+  }
+
+  function kindName(k){
+    try{
+      if(typeof t === 'function') return t(k || 'kindA');
+    }catch(e){}
+    const lang = currentLang();
+    if(lang === 'en') return k === 'kindB' ? 'Right' : 'Left';
+    if(lang === 'ms') return k === 'kindB' ? 'Kanan' : 'Kiri';
+    return k === 'kindB' ? '右边' : '左边';
+  }
+
+  function escapeHtmlLocal(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function forceCards(reason){
+    try{
+      ensureGoodState();
+
+      if(typeof state !== 'undefined'){
+        state.running = true;
+        if(!Array.isArray(state.cards) || state.cards.length < 12){
+          let ok = false;
+          try{ ok = typeof buildStageCards === 'function' ? !!buildStageCards() : false; }catch(e){ ok = false; }
+          if(!ok || !Array.isArray(state.cards) || state.cards.length < 12){
+            buildCardsFallback();
+          }
+        }
+      }
+
+      try{ if(typeof renderBoard === 'function') renderBoard(); }catch(e){ console.error('[S001 final renderBoard failed]', e); }
+      if(boardCount() === 0) manualBoardRender();
+
+      try{ if(typeof prepareTeams === 'function' && (!state.teams || !state.teams.length)) prepareTeams(); }catch(e){}
+      try{ if(typeof updateInfoPanel === 'function') updateInfoPanel(); }catch(e){}
+      try{ if(typeof renderRanking === 'function') renderRanking(); }catch(e){}
+      try{ if(typeof updateProgressPanel === 'function') updateProgressPanel(); }catch(e){}
+      try{ if(typeof updateActionButtons === 'function') updateActionButtons(); }catch(e){}
+      try{ if(typeof saveLocal === 'function') saveLocal(); }catch(e){}
+      try{ if(typeof fitStageToScreen === 'function') fitStageToScreen(); }catch(e){}
+
+      if(boardCount() === 0){
+        setTimeout(manualBoardRender, 80);
+      }
+    }catch(err){
+      console.error('[S001 final forceCards]', reason, err);
+      try{ manualBoardRender(); }catch(e){}
+    }
+  }
+
+  function bindExtra(){
+    const restart = $('restartBtn');
+    if(restart && !restart.dataset.s001FinalForce){
+      restart.dataset.s001FinalForce = '1';
+      restart.addEventListener('click', function(){ setTimeout(()=>forceCards('restart'), 120); }, true);
+    }
+    const langSelect = $('langSelect');
+    if(langSelect && !langSelect.dataset.s001FinalForce){
+      langSelect.dataset.s001FinalForce = '1';
+      langSelect.addEventListener('change', function(){ setTimeout(()=>forceCards('language'), 180); }, true);
+    }
+    const apply = $('applySettingsBtn');
+    if(apply && !apply.dataset.s001FinalForce){
+      apply.dataset.s001FinalForce = '1';
+      apply.addEventListener('click', function(){ setTimeout(()=>forceCards('apply'), 250); }, true);
+    }
+  }
+
+  function init(){
+    bindExtra();
+    setTimeout(()=>forceCards('init-100'), 100);
+    setTimeout(()=>forceCards('init-500'), 500);
+    setTimeout(()=>{ if(boardCount()===0) forceCards('init-1200'); }, 1200);
+    setTimeout(()=>{ if(boardCount()===0) forceCards('init-2500'); }, 2500);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<!-- S001_FORCE_CARD_DISPLAY_FINAL_FIX_END -->
 
 </body>
 </html>
