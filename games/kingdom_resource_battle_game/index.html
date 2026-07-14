@@ -23,6 +23,10 @@
 .win{position:fixed;inset:0;background:rgba(2,6,23,.88);z-index:40;display:grid;place-items:center;text-align:center;padding:20px}.win-card{width:min(760px,94vw);background:linear-gradient(135deg,rgba(250,204,21,.23),rgba(34,197,94,.16));border:1px solid rgba(250,204,21,.38);border-radius:28px;padding:28px}.win h2{font-size:42px;margin:0 0 8px}.win p{font-size:20px;color:#e2e8f0}
 @media(max-width:1280px){.main{grid-template-columns:290px 1fr}.panel.right{display:none}.zoneCards{grid-template-columns:1fr}.setup-grid{grid-template-columns:1fr 1fr}.split2{grid-template-columns:1fr}}@media(max-width:760px){html,body{overflow:auto}.app{height:auto}.main{grid-template-columns:1fr}.eventCardGrid{grid-template-columns:1fr}.teamOutpost{display:none}.setup-grid,.eventRowGrid{grid-template-columns:1fr}.mapSpot img.building{width:140px}}
 </style>
+  <link rel="stylesheet" href="../_shared/shared-polish.css" />
+  <script defer src="../_shared/shared-polish.js"></script>
+  <link rel="stylesheet" href="../_shared/cute-unify.css" />
+  <script defer src="../_shared/cute-unify.js"></script>
 </head>
 <body>
 <div class="app">
@@ -106,5 +110,92 @@ function finishGame(){ clearInterval(timerId); const a=state.A.score,b=state.B.s
 $('#lang').onchange=e=>{lang=e.target.value; $('#setupLang').value=lang; applyI18N();}; $('#setupLang').onchange=e=>{lang=e.target.value; $('#lang').value=lang; applyI18N();}; $('#setupBtn').onclick=()=>$('#setup').classList.remove('hidden'); $('#fullBtn').onclick=()=>document.documentElement.requestFullscreen?.(); $('#resetBtn').onclick=()=>location.reload(); $('#sampleBtn').onclick=loadSample; $('#sampleBtnInline').onclick=loadSample; $('#startBtn').onclick=startGame; $('#addEventBtn').onclick=()=>addEventRow(); $('#skipBtn').onclick=()=>{logs.unshift('⏭️ '+teamName(turn)+' skipped turn'); logs=logs.slice(0,12); if(turn==='A') turn='B'; else {turn='A'; round+=1;} render();}; $('#farmBtn').onclick=()=>chooseLane('farm'); $('#forestBtn').onclick=()=>chooseLane('forest'); $('#mineBtn').onclick=()=>chooseLane('mine'); $('#eventOkBtn').onclick=()=>{ $('#eventModal').classList.add('hidden'); nextTurn(); };
 populateThemeSelects(); loadSample(); applyI18N();
 </script>
+
+<!-- built-in-sample-loader-fix -->
+<script>
+(function(){
+  const SAMPLE_TEXT = "# H008 王国资源争夺战｜题库范例\n# 用途：开发农田、森林、金矿，答题获得资源并触发事件卡。\n# 题库格式：题目 | 选项A | 选项B | 选项C | 选项D | 正确编号\nAI 从什么学习？ | 训练资料 | 魔法 | 只靠猜测 | 什么都不需要 | 1\n看到可疑链接时应该？ | 马上点开 | 先检查来源 | 输入密码 | 转发给朋友 | 2\n哪一种密码较安全？ | 123456 | 生日日期 | BlueSky!2026 | 名字拼音 | 3\n\n# 事件卡格式：区域 | 类型 | 标题 | 描述 | 分数变动\nfarm | good | 农作物大丰收 | 天气理想，粮食大增，额外 +2 分。 | 2\nforest | bad | 森林大火 | 大火烧毁林地，王国损失资源，扣 2 分。 | -2\nmine | good | 发现金矿新矿脉 | 金矿产量提升，额外 +3 分。 | 3\n";
+  const TARGET_TEXTAREA_IDS = ["questionText"];
+  const SAMPLE_BUTTON_IDS = ["sampleBtn", "sampleBtnInline"];
+  const SAMPLE_URL = 'question-bank-example.txt?v=sample-loader-fixed-20260627';
+  function $(id){ return document.getElementById(id); }
+  function cleanSampleText(text){
+    return String(text || '')
+      .replace(/
+/g,'
+')
+      .split('
+')
+      .map(line => line.trim())
+      .filter(line => line && !line.startsWith('#'))
+      .join('
+');
+  }
+  function findBankField(){
+    for (const id of TARGET_TEXTAREA_IDS){
+      const el = $(id);
+      if (el && ('value' in el)) return el;
+    }
+    return document.querySelector('textarea');
+  }
+  async function getBuiltInSampleText(){
+    try {
+      const res = await fetch(SAMPLE_URL, { cache:'no-store' });
+      if (res && res.ok) {
+        const text = await res.text();
+        if (cleanSampleText(text)) return text;
+      }
+    } catch(e) {}
+    return SAMPLE_TEXT;
+  }
+  function afterFill(field){
+    try { field.dispatchEvent(new Event('input', { bubbles:true })); } catch(e) {}
+    try { field.dispatchEvent(new Event('change', { bubbles:true })); } catch(e) {}
+    try {
+      if (field.id === 'textItems') {
+        const mode = $('mode'); if (mode) mode.value = 'text';
+        const lines = cleanSampleText(field.value).split('
+');
+        const categories = [];
+        lines.forEach(line => {
+          const parts = line.split('|').map(x => x.trim()).filter(Boolean);
+          if (parts[1] && !categories.includes(parts[1])) categories.push(parts[1]);
+        });
+        if (categories.length) {
+          try { cats = categories; } catch(e) {}
+          const catCount = $('catCount'); if (catCount) catCount.value = String(Math.min(Math.max(categories.length,2),5));
+          try { if (typeof renderCats === 'function') renderCats(); } catch(e) {}
+        }
+        try { if (typeof buildItems === 'function') buildItems(false); } catch(e) {}
+        try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
+      }
+      if (field.id === 'wordBank') { try { if (typeof applyBank === 'function') applyBank(true); } catch(e) {} }
+      try { if (typeof saveSettings === 'function') saveSettings(); } catch(e) {}
+      try { if (typeof renderPreview === 'function') renderPreview(); } catch(e) {}
+      try { if (typeof renderItems === 'function') renderItems(); } catch(e) {}
+      try { if (typeof setMessage === 'function') setMessage('已载入内置题库范例 / Built-in sample loaded / Contoh terbina telah dimuat'); } catch(e) {}
+      try { if (typeof toast === 'function') toast('已载入内置题库范例'); } catch(e) {}
+    } catch(e) { console.warn('Sample after-fill warning:', e); }
+  }
+  async function loadBuiltInSampleQuestionBank(event){
+    if (event) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); }
+    const field = findBankField();
+    if (!field) return;
+    const sampleText = cleanSampleText(await getBuiltInSampleText());
+    if (!sampleText) return;
+    field.value = sampleText;
+    afterFill(field);
+  }
+  window.loadBuiltInSampleQuestionBank = loadBuiltInSampleQuestionBank;
+  SAMPLE_BUTTON_IDS.forEach(id => {
+    const btn = $(id);
+    if (btn && !btn.dataset.sampleLoaderFixed) {
+      btn.dataset.sampleLoaderFixed = '1';
+      btn.addEventListener('click', loadBuiltInSampleQuestionBank, true);
+    }
+  });
+})();
+</script>
+<!-- /built-in-sample-loader-fix -->
 </body>
 </html>
