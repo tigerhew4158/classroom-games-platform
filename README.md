@@ -650,3 +650,42 @@ Built-in admin account is protected from old localStorage lockout: admin@lead.ai
 - 自动检查并修复旧版 localStorage 里空白或无效题库导致的空白棋盘。
 - 若题库不足，会自动载入示例题库并重新生成卡片。
 - 修正后打开 `/games/memory_match_game/index.html?lang=zh` 应直接显示翻牌卡片。
+
+
+## v28 更新：S001 卡片渲染最终修正
+- 移除了旧版外部修补脚本，解决 Console 出现 `state is not defined`、`renderBoard is not defined` 的问题。
+- 卡片生成逻辑改回主程式内部执行，避免跨 script scope 失效。
+- 若浏览器 localStorage 里存了空白或无效题库，会自动重置为示例题库。
+- 若题库不足 6 组，会自动补回示例题库，不会再出现中央空白棋盘。
+- S001 下载包 `downloads/memory_match.zip` 也同步更新。
+
+
+## v29 更新：S001 按钮与脚本作用域修正
+- 修正 Console 报错：`Identifier 't' has already been declared`。
+- 将 S001 主程式包进独立作用域，避免与浏览器缓存或其他脚本的全局变量冲突。
+- 修复因脚本停止执行而导致「设置题库」与「重新开始」按钮没有作用的问题。
+- S001 下载包 `downloads/memory_match.zip` 也同步更新。
+
+
+## v30 更新：首页 undefined 文字移除
+- 移除首页右侧预览卡片里的 `undefined` 文字。
+- 只修改 `app.js`。
+- 其他游戏与 S001 修正保留不变。
+
+
+## v31 更新：老师账号同步 Supabase 数据库
+- 修正：老师申请只存在本机浏览器 localStorage，管理员在其他电脑看不到。
+- 修正：管理员新增老师后，老师电脑无法登入。
+- 新增 `/api/platform-users.js`，老师账号会写入 Supabase `platform_users` 表。
+- 管理员后台新增「同步资料库」按钮。
+- 管理员新增、批准、停用、重设密码、删除、保存授权都会同步到 Supabase。
+- 老师登录会从 Supabase 检查账号。
+- 老师申请会写入 Supabase，管理员登录后台后可看到待批准账号。
+
+部署前请在 Supabase 执行 `supabase_platform_schema.sql`，并在 classroom-games-platform 这个 Vercel 项目设置：
+SUPABASE_URL
+SUPABASE_SERVICE_ROLE_KEY
+
+
+### v31 补充：自动迁移旧浏览器账号
+管理员第一次用 `admin@lead.ai / admin123` 登录时，系统会尝试把当前浏览器 localStorage 里的旧老师账号同步到 Supabase。

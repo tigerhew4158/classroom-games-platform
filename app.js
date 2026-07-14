@@ -1338,73 +1338,71 @@ function normalizeEmail(email){
 function isValidEmail(email){
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizeEmail(email));
 }
-function login(email, password){
+
+async function platformApi(action, payload = {}){
+  const response = await fetch('/api/platform-users', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action, ...payload})});
+  const data = await response.json().catch(()=>({ok:false,error:'Invalid JSON response'}));
+  if(!response.ok) throw new Error(data.error || data.msg || 'Platform API error');
+  return data;
+}
+function normalizeBackendUsers(users){
+  return Array.isArray(users) ? users.map(u=>({id:u.id,email:u.email,username:u.username||u.email,password:u.password||'',name:u.name||u.email,role:u.role||'user',accountStatus:u.accountStatus||'pending',disabled:!!u.disabled,ownedGames:Array.isArray(u.ownedGames)?u.ownedGames:[],promoGift:Array.isArray(u.promoGift)?u.promoGift:[],package:u.package||'free',profileCompleted:!!u.profileCompleted,profile:u.profile||{email:u.email,phone:'',chineseName:u.name||'',englishName:'',state:'Johor',orgTypes:[]}})) : [];
+}
+function mergeBackendUsers(users){
+  const normalized = normalizeBackendUsers(users);
+  if(!normalized.length) return;
+  state.users = normalized;
+  ensureDefaultAccounts(state);
+  saveState();
+}
+function currentAdminCredentials(){
+  const admin = getUser();
+  return {adminEmail:admin?.email || admin?.username || '', adminPassword:admin?.password || ''};
+}
+async function refreshBackendUsers(){
+  const data = await platformApi('list', currentAdminCredentials());
+  if(data.ok && data.users) mergeBackendUsers(data.users);
+  return data;
+}
+function platformOfflineMsg(){
+  return state.lang==='en' ? 'Backend database is not connected. Please check Supabase / Vercel Environment Variables.' : (state.lang==='ms' ? 'Pangkalan data belum disambungkan. Sila semak Supabase / Vercel Environment Variables.' : '后台数据库尚未连接。请检查 Supabase / Vercel 环境变量。');
+}
+
+async function login(email, password){
   const normalized = normalizeEmail(email);
   const passwordText = String(password || '').trim();
-  ensureDefaultAccounts(state);
-
-  // Hard fallback for built-in admin account. This prevents old localStorage,
-  // accidental disable, missing password, or migration issues from locking the admin out.
-  if(normalized === 'admin@lead.ai' && passwordText === 'admin123'){
-    const adminDefault = defaultState().users.find(u => u.role === 'admin');
-    let admin = state.users.find(u => normalizeEmail(u.email || u.username) === 'admin@lead.ai');
-    if(!admin){
-      admin = {...adminDefault};
-      state.users.push(admin);
+  try{
+    const data = await platformApi('login', {email: normalized, password: passwordText, localUsers: state.users});
+    if(!data.ok) return {ok:false, msg:data.msg || data.error || t('loginFail')};
+    if(data.users) mergeBackendUsers(data.users);
+    else if(data.user){
+      const admins = state.users.filter(u=>u.role==='admin');
+      state.users = [...admins, data.user];
+      ensureDefaultAccounts(state);
+      saveState();
     }
-    admin.id = admin.id || 'u_admin';
-    admin.email = 'admin@lead.ai';
-    admin.username = 'admin@lead.ai';
-    admin.password = 'admin123';
-    admin.name = admin.name || adminDefault.name || 'Admin';
-    admin.role = 'admin';
-    admin.accountStatus = 'approved';
-    admin.disabled = false;
-    admin.package = 'all_access';
-    admin.ownedGames = GAME_DATA.map(g=>g.id);
-    admin.profileCompleted = true;
-    admin.profile = admin.profile || adminDefault.profile;
-    state.currentUser = admin.id;
+    const user = data.user || state.users.find(u=>normalizeEmail(u.email || u.username)===normalized);
+    if(!user) return {ok:false, msg:t('loginFail')};
+    state.currentUser = user.id;
     saveState();
     render();
     return {ok:true, msg:''};
-  }
-
-  // Hard fallback for demo teacher account.
-  if(normalized === 'teacher@example.com' && passwordText === '123456'){
-    const teacherDefault = defaultState().users.find(u => normalizeEmail(u.email) === 'teacher@example.com');
-    let teacher = state.users.find(u => normalizeEmail(u.email || u.username) === 'teacher@example.com');
-    if(!teacher){
-      teacher = {...teacherDefault};
-      state.users.push(teacher);
+  }catch(err){
+    console.error('[platform login]', err);
+    if(normalized === 'admin@lead.ai' && passwordText === 'admin123'){
+      ensureDefaultAccounts(state);
+      const admin = state.users.find(u=>u.role==='admin');
+      state.currentUser = admin.id;
+      saveState();
+      render();
+      setTimeout(()=>alert(platformOfflineMsg()), 100);
+      return {ok:true, msg:''};
     }
-    teacher.id = teacher.id || 'u_teacher';
-    teacher.email = 'teacher@example.com';
-    teacher.username = 'teacher@example.com';
-    teacher.password = '123456';
-    teacher.role = 'user';
-    teacher.accountStatus = 'approved';
-    teacher.disabled = false;
-    teacher.package = 'free';
-    teacher.ownedGames = [];
-    teacher.promoGift = freeTrialTemplates();
-    state.currentUser = teacher.id;
-    saveState();
-    render();
-    return {ok:true, msg:''};
+    return {ok:false, msg:platformOfflineMsg()};
   }
-
-  let user = state.users.find(u => normalizeEmail(u.email || u.username)===normalized && String(u.password || '').trim()===passwordText);
-  if(!user) return {ok:false, msg:t('loginFail')};
-  if(user.disabled) return {ok:false, msg:t('accountDisabled') || 'This account has been disabled. Please contact the administrator.'};
-  if(user.accountStatus !== 'approved') return {ok:false, msg:t('accountPending') || 'Your account request has been submitted. Please wait for admin approval.'};
-  state.currentUser = user.id;
-  saveState();
-  render();
-  return {ok:true, msg:''};
 }
 function freeTrialTemplates(){ return [...BASE_FREE_GAMES]; }
-function registerTeacherAccount(name, email, phone, password){
+async function registerTeacherAccount(name, email, phone, password){
   const normalized = normalizeEmail(email);
   const teacherName = String(name || '').trim();
   const phoneText = String(phone || '').trim();
@@ -1413,25 +1411,13 @@ function registerTeacherAccount(name, email, phone, password){
   if(!teacherName || !normalized || !phoneText || !passwordText) return {ok:false, msg:t('fillAll')};
   if(!isValidEmail(normalized)) return {ok:false, msg:c.invalidEmail};
   if(passwordText.length < 6) return {ok:false, msg: state.lang==='en' ? 'Password must be at least 6 characters.' : (state.lang==='ms' ? 'Kata laluan mesti sekurang-kurangnya 6 aksara.' : '登录密码至少需要 6 个字符。')};
-  if(state.users.some(u => normalizeEmail(u.email || u.username)===normalized)) return {ok:false, msg:t('accountExists')};
-  const trialGames = freeTrialTemplates();
-  state.users.push({
-    id:'u_'+Date.now(),
-    email:normalized,
-    username:normalized,
-    password:passwordText,
-    name:teacherName,
-    role:'user',
-    accountStatus:'pending',
-    disabled:false,
-    ownedGames:[],
-    promoGift:trialGames,
-    package:'free',
-    profileCompleted:false,
-    profile:{email:normalized, phone:phoneText, chineseName:teacherName, englishName:'', state:'Johor', orgTypes:[]}
-  });
-  saveState();
-  return {ok:true, msg:c.registerSuccess};
+  try{
+    const data = await platformApi('register', {name:teacherName, email:normalized, phone:phoneText, password:passwordText});
+    return {ok:!!data.ok, msg:data.msg || c.registerSuccess};
+  }catch(err){
+    console.error('[platform register]', err);
+    return {ok:false, msg: platformOfflineMsg()};
+  }
 }
 function register(email, password){
   return registerTeacherAccount(email, email, '', password);
@@ -1440,17 +1426,23 @@ function isProfileComplete(user){
   const p = user?.profile || {};
   return !!(p.email && p.phone && (p.chineseName || p.englishName) && p.state && Array.isArray(p.orgTypes) && p.orgTypes.length);
 }
-function completeProfile(userId, profile){
+async function completeProfile(userId, profile){
   const user = state.users.find(u=>u.id===userId);
   if(!user) return false;
   user.profile = {...(user.profile||{}), ...profile, email:user.email};
   user.name = profile.chineseName || profile.englishName || user.email;
   const wasCompleted = user.profileCompleted;
   user.profileCompleted = isProfileComplete(user);
-  if(user.profileCompleted && !wasCompleted && !user.ownedGames.includes(PROFILE_REWARD_GAME)){
-    user.ownedGames.push(PROFILE_REWARD_GAME);
-  }
+  if(user.profileCompleted && !wasCompleted && !user.ownedGames.includes(PROFILE_REWARD_GAME)) user.ownedGames.push(PROFILE_REWARD_GAME);
   saveState();
+  try{
+    const data = await platformApi('profile', {email:user.email, password:user.password, profile:user.profile, profileCompleted:user.profileCompleted, ownedGames:user.ownedGames});
+    if(data.ok && data.user){
+      const i = state.users.findIndex(u=>u.id===userId);
+      if(i >= 0) state.users[i] = data.user;
+      saveState();
+    }
+  }catch(err){ console.warn('[platform profile sync]', err); }
   render();
   return true;
 }
@@ -2013,7 +2005,7 @@ function renderAdminPanel(){
   const feedback = state.feedback || [];
   return `
   <div id="adminPanel" class="card admin-account-panel">
-    <div class="filter-row"><h3>${t('adminAccountPanelTitle')}</h3><div class="muted">${tt('adminAccountStats', {pending: pendingCount, total: teachers.length})}</div></div>
+    <div class="filter-row"><h3>${t('adminAccountPanelTitle')}</h3><div class="muted">${tt('adminAccountStats', {pending: pendingCount, total: teachers.length})}</div><button id="syncUsersBtn" class="btn secondary small">同步资料库</button></div>
     <div class="notice">${t('adminAccountNotice')}</div>
     ${renderPurchaseOrdersPanel()}
 
@@ -2116,37 +2108,34 @@ function packageLabel(pkg){
 }
 
 
-function handleLoginClick(){
+async function handleLoginClick(){
   const email = $('#loginEmail')?.value?.trim() || '';
   const password = $('#loginPassword')?.value || '';
-  const result = login(email, password);
   const msg = $('#loginMsg');
+  if(msg) msg.textContent = state.lang==='en' ? 'Checking account...' : (state.lang==='ms' ? 'Sedang menyemak akaun...' : '正在检查账号...');
+  const result = await login(email, password);
   if(msg) msg.textContent = result.ok ? '' : result.msg;
 }
-function handleQuickAdminClick(){
-  const email = $('#loginEmail');
-  const password = $('#loginPassword');
+async function handleQuickAdminClick(){
+  const email = $('#loginEmail'); const password = $('#loginPassword');
   if(email) email.value='admin@lead.ai';
   if(password) password.value='admin123';
-  const result = login('admin@lead.ai','admin123');
   const msg = $('#loginMsg');
+  if(msg) msg.textContent = state.lang==='en' ? 'Checking account...' : (state.lang==='ms' ? 'Sedang menyemak akaun...' : '正在检查账号...');
+  const result = await login('admin@lead.ai','admin123');
   if(msg) msg.textContent = result.ok ? '' : result.msg;
 }
-function handleRegisterClick(){
+async function handleRegisterClick(){
   const name = $('#regName')?.value?.trim() || '';
   const email = $('#regEmail')?.value?.trim() || '';
   const phone = $('#regPhone')?.value?.trim() || '';
   const password = $('#regPassword')?.value?.trim() || '';
   const msg = $('#regMsg');
   if(!name || !email || !phone || !password){ if(msg) msg.textContent=t('fillAll'); return; }
-  const result = registerTeacherAccount(name, email, phone, password);
+  if(msg) msg.textContent = state.lang==='en' ? 'Submitting application...' : (state.lang==='ms' ? 'Sedang menghantar permohonan...' : '正在送出申请...');
+  const result = await registerTeacherAccount(name, email, phone, password);
   if(msg) msg.textContent = result.msg;
-  if(result.ok){
-    if($('#regName')) $('#regName').value='';
-    if($('#regEmail')) $('#regEmail').value='';
-    if($('#regPhone')) $('#regPhone').value='';
-    if($('#regPassword')) $('#regPassword').value='';
-  }
+  if(result.ok){ ['regName','regEmail','regPhone','regPassword'].forEach(id=>{ if($('#'+id)) $('#'+id).value=''; }); }
 }
 
 function bindAuth(){
@@ -2154,14 +2143,10 @@ function bindAuth(){
   const quickAdminBtn = $('#quickAdminBtn'); if(quickAdminBtn) quickAdminBtn.onclick = handleQuickAdminClick;
   const resetDemoBtn = $('#resetDemoBtn'); if(resetDemoBtn) resetDemoBtn.onclick = resetDemo;
   const registerBtn = $('#registerBtn'); if(registerBtn) registerBtn.onclick = handleRegisterClick;
-  ['loginEmail','loginPassword'].forEach(id=>{
-    const el = $(id);
-    if(el) el.onkeydown = (ev)=>{ if(ev.key==='Enter') handleLoginClick(); };
-  });
+  ['loginEmail','loginPassword'].forEach(id=>{ const el = $(id); if(el) el.onkeydown = (ev)=>{ if(ev.key==='Enter') handleLoginClick(); }; });
 }
 
-
-function addTeacherAccount(){
+async function addTeacherAccount(){
   const name = $('#newTeacherName')?.value?.trim() || '';
   const email = $('#newTeacherEmail')?.value?.trim() || '';
   const phone = $('#newTeacherPhone')?.value?.trim() || '';
@@ -2171,43 +2156,34 @@ function addTeacherAccount(){
   const msg = $('#addTeacherMsg');
   if(!name || !normalized){ if(msg) msg.textContent=t('teacherNameEmailRequired'); return; }
   if(!isValidEmail(normalized)){ if(msg) msg.textContent=t('validEmailRequired'); return; }
-  if(state.users.some(u=>normalizeEmail(u.email || u.username)===normalized)){ if(msg) msg.textContent=t('emailExists'); return; }
-  state.users.push({
-    id:'u_'+Date.now(), email:normalized, username:normalized, password, name,
-    role:'user', accountStatus:'approved', disabled:false,
-    ownedGames: pkg==='all_access' ? GAME_DATA.map(g=>g.id) : [],
-    package:pkg,
-    profileCompleted:true,
-    profile:{email:normalized, phone, chineseName:name, englishName:'', state:'Johor', orgTypes:[t('schoolTeacherOrg')]}
-  });
-  saveState();
-  render();
+  if(msg) msg.textContent = '正在同步到后台数据库...';
+  try{
+    const data = await platformApi('add', {...currentAdminCredentials(), name, email:normalized, phone, password, package:pkg});
+    if(!data.ok){ if(msg) msg.textContent = data.msg || data.error || '新增失败'; return; }
+    if(data.users) mergeBackendUsers(data.users);
+    render();
+  }catch(err){ console.error('[platform add teacher]', err); if(msg) msg.textContent = platformOfflineMsg(); }
 }
-function approveTeacher(userId){
-  const u = state.users.find(x=>x.id===userId); if(!u) return;
-  u.accountStatus='approved'; u.disabled=false;
-  if(!u.package) u.package='free';
-  if(!Array.isArray(u.promoGift)) u.promoGift = freeTrialTemplates();
-  updateTeacherPackageByOwnedGames(u);
-  saveState(); render();
+async function approveTeacher(userId){
+  try{ const data = await platformApi('approve', {...currentAdminCredentials(), userId}); if(data.ok && data.users) mergeBackendUsers(data.users); render(); }
+  catch(err){ alert(platformOfflineMsg()); console.error(err); }
 }
-function toggleTeacherDisabled(userId){
-  const u = state.users.find(x=>x.id===userId); if(!u) return;
-  u.disabled = !u.disabled;
-  saveState(); render();
+async function toggleTeacherDisabled(userId){
+  try{ const data = await platformApi('toggleDisabled', {...currentAdminCredentials(), userId}); if(data.ok && data.users) mergeBackendUsers(data.users); render(); }
+  catch(err){ alert(platformOfflineMsg()); console.error(err); }
 }
-function deleteTeacherAccount(userId){
+async function deleteTeacherAccount(userId){
   const u = state.users.find(x=>x.id===userId); if(!u) return;
-  if(!confirm(tt('confirmDeleteTeacher', {name: u.name || u.email}))) return;
-  state.users = state.users.filter(x=>x.id!==userId);
-  saveState(); render();
+  if(!confirm(tt('confirmDeleteTeacher', {name:u.name || u.email}))) return;
+  try{ const data = await platformApi('delete', {...currentAdminCredentials(), userId}); if(data.ok && data.users) mergeBackendUsers(data.users); render(); }
+  catch(err){ alert(platformOfflineMsg()); console.error(err); }
 }
-function resetTeacherPassword(userId){
+async function resetTeacherPassword(userId){
   const u = state.users.find(x=>x.id===userId); if(!u) return;
-  const p = prompt(tt('promptNewPassword', {name: u.name || u.email}), '123456');
+  const p = prompt(tt('promptNewPassword', {name:u.name || u.email}), '123456');
   if(!p) return;
-  u.password = p;
-  saveState(); render();
+  try{ const data = await platformApi('resetPassword', {...currentAdminCredentials(), userId, newPassword:p}); if(data.ok && data.users) mergeBackendUsers(data.users); render(); }
+  catch(err){ alert(platformOfflineMsg()); console.error(err); }
 }
 function bindDashboard(){
   const logoutBtn = $('#logoutBtn'); if(logoutBtn) logoutBtn.onclick = logout;
@@ -2256,6 +2232,8 @@ function bindDashboard(){
   if(openAdmin) openAdmin.onclick = () => { $('#adminPanel').classList.remove('hidden'); };
   const closeAdmin = $('#closeAdminBtn');
   if(closeAdmin) closeAdmin.onclick = () => { $('#adminPanel').classList.add('hidden'); };
+  const syncUsersBtn = $('#syncUsersBtn');
+  if(syncUsersBtn) syncUsersBtn.onclick = async () => { try{ await refreshBackendUsers(); render(); }catch(err){ alert(platformOfflineMsg()); console.error(err); } };
   $$('.save-user-btn').forEach(btn => btn.onclick = () => saveUserConfig(btn.dataset.user));
   $$('.grant-all-btn').forEach(btn => btn.onclick = () => setAllChecks(btn.dataset.user, true));
   $$('.clear-all-btn').forEach(btn => btn.onclick = () => setAllChecks(btn.dataset.user, false));
@@ -2508,14 +2486,16 @@ function downloadMakerTxt(){
 }
 
 function setAllChecks(userId, checked){ $$(`.admin-game-check[data-user="${userId}"]`).forEach(el => el.checked = checked); }
-function saveUserConfig(userId){
-  const user = state.users.find(u => u.id===userId);
+async function saveUserConfig(userId){
+  const user = state.users.find(u=>u.id===userId);
   if(!user) return;
-  user.package = $(`.admin-package-select[data-user="${userId}"]`).value;
-  user.ownedGames = $$(`.admin-game-check[data-user="${userId}"]`).filter(el=>el.checked).map(el=>el.dataset.game);
-  if(user.package === 'free') updateTeacherPackageByOwnedGames(user);
-  saveState();
-  render();
+  const pkg = $(`.admin-package-select[data-user="${userId}"]`).value;
+  const ownedGames = $$(`.admin-game-check[data-user="${userId}"]`).filter(el=>el.checked).map(el=>el.dataset.game);
+  try{
+    const data = await platformApi('update', {...currentAdminCredentials(), userId, package:pkg, ownedGames, accountStatus:user.accountStatus, disabled:user.disabled});
+    if(data.ok && data.users) mergeBackendUsers(data.users);
+    render();
+  }catch(err){ alert(platformOfflineMsg()); console.error(err); }
 }
 function buySingle(gameId){
   const user = getUser();
