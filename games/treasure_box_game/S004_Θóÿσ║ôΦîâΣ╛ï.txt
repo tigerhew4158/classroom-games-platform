@@ -1,0 +1,6 @@
+# S004 宝箱开开看｜题库范例
+# 用途：抽题、复习、奖励式问答。
+# 建议格式：题目 | 正确答案 | 选项A,选项B,选项C,选项D
+AI 的英文全名是什么？ | Artificial Intelligence | Artificial Intelligence,Auto Internet,Advanced Image,Active Input
+哪一种密码较安全？ | 长且混合不同字符 | 123456,生日日期,长且混合不同字符,名字拼音
+看到可疑链接时应该怎么做？ | 先检查来源 | 马上点击,先检查来源,输入密码,转发朋友
